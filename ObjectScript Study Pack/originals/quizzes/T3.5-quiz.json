@@ -1,0 +1,208 @@
+{
+    "quiz": {
+        "title": "T3.5: Scalability and Performance",
+        "description": "Test your knowledge of TUNE TABLE, query plans, performance testing, %SYS.PTools, and SQL optimization in InterSystems IRIS through scenario-based questions.",
+        "version": "2.1",
+        "publishedDate": "2026-09-17",
+        "questions": [
+            {
+                "id": 1,
+                "type": "single",
+                "question": "Consider the following snippet of performance metrics for an SQL query:\n\nAverage SQL Execution Time: 0.018s\nP50 SQL Execution Time:     0.014s\nP90 SQL Execution Time:     0.061s\nP99 SQL Execution Time:     1.042s\n\nAssuming P50 means the execution time higher than 50% of recorded values, P90 higher than 90%, and P99 higher than 99%.\n\nWhich of the following best explains why the P99 time is magnitudes higher than the rest?",
+                "options": [
+                    "The query cache is occasionally purged, meaning a small subset of queries are running uncached",
+                    "An outlier value in the WHERE clause parameter causes the optimizer to choose a less efficient plan for that specific value",
+                    "P99 queries use Embedded SQL while the others use Dynamic SQL",
+                    "The SQL query is gathering table statistics every time it runs"
+                ],
+                "correct": [0],
+                "explanation": "When cached query plans are purged (e.g., by schema changes, system maintenance, or memory pressure), the next execution must recompile the query and generate a new plan. This compilation step is orders of magnitude slower than executing a cached plan. Since purges are infrequent, only a small percentage of executions (showing up in P99) are affected. While outlier values can cause the optimizer to choose a different plan, this would typically affect a larger and more consistent percentage of queries (not just P99 spikes), and the difference would be in execution time, not orders of magnitude. TUNE TABLE is not triggered automatically. (Reference: InterSystems Practice Question Q12; https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_queries)"
+            },
+            {
+                "id": 2,
+                "type": "single",
+                "question": "Which of the following is recommended as the best time to gather (or regather) table statistics for an IRIS SQL table?",
+                "options": [
+                    "During development, right before deploying to a live system",
+                    "Immediately after deploying to a live system",
+                    "Every time 20% of the table has changed in a live environment",
+                    "Every time 20% of the table has changed in a development environment"
+                ],
+                "correct": [2],
+                "explanation": "Table statistics should be gathered on the live system when approximately 20% of the data has changed. Development data is not representative of production data distributions. Gathering only at deployment time means statistics become stale as the production data grows and changes. The 20% threshold balances keeping statistics current against the overhead of running TUNE TABLE. (Reference: InterSystems Practice Question Q13; https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_options)"
+            },
+            {
+                "id": 3,
+                "type": "single",
+                "question": "A developer runs TUNE TABLE on a table with 1 million rows:\n\nTUNE TABLE Sample.Order\n\nWhich of the following does TUNE TABLE gather?",
+                "options": [
+                    "Fragmentation levels for indexes, with recommendations for index rebuilds",
+                    "Extent size, field selectivity, and block count statistics for the query optimizer",
+                    "Query execution times, identifying slow queries",
+                    "Contention metrics for locks, with recommendations for concurrency improvements"
+                ],
+                "correct": [1],
+                "explanation": "TUNE TABLE gathers statistical metadata about the table: extent size (row count), field selectivity (distribution of unique values per column), and map block counts. The SQL query optimizer uses these statistics to estimate costs and choose efficient query plans. TUNE TABLE does NOT analyze index fragmentation, measure query times, or check lock contention. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_options)"
+            },
+            {
+                "id": 4,
+                "type": "single",
+                "question": "A developer examines the query plan for this SQL:\n\nSELECT Name, City FROM Sample.Person WHERE City = 'Boston'\n\nThe plan shows:\n\n Read master map Sample.Person.IDKEY, looping on ID.\n For each row: check condition City = 'Boston'.\n\nWhat does this query plan indicate?",
+                "options": [
+                    "The query efficiently uses an index on City",
+                    "The query performs a full table scan, reading every row to check the City condition",
+                    "The query uses the IDKEY index to directly look up Boston rows",
+                    "The query reads from a cached result set"
+                ],
+                "correct": [1],
+                "explanation": "'Read master map' means the query reads the main data global (the IDKEY/master map), scanning every row sequentially. For each row, it checks whether City = 'Boston'. This is a full table scan - the least efficient approach for selective queries on large tables. Adding an index on City would allow the optimizer to read only matching rows directly. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_queries)"
+            },
+            {
+                "id": 5,
+                "type": "single",
+                "question": "After adding an index and running %BuildIndices, the developer re-examines the query plan:\n\nIndex CityIdx On City;\n\nThe plan now shows:\n\n Read index map Sample.Person.CityIdx, using the given value.\n For each matching row: read master map Sample.Person.IDKEY.\n\nWhat does this plan indicate?",
+                "options": [
+                    "A full table scan using the CityIdx index",
+                    "An index-only query that never reads the data global",
+                    "An index lookup to find matching IDs, then a data global read for each match to get the Name column",
+                    "A bitmap AND operation combining multiple indexes"
+                ],
+                "correct": [2],
+                "explanation": "The plan shows a two-step access: first, the CityIdx index is used to find row IDs matching City = 'Boston'. Then, for each matching ID, the master map (data global) is read to retrieve the Name column (which is not in the index). This is more efficient than a full table scan but requires the extra master map read because the query needs columns not stored in the index. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_queries)"
+            },
+            {
+                "id": 6,
+                "type": "single",
+                "question": "A developer wants to time how long a code block takes to execute:\n\nset start = $ZH\nfor i = 1:1:100000 {\n    set x = $PIECE(\"A,B,C,D,E\", \",\", 3)\n}\nset elapsed = $ZH - start\nwrite \"Elapsed: \", elapsed, \" seconds\"\n\nWhy is $ZH preferred over $HOROLOG for timing?",
+                "options": [
+                    "$HOROLOG has higher precision than $ZH",
+                    "$ZH provides fractional-second precision and simple arithmetic, while $HOROLOG uses comma-separated date,seconds format",
+                    "$HOROLOG measures CPU time while $ZH measures wall clock time",
+                    "$ZH is more accurate because it uses the system clock directly"
+                ],
+                "correct": [1],
+                "explanation": "$ZH ($ZHOROLOG) returns a high-resolution timestamp as a single number with fractional seconds, making subtraction straightforward. $HOROLOG returns 'days,seconds' format (e.g., '67339,45123') where the comma makes arithmetic complex and it only has whole-second granularity. For code timing, $ZH is the standard choice. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_vzhorolog)"
+            },
+            {
+                "id": 7,
+                "type": "single",
+                "question": "A developer runs the equivalent of TUNE TABLE from ObjectScript:\n\nset sc = $SYSTEM.SQL.Stats.Table.GatherTableStats(\"Sample.Person\")\n\nAfter running this, they notice no improvement in query performance. What is the most likely reason?",
+                "options": [
+                    "The method failed silently and statistics were not updated",
+                    "Existing cached query plans still use the old statistics; they must be purged",
+                    "Statistics only take effect after an IRIS restart",
+                    "GatherTableStats only updates the extent size, not field selectivity"
+                ],
+                "correct": [1],
+                "explanation": "Gathering new statistics updates the metadata, but existing cached query plans were compiled with the old statistics. These cached plans continue to be used until purged. After gathering statistics, run $SYSTEM.SQL.Purge() to force new plans to be generated using the updated statistics. Statistics take effect immediately for new query compilations, no restart needed. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_options)"
+            },
+            {
+                "id": 8,
+                "type": "single",
+                "question": "A developer profiles a slow query using %SYS.PTools:\n\ndo ##class(%SYS.PTools.SQLQuery).Execute(\n    \"SELECT o.OrderDate, p.Name FROM Sample.\"\"Order\"\" o JOIN Sample.Person p ON o.PersonId = p.ID WHERE o.Status = ?\",\n    ,\"Pending\")\n\nThe output shows:\n\n| Module | Global refs | Lines executed |\n|--------|-------------|----------------|\n| JOIN step | 250,000 | 500,000 |\n| WHERE filter | 250,000 | 250,000 |\n\nWhat does this suggest?",
+                "options": [
+                    "The query is optimally configured and no improvement is possible",
+                    "The JOIN is processed before the WHERE filter, causing unnecessary work; an index on Status could reduce the rows entering the JOIN",
+                    "The JOIN needs to be changed from INNER to LEFT",
+                    "The global references are too low, indicating the query is reading from cache"
+                ],
+                "correct": [1],
+                "explanation": "The high global reference count in the JOIN step (250,000) suggests many rows are being joined before the WHERE filter eliminates non-matching rows. If an index on Status filtered rows before the JOIN, far fewer rows would enter the join step. The optimizer may choose a better plan with an index that reduces the initial result set. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_queries)"
+            },
+            {
+                "id": 9,
+                "type": "single",
+                "question": "A query plan shows the following for a query with ORDER BY:\n\nSELECT Name, City FROM Sample.Person\n  WHERE Status = 'Active' ORDER BY Name\n\nPlan:\n Read index map StatusIdx, using the given value.\n For each row: read master map for Name, City.\n Generate a temp file, sorting by Name.\n Read the sorted temp file, output rows.\n\nThe table has Index NameIdx On Name. Why is the optimizer using a temp file sort?",
+                "options": [
+                    "Temp file sorts are always faster than index-based ordering",
+                    "The optimizer chose StatusIdx for the WHERE clause, so it cannot also use NameIdx for ordering",
+                    "NameIdx is corrupt and must be rebuilt",
+                    "ORDER BY always requires a temp file sort in IRIS"
+                ],
+                "correct": [1],
+                "explanation": "The optimizer must choose one access path. It selected StatusIdx to efficiently filter Status = 'Active' rows, but this means rows come out in StatusIdx order, not Name order. A separate temp file sort is needed for ORDER BY Name. If the developer added a composite index on (Status, Name), the optimizer could filter and sort in one pass without a temp file. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_queries)"
+            },
+            {
+                "id": 10,
+                "type": "single",
+                "question": "A developer writes a performance test using $ZH:\n\nClassMethod BenchmarkQuery(iterations As %Integer = 1000) As %Numeric\n{\n    set stmt = ##class(%SQL.Statement).%New()\n    set sc = stmt.%Prepare(\"SELECT Name FROM Sample.Person WHERE City = ?\")\n    \n    set start = $ZH\n    for i = 1:1:iterations {\n        set rs = stmt.%Execute(\"Boston\")\n        while rs.%Next() { /* consume results */ }\n    }\n    set elapsed = $ZH - start\n    write \"Total: \", elapsed, \"s, Avg: \", elapsed/iterations, \"s\", !\n    quit elapsed/iterations\n}",
+                "options": [
+                    "This benchmark is flawed because it reuses the prepared statement",
+                    "This benchmark correctly measures average per-query execution time by preparing once and executing many times",
+                    "This benchmark is flawed because $ZH cannot measure sub-second intervals",
+                    "This benchmark should use $HOROLOG instead of $ZH for higher accuracy"
+                ],
+                "correct": [1],
+                "explanation": "This is a well-structured benchmark. Preparing the statement once outside the loop is correct because in production, statements are cached. The loop measures average execution time over many iterations, smoothing out variance. $ZH provides sub-second precision suitable for this measurement. Reusing the prepared statement reflects real-world caching behavior. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_vzhorolog)"
+            },
+            {
+                "id": 11,
+                "type": "single",
+                "question": "A developer runs TUNE TABLE and examines the selectivity for a Status column that has 3 distinct values (Active, Pending, Closed) across 1 million rows:\n\nField: Status\nSelectivity: 33.33%\nOutlier Selectivity: Active = 80.00%\n\nWhat do these statistics tell the optimizer?",
+                "options": [
+                    "On average, each Status value matches 33% of rows, but 'Active' specifically matches 80% of rows",
+                    "The Status column is 33% full and the Active outlier is 80% null",
+                    "33% of queries use the Status column and 80% of those filter for Active",
+                    "The index on Status has 33% fragmentation and 80% of entries are for Active"
+                ],
+                "correct": [0],
+                "explanation": "Selectivity indicates what percentage of rows match each distinct value on average (33.33% = 1/3). Outlier selectivity identifies values with significantly different distribution: 'Active' matches 80% of rows, far above the average. This helps the optimizer decide: for WHERE Status = 'Active', a table scan may be faster than an index lookup (80% of rows); for WHERE Status = 'Closed', the index is very selective. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_options)"
+            },
+            {
+                "id": 12,
+                "type": "single",
+                "question": "A developer notices that a query performs well in development (1,000 rows) but poorly in production (10 million rows). The query plan in both environments shows the same full table scan. What is the first optimization step?",
+                "options": [
+                    "Increase the IRIS global buffer size",
+                    "Run TUNE TABLE on production, add appropriate indexes, rebuild, and purge cached queries",
+                    "Switch from Dynamic SQL to Embedded SQL",
+                    "Add a LIMIT clause to the query"
+                ],
+                "correct": [1],
+                "explanation": "The full table scan on 10 million rows is the root cause. The optimization sequence is: (1) Run TUNE TABLE to give the optimizer accurate statistics for the production data volume. (2) Add indexes on the columns used in WHERE, JOIN, and ORDER BY clauses. (3) Build the indexes with %BuildIndices. (4) Purge cached queries to generate new plans. Increasing buffers only helps if the working set fits in memory. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_options)"
+            },
+            {
+                "id": 13,
+                "type": "multiple",
+                "question": "A developer examines the query plan for:\n\nSELECT p.Name, a.City\n  FROM Sample.Person p\n  JOIN Sample.Address a ON p.AddressId = a.ID\n  WHERE a.State = 'MA'\n\nThe plan shows:\n\n Read master map Sample.Address, looping.\n For each Address row: check State = 'MA'.\n For each matching Address: read master map Sample.Person, looping.\n For each Person: check AddressId = Address.ID.\n\nWhich of the following are signs of poor optimization in this plan? (Select all that apply)",
+                "options": [
+                    "Full table scan on Sample.Address instead of using an index on State",
+                    "Nested loop join reading all Person rows for each matching Address",
+                    "The join condition is checked as a filter rather than using an index on AddressId",
+                    "The query returns results in an unpredictable order",
+                    "The plan uses two separate global reads"
+                ],
+                "correct": [0, 1, 2],
+                "explanation": "Three issues: (A) No index on Address.State forces a full scan. (B) For each matching Address, a full scan of Person is done (nested loop with no index). (C) The AddressId join condition is checked as a post-read filter instead of using an index. Fixes: add Index StateIdx On State to Address, add Index AddrIdx On AddressId to Person. Two global reads (E) is normal for a join. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_queries)"
+            },
+            {
+                "id": 14,
+                "type": "multiple",
+                "question": "A developer uses bitmap indexes for a reporting query:\n\nIndex StatusIdx On Status [Type = bitmap];\nIndex RegionIdx On Region [Type = bitmap];\n\nSELECT COUNT(*) FROM Sample.Order\n  WHERE Status = 'Shipped' AND Region = 'Northeast'\n\nThe query plan shows:\n\n Bitmap AND of StatusIdx and RegionIdx.\n Count rows in the resulting bitmap.\n\nWhy is this plan efficient? (Select all that apply)",
+                "options": [
+                    "Bitmap indexes are always faster than standard indexes",
+                    "The bitmap AND combines two indexes using bitwise operations without reading the data global",
+                    "Bitmap indexes store data compressed, reducing I/O",
+                    "The COUNT(*) forces the optimizer to use bitmap indexes",
+                    "The engine expands the result bitmap back into row IDs before counting them"
+                ],
+                "correct": [1, 2],
+                "explanation": "Two things make the plan efficient: the bitmap AND combines both indexes with bitwise operations and never touches the data global, and bitmaps are stored compressed so little I/O is needed to read them. Bitmap indexes are not universally faster -- they suit low-cardinality columns and lose to standard indexes on highly selective ones -- and COUNT(*) does not force their use; the optimizer chose them. Expanding to row IDs is exactly what the plan AVOIDS: the count is computed from the bitmap directly, which is the whole point.",
+                "revised": true
+            },
+            {
+                "id": 15,
+                "type": "single",
+                "question": "A developer measures query performance before and after adding an index:\n\n// Before index:\nset start = $ZH\nfor i = 1:1:100 {\n    &sql(SELECT Name INTO :n FROM Sample.Person WHERE SSN = :testSSN)\n}\nset before = ($ZH - start) / 100\n\n// Add unique index on SSN, build, purge queries\n\n// After index:\nset start = $ZH\nfor i = 1:1:100 {\n    &sql(SELECT Name INTO :n FROM Sample.Person WHERE SSN = :testSSN)\n}\nset after = ($ZH - start) / 100\n\nwrite \"Before: \", before, \"s  After: \", after, \"s\"\n\nThe results show Before: 0.045s and After: 0.001s. What explains this 45x improvement?",
+                "options": [
+                    "Embedded SQL was recompiled and optimized between the two runs",
+                    "The unique index on SSN allows direct lookup by value instead of scanning all rows",
+                    "The second run benefits from operating system file caching",
+                    "The loop warm-up in the first run caused it to be artificially slow"
+                ],
+                "correct": [1],
+                "explanation": "Without an index, the query must scan the entire table (full table scan) to find the row with the matching SSN. With a unique index on SSN, the optimizer performs a direct index lookup: SSN value -> row ID -> single row read. This changes from O(n) to O(1) access, explaining the dramatic improvement. The Embedded SQL was recompiled (cached query purged), but the improvement comes from the index, not the recompilation itself. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_tables)"
+            }
+        ]
+    }
+}

@@ -1,0 +1,244 @@
+{
+  "quiz": {
+    "title": "T1.3: Methods",
+    "description": "Scenario-based questions on instance vs class methods, class parameters in methods (..#ParamName), method arguments and return types, passing objects to methods, pass by reference, multidimensional variables by reference, and ##super for superclass methods in InterSystems IRIS ObjectScript.",
+    "version": "2.0",
+    "publishedDate": "2026-03-05",
+    "questions": [
+      {
+        "id": 1,
+        "type": "single",
+        "question": "Consider the following class definition.\n\nClass Sample.Circle Extends %RegisteredObject\n{\nParameter PI = 3.14159;\nProperty Radius As %Integer;\nClassMethod FromDiameter(diameter As %Integer) As %Integer\n{ /*Omitted*/ }\nMethod Area() As %Integer\n{ /*Omitted*/ }\n}\n\nWhich of the following is accurate about the difference between the Area and FromDiameter methods?",
+        "options": [
+          "Only the Area instance method can access the PI class parameter using ..#PI; this syntax does not work in the FromDiameter class method.",
+          "The code body of Area can reference the Radius property using relative dot syntax, while this is not possible in the FromDiameter class method.",
+          "You need to create an instance of Sample.Circle to use the FromDiameter method but this is not necessary when calling the Area class method.",
+          "The FromDiameter class method can call the Area class method but Area can not call FromDiameter."
+        ],
+        "correct": [1],
+        "explanation": "Instance methods like Area() have access to the current object context and can reference properties using the .. (double-dot) syntax (e.g., ..Radius). Class methods like FromDiameter() have no object context and therefore cannot use .. to access instance properties. However, both instance and class methods CAN access class parameters using ..#ParamName (option A is incorrect). Class methods do not require an instance to call (option C is reversed). Instance methods can call class methods (option D is incorrect). (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_methods)"
+      },
+      {
+        "id": 2,
+        "type": "single",
+        "question": "An application provides utility methods that return tax information for a city. The tax rate may change occasionally.\n\nWhich of the following code blocks shows how this class can be implemented most efficiently?",
+        "options": [
+          "Class Sample.Utils\n{\nParameter TaxRate = 0.05;\nClassMethod Tax(amt As %Numeric) As %Numeric\n{ return amt * ..#TaxRate }\nClassMethod Total(amt As %Numeric) As %Numeric\n{ return amt + ..Tax(amt) }\nClassMethod Description() As %String\n{ return \"The tax rate is \" _ ..#TaxRate }\n}",
+          "Class Sample.Utils\n{\nProperty TaxRate As %Numeric = 0.05;\nClassMethod Tax(amt As %Numeric) As %Numeric\n{ return amt * ..TaxRate }\nClassMethod Total(amt As %Numeric) As %Numeric\n{ return amt + ..Tax(amt) }\nClassMethod Description() As %String\n{ return \"The tax rate is \" _ ..TaxRate }\n}",
+          "Class Sample.Utils\n{\nClassMethod Tax(amt As %Numeric) As %Numeric\n{ return amt * 0.05 }\nClassMethod Total(amt As %Numeric) As %Numeric\n{ return amt + ..Tax(amt) }\nClassMethod Description() As %String\n{ return \"The tax rate is 0.05\" }\n}",
+          "Class Sample.Utils\n{\nMethod CurrentTaxRate()\n{ return 0.05 }\nClassMethod Tax(amt As %Numeric) As %Numeric\n{ return amt * ..CurrentTaxRate() }\nClassMethod Total(amt As %Numeric) As %Numeric\n{ return amt + ..Tax(amt) }\nClassMethod Description() As %String\n{ return \"The tax rate is \" _ ..CurrentTaxRate() }\n}"
+        ],
+        "correct": [0],
+        "explanation": "Option A is correct. Using a Parameter for the tax rate is the most efficient approach: parameters are class-level constants accessible via ..#TaxRate in both class and instance methods. Option B fails because ClassMethods cannot use .. to access properties (properties require an instance). Option C hardcodes the value in multiple places, making maintenance error-prone. Option D fails because ClassMethods cannot call instance methods via .. syntax (CurrentTaxRate is an instance method). (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_parameters)"
+      },
+      {
+        "id": 3,
+        "type": "single",
+        "question": "Consider the following class.\n\nClass App.Calculator Extends %RegisteredObject\n{\nParameter PRECISION = 4;\n\nClassMethod Round(value As %Numeric) As %Numeric\n{\n  return $FN(value, \"\", ..#PRECISION)\n}\n\nClassMethod Add(a As %Numeric, b As %Numeric) As %Numeric\n{\n  return ..Round(a + b)\n}\n}\n\nA developer runs:\n\nwrite ##class(App.Calculator).Add(1.123456, 2.654321)\n\nWhat is the output?",
+        "options": [
+          "3.777777",
+          "3.7778",
+          "3.78",
+          "An error because class methods cannot call other class methods using .. syntax"
+        ],
+        "correct": [1],
+        "explanation": "Class methods CAN call other class methods in the same class using the .. syntax. The Add() method calls ..Round(3.777777), and Round() uses $FN with the PRECISION parameter value of 4 to format the number to 4 decimal places, resulting in 3.7778. The ..# syntax accesses the parameter, and the .. syntax calls the class method -- both work from within a class method. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_methods)"
+      },
+      {
+        "id": 4,
+        "type": "single",
+        "question": "Consider the following method signature.\n\nClassMethod ProcessData(ByRef data As %String, Output result As %String) As %Status\n\nA developer calls it like this:\n\nset myData = \"input-value\"\nset myResult = \"old-result\"\nset sc = ##class(App.Processor).ProcessData(.myData, .myResult)\n\nWhich of the following is true about myData and myResult when ProcessData begins executing?",
+        "options": [
+          "Both myData and myResult retain their original values (\"input-value\" and \"old-result\")",
+          "myData retains \"input-value\" because it is ByRef; myResult is killed (undefined) because it is Output",
+          "Both are killed (undefined) because they are both passed by reference",
+          "myData is killed and myResult retains \"old-result\" because Output preserves existing values"
+        ],
+        "correct": [0],
+        "explanation": "Both ByRef and Output are passed by reference, and neither keyword affects runtime behavior. The InterSystems documentation states: 'The ByRef and Output keywords provide information for the benefit of anyone using the InterSystems Class Reference. They do not affect the behavior of the code.' Both myData and myResult retain their original values when ProcessData begins executing. The Output keyword is a semantic hint indicating the parameter is intended to return a value, but it does NOT kill or clear the variable. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_methods)"
+      },
+      {
+        "id": 5,
+        "type": "single",
+        "question": "Consider the following code.\n\nClass App.Formatter Extends %RegisteredObject\n{\nClassMethod BuildReport(ByRef lines As %String) As %String\n{\n  set result = \"\"\n  set key = \"\"\n  for {\n    set key = $Order(lines(key))\n    quit:key=\"\"\n    set result = result _ lines(key) _ $Char(10)\n  }\n  return result\n}\n}\n\n// Caller:\nset lines(1) = \"Header\"\nset lines(2) = \"Body\"\nset lines(3) = \"Footer\"\nset report = ##class(App.Formatter).BuildReport(.lines)\nwrite report\n\nWhat does this code output?",
+        "options": [
+          "An error because arrays cannot be passed to methods",
+          "Header followed by Body followed by Footer, each on a new line",
+          "Only \"Header\" because without ByRef only the first subscript is passed",
+          "An empty string because the lines variable has no top-level value"
+        ],
+        "correct": [1],
+        "explanation": "Passing an array by reference (with the dot prefix .lines) sends the entire subscripted structure to the method. Inside BuildReport, the lines parameter has subscripts lines(1), lines(2), and lines(3) accessible. The $Order loop iterates through the subscripts in order, building a string with each line separated by $Char(10) (line feed). This is the standard pattern for passing multidimensional arrays to methods in ObjectScript. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_methods)"
+      },
+      {
+        "id": 6,
+        "type": "single",
+        "question": "Consider the following code.\n\nClass App.Service Extends %RegisteredObject\n{\nClassMethod UpdateRecord(patient As App.Patient)\n{\n  set patient.Status = \"Active\"\n}\n}\n\n// Caller:\nset pt = ##class(App.Patient).%OpenId(1)\nwrite pt.Status    // outputs: \"Pending\"\ndo ##class(App.Service).UpdateRecord(pt)\nwrite pt.Status\n\nWhat is the second write output?",
+        "options": [
+          "\"Pending\" because objects are passed by value (a copy is made)",
+          "\"Active\" because object references point to the same object in memory -- modifying properties through one reference is visible through all references",
+          "An error because objects must be passed with ByRef to allow modification",
+          "\"Active\" but only because the ByRef keyword is implied for objects"
+        ],
+        "correct": [1],
+        "explanation": "In ObjectScript, when you pass an object to a method (even without ByRef), the object reference (oref) is passed by value. However, both the caller's variable and the method's parameter point to the same object in memory. Modifying the object's properties through either reference affects the same underlying object. ByRef would only be needed if the method wanted to reassign the caller's variable to a different object entirely. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_methods)"
+      },
+      {
+        "id": 7,
+        "type": "single",
+        "question": "Consider the following class hierarchy.\n\nClass App.Shape Extends %RegisteredObject\n{\nMethod Draw() As %String\n{\n  return \"Drawing generic shape\"\n}\n}\n\nClass App.Circle Extends App.Shape\n{\nProperty Radius As %Numeric;\n\nMethod Draw() As %String\n{\n  set base = ##super()\n  return base _ \" -> Circle with radius \" _ ..Radius\n}\n}\n\nA developer runs:\n\nset c = ##class(App.Circle).%New()\nset c.Radius = 5\nwrite c.Draw()\n\nWhat is the output?",
+        "options": [
+          "\"Drawing generic shape\"",
+          "\"Circle with radius 5\"",
+          "\"Drawing generic shape -> Circle with radius 5\"",
+          "An error because ##super() cannot be used in a method that returns a value"
+        ],
+        "correct": [2],
+        "explanation": "##super() calls the parent class's implementation of the same method. In App.Circle's Draw(), ##super() calls App.Shape's Draw() which returns \"Drawing generic shape\". That return value is stored in base, then concatenated with the circle-specific text. ##super() works with return values and can pass arguments just like any other method call. This is the standard pattern for extending parent behavior while adding subclass-specific logic. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_methods_override)"
+      },
+      {
+        "id": 8,
+        "type": "single",
+        "question": "Consider the following code.\n\nClass App.Math Extends %RegisteredObject\n{\nClassMethod Divide(a As %Numeric, b As %Numeric, Output result As %Numeric) As %Status\n{\n  if b = 0 return $$$ERROR($$$GeneralError, \"Division by zero\")\n  set result = a / b\n  return $$$OK\n}\n}\n\n// Caller:\nset sc = ##class(App.Math).Divide(10, 3, .answer)\nif $$$ISOK(sc) {\n  write \"Result: \", answer\n} else {\n  do $SYSTEM.Status.DisplayError(sc)\n}\n\nWhat is the output?",
+        "options": [
+          "Result: 3.333333333333333333",
+          "Result: 3",
+          "An error because Output parameters cannot be used with class methods",
+          "An empty string because .answer was not initialized before the call"
+        ],
+        "correct": [0],
+        "explanation": "The Divide method receives a=10, b=3. Since b is not 0, it sets result (which is the caller's answer variable via Output) to 10/3 = 3.333333333333333333 and returns $$$OK. The caller checks $$$ISOK(sc) which is true, then writes the answer. Output parameters work with both class methods and instance methods. Note: the Output keyword is a semantic hint indicating the parameter returns a value; it does not affect runtime behavior (both ByRef and Output pass by reference identically). (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_methods)"
+      },
+      {
+        "id": 9,
+        "type": "single",
+        "question": "Consider the following class.\n\nClass App.Validator Extends %RegisteredObject\n{\nClassMethod ValidateAge(age As %Integer) As %Status\n{\n  if age < 0 return $$$ERROR($$$GeneralError, \"Age cannot be negative\")\n  if age > 150 return $$$ERROR($$$GeneralError, \"Age exceeds maximum\")\n  return $$$OK\n}\n\nClassMethod ValidatePerson(name As %String, age As %Integer) As %Status\n{\n  if name = \"\" return $$$ERROR($$$GeneralError, \"Name is required\")\n  set sc = ..ValidateAge(age)\n  if $$$ISERR(sc) return sc\n  return $$$OK\n}\n}\n\nA developer calls:\n\nset sc = ##class(App.Validator).ValidatePerson(\"John\", -5)\nwrite $SYSTEM.Status.GetErrorText(sc)\n\nWhat is the output?",
+        "options": [
+          "\"Name is required\"",
+          "\"Age cannot be negative\"",
+          "\"Age exceeds maximum\"",
+          "An error because ..ValidateAge() cannot be called from a ClassMethod"
+        ],
+        "correct": [1],
+        "explanation": "ValidatePerson is called with name = \"John\" (not empty, passes first check) and age = -5. It then calls ..ValidateAge(-5). ClassMethods CAN call other ClassMethods using the .. syntax. ValidateAge checks -5 < 0 which is true, and returns an error status with \"Age cannot be negative\". This error is returned back through ValidatePerson, and GetErrorText displays the message. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_status)"
+      },
+      {
+        "id": 10,
+        "type": "single",
+        "question": "Consider the following code.\n\nClass App.Counter Extends %RegisteredObject\n{\nProperty Value As %Integer [ InitialExpression = 0 ];\n\nMethod Increment(amount As %Integer = 1) As %Integer\n{\n  set ..Value = ..Value + amount\n  return ..Value\n}\n}\n\n// Caller:\nset c = ##class(App.Counter).%New()\nwrite c.Increment(), \" \"\nwrite c.Increment(5), \" \"\nwrite c.Increment()\n\nWhat is the output?",
+        "options": [
+          "1 5 1",
+          "1 6 7",
+          "0 5 6",
+          "An error because you cannot call Increment() without an argument"
+        ],
+        "correct": [1],
+        "explanation": "The method signature includes a default value: amount As %Integer = 1. When called without arguments, amount defaults to 1. First call: 0+1=1, returns 1. Second call: 1+5=6, returns 6. Third call: 6+1=7, returns 7. The Value property persists across calls because the method modifies the instance state via ..Value. Default argument values allow flexible method signatures. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_methods)"
+      },
+      {
+        "id": 11,
+        "type": "single",
+        "question": "Consider the following class.\n\nClass App.Processor Extends %RegisteredObject\n{\nClassMethod Transform(ByRef data As %String)\n{\n  set key = \"\"\n  for {\n    set key = $Order(data(key))\n    quit:key=\"\"\n    set data(key) = $ZCONVERT(data(key), \"U\")\n  }\n}\n}\n\n// Caller:\nset items(\"a\") = \"hello\"\nset items(\"b\") = \"world\"\ndo ##class(App.Processor).Transform(.items)\nwrite items(\"a\"), \" \", items(\"b\")\n\nWhat is the output?",
+        "options": [
+          "hello world",
+          "HELLO WORLD",
+          "An error because class methods cannot modify ByRef arrays",
+          "An empty string because the array is killed by the ByRef keyword"
+        ],
+        "correct": [1],
+        "explanation": "The array is passed by reference using the dot prefix (.items), which gives the Transform method access to all subscripts. The method iterates through each subscript using $Order and converts the values to uppercase using $ZCONVERT with the \"U\" flag. Since the array is passed by reference, the modifications to data(key) directly affect the caller's items array. The output is \"HELLO WORLD\". (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_methods)"
+      },
+      {
+        "id": 12,
+        "type": "single",
+        "question": "Consider the following class hierarchy.\n\nClass App.Base Extends %Persistent\n{\nMethod Validate() As %Status\n{\n  // Base validation logic\n  return $$$OK\n}\n}\n\nClass App.Extended Extends App.Base\n{\nProperty Email As %String;\n\nMethod Validate() As %Status\n{\n  set sc = ##super()\n  if $$$ISERR(sc) return sc\n  if ..Email = \"\" return $$$ERROR($$$GeneralError, \"Email required\")\n  if ..Email '[ \"@\" return $$$ERROR($$$GeneralError, \"Invalid email\")\n  return $$$OK\n}\n}\n\nA developer calls:\n\nset obj = ##class(App.Extended).%New()\nset obj.Email = \"invalid-email\"\nset sc = obj.Validate()\n\nWhat is the result?",
+        "options": [
+          "$$$OK because the base Validate() returns OK and the method stops there",
+          "An error status with \"Email required\"",
+          "An error status with \"Invalid email\" because ##super() returned OK, Email is not empty, but Email does not contain \"@\"",
+          "An error because ##super() cannot return a %Status value"
+        ],
+        "correct": [2],
+        "explanation": "The execution flow is: App.Extended.Validate() calls ##super() which runs App.Base.Validate() returning $$$OK. Since sc is OK, execution continues. Email is \"invalid-email\" (not empty), so the first Email check passes. But \"invalid-email\" does not contain \"@\" (the [ operator checks for substring containment), so the method returns the \"Invalid email\" error. This demonstrates how ##super() enables layered validation. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_methods_override)"
+      },
+      {
+        "id": 13,
+        "type": "single",
+        "question": "Consider the following class.\n\nClass App.Logger Extends %RegisteredObject\n{\nParameter LOGPREFIX = \"APP\";\n\nClassMethod Log(message As %String)\n{\n  write \"[\" _ ..#LOGPREFIX _ \"] \" _ message, !\n}\n}\n\nClass App.AuditLogger Extends App.Logger\n{\nParameter LOGPREFIX = \"AUDIT\";\n}\n\nA developer runs:\n\ndo ##class(App.AuditLogger).Log(\"User logged in\")\n\nWhat is the output?",
+        "options": [
+          "[APP] User logged in",
+          "[AUDIT] User logged in",
+          "An error because AuditLogger does not define its own Log() method",
+          "[APP][AUDIT] User logged in"
+        ],
+        "correct": [1],
+        "explanation": "App.AuditLogger inherits the Log() method from App.Logger. When Log() is called on App.AuditLogger, the ..#LOGPREFIX reference resolves to the parameter value defined in App.AuditLogger, which is \"AUDIT\". Parameters can be overridden in subclasses, and ..# always resolves to the value in the class the method is being called on, not the class where the method was originally defined. This is a form of parametric polymorphism. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_parameters)"
+      },
+      {
+        "id": 14,
+        "type": "single",
+        "question": "Consider the following classes.\n\nClass Sample.Person Extends %Persistent\n{\n// Omitted\n}\n\nClass Sample.Patient Extends Sample.Person\n{\n// Omitted\n}\n\nYou are writing code that accepts an object reference and need to verify the caller passed an instance of Sample.Person or a subclass.\n\nWhich of the following code blocks correctly accomplishes that?",
+        "options": [
+          "ClassMethod ProcessPatient(oref As Sample.Person)\n{\n  if oref.%ClassName() '= \"Sample.Person\" return \"Wrong Class\"\n}",
+          "ClassMethod ProcessPatient(oref As Sample.Person)\n{\n  if 'oref.%IsA(\"Sample.Person\") return \"Wrong Class\"\n}",
+          "ClassMethod ProcessPatient(oref As Sample.Person)\n{\n  if $CLASSNAME(oref) '= \"Sample.Person\" return \"Wrong Class\"\n}",
+          "ClassMethod ProcessPatient(oref As Sample.Patient)\n{\n  if oref.%TypeOf() '= \"Sample.Person\" return \"Wrong Class\"\n}"
+        ],
+        "correct": [1],
+        "explanation": "The %IsA() method checks whether an object is an instance of a specified class OR any of its subclasses. Passing a Sample.Patient instance would return true for %IsA(\"Sample.Person\") because Patient extends Person. Option A fails because %ClassName() returns only the short class name (\"Person\") without the package, and it would reject valid subclass instances. Option C uses $CLASSNAME which is not a standard ObjectScript function. Option D uses %TypeOf() which does not exist. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_model_inheritance_extents)"
+      },
+      {
+        "id": 15,
+        "type": "single",
+        "question": "Consider the following method.\n\nClassMethod GetStats(ByRef counts As %Integer) As %Status\n{\n  set counts(\"total\") = 100\n  set counts(\"active\") = 75\n  set counts(\"inactive\") = 25\n  return $$$OK\n}\n\nA developer calls:\n\nset myCount = 0\nset myCount(\"extra\") = 999\nset sc = ##class(App.Reports).GetStats(.myCount)\nwrite myCount, !\nwrite myCount(\"total\"), !\nwrite myCount(\"extra\")\n\nWhat is the output?",
+        "options": [
+          "0\n100\n999",
+          "100\n100\n999",
+          "An error because ByRef kills the variable before the method starts",
+          "0\n100\nAn <UNDEFINED> error because the method replaced the array"
+        ],
+        "correct": [0],
+        "explanation": "With ByRef, the caller's variable (including all subscripts) is passed to the method intact. The method adds subscripts \"total\", \"active\", and \"inactive\" to the counts array but does not modify the top-level value or the existing \"extra\" subscript. After the call, myCount retains its top-level value of 0, myCount(\"total\") is 100 (set by the method), and myCount(\"extra\") is 999 (untouched by the method). Neither ByRef nor Output kills the variable -- both keywords are semantic hints that do not affect runtime behavior. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_methods)"
+      },
+      {
+        "id": 16,
+        "type": "single",
+        "question": "Consider the following class with an abstract method.\n\nClass App.DataSource Extends %RegisteredObject [ Abstract ]\n{\nMethod FetchData() As %String [ Abstract ]\n{\n}\n\nMethod Process() As %String\n{\n  set raw = ..FetchData()\n  return $ZCONVERT(raw, \"U\")\n}\n}\n\nClass App.FileSource Extends App.DataSource\n{\nMethod FetchData() As %String\n{\n  return \"data from file\"\n}\n}\n\nA developer runs:\n\nset src = ##class(App.FileSource).%New()\nwrite src.Process()\n\nWhat is the output?",
+        "options": [
+          "An error because abstract methods cannot be called",
+          "\"data from file\"",
+          "\"DATA FROM FILE\"",
+          "An error because App.DataSource cannot be compiled with an abstract method"
+        ],
+        "correct": [2],
+        "explanation": "The Process() method calls ..FetchData(). Since the actual object is an App.FileSource instance, its FetchData() implementation runs, returning \"data from file\". Process() then passes this through $ZCONVERT with \"U\" to convert to uppercase, resulting in \"DATA FROM FILE\". This demonstrates the Template Method design pattern: the base class defines the algorithm (Process) while subclasses provide specific implementations (FetchData). (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_methods)"
+      },
+      {
+        "id": 17,
+        "type": "single",
+        "question": "Consider the following code.\n\nClass App.Converter Extends %RegisteredObject\n{\nClassMethod ToList(ByRef arr As %String, Output list As %List) As %Status\n{\n  set list = \"\"\n  set key = \"\"\n  for {\n    set key = $Order(arr(key))\n    quit:key=\"\"\n    set list = list _ $ListBuild(arr(key))\n  }\n  return $$$OK\n}\n}\n\n// Caller:\nset data(1) = \"Red\"\nset data(2) = \"Green\"\nset data(3) = \"Blue\"\nset sc = ##class(App.Converter).ToList(.data, .result)\nwrite $ListLength(result)\n\nWhat is the output?",
+        "options": [
+          "0",
+          "3",
+          "An error because you cannot concatenate $List values with _",
+          "1"
+        ],
+        "correct": [1],
+        "explanation": "The method iterates through the arr subscripts (1, 2, 3) using $Order and builds a $List by concatenating $ListBuild values. $List concatenation with _ is valid and produces a longer $List. After processing all three elements, list contains $LB(\"Red\", \"Green\", \"Blue\"), and $ListLength returns 3. The data array is passed ByRef and result is passed as Output; both keywords pass by reference and neither affects runtime behavior (they are semantic hints for documentation). (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_flistbuild)"
+      },
+      {
+        "id": 18,
+        "type": "single",
+        "question": "Consider the following class.\n\nClass App.EventHandler Extends %RegisteredObject\n{\nMethod OnEvent(eventName As %String) As %String\n{\n  return \"Base handler: \" _ eventName\n}\n}\n\nClass App.CustomHandler Extends App.EventHandler\n{\nMethod OnEvent(eventName As %String) As %String [ Final ]\n{\n  return \"Custom: \" _ ##super(eventName)\n}\n}\n\nClass App.SpecialHandler Extends App.CustomHandler\n{\nMethod OnEvent(eventName As %String) As %String\n{\n  return \"Special: \" _ ##super(eventName)\n}\n}\n\nWhat happens when the developer tries to compile App.SpecialHandler?",
+        "options": [
+          "Compilation succeeds and App.SpecialHandler.OnEvent returns \"Special: Custom: Base handler: <event>\"",
+          "A compile error occurs because App.CustomHandler.OnEvent is marked Final and cannot be overridden",
+          "Compilation succeeds but the Final keyword is ignored in subclasses",
+          "A runtime error occurs when OnEvent is called"
+        ],
+        "correct": [1],
+        "explanation": "The [ Final ] keyword on App.CustomHandler.OnEvent() prevents any subclass from overriding that method. When App.SpecialHandler attempts to define its own OnEvent(), the compiler detects the violation and raises a compile-time error. Final methods are used to lock down critical behavior and prevent subclasses from changing it. This is enforced at compile time, not runtime. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_methods_override)"
+      }
+    ]
+  }
+}

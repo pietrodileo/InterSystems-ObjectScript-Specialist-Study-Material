@@ -1,0 +1,247 @@
+{
+  "quiz": {
+    "title": "T2.1: Ensures Data Integrity",
+    "description": "Scenario-based questions on transaction processing (TSTART, TCOMMIT, TROLLBACK), locking mechanisms (LOCK command, incremental locks, shared/exclusive, lock escalation, timeouts), pessimistic vs optimistic concurrency, and SQL transactions in InterSystems IRIS ObjectScript",
+    "version": "2.1",
+    "publishedDate": "2026-04-09",
+    "questions": [
+      {
+        "id": 1,
+        "type": "single",
+        "question": "A developer writes the following method to transfer funds between accounts:\n\nClassMethod Transfer(from As %Integer, to As %Integer, amt As %Numeric) As %Status\n{\n  SET ^Account(from) = ^Account(from) - amt\n  SET ^Account(to) = ^Account(to) + amt\n  QUIT $$$OK\n}\n\nDuring testing, the IRIS instance crashes after the first SET but before the second. Which of the following correctly fixes the method to ensure both operations succeed or fail together?",
+        "options": [
+          "Wrap both SET commands with LOCK +^Account and LOCK -^Account",
+          "Add TSTART before the first SET and TCOMMIT after the second SET",
+          "Use SET $ZTRAP = \"ROLLBACK\" before the first SET",
+          "Replace SET with MERGE to make the operation atomic"
+        ],
+        "correct": [1],
+        "explanation": "TSTART/TCOMMIT ensures that both global modifications are treated as a single atomic unit. If the process crashes mid-transaction, IRIS automatically rolls back all uncommitted changes. Locks control concurrency but do not provide atomicity. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=TOS_Transaction)"
+      },
+      {
+        "id": 2,
+        "type": "single",
+        "question": "Consider the following code:\n\nTSTART\nSET ^Order(101,\"status\") = \"Processing\"\nTSTART\nSET ^Order(101,\"total\") = 250.00\nSET ^Order(101,\"items\") = 3\nTROLLBACK 1\nSET ^Order(101,\"notes\") = \"Reviewed\"\nTCOMMIT\n\nAfter execution completes, which globals are committed?",
+        "options": [
+          "All four SET operations are committed",
+          "Only ^Order(101,\"status\") and ^Order(101,\"notes\") are committed",
+          "Only ^Order(101,\"status\") is committed; everything else is rolled back",
+          "Nothing is committed because TROLLBACK 1 invalidates the entire transaction"
+        ],
+        "correct": [1],
+        "explanation": "TROLLBACK 1 rolls back only the innermost transaction level (the second TSTART), undoing the \"total\" and \"items\" SETs. $TLEVEL drops from 2 to 1. The subsequent SET of \"notes\" occurs at level 1, and TCOMMIT commits everything at level 1: \"status\" and \"notes\". (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_ctrollback)"
+      },
+      {
+        "id": 3,
+        "type": "single",
+        "question": "A developer is debugging a method and adds logging:\n\nTSTART\nSET ^Inventory(itemId) = newQty\nWRITE \"$TLEVEL = \", $TLEVEL, !\nTSTART\nSET ^Inventory(itemId,\"lastUpdate\") = $HOROLOG\nWRITE \"$TLEVEL = \", $TLEVEL, !\nTCOMMIT\nWRITE \"$TLEVEL = \", $TLEVEL, !\nTCOMMIT\nWRITE \"$TLEVEL = \", $TLEVEL, !\n\nWhat sequence of $TLEVEL values is printed?",
+        "options": [
+          "1, 2, 2, 1",
+          "1, 2, 1, 0",
+          "0, 1, 0, 0",
+          "1, 1, 0, 0"
+        ],
+        "correct": [1],
+        "explanation": "After the first TSTART, $TLEVEL = 1. After the second TSTART, $TLEVEL = 2. The first TCOMMIT decrements it to 1. The second TCOMMIT decrements it to 0 and actually commits the data. The real commit only occurs when $TLEVEL returns to 0. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_vtlevel)"
+      },
+      {
+        "id": 4,
+        "type": "single",
+        "question": "If process A executes this line of code:\n\nLOCK +^x\n\nHow does this line impact the ability of other processes to read and manipulate ^x?",
+        "options": [
+          "Other processes cannot set or read ^x unless process A releases the lock on ^x",
+          "Other processes cannot set or read ^x unless they run LOCK -^x first",
+          "Other processes can read but cannot set ^x",
+          "Other processes can set and read ^x unless they call LOCK ^x first"
+        ],
+        "correct": [3],
+        "explanation": "Locks in InterSystems IRIS are advisory (cooperative). LOCK +^x only blocks other processes that also attempt to acquire a LOCK on ^x. Any process can still directly SET or read ^x without calling LOCK first. For locks to be effective, all processes accessing the data must follow the convention of acquiring locks. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_locktable)"
+      },
+      {
+        "id": 5,
+        "type": "single",
+        "question": "Process A executes:\n\nLOCK +^Patient(42)\nSET ^Patient(42,\"name\") = \"Smith\"\n; ... still working ...\n\nMeanwhile, Process B executes:\n\nSET ^Patient(42,\"phone\") = \"555-0199\"\n\nWhat happens when Process B executes its SET command?",
+        "options": [
+          "Process B receives a <LOCKED> error because Process A holds a lock on ^Patient(42)",
+          "Process B's SET is queued until Process A releases its lock",
+          "Process B successfully sets ^Patient(42,\"phone\") because it did not attempt to acquire a lock",
+          "Process B can read ^Patient(42) but the SET fails silently"
+        ],
+        "correct": [2],
+        "explanation": "Locks in IRIS are advisory. Process B never attempted to LOCK ^Patient(42), so there is no lock conflict. Process B's SET executes immediately and successfully. Only processes that also call LOCK ^Patient(42) would be blocked. This is why all processes must cooperate by acquiring locks before accessing shared data. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_locktable)"
+      },
+      {
+        "id": 6,
+        "type": "single",
+        "question": "A method attempts to acquire a lock with a timeout:\n\nLOCK +^Invoice(invId):5\nIF '$TEST {\n  SET sc = $$$ERROR($$$GeneralError, \"Lock timeout on Invoice \"_invId)\n  QUIT sc\n}\nSET ^Invoice(invId,\"status\") = \"Processing\"\n\nAnother process already holds LOCK +^Invoice(invId). What happens when this code runs?",
+        "options": [
+          "The LOCK command throws a <TIMEOUT> error immediately",
+          "The process waits up to 5 seconds; if the lock is not acquired, $TEST is set to 0 and the error status is returned",
+          "The process waits up to 5 seconds; if the lock is not acquired, a <LOCKED> error is thrown",
+          "The LOCK command is skipped entirely because the lock is already held by another process"
+        ],
+        "correct": [1],
+        "explanation": "When a LOCK command includes a timeout (the :5 suffix), the process waits up to 5 seconds to acquire the lock. If it cannot, $TEST is set to 0 (failure) and execution continues to the next line. The code then checks '$TEST, finds it true (lock failed), and returns an error status. No exception is thrown. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_clock)"
+      },
+      {
+        "id": 7,
+        "type": "single",
+        "question": "Consider the following two code blocks:\n\nBlock A:\nLOCK +^Order(id)#\"S\"\n; read ^Order(id)\nLOCK -^Order(id)#\"S\"\n\nBlock B:\nLOCK +^Order(id)\n; update ^Order(id)\nLOCK -^Order(id)\n\nWhich statement is correct about concurrent execution?",
+        "options": [
+          "Block A and Block B can execute simultaneously because they lock different globals",
+          "Two processes running Block A simultaneously will block each other",
+          "A process running Block A will be blocked if another process is running Block B, but multiple processes can run Block A concurrently",
+          "Block A's #\"S\" flag makes the lock non-blocking, so it never waits"
+        ],
+        "correct": [2],
+        "explanation": "The #\"S\" flag acquires a shared lock. Multiple processes can hold shared locks on the same reference simultaneously (for reading). However, a shared lock conflicts with an exclusive lock (Block B uses the default exclusive mode). So Block A will be blocked while Block B holds its exclusive lock. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_clock)"
+      },
+      {
+        "id": 8,
+        "type": "single",
+        "question": "A developer runs the following SQL update within a transaction:\n\n&sql(START TRANSACTION)\nFOR i = 1:1:1500 {\n  &sql(UPDATE Patient SET Processed = 1 WHERE PatientId = :i)\n}\n&sql(COMMIT)\n\nAfter processing about 1,000 records, other processes that try to access the Patient table start getting blocked. What is the most likely cause?",
+        "options": [
+          "The lock table has reached its maximum capacity and is throwing <LOCKTABLEFULL> errors",
+          "SQL lock escalation has occurred: after 1,000 individual row locks on Patient, IRIS replaced them with a single table-level lock, blocking all other access to the table",
+          "The FOR loop creates a deadlock because it updates rows sequentially",
+          "The &sql(START TRANSACTION) is holding all locks indefinitely"
+        ],
+        "correct": [1],
+        "explanation": "Lock escalation is a mechanism of the InterSystems SQL engine, not of ObjectScript LOCK commands. When SQL operations (INSERT, UPDATE, DELETE) within a transaction accumulate more than 1,000 row-level locks on a single table (the default threshold), the SQL engine automatically escalates to a table-level lock. This replaces all individual row locks with one lock on the entire table, blocking other processes. The threshold is configurable via $SYSTEM.SQL.Util.SetOption(\"LockThreshold\", value). Note: direct ObjectScript LOCK +^Global commands do NOT participate in SQL lock escalation. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_options#GSQL_locking_escalation)"
+      },
+      {
+        "id": 9,
+        "type": "multiple",
+        "question": "Which of the following are consequences of SQL lock escalation in InterSystems IRIS?",
+        "options": [
+          "Individual row-level locks are replaced by a single table-level lock",
+          "Other processes may be blocked from locking any row in that table",
+          "The escalated lock automatically downgrades when individual row locks are released",
+          "Concurrency can be significantly reduced because the lock covers the entire table",
+          "Lock escalation triggers a <LOCKTABLEFULL> error"
+        ],
+        "correct": [0, 1, 3],
+        "explanation": "SQL lock escalation replaces many individual row locks with a single table-level lock. This blocks other processes from acquiring locks on any row in the table and reduces concurrency. Escalated locks do not automatically downgrade, and escalation itself is not the same as a <LOCKTABLEFULL> error (that occurs only when the entire lock table runs out of space). Lock escalation is a mechanism of the SQL engine and applies to SQL operations (INSERT, UPDATE, DELETE), not to direct ObjectScript LOCK commands. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_options#GSQL_locking_escalation)"
+      },
+      {
+        "id": 10,
+        "type": "single",
+        "question": "A web application lets users edit patient records. Two users open the same patient record at the same time. The developer implements the following strategy:\n\nClassMethod SavePatient(id, data, origVersion) As %Status\n{\n  IF ^Patient(id,\"version\") '= origVersion {\n    QUIT $$$ERROR($$$GeneralError, \"Record modified by another user\")\n  }\n  SET ^Patient(id) = data\n  SET ^Patient(id,\"version\") = origVersion + 1\n  QUIT $$$OK\n}\n\nWhich concurrency strategy does this implement?",
+        "options": [
+          "Pessimistic concurrency - locks are held during the entire edit session",
+          "Optimistic concurrency - the record is read without locks and changes are detected before saving",
+          "Deadlock prevention - version numbers prevent circular lock dependencies",
+          "Two-phase locking - locks are acquired in the first phase and released in the second"
+        ],
+        "correct": [1],
+        "explanation": "This is optimistic concurrency. The record is read without locks, and before saving, the code checks if the version has changed (indicating another user modified it). If so, the save is rejected. This approach works well when conflicts are rare, providing better throughput than holding locks during potentially long user edit sessions. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_locktable)"
+      },
+      {
+        "id": 11,
+        "type": "single",
+        "question": "A developer implements pessimistic concurrency for an order processing system:\n\nClassMethod ProcessOrder(orderId) As %Status\n{\n  LOCK +^Order(orderId):10\n  IF '$TEST QUIT $$$ERROR($$$GeneralError, \"Cannot lock order\")\n  TSTART\n  TRY {\n    SET ^Order(orderId,\"status\") = \"Processing\"\n    ; ... complex business logic ...\n    TCOMMIT\n  } CATCH ex {\n    TROLLBACK\n  }\n  LOCK -^Order(orderId)\n  QUIT $$$OK\n}\n\nWhich statement best describes this implementation?",
+        "options": [
+          "The LOCK should be inside the TSTART/TCOMMIT block for the lock to participate in the transaction",
+          "The TROLLBACK in the CATCH should be TROLLBACK 1 to preserve the lock",
+          "This is correct: the lock prevents concurrent access, the transaction ensures atomicity, and the lock is released after the transaction completes",
+          "The LOCK -^Order(orderId) should be before TCOMMIT to release the lock as early as possible"
+        ],
+        "correct": [2],
+        "explanation": "This is a well-structured pessimistic concurrency pattern. The lock is acquired first (with a timeout to avoid indefinite waiting), then a transaction wraps the data changes. On error, TROLLBACK rolls back all changes. The lock is released after the transaction finishes (commit or rollback). Releasing the lock before TCOMMIT would allow another process to see uncommitted data. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=TOS_Transaction)"
+      },
+      {
+        "id": 12,
+        "type": "single",
+        "question": "Consider the following code:\n\nLOCK ^Patient(42)\nSET ^Patient(42,\"name\") = \"Jones\"\nLOCK +^Appointment(100)\nSET ^Appointment(100,\"patient\") = 42\nLOCK -^Appointment(100)\n\nAfter this code executes, which locks does the process still hold?",
+        "options": [
+          "Both ^Patient(42) and ^Appointment(100)",
+          "Only ^Patient(42)",
+          "Only ^Appointment(100)",
+          "No locks are held"
+        ],
+        "correct": [1],
+        "explanation": "LOCK ^Patient(42) (without +) is a simple lock: it releases ALL previously held locks, then acquires ^Patient(42). LOCK +^Appointment(100) is incremental and adds to existing locks without releasing ^Patient(42). LOCK -^Appointment(100) releases the incremental lock on ^Appointment(100). After execution, only ^Patient(42) is still held. This demonstrates the important difference between simple LOCK (releases all prior locks) and incremental LOCK +/- (adds/removes individual locks). (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_clock)"
+      },
+      {
+        "id": 13,
+        "type": "single",
+        "question": "Consider the following code:\n\nLOCK +^Order(1)\nLOCK +^Order(2)\nLOCK ^Order(3)\n\nAfter this code executes, which locks does the process hold?",
+        "options": [
+          "^Order(1), ^Order(2), and ^Order(3)",
+          "Only ^Order(3)",
+          "^Order(2) and ^Order(3)",
+          "Only ^Order(1) and ^Order(2)"
+        ],
+        "correct": [1],
+        "explanation": "LOCK +^Order(1) acquires an incremental lock. LOCK +^Order(2) adds another incremental lock. But LOCK ^Order(3) (without the + prefix) is a simple lock: it first releases ALL previously held locks, then acquires only ^Order(3). After execution, only ^Order(3) is held. This is why incremental locks (LOCK +/-) should be used inside transactions rather than simple LOCK. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_clock)"
+      },
+      {
+        "id": 14,
+        "type": "single",
+        "question": "What does TROLLBACK (with no argument) do when $TLEVEL is 3?",
+        "options": [
+          "Rolls back only the innermost transaction (level 3)",
+          "Rolls back all three levels and sets $TLEVEL to 0",
+          "Rolls back two levels, leaving $TLEVEL at 1",
+          "Returns a <TRANSACTION> error because TROLLBACK requires an argument when $TLEVEL > 1"
+        ],
+        "correct": [1],
+        "explanation": "TROLLBACK with no argument performs a full rollback of ALL transaction levels, regardless of the current $TLEVEL. It undoes all changes made since the outermost TSTART and resets $TLEVEL to 0. To roll back only one level, use TROLLBACK 1. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_ctrollback)"
+      },
+      {
+        "id": 15,
+        "type": "single",
+        "question": "A developer writes the following Embedded SQL code inside a transaction:\n\nTSTART\nSET ^Log($I(^Log)) = \"Starting batch\"\n&sql(UPDATE Inventory SET Quantity = Quantity - 1 WHERE ItemId = 'A100')\nIF SQLCODE < 0 {\n  TROLLBACK\n  QUIT $$$ERROR($$$GeneralError, \"SQL Error: \"_SQLCODE)\n}\nTCOMMIT\n\nIf the UPDATE fails and TROLLBACK executes, which changes are rolled back?",
+        "options": [
+          "Only the SQL UPDATE is rolled back; the ^Log SET is preserved",
+          "Only the ^Log SET is rolled back; the SQL UPDATE was never committed",
+          "Both the ^Log SET and the SQL UPDATE are rolled back",
+          "Neither is rolled back because Embedded SQL uses a separate transaction context"
+        ],
+        "correct": [2],
+        "explanation": "In InterSystems IRIS, Embedded SQL and ObjectScript share the same transaction context. When TROLLBACK executes, ALL global modifications made since TSTART are rolled back, including both the ^Log SET and any changes from the SQL UPDATE. Note: even though the UPDATE failed (negative SQLCODE), it may have made partial changes to globals before failing. TROLLBACK ensures everything is cleanly rolled back to the state before TSTART. There is no separate transaction context for Embedded SQL. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GAPPS_tp)",
+        "revised": true
+      },
+      {
+        "id": 16,
+        "type": "multiple",
+        "question": "A developer writes the following lock acquisition with a timeout:\n\nLOCK +^Resource(resId):0\n\nWhich of the following statements about this command are correct?",
+        "options": [
+          "The timeout of 0 means the lock attempt returns immediately without waiting",
+          "$TEST is set to 1 if the lock was acquired, 0 if it was not",
+          "A timeout of 0 is equivalent to omitting the timeout entirely",
+          "This is useful for non-blocking lock attempts where the code can take alternative action if the lock is unavailable",
+          "If the lock is not acquired, a <TIMEOUT> error is thrown"
+        ],
+        "correct": [0, 1, 3],
+        "explanation": "LOCK +^Resource(resId):0 is a non-blocking lock attempt. It tries to acquire the lock immediately and returns without waiting. $TEST indicates success (1) or failure (0). This differs from omitting the timeout, which waits indefinitely. No error is thrown on failure; the code simply checks $TEST. This pattern is useful for try-or-skip scenarios. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_clock)"
+      },
+      {
+        "id": 17,
+        "type": "single",
+        "question": "What happens if a process terminates abnormally (e.g., a JOB crashes) while holding locks and an open transaction at $TLEVEL = 2?",
+        "options": [
+          "The locks are preserved until the system administrator manually removes them via the Management Portal",
+          "The transaction at $TLEVEL 2 is rolled back but $TLEVEL 1 is committed",
+          "The entire transaction is automatically rolled back and all locks held by the process are released",
+          "The locks are released but the partial transaction changes are committed"
+        ],
+        "correct": [2],
+        "explanation": "When a process terminates (normally or abnormally), InterSystems IRIS automatically rolls back ALL open transaction levels for that process and releases ALL locks held by that process. This prevents orphaned locks and uncommitted partial changes from affecting the system. There is no partial commit of nested levels. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=TOS_Transaction)"
+      },
+      {
+        "id": 18,
+        "type": "single",
+        "question": "Consider the following method that uses Dynamic SQL within a transaction:\n\nClassMethod BatchUpdate(items As %List) As %Status\n{\n  SET stmt = ##class(%SQL.Statement).%New()\n  SET sc = stmt.%Prepare(\"UPDATE Inventory SET Status = 'Active' WHERE ItemId = ?\")\n  TSTART\n  SET ptr = 0\n  WHILE $LISTNEXT(items, ptr, itemId) {\n    SET rs = stmt.%Execute(itemId)\n    IF rs.%SQLCODE < 0 {\n      TROLLBACK\n      QUIT\n    }\n  }\n  TCOMMIT\n  QUIT $$$OK\n}\n\nWhich statement about this code is correct?",
+        "options": [
+          "Dynamic SQL via %SQL.Statement does not participate in ObjectScript transactions, so TROLLBACK has no effect on the SQL changes",
+          "The %Prepare call should be inside the TSTART block for the SQL to participate in the transaction",
+          "Both Dynamic SQL and Embedded SQL share the same transaction context as ObjectScript, so TROLLBACK correctly undoes all SQL changes",
+          "Each %Execute call creates its own implicit transaction, making the outer TSTART redundant"
+        ],
+        "correct": [2],
+        "explanation": "In InterSystems IRIS, Dynamic SQL executed via %SQL.Statement participates in the same transaction context as ObjectScript. TSTART/TCOMMIT/TROLLBACK apply to all global modifications, whether made by ObjectScript SET commands, Embedded SQL, or Dynamic SQL. The %Prepare call does not need to be inside the transaction. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=TOS_Transaction)"
+      }
+    ]
+  }
+}

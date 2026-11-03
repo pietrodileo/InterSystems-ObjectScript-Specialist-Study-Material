@@ -1,0 +1,208 @@
+{
+    "quiz": {
+        "title": "T3.1: Storage Media Types",
+        "description": "Test your understanding of globals, temporary globals, process-private globals, and local variables in InterSystems IRIS through scenario-based questions with code examples.",
+        "version": "2.1",
+        "publishedDate": "2026-07-27",
+        "questions": [
+            {
+                "id": 1,
+                "type": "single",
+                "question": "While reviewing an application's code, you come across the following line:\n\nset ^||queryLog = $ZTS _ \" Update Successful, Row Count \" _ %ROWCOUNT\n\nWhich of the following is true about the queryLog variable?",
+                "options": [
+                    "queryLog is a temporary global visible to all processes and cleaned up on system restart",
+                    "queryLog is a process-private global visible only to this process and cleaned up on system restart",
+                    "queryLog is a temporary global visible only to this process and cleaned up when the process ends",
+                    "queryLog is a process-private global visible only to this process and cleaned up when the process ends"
+                ],
+                "correct": [3],
+                "explanation": "The ^|| prefix denotes a process-private global (PPG). PPGs are visible only to the creating process and are automatically cleaned up when the process terminates (not on system restart). Temporary globals (like ^IRIS.Temp.*) are visible to all processes and cleaned up on restart. (Reference: InterSystems Practice Question Q9; https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_variables#GCOS_variables_ppg)"
+            },
+            {
+                "id": 2,
+                "type": "single",
+                "question": "A batch process needs to accumulate intermediate results across multiple method calls within a single process, then discard them. The data volume is approximately 200MB. Consider the following approaches:\n\nA) set results(key) = value\nB) set ^||results(key) = value\nC) set ^IRIS.Temp.results(key) = value\nD) set ^results(key) = value\n\nWhich approach is most appropriate?",
+                "options": [
+                    "A - local variables are always the best choice for temporary data",
+                    "B - process-private globals handle large volumes and auto-cleanup on process end",
+                    "C - temporary globals provide auto-cleanup on system restart",
+                    "D - persistent globals are the most reliable storage"
+                ],
+                "correct": [1],
+                "explanation": "For 200MB of single-process temporary data, process-private globals (^||) are ideal. Local variables (A) would consume too much process memory for 200MB. ^IRIS.Temp.* (C) would work but is visible to other processes, creating potential naming conflicts. ^results (D) would persist indefinitely and require manual cleanup. PPGs auto-cleanup when the process ends. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_variables#GCOS_variables_ppg)"
+            },
+            {
+                "id": 3,
+                "type": "single",
+                "question": "Process A executes the following code:\n\nset ^||counter = 0\nfor i = 1:1:1000 {\n    set ^||counter = ^||counter + 1\n}\nwrite ^||counter\n\nProcess B then executes:\n\nwrite ^||counter\n\nWhat happens in Process B?",
+                "options": [
+                    "Process B writes 1000",
+                    "Process B writes 0",
+                    "Process B gets an <UNDEFINED> error because ^||counter does not exist in its context",
+                    "Process B writes \"\" (empty string)"
+                ],
+                "correct": [2],
+                "explanation": "Process-private globals are completely isolated per process. Process B has its own ^||counter namespace, which was never set, so referencing it produces an <UNDEFINED> error. Even though both processes use the same name ^||counter, these are entirely separate storage areas. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_variables#GCOS_variables_ppg)"
+            },
+            {
+                "id": 4,
+                "type": "single",
+                "question": "Consider the following code that runs in a web application where multiple CSP sessions must share progress data:\n\nClassMethod UpdateProgress(sessionId As %String, pct As %Integer)\n{\n    set ^||progress(sessionId) = pct\n}\n\nClassMethod GetProgress(sessionId As %String) As %Integer\n{\n    quit $GET(^||progress(sessionId), 0)\n}\n\nA user reports that GetProgress always returns 0 even after UpdateProgress was called. What is the most likely cause?",
+                "options": [
+                    "The $GET default value of 0 is masking the real value",
+                    "PPGs are not visible across different processes, and each CSP request may run in a different process",
+                    "The sessionId parameter has a type mismatch between the two methods",
+                    "PPGs cannot store integer values"
+                ],
+                "correct": [1],
+                "explanation": "In a web application, each HTTP request may be handled by a different process from the CSP server pool. Since process-private globals (^||) are only visible within the creating process, UpdateProgress and GetProgress running in different processes cannot share data via PPGs. A persistent global or temporary global (^IRIS.Temp.*) should be used for cross-process data sharing. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_variables#GCOS_variables_ppg)"
+            },
+            {
+                "id": 5,
+                "type": "single",
+                "question": "A developer writes the following code to cache computed values:\n\nset ^cache(\"tax\", zipCode) = taxRate\nset ^cache(\"ship\", zipCode) = shipCost\n\nAfter a system restart, they notice the cache data is still present. They want the cache to be automatically cleared on restart. Which change would accomplish this?",
+                "options": [
+                    "set ^||cache(\"tax\", zipCode) = taxRate",
+                    "set ^IRIS.Temp.cache(\"tax\", zipCode) = taxRate",
+                    "set cache(\"tax\", zipCode) = taxRate",
+                    "set ^%cache(\"tax\", zipCode) = taxRate"
+                ],
+                "correct": [1],
+                "explanation": "Temporary globals like ^IRIS.Temp.* are mapped to the IRISTEMP database, which is not preserved across system restarts. This is ideal for cache data that should be cleared on restart. PPGs (^||) would also be cleared but are process-private, which would prevent sharing the cache across processes. Local variables (no ^) are only in memory for the current process. ^% globals are persistent system globals. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_variables#GCOS_variables_tempglobals)"
+            },
+            {
+                "id": 6,
+                "type": "single",
+                "question": "Consider the following method that processes a large file:\n\nClassMethod ProcessFile(path As %String) As %Status\n{\n    set stream = ##class(%Stream.FileCharacter).%New()\n    do stream.LinkToFile(path)\n    set lineNum = 0\n    while 'stream.AtEnd {\n        set line = stream.ReadLine()\n        set lineNum = lineNum + 1\n        set ^||parsed(lineNum) = $PIECE(line, \",\", 1, 5)\n    }\n    // ... further processing of ^||parsed ...\n    quit $$$OK\n}\n\nWhich statements about ^||parsed are correct?",
+                "options": [
+                    "^||parsed is journaled and will survive a crash during processing",
+                    "^||parsed is stored in IRISTEMP and not journaled, so data is lost on a crash",
+                    "^||parsed is stored only in process memory like a local variable",
+                    "^||parsed is stored in the default database of the current namespace"
+                ],
+                "correct": [1],
+                "explanation": "Process-private globals are stored in the IRISTEMP database, which is not journaled. If the system crashes during processing, the ^||parsed data is lost. This is acceptable for temporary processing data that can be regenerated. PPGs are not stored in process memory (that is local variables) nor in the default namespace database. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_variables#GCOS_variables_ppg)"
+            },
+            {
+                "id": 7,
+                "type": "single",
+                "question": "Two concurrent processes need to build a shared work queue. Process A writes:\n\nset ^IRIS.Temp.WorkQueue($INCREMENT(^IRIS.Temp.WorkQueue)) = taskA\n\nProcess B writes:\n\nset ^IRIS.Temp.WorkQueue($INCREMENT(^IRIS.Temp.WorkQueue)) = taskB\n\nWhich statement is true about ^IRIS.Temp.WorkQueue?",
+                "options": [
+                    "It will cause collisions because temporary globals do not support $INCREMENT",
+                    "Both processes can see and write to it, and $INCREMENT ensures atomic sequence numbers",
+                    "Each process has its own copy, so the tasks will not be in the same queue",
+                    "It will be journaled and recoverable after a crash"
+                ],
+                "correct": [1],
+                "explanation": "Temporary globals (^IRIS.Temp.*) are visible to all processes, unlike PPGs. $INCREMENT is atomic and works on any global, including temporary ones, so both processes can safely add to the same queue without collisions. However, temporary globals are stored in IRISTEMP and are not journaled, so the queue is lost on system restart. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_variables#GCOS_variables_tempglobals)"
+            },
+            {
+                "id": 8,
+                "revised": true,
+                "type": "single",
+                "question": "A developer examines the following code and needs to identify which variables will survive a system restart:\n\nset localVar = \"in memory\"\nset ^||processData = \"process only\"\nset ^IRIS.Temp.shared = \"temp shared\"\nset ^AppData(\"key\") = \"persistent\"\nset ^CacheTempWork(1) = \"legacy temp\"\n\nWhich variable will still contain data after a system restart?",
+                "options": [
+                    "localVar",
+                    "^||processData",
+                    "^IRIS.Temp.shared",
+                    "^AppData(\"key\")",
+                    "^CacheTempWork(1)"
+                ],
+                "correct": [3],
+                "explanation": "Only ^AppData(\"key\") survives a restart because it is a persistent global stored in a journaled database. Local variables exist only in process memory. PPGs (^||) are in IRISTEMP. ^IRIS.Temp.* and ^CacheTemp* globals are mapped to IRISTEMP. IRISTEMP is rebuilt on every restart, clearing all its contents. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_variables)"
+            },
+            {
+                "id": 9,
+                "type": "single",
+                "question": "Consider the following mirror failover scenario. Before failover, Process X on the primary member executes:\n\nset ^PatientQueue(1) = \"John Smith\"\nset ^||tempCalc = 42\nset ^IRIS.Temp.staging(1) = \"staged\"\n\nAfter failover to the backup member, which data is available?",
+                "options": [
+                    "All three variables are available on the backup member",
+                    "Only ^PatientQueue(1) is available because it was journaled and replicated via mirroring",
+                    "^PatientQueue(1) and ^IRIS.Temp.staging(1) are available",
+                    "None of the data is available after failover"
+                ],
+                "correct": [1],
+                "explanation": "Mirroring replicates journal data. Only persistent globals in mirrored databases are journaled and replicated. ^PatientQueue(1) is a persistent global that was journaled. ^||tempCalc (PPG) and ^IRIS.Temp.staging (temporary global) are stored in IRISTEMP, which is not journaled and not replicated. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GHA_mirror)"
+            },
+            {
+                "id": 10,
+                "type": "single",
+                "question": "A developer writes a utility that must track execution counts across all processes in a namespace. They write:\n\nClassMethod RecordExecution(methodName As %String)\n{\n    set ^||execCount(methodName) = $GET(^||execCount(methodName), 0) + 1\n}\n\nClassMethod GetTotalExecutions(methodName As %String) As %Integer\n{\n    quit $GET(^||execCount(methodName), 0)\n}\n\nThe developer finds that GetTotalExecutions returns inconsistent values. What is wrong?",
+                "options": [
+                    "The $GET function cannot be used with PPGs",
+                    "^||execCount is process-private, so each process has its own counter; a persistent or temporary global should be used instead",
+                    "The $INCREMENT function must be used instead of manual addition",
+                    "PPGs do not support subscripted nodes"
+                ],
+                "correct": [1],
+                "explanation": "Since ^|| is a process-private global, each process maintains its own independent ^||execCount. GetTotalExecutions only sees the count from the current process, not a global total. To track counts across all processes, use a persistent global with $INCREMENT for atomicity: set ^execCount(methodName) = $INCREMENT(^execCount(methodName)). (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_variables#GCOS_variables_ppg)"
+            },
+            {
+                "id": 11,
+                "type": "single",
+                "question": "Consider the following code executed in a Terminal session:\n\nset x = 100\nset ^data(1) = \"saved\"\nset ^||temp = \"processing\"\n\nThe developer closes the Terminal (ending the process) and opens a new one. Which command will NOT produce an <UNDEFINED> error?",
+                "options": [
+                    "write x",
+                    "write ^||temp",
+                    "write ^data(1)",
+                    "All three will produce <UNDEFINED>"
+                ],
+                "correct": [2],
+                "explanation": "When the Terminal process ends, local variable x and PPG ^||temp are both destroyed. Only ^data(1), a persistent global, survives the process termination. In the new Terminal session, only write ^data(1) will return \"saved\" without error. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_variables)"
+            },
+            {
+                "id": 12,
+                "type": "single",
+                "question": "A developer needs to store session-specific state for a long-running background job. The data must persist across method calls within the same process but should not be visible to other processes. The total data is approximately 50MB. Which code pattern is most appropriate?",
+                "options": [
+                    "set sessionState(key) = value  // local variable",
+                    "set ^||sessionState(key) = value  // PPG",
+                    "set ^IRIS.Temp.session(jobId, key) = value  // temp global with job ID",
+                    "set ^sessionState($JOB, key) = value  // persistent global with $JOB subscript"
+                ],
+                "correct": [1],
+                "explanation": "A PPG (^||) is the best fit: it is process-private (not visible to others), persists across method calls within the process, handles 50MB well (stored in IRISTEMP on disk), and auto-cleans when the process ends. Local variables might consume too much process memory for 50MB. ^IRIS.Temp.* would work but is visible to other processes. A persistent global requires manual cleanup. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_variables#GCOS_variables_ppg)"
+            },
+            {
+                "id": 13,
+                "type": "single",
+                "question": "Consider this code that attempts to use a temporary global for inter-process communication:\n\nClassMethod Producer()\n{\n    for i = 1:1:100 {\n        set ^CacheTempQueue(i) = \"item\" _ i\n    }\n    set ^CacheTempQueue(\"done\") = 1\n}\n\nClassMethod Consumer()\n{\n    for {\n        hang 0.1\n        quit:$GET(^CacheTempQueue(\"done\"))\n    }\n    // process items...\n}\n\nWhich statement about ^CacheTempQueue is correct?",
+                "options": [
+                    "^CacheTemp* globals are persistent and will clog up the database if not cleaned up manually",
+                    "^CacheTemp* globals are mapped to IRISTEMP, visible to all processes, and cleared on restart",
+                    "^CacheTemp* globals are process-private like ^|| globals",
+                    "^CacheTemp* is not a recognized pattern and will be stored in the default database"
+                ],
+                "correct": [1],
+                "explanation": "The ^CacheTemp* naming pattern is a legacy convention (from Cache) recognized by InterSystems IRIS. These globals are automatically mapped to the IRISTEMP database. They are visible to all processes (making inter-process communication possible), not journaled, and cleared on system restart. The modern equivalent is ^IRIS.Temp.*. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_variables#GCOS_variables_tempglobals)"
+            },
+            {
+                "id": 14,
+                "type": "single",
+                "question": "A developer debugging a production issue adds the following logging code:\n\nset ^||debugLog($INCREMENT(^||debugLog)) = $ZSTRIP($ZERROR, \"<>W\")\n\nAfter the error occurs and the process terminates abnormally, the developer tries to examine the log. What will they find?",
+                "options": [
+                    "The ^||debugLog data is available and contains the error information",
+                    "The ^||debugLog data was lost because PPGs are destroyed when the process ends, even abnormally",
+                    "The ^||debugLog data is corrupted because the process terminated abnormally",
+                    "The ^||debugLog data was written to the journal and can be recovered"
+                ],
+                "correct": [1],
+                "explanation": "When a process terminates (normally or abnormally), all its process-private globals are automatically cleaned up. The developer will find no data in ^||debugLog. For persistent debug logging that survives process termination, use a persistent global like ^debugLog($JOB, ...) instead. PPGs are never journaled, so journal recovery is also not an option. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_variables#GCOS_variables_ppg)"
+            },
+            {
+                "id": 15,
+                "type": "multiple",
+                "question": "Consider the following storage comparison table:\n\n| Feature          | Local Var | PPG (^\\|\\|) | Temp Global (^IRIS.Temp.*) | Persistent Global |\n|------------------|-----------|-----------|----------------------------|-------------------|\n| Stored in        | Memory    | IRISTEMP   | IRISTEMP                    | Database          |\n| Visible to       | Process   | Process   | All processes              | All processes     |\n| Survives restart | No        | No        | No                         | ?                 |\n| Journaled        | No        | No        | No                         | ?                 |\n\nWhich of the following correctly complete the two missing cells (?) for persistent globals? (Select all that apply)",
+                "options": [
+                    "Persistent globals always survive a restart",
+                    "Persistent globals survive a restart if stored in a durable database",
+                    "Persistent globals are always journaled",
+                    "Persistent globals are journaled if the database has journaling enabled",
+                    "Persistent globals are journaled only during transactions"
+                ],
+                "correct": [1, 3],
+                "explanation": "Persistent globals survive restarts when stored in a durable database (the typical case). They are journaled only if the database they reside in has journaling enabled - some databases may have journaling disabled for performance reasons. It is not true that they are always journaled (e.g., a non-journaled database) or only journaled during transactions. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCDI_journal)"
+            }
+        ]
+    }
+}

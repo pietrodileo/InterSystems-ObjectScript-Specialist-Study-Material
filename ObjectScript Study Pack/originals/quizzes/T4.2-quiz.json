@@ -1,0 +1,207 @@
+{
+  "quiz": {
+    "title": "T4.2: Manipulates Lists",
+    "description": "Scenario-based questions on $LISTBUILD, $LIST, $LISTGET, $LISTNEXT iteration, $LISTTOSTRING/$LISTFROMSTRING conversions, $LISTLENGTH, $LISTFIND, $LISTSAME, and list vs delimited string comparisons.",
+    "version": "2.1",
+    "publishedDate": "2026-04-09",
+    "questions": [
+      {
+        "id": 1,
+        "type": "single",
+        "question": "Consider the following list:\n\nset x = $LB(\"A\", \"B\", \"C\")\n\nHow do you retrieve the third element in this list?",
+        "options": [
+          "set y = $LISTGET(x, 3, \"default value\")",
+          "set y = $LISTGET(x, 2, \"default value\")",
+          "set y = $LISTNEXT(x, 2, \"default value\")",
+          "set y = $LISTNEXT(x, 3, \"default value\")"
+        ],
+        "correct": [0],
+        "explanation": "$LISTGET uses 1-based indexing. $LISTGET(x, 3, \"default value\") returns the element at position 3, which is \"C\". The third argument is a default value returned only if the position is undefined. $LISTNEXT is an iteration function with different syntax (it takes a pointer, not a position). (Reference: InterSystems Practice Q15; https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_flistget)"
+      },
+      {
+        "id": 2,
+        "type": "single",
+        "question": "You are building a patient demographics record. Consider:\n\nset record = $LISTBUILD(\"Smith\", \"John\", 45, \"Male\")\nwrite $LISTGET(record, 2)\n\nWhat is the output?",
+        "options": [
+          "Smith",
+          "John",
+          "45",
+          "Male"
+        ],
+        "correct": [1],
+        "explanation": "$LISTGET retrieves an element by its 1-based position. Position 2 of the list (\"Smith\", \"John\", 45, \"Male\") is \"John\". (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_flistget)"
+      },
+      {
+        "id": 3,
+        "type": "single",
+        "question": "A data import routine encounters missing fields. Consider:\n\nset row = $LISTBUILD(\"OrderA\",,\"Shipped\")\nwrite $LISTGET(row, 2, \"N/A\")\n\nWhat is the output?",
+        "options": [
+          "\"\" (empty string)",
+          "N/A",
+          "<NULL>",
+          "An <UNDEFINED> error"
+        ],
+        "correct": [1],
+        "explanation": "In $LISTBUILD(\"OrderA\",,\"Shipped\"), position 2 is undefined (null) - not an empty string, but truly undefined. $LISTGET with a default value returns \"N/A\" for an undefined element. If position 2 were an empty string ($LB(\"OrderA\",\"\",\"Shipped\")), $LISTGET would return the empty string instead. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_flistget)"
+      },
+      {
+        "id": 4,
+        "type": "single",
+        "question": "You are converting data between list and delimited formats. Consider:\n\nset colors = $LISTBUILD(\"Red\", \"Green\", \"Blue\")\nset str = $LISTTOSTRING(colors, \"|\")\nwrite str\n\nWhat is the output?",
+        "options": [
+          "Red|Green|Blue",
+          "Red,Green,Blue",
+          "$LB(\"Red\",\"Green\",\"Blue\")",
+          "RedGreenBlue"
+        ],
+        "correct": [0],
+        "explanation": "$LISTTOSTRING converts a $LISTBUILD list into a delimited string. The second argument specifies the delimiter character. With \"|\" as the delimiter, the result is \"Red|Green|Blue\". (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_flisttostring)"
+      },
+      {
+        "id": 5,
+        "type": "single",
+        "question": "A CSV file parser needs to convert a line into a list. Consider:\n\nset line = \"Tokyo,London,Paris\"\nset cities = $LISTFROMSTRING(line, \",\")\nwrite $LISTGET(cities, 2)\n\nWhat is the output?",
+        "options": [
+          "Tokyo",
+          "London",
+          "Paris",
+          "Tokyo,London,Paris"
+        ],
+        "correct": [1],
+        "explanation": "$LISTFROMSTRING converts a delimited string into a $LISTBUILD list. Using \",\" as the delimiter, \"Tokyo,London,Paris\" becomes $LB(\"Tokyo\",\"London\",\"Paris\"). Position 2 is \"London\". (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_flistfromstring)"
+      },
+      {
+        "id": 6,
+        "type": "single",
+        "question": "You need to iterate through a list of error messages as efficiently as possible. Which code is correct?",
+        "options": [
+          "set ptr = 0\nwhile $LISTNEXT(errors, ptr, msg) {\n  write msg, !\n}",
+          "set ptr = 1\nwhile $LISTNEXT(errors, ptr, msg) {\n  write msg, !\n}",
+          "set ptr = \"\"\nwhile $LISTNEXT(errors, ptr, msg) {\n  write msg, !\n}",
+          "for i = 1:1:$LL(errors) {\n  set msg = $LISTNEXT(errors, i)\n  write msg, !\n}"
+        ],
+        "correct": [0],
+        "explanation": "$LISTNEXT requires the pointer to be initialized to 0 before the first call. Each call advances the pointer internally and sets the value in msg. It returns 1 while elements remain and 0 when exhausted. $LISTNEXT is the most efficient way to iterate because it avoids recalculating offsets. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_flistnext)"
+      },
+      {
+        "id": 7,
+        "type": "single",
+        "question": "You are merging two lists of permissions. Consider:\n\nset read = $LISTBUILD(\"view\", \"export\")\nset write = $LISTBUILD(\"edit\", \"delete\")\nset all = read _ write\nwrite $LISTLENGTH(all)\n\nWhat is the output?",
+        "options": [
+          "2",
+          "4",
+          "A <LIST> error",
+          "1"
+        ],
+        "correct": [1],
+        "explanation": "Concatenating two $LISTBUILD lists with the _ operator produces a valid combined list. $LB(\"view\",\"export\") _ $LB(\"edit\",\"delete\") creates $LB(\"view\",\"export\",\"edit\",\"delete\"), which has 4 elements. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_lists)"
+      },
+      {
+        "id": 8,
+        "type": "single",
+        "question": "A data correction routine needs to update a list element in place. Consider:\n\nset items = $LISTBUILD(\"Apple\", \"Bannana\", \"Cherry\")\nset $LIST(items, 2) = \"Banana\"\nwrite $LISTGET(items, 2)\n\nWhat is the output?",
+        "options": [
+          "Bannana",
+          "Banana",
+          "A <FUNCTION> error",
+          "Apple"
+        ],
+        "correct": [1],
+        "explanation": "SET $LIST(list, position) = value modifies the list in place, replacing the element at the specified position. After the correction, position 2 now contains \"Banana\" instead of the misspelled \"Bannana\". (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_flist)"
+      },
+      {
+        "id": 9,
+        "type": "single",
+        "question": "You need to extract a sublist from a larger list. Consider:\n\nset weekdays = $LISTBUILD(\"Mon\", \"Tue\", \"Wed\", \"Thu\", \"Fri\")\nset midweek = $LIST(weekdays, 2, 4)\nwrite $LISTTOSTRING(midweek, \"-\")\n\nWhat is the output?",
+        "options": [
+          "Tue-Wed-Thu",
+          "Mon-Tue-Wed-Thu",
+          "Tue-Thu",
+          "Wed-Thu-Fri"
+        ],
+        "correct": [0],
+        "explanation": "$LIST(list, from, to) extracts a sublist from position 'from' to position 'to' inclusive. $LIST(weekdays, 2, 4) returns $LB(\"Tue\",\"Wed\",\"Thu\"). Converting to string with \"-\" gives \"Tue-Wed-Thu\". (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_flist)"
+      },
+      {
+        "id": 10,
+        "type": "single",
+        "question": "You are searching for a specific role in a user's role list. Consider:\n\nset roles = $LISTBUILD(\"Admin\", \"Editor\", \"Viewer\", \"Auditor\")\nwrite $LISTFIND(roles, \"Viewer\")\n\nWhat is the output?",
+        "options": [
+          "2",
+          "3",
+          "Viewer",
+          "0"
+        ],
+        "correct": [1],
+        "explanation": "$LISTFIND searches for an element in a list and returns its 1-based position. \"Viewer\" is at position 3. If the element is not found, $LISTFIND returns 0. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_flistfind)"
+      },
+      {
+        "id": 11,
+        "type": "single",
+        "question": "A developer reports that accessing a null list element throws an error. Consider:\n\nset x = $LISTBUILD(\"A\",,\"C\")\nwrite $LIST(x, 2)\n\nWhat happens?",
+        "options": [
+          "It writes an empty string",
+          "It writes <null>",
+          "It throws a <NULL VALUE> error",
+          "It writes 0"
+        ],
+        "correct": [2],
+        "explanation": "Position 2 in $LB(\"A\",,\"C\") is undefined (null). Unlike $LISTGET which returns a default value for undefined elements, $LIST throws a <NULL VALUE> error. Use $LISTGET with a default value to safely access elements that might be null. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_flist)"
+      },
+      {
+        "id": 12,
+        "type": "multiple",
+        "question": "A colleague asks about the advantages of $LISTBUILD lists over delimited strings. Which of the following are true? (Select all that apply)",
+        "options": [
+          "Elements can contain the delimiter character without conflict",
+          "Elements can be undefined (null) as distinct from empty string",
+          "$LISTBUILD lists use significantly less memory than delimited strings",
+          "Elements preserve their data type (string vs number)",
+          "$LISTBUILD lists can be displayed in readable $LISTBUILD notation using ZWRITE"
+        ],
+        "correct": [0, 1, 3, 4],
+        "explanation": "$LISTBUILD lists use a binary encoded format that preserves data types, supports null/undefined elements distinct from empty strings, and avoids delimiter conflicts. WRITE outputs the binary representation of a $LISTBUILD list (garbled characters), while ZWRITE displays them in readable $lb() notation (e.g., ZWRITE $LB(\"A\",,\"C\") shows $lb(\"A\",,\"C\")). Memory usage is comparable to delimited strings. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_lists)",
+        "revised": true
+      },
+      {
+        "id": 13,
+        "type": "single",
+        "question": "You need to verify whether an incoming value is a valid list before processing. Consider:\n\nset input = \"not a list\"\nwrite $LISTVALID(input)\n\nWhat is the output?",
+        "options": [
+          "1",
+          "0",
+          "A <LIST> error",
+          "\"not a list\""
+        ],
+        "correct": [1],
+        "explanation": "$LISTVALID returns 1 if the value is a valid $LISTBUILD list and 0 otherwise. A plain string \"not a list\" is not a valid list structure, so $LISTVALID returns 0. This is the safe way to test before calling list functions. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_flistvalid)"
+      },
+      {
+        "id": 14,
+        "type": "single",
+        "question": "You are comparing two lists that were built differently. Consider:\n\nset list1 = $LISTBUILD(\"X\", \"Y\", \"Z\")\nset list2 = $LISTFROMSTRING(\"X,Y,Z\", \",\")\nwrite $LISTSAME(list1, list2)\n\nWhat is the output?",
+        "options": [
+          "0",
+          "1",
+          "A <FUNCTION> error",
+          "\"X,Y,Z\""
+        ],
+        "correct": [1],
+        "explanation": "$LISTSAME compares two lists element by element. Both list1 and list2 contain the same three string elements (\"X\", \"Y\", \"Z\") in the same order, so $LISTSAME returns 1 (true), even though they were constructed differently. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_flistsame)"
+      },
+      {
+        "id": 15,
+        "type": "single",
+        "question": "You are processing a multi-value HL7 field stored as a list. Consider:\n\nset diagnoses = $LISTBUILD(\"J06.9\", \"R05\", \"J20.9\", \"R50.9\")\nset pos = $LISTFIND(diagnoses, \"R05\")\nif pos {\n  write \"Found at position: \", pos\n} else {\n  write \"Not found\"\n}\n\nWhat is the output?",
+        "options": [
+          "Found at position: 1",
+          "Found at position: 2",
+          "Found at position: 3",
+          "Not found"
+        ],
+        "correct": [1],
+        "explanation": "$LISTFIND returns the 1-based position of the element \"R05\" in the list. It is at position 2. Since 2 is non-zero (truthy), the if branch executes and prints \"Found at position: 2\". If the element were not in the list, $LISTFIND would return 0 (falsy). (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_flistfind)"
+      }
+    ]
+  }
+}

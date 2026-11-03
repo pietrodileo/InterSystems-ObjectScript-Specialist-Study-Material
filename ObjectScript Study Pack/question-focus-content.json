@@ -1,0 +1,2194 @@
+{
+  "T1.1": [
+    {
+      "title": "L’indice non si indovina dal suffisso",
+      "reason": "BME identifica l’indice di estensione; la sua Location esplicita punta a ^EW3K.DuIo.3. Le altre location rappresentano dati o indici differenti.",
+      "insight": "Il nome logico permette di trovare il contenitore fisico senza dipendere dalle convenzioni di denominazione.",
+      "challenge": "Spostando soltanto BME in ^Archivio.BME, quale global va ispezionato? Quello indicato dalla nuova Location."
+    },
+    {
+      "title": "Cancellare per chiave applicativa",
+      "reason": "JTE810 è MessageId, non l’ID interno. MIIdxDelete risolve la chiave univoca e identifica l’oggetto da eliminare.",
+      "insight": "Una stringa che sembra un identificativo non rivela quale spazio di identità usa l’API. Controlla sempre il contratto del metodo.",
+      "challenge": "Se MessageId fosse 42 e anche l’ID fosse 42, i due concetti diventerebbero equivalenti? No, coinciderebbero soltanto in quel record."
+    },
+    {
+      "title": "Salvataggio e conferma della transazione",
+      "reason": "%Save restituisce uno status e rende disponibile l’ID nell’esempio. La presenza dell’ID non sostituisce il controllo dell’esito.",
+      "insight": "Se una transazione esterna rimane aperta, un save riuscito non prova che l’intera operazione applicativa sia stata confermata.",
+      "challenge": "Dopo un save riuscito dentro TSTART puoi già inviare una conferma definitiva al cliente? Occorre prima gestire il commit dell’operazione completa."
+    },
+    {
+      "title": "Ereditarietà multipla e stato ereditato",
+      "reason": "PickupTruck combina il comportamento persistente di Truck con proprietà e metodi di Vehicle; non conserva soltanto TowCapacity.",
+      "insight": "Leggi la gerarchia e l’ordine delle superclassi quando risolvi membri omonimi. Proprietà ereditata e proprietà dichiarata localmente partecipano entrambe al modello effettivo.",
+      "challenge": "Aggiungendo Describe nella sottoclasse, quale implementazione userà la chiamata? Quella ridefinita nella sottoclasse, salvo esplicito richiamo al padre."
+    },
+    {
+      "title": "Massimo ID e cardinalità",
+      "reason": "Il valore 5 alimenta la prossima allocazione, 6 nello schema mostrato. I due sottonodi visibili rappresentano due record, non cinque.",
+      "insight": "I buchi non dimostrano da soli una cancellazione: allocazioni e operazioni fallite possono rendere il contatore diverso dal numero di righe.",
+      "challenge": "Con ID presenti 2 e 9 e contatore 12, quante righe sono dimostrate? Due; il contatore non è COUNT(*)."
+    },
+    {
+      "title": "Caricamento e riferimento valido",
+      "reason": "%OpenId produce un oref oppure una stringa vuota nel caso non trovato. Accedere subito a Salary confonde caricamento e uso dell’oggetto.",
+      "insight": "Il controllo dell’esistenza va prima di qualsiasi dereferenziazione. Lo status di uscita consente inoltre una diagnosi più precisa.",
+      "challenge": "Se l’ID manca, un successivo SET emp.Salary crea automaticamente il dipendente? No: manca il riferimento su cui operare."
+    },
+    {
+      "title": "Cancellazione con effetti applicativi",
+      "reason": "%DeleteExtent è la scelta del quiz quando servono le callback di cancellazione. DROP TABLE cambia anche lo schema, mentre la cancellazione rapida segue un contratto diverso.",
+      "insight": "Prima di ottimizzare una cancellazione chiediti quali verifiche o effetti implementano le callback: la stessa quantità di righe eliminate non implica lo stesso comportamento.",
+      "challenge": "Se una callback aggiorna un registro, basta verificare che la tabella sia vuota? No: va verificato anche l’effetto previsto dal registro."
+    },
+    {
+      "title": "Documentazione come metadato",
+      "reason": "I commenti /// associati ai membri diventano descrizioni consultabili nel dizionario e nella documentazione delle classi.",
+      "insight": "Documentare un contratto vicino alla dichiarazione rende visibili anche unità, precondizioni e significato dei risultati, non soltanto l’implementazione.",
+      "challenge": "Dove descriveresti se un importo include l’imposta? Nella descrizione del membro o parametro che espone quell’importo."
+    },
+    {
+      "title": "Costruzione con effetti collaterali",
+      "reason": "%New inoltra gli argomenti a %OnNew; Name e MRN vengono inizializzati prima di restituire l’oref riuscito.",
+      "insight": "Il contatore MRN viene modificato durante la costruzione, prima del salvataggio del paziente. Creare e poi abbandonare l’istanza può quindi consumare un numero.",
+      "challenge": "Se crei due istanze ma ne salvi una sola, puoi dedurre che esistano due pazienti? No: le allocazioni nel costruttore non contano i record persistenti."
+    },
+    {
+      "title": "Location specifica e fallback",
+      "reason": "SKUIdx ha una Location propria, ^A1B2.C3D4.3. Il valore generico IndexLocation non annulla quella mappa esplicita.",
+      "insight": "Per diagnosticare uno specifico indice parti dal suo nome, non dall’insieme degli indici della classe.",
+      "challenge": "Cambiando soltanto IndexLocation, hai provato che SKUIdx sia stato spostato? No, devi rileggere la sua location effettiva."
+    },
+    {
+      "title": "Dal namespace al database",
+      "reason": "DataLocation identifica ^Sales.OrderD; il mapping del namespace determina il database che ospita quel global.",
+      "insight": "Classe, global e database sono tre livelli. Conoscere il primo non elimina la necessità di risolvere gli altri due.",
+      "challenge": "Due namespace vedono lo stesso nome di global: devono vedere gli stessi dati? Non necessariamente, dipende dai mapping."
+    },
+    {
+      "title": "Oggetto in memoria e API persistente",
+      "reason": "Counter eredita da %RegisteredObject: Increment funziona sullo stato in memoria, ma ciò non gli conferisce %Save.",
+      "insight": "Non ogni oggetto istanziabile è un record. La possibilità di serializzare contenuti non equivale al contratto di una classe %Persistent.",
+      "challenge": "Per un contatore usato soltanto durante una richiesta serve una tabella? No, se la durata richiesta coincide con quella dell’istanza in memoria."
+    },
+    {
+      "title": "Storage di una sottoclasse",
+      "reason": "La domanda descrive una gerarchia persistente con storage condiviso. Il layout concreto va però letto nella definizione generata, senza universalizzare il sottonodo Rectangle.",
+      "insight": "L’ereditarietà del modello non obbliga a un global separato per ogni classe. Il dizionario logico e la rappresentazione fisica possono avere granularità diverse.",
+      "challenge": "Puoi cercare ^App.RectangleD solo dal nome della classe? No: prima identifica lo storage effettivo della gerarchia."
+    },
+    {
+      "title": "Due canali di risultato nel caricamento",
+      "reason": "Il terzo argomento .sc riceve informazioni di stato; il valore restituito continua a essere l’oref. Le virgole mantengono la posizione dell’argomento omesso.",
+      "insight": "Progetta separatamente il ramo non trovato e il ramo errore di caricamento, usando il contratto e lo status restituito dall’API.",
+      "challenge": "Se scrivi set sc=%OpenId(...), sc contiene uno status? No: contiene il valore di ritorno del metodo, cioè il riferimento o il risultato vuoto."
+    },
+    {
+      "title": "Override e salvataggio ignorato",
+      "reason": "Log della sottoclasse sostituisce il metodo ereditato. Il messaggio viene assegnato e il codice tenta %Save.",
+      "insight": "Il frammento usa DO per un metodo che produce uno status: manca la gestione esplicita dell’esito del salvataggio. L’avvenuta chiamata non prova il successo dell’audit.",
+      "challenge": "Quale risultato controlleresti prima di dichiarare che il log è persistito? Lo status di %Save, propagandolo al chiamante se necessario."
+    },
+    {
+      "title": "Leggere la mappa dello storage",
+      "reason": "DataLocation, IndexLocation, StreamLocation e IdLocation hanno ruoli diversi; DefaultData nomina una definizione di layout, non un database.",
+      "insight": "Una parola come Data compare a più livelli: distinguere il nome di un blocco XML da una destinazione evita diagnosi sul database sbagliato.",
+      "challenge": "Se DefaultData vale CustomerDefaultData, è il nome di un file fisico? No, è un riferimento interno alla definizione di storage."
+    },
+    {
+      "title": "Utility senza istanza",
+      "reason": "Un ClassMethod basta per formattare una data senza conservare stato per oggetto. Abstract comunica che l’istanza non fa parte dell’interfaccia prevista.",
+      "insight": "Una costante o un helper non richiede automaticamente una classe persistente: la scelta della superclasse determina anche API e struttura generata.",
+      "challenge": "Se FormatDate diventa dipendente dal fuso scelto da ogni utente, dove rappresenti quel contesto? In un argomento o in uno stato esplicito, non in una persistenza introdotta senza necessità."
+    },
+    {
+      "title": "Visitare record esistenti",
+      "reason": "Il ciclo prova mille identificativi ma può trovare soltanto cinquecento oggetti. L’intervallo visitato non coincide con l’insieme delle righe presenti.",
+      "insight": "La spiegazione del quiz propone una possibile distribuzione, non una prova di quali ID manchino. Conta caricati, mancanti, falliti e salvati per distinguere le cause.",
+      "challenge": "Se mancano gli ID dispari anziché quelli sopra 500, il totale può restare 500? Sì: lo stesso totale non identifica la distribuzione dei buchi."
+    }
+  ],
+  "T1.2": [
+    {
+      "title": "MAXLEN è un contratto da controllare",
+      "reason": "Il punto utile è rendere esplicita la lunghezza richiesta e controllare la validazione; il troncamento silenzioso descritto dalla fonte non va assunto come comportamento universale.",
+      "insight": "Un Bio di migliaia di caratteri e un report di megabyte hanno esigenze diverse: aumentare il limite non rende una stringa equivalente a uno stream.",
+      "challenge": "Per un campo di 2000 caratteri, cosa proveresti al confine? Valori di 1999, 2000 e 2001 caratteri e lo status ottenuto."
+    },
+    {
+      "title": "Testo grande e luogo di conservazione",
+      "reason": "GlobalCharacter sceglie testo conservato nel database. FileCharacter cambia la destinazione; Binary cambia il significato dei dati.",
+      "insight": "La compressione va verificata nella classe e nella configurazione adottate: il tipo corretto non garantisce ogni comportamento opzionale descritto dal quiz.",
+      "challenge": "Un PDF da 5 MB va trattato automaticamente come testo? No: la dimensione non determina la natura Character o Binary."
+    },
+    {
+      "title": "Validazione di vincoli indipendenti",
+      "reason": "Name mancante viola Required; Toys viola VALUELIST. Un valore valido di Price non compensa gli altri errori.",
+      "insight": "Valida ogni proprietà contro il suo vincolo e poi raccogli lo status complessivo. Non fermarti al primo dato apparentemente corretto.",
+      "challenge": "Impostando Name ma lasciando Toys, quanti dei due problemi individuati restano? Uno: l’appartenenza alla lista dei valori consentiti."
+    },
+    {
+      "title": "Valore derivato e dipendenze",
+      "reason": "Nello scenario Subtotal 100 e TaxRate 0.08 producono 108. SqlComputed e le dipendenze dichiarate stabiliscono quando mantenere il dato derivato.",
+      "insight": "Memorizzare un risultato calcolato richiede una politica di aggiornamento: la formula da sola non impedisce che il risultato diventi obsoleto.",
+      "challenge": "Se l’aliquota passa a 0.10 e il meccanismo dichiarato ricalcola, quale totale ti aspetti? 110, da verificare dopo l’operazione prevista."
+    },
+    {
+      "title": "Calculated non significa formula inventata",
+      "reason": "FullName non è memorizzato: serve un accessor o un meccanismo di calcolo coerente con i keyword scelti. Il nome della proprietà non fornisce la formula.",
+      "insight": "Una proprietà virtuale è un’interfaccia: chi la legge deve ottenere il risultato del calcolo, senza trattarla come una copia da aggiornare manualmente.",
+      "challenge": "Se LastName cambia, FullName virtuale deve attendere una migrazione dei record? No: dipende dal calcolo eseguito in lettura."
+    },
+    {
+      "title": "Bitslice e aggregati",
+      "reason": "ChargesIdx è il candidato costruito per rappresentare valori numerici con bit slice e facilitare aggregazioni nel caso proposto.",
+      "insight": "Idoneità dell’indice e piano scelto non sono sinonimi. Confronta il piano effettivo e i dati letti, evitando la promessa che ogni SUM sarà sempre risolto soltanto dall’indice.",
+      "challenge": "Se aggiungi un filtro su un’altra colonna, il solo ChargesIdx garantisce l’intera query? No: occorre considerare anche il filtro e il piano."
+    },
+    {
+      "title": "Aprire tramite indice univoco",
+      "reason": "EmailIdxOpen restituisce un oggetto, non lo status suggerito dal nome della variabile sc nel chiamante.",
+      "insight": "Usare nomi coerenti con i tipi di ritorno riduce errori: account per l’oref e sc2 per lo status di uscita. Il SET non cambia il tipo del risultato.",
+      "challenge": "Dopo set sc=EmailIdxOpen(...), puoi usare $$$ISOK(sc) per valutare l’apertura? Non è il controllo appropriato per un oref."
+    },
+    {
+      "title": "Intersezione di insiemi",
+      "reason": "La condizione AND richiede gli ID presenti sia nel bitmap Shipped sia in North. Non è una concatenazione di tutte le righe dei due gruppi.",
+      "insight": "Per COUNT(*) può bastare contare i candidati del piano; selezionare altre colonne può invece richiedere letture dei record.",
+      "challenge": "Con Shipped={1,2,4} e North={2,3,4}, quanti corrispondono? Due: gli ID 2 e 4."
+    },
+    {
+      "title": "Vincolo referenziale e ordine delle operazioni",
+      "reason": "Il dipendente riferisce HR, che non esiste nel dipartimento: il salvataggio non deve inventare il record padre.",
+      "insight": "Quando importi dati collegati, pianifica l’ordine e il confine transazionale: rispettare una chiave esterna richiede dati referenziati validi, non soltanto sintassi valida.",
+      "challenge": "Correggere il tipo di DeptCode risolve una chiave HR inesistente? No: il problema è la presenza del record referenziato."
+    },
+    {
+      "title": "Parametro e configurazione applicativa",
+      "reason": "APPVERSION si legge con # e non con la sintassi di una proprietà d’istanza. Non serve creare un oggetto per accedere al parametro.",
+      "insight": "Un parametro di classe esprime un valore nella definizione compilata; una configurazione modificabile dagli utenti ha requisiti di aggiornamento differenti.",
+      "challenge": "Cambiare una riga di configurazione applicativa cambia da solo #APPVERSION? No: sono meccanismi diversi."
+    },
+    {
+      "title": "Ordine delle chiavi composte",
+      "reason": "SensorId restringe la prima parte dell’indice; dentro quel gruppo ReadingTime consente la scansione dell’intervallo.",
+      "insight": "L’ordine dei predicati scritti nel WHERE non cambia l’ordine fisico dell’indice. Conta l’ordine nella definizione delle chiavi.",
+      "challenge": "Invertire i due predicati nel testo SQL distrugge il vantaggio? No: non equivale a invertire le colonne dell’indice."
+    },
+    {
+      "title": "Calcolo mantenuto da più interfacce",
+      "reason": "Updated content ha 15 caratteri. La domanda mostra che il dato derivato deve restare coerente anche quando la modifica passa da SQL.",
+      "insight": "Se il calcolo è centralizzato nel modello, evita una seconda formula applicativa divergente. Conferma comunque keyword e percorso di aggiornamento della classe reale.",
+      "challenge": "Se un’applicazione cambia Data senza aggiornare manualmente DataLength, cosa deve garantire il modello dichiarato? Che il meccanismo di calcolo previsto mantenga il risultato."
+    },
+    {
+      "title": "Default non significa obbligatorietà",
+      "reason": "Role e LoginCount vengono inizializzati durante la costruzione. Required risponde invece alla domanda se il valore possa mancare alla validazione.",
+      "insight": "Un default è un valore di partenza, non una regola che impedisce al chiamante di impostarne uno diverso quando consentito.",
+      "challenge": "Se il chiamante imposta Role=Editor prima del save, il solo InitialExpression deve ripristinare Viewer? No, non è un vincolo di immutabilità."
+    },
+    {
+      "title": "Stream e ritorni a capo",
+      "reason": "Write accumula il testo nel flusso dell’esempio; WriteLine aggiunge anche il terminatore. Il risultato comprende contenuto e separatore.",
+      "insight": "Non ricostruire un intero report enorme in una stringa soltanto perché il quiz lo fa: conserva la lettura a blocchi anche nel consumatore quando possibile.",
+      "challenge": "Se sostituisci WriteLine con Write, dove finirà la seconda sezione? Subito dopo la prima, senza il ritorno a capo aggiunto."
+    },
+    {
+      "title": "Tre dimensioni dell’indice",
+      "reason": "Unique descrive un vincolo; bitmap e bitslice descrivono rappresentazioni utili a ricerche diverse. Unique non trasforma un indice standard in bitmap.",
+      "insight": "Valuta insieme unicità, cardinalità, aggregazione e costo degli aggiornamenti. Un indice può aiutare una lettura ma aggiungere lavoro a ogni scrittura.",
+      "challenge": "Un campo con tre valori possibili è automaticamente univoco? No: cardinalità bassa e unicità sono proprietà differenti."
+    },
+    {
+      "title": "Assegnazione e validazione",
+      "reason": "Salary 25000 può essere assegnato all’oggetto, ma viola MINVAL 30000 quando viene validato dal save. $$$ISOK restituisce quindi falso nello scenario.",
+      "insight": "Separare lo stato temporaneo in memoria dallo stato accettabile per la persistenza spiega perché controllare il SET non basta.",
+      "challenge": "Con MINVAL 30000, qual è il primo valore di confine valido? 30000, se non intervengono altri vincoli."
+    },
+    {
+      "title": "Timestamp iniziale e unicità",
+      "reason": "L’espressione viene valutata alla creazione e fotografa quell’istante. Non è un timestamp congelato alla compilazione.",
+      "insight": "Un valore temporale non garantisce un identificatore univoco: due oggetti possono nascere nella stessa risoluzione dell’orologio. La fonte usa unico in modo troppo forte.",
+      "challenge": "Due Task creati nello stesso secondo possono avere lo stesso CreatedAt? Sì; serve un altro meccanismo se occorre unicità."
+    },
+    {
+      "title": "Nessun MAXLEN non significa infinito",
+      "reason": "MAXLEN vuoto rimuove quel controllo di lunghezza, ma rimangono i limiti delle stringhe della piattaforma e del contesto.",
+      "insight": "La decisione tra stringa e stream riguarda anche elaborazione, memoria e interfaccia, non soltanto il limite di validazione.",
+      "challenge": "Un import di centinaia di megabyte diventa adatto a %String impostando MAXLEN vuoto? No: usa un flusso e una strategia a blocchi."
+    }
+  ],
+  "T1.3": [
+    {
+      "title": "Contesto di classe e di istanza",
+      "reason": "Area usa Radius dell’oggetto corrente; FromDiameter è un ClassMethod senza quell’istanza implicita. Entrambi possono leggere parametri di classe.",
+      "insight": "La sintassi relativa va interpretata rispetto al membro chiamato: un metodo di classe può chiamare altri metodi di classe, senza acquisire proprietà d’istanza.",
+      "challenge": "FromDiameter può creare un oggetto e impostarne Radius esplicitamente? Sì, tramite un oref esplicito anziché uno stato d’istanza implicito."
+    },
+    {
+      "title": "Costante condivisa e cambiamenti di aliquota",
+      "reason": "Un parametro elimina duplicazioni nella definizione dell’aliquota e rende i ClassMethod coerenti nello scenario.",
+      "insight": "Se l’aliquota cambia per data, città o utente, una costante compilata può non rappresentare più il requisito: occorre rendere esplicita quella variabilità.",
+      "challenge": "Per due città con aliquote diverse, basta una sola costante TAXRATE? Solo se il modello distingue altrove quale regola applicare."
+    },
+    {
+      "title": "Arrotondamento al confine dell’operazione",
+      "reason": "Add somma 1.123456 e 2.654321 ottenendo 3.777777; Round formatta a quattro decimali producendo 3.7778.",
+      "insight": "Arrotondare ogni addendo prima di sommare può differire dall’arrotondamento finale. Decidi il punto del calcolo in base al contratto numerico.",
+      "challenge": "Con due importi da 0.005 e due decimali, è indifferente arrotondare prima o dopo la somma? No: il punto di arrotondamento può cambiare il risultato."
+    },
+    {
+      "title": "Output conserva il contenuto precedente",
+      "reason": "I due argomenti sono passati con il punto nel chiamante. ByRef e Output documentano l’intenzione e non azzerano le variabili all’ingresso.",
+      "insight": "Un produttore di output deve inizializzare ciò che promette di produrre: non può presumere che un vecchio risultato sia già stato cancellato.",
+      "challenge": "Se il metodo esce prima di assegnare myResult, il vecchio valore può restare? Sì: il chiamante deve usare il contratto e lo status per decidere se leggerlo."
+    },
+    {
+      "title": "Passare l’albero di un array",
+      "reason": ".lines rende accessibili i sottonodi; $ORDER percorre le chiavi e il metodo legge i valori associati.",
+      "insight": "L’ordine osservato deriva dalla collazione delle chiavi, non dall’ordine con cui sono state scritte. I valori non vengono ordinati alfabeticamente.",
+      "challenge": "Se scrivi lines(3) prima di lines(1), quale viene visitato prima nell’esempio numerico? lines(1)."
+    },
+    {
+      "title": "Copia del riferimento e mutazione condivisa",
+      "reason": "Il parametro riceve una copia dell’oref che punta allo stesso paziente. Cambiare Status modifica l’istanza condivisa.",
+      "insight": "Riassegnare il parametro a un nuovo oggetto è diverso da modificare una proprietà dell’oggetto ricevuto. La persistenza rimane un passaggio separato.",
+      "challenge": "Se il metodo esegue set pt=nuovoOggetto senza passaggio per riferimento, cambia il pt del chiamante? No."
+    },
+    {
+      "title": "Estendere il risultato del padre",
+      "reason": "##super esegue Draw del padre e restituisce una stringa; il metodo figlio la amplia con il raggio.",
+      "insight": "L’override non richiama automaticamente il padre: la composizione avviene perché il codice lo chiede esplicitamente.",
+      "challenge": "Rimuovendo ##super ma lasciando il testo del cerchio, il testo generico compare ancora per magia? No."
+    },
+    {
+      "title": "Valore utile e status separati",
+      "reason": "Divide scrive answer per riferimento e restituisce $$$OK. Il chiamante legge il quoziente soltanto nel ramo di successo.",
+      "insight": "Su errore l’output potrebbe non essere stato assegnato: un valore residuo non deve essere presentato come risultato di questa chiamata.",
+      "challenge": "Se b=0 e answer conteneva 12, è corretto stampare 12 dopo lo status di errore? No: manca un nuovo risultato valido."
+    },
+    {
+      "title": "Propagare il primo errore significativo",
+      "reason": "ValidatePerson passa il nome, poi delega l’età; lo status negativo di ValidateAge viene restituito invece di essere sostituito da OK.",
+      "insight": "Il messaggio appartiene alla causa rilevata. Ritornare sempre successo nel livello esterno renderebbe inutili le verifiche interne.",
+      "challenge": "Con nome vuoto ed età negativa, puoi assumere che siano raccolti entrambi gli errori? No: questo flusso termina al primo controllo fallito."
+    },
+    {
+      "title": "Stato che sopravvive tra chiamate",
+      "reason": "L’istanza parte da zero e accumula +1, +5, +1: i ritorni sono 1, 6, 7.",
+      "insight": "Il default riguarda l’argomento omesso, non il ripristino della proprietà. Una nuova istanza ha invece un proprio stato iniziale.",
+      "challenge": "Dopo le tre chiamate, una seconda istanza appena creata con Increment() ritorna 8? No: nello scenario ritorna 1."
+    },
+    {
+      "title": "Trasformazione in posto",
+      "reason": "Transform riscrive i valori dell’array passato con il punto; le modifiche sono visibili direttamente nel chiamante.",
+      "insight": "Un’operazione in posto risparmia una copia ma cambia l’input. Documenta questa scelta, soprattutto se un altro passaggio richiede i valori originali.",
+      "challenge": "Dopo Transform puoi ricostruire sempre la capitalizzazione originale? No: la conversione in maiuscolo perde quell’informazione."
+    },
+    {
+      "title": "Validazione a strati",
+      "reason": "Il padre restituisce OK, poi il figlio controlla Email. invalid-email passa il controllo non vuoto ma non contiene @.",
+      "insight": "Ogni strato aggiunge una condizione senza cancellare gli errori precedenti. La semplice presenza di @ è comunque un esempio didattico, non una validazione completa delle email.",
+      "challenge": "Se il padre fallisce, si deve continuare con le verifiche che presuppongono il suo contratto? Questo codice restituisce subito il suo errore."
+    },
+    {
+      "title": "Parametro ereditato specializzato",
+      "reason": "AuditLogger eredita Log ma sostituisce LOGPREFIX: la chiamata dell’esempio risolve AUDIT nel contesto della sottoclasse.",
+      "insight": "Un algoritmo ereditato può essere specializzato tramite parametri senza duplicare il corpo del metodo.",
+      "challenge": "Se vuoi cambiare anche la destinazione del log, basta cambiare il prefisso? No: quella modifica non cambia il comportamento di scrittura."
+    },
+    {
+      "title": "Tipo compatibile e riferimento esistente",
+      "reason": "%IsA accetta la classe e le sottoclassi; un confronto con il solo nome rifiuterebbe Patient pur essendo Person.",
+      "insight": "Prima di chiamare %IsA su input non fidato, controlla che sia un oref valido: compatibilità del tipo e validità del riferimento sono verifiche distinte.",
+      "challenge": "Un valore vuoto può essere interrogato come oggetto solo perché il parametro dichiara Person? Non fare affidamento sulla sola dichiarazione: valida il riferimento."
+    },
+    {
+      "title": "Nodo radice e sottonodi indipendenti",
+      "reason": "GetStats assegna total, active e inactive senza cancellare il valore radice 0 né extra=999.",
+      "insight": "Un parametro di output ad albero può lasciare dati precedenti. Decidi se il metodo aggiorna un insieme o restituisce un risultato completamente nuovo.",
+      "challenge": "Se il contratto promette soltanto tre statistiche, come eviti extra residuo? Inizializzando esplicitamente il contenitore nel punto previsto dal contratto."
+    },
+    {
+      "title": "Algoritmo comune e passaggio specializzato",
+      "reason": "Process chiama FetchData sull’istanza reale FileSource e trasforma il testo restituito in maiuscolo.",
+      "insight": "La base definisce la sequenza; la sottoclasse fornisce un passaggio. Il riuso funziona finché l’implementazione specializzata rispetta il valore atteso dal chiamante.",
+      "challenge": "Se FetchData iniziasse a restituire uno status invece del testo, Process sarebbe ancora corretto? No: cambierebbe il contratto del passaggio."
+    },
+    {
+      "title": "Concatenare liste non è concatenare campi delimitati",
+      "reason": "Ogni $LISTBUILD produce una rappresentazione di lista valida; concatenarle forma la sequenza di tre elementi nello scenario.",
+      "insight": "La struttura binaria mantiene i confini degli elementi anche quando il testo contiene un delimitatore. Non applicare $PIECE alla rappresentazione della lista.",
+      "challenge": "Un elemento Red,Green aggiunge due elementi? No: $LISTBUILD lo conserva come un unico valore stringa."
+    },
+    {
+      "title": "Final chiude un punto di estensione",
+      "reason": "La ridefinizione del metodo Final viene respinta alla compilazione della sottoclasse, prima di qualsiasi chiamata all’istanza.",
+      "insight": "Non confondere Abstract, che richiede un’implementazione concreta, con Final, che impedisce ulteriori ridefinizioni.",
+      "challenge": "Puoi aggirare Final aggiungendo ##super nel metodo vietato? No: il problema è la ridefinizione stessa."
+    }
+  ],
+  "T1.4": [
+    {
+      "title": "Due parser, due significati di true",
+      "reason": "Nel SET ordinario true è un nome di variabile; nel letterale JSON è un booleano del linguaggio JSON.",
+      "insight": "Il contesto sintattico decide il significato. Impostare 1 senza indicare il tipo non documenta necessariamente un booleano nella risposta serializzata.",
+      "challenge": "Come produci esplicitamente un booleano JSON? Con %Set della proprietà usando il tipo boolean, oppure con un letterale JSON valido."
+    },
+    {
+      "title": "Indici JSON a base zero",
+      "reason": "patients.%Get(1) seleziona Bob perché Alice occupa la posizione zero.",
+      "insight": "Non trasferire gli indici delle liste ObjectScript ai DynamicArray: le due strutture hanno convenzioni differenti.",
+      "challenge": "Con tre pazienti, quali sono gli indici validi per visitarli tutti? 0, 1 e 2."
+    },
+    {
+      "title": "Valore e tipo nella serializzazione",
+      "reason": "%Set con null o boolean controlla la rappresentazione; error diventa null e verified diventa true nello scenario.",
+      "insight": "Una stringa che contiene true non è il booleano true. Il consumatore JSON può attribuire loro significati diversi.",
+      "challenge": "Che differenza vedi tra verified=\"true\" e verified=true nel JSON? Il primo è testo, il secondo è un valore booleano."
+    },
+    {
+      "title": "Iteratore come oggetto separato",
+      "reason": "%GetNext viene chiamato sull’iteratore ottenuto da %GetIterator, non direttamente sul DynamicObject.",
+      "insight": "Un contenitore e il cursore che lo percorre sono due responsabilità diverse. Il metodo giusto sulla classe sbagliata resta una chiamata non valida.",
+      "challenge": "Dove conservi lo stato di avanzamento della scansione? Nell’iteratore restituito, non in un metodo inventato sul contenitore."
+    },
+    {
+      "title": "Push e Pop con stato intermedio",
+      "reason": "Dopo tre inserimenti, Pop rimuove blue; il nuovo Push mette yellow in coda. La dimensione finale resta tre.",
+      "insight": "Per capire una sequenza mutabile annota il contenuto dopo ogni operazione, non soltanto il numero di chiamate.",
+      "challenge": "Dopo un altro Pop quale valore ottieni? yellow, l’ultimo elemento rimasto in coda."
+    },
+    {
+      "title": "Alias di un array annidato",
+      "reason": "arr e obj.values puntano allo stesso DynamicArray; %Set(1,99) cambia il secondo elemento visto da entrambi.",
+      "insight": "Assegnare una variabile non significa clonare un grafo di oggetti. La condivisione è utile ma può produrre modifiche indirette inattese.",
+      "challenge": "Se vuoi una variante indipendente dell’ordine, basta set copia=ordine? No: serve una strategia esplicita di copia adeguata alla struttura."
+    },
+    {
+      "title": "Presente ma nullo",
+      "reason": "address esiste e ha tipo null; phone non esiste. Un valore mancante e uno esplicitamente nullo trasmettono informazioni diverse.",
+      "insight": "Questa distinzione è decisiva negli aggiornamenti parziali: campo omesso può significare non modificare, null può significare cancellare il valore, secondo il contratto API.",
+      "challenge": "Sostituendo address:null con la rimozione della proprietà, %IsDefined restituisce ancora 1? No."
+    },
+    {
+      "title": "JSON grande e costo del consumatore",
+      "reason": "La serializzazione nello stream evita di restituire subito una singola stringa; Rewind rende esplicito l’inizio della lettura.",
+      "insight": "Il ciclo del quiz ricompone poi l’intero JSON in memoria: questo perde parte del vantaggio per documenti grandi. Anche il consumatore deve lavorare a blocchi.",
+      "challenge": "Se il JSON occupa centinaia di megabyte, conviene accumulare json=json_chunk più volte in una stringa? No: mantieni una pipeline a flusso quando possibile."
+    },
+    {
+      "title": "Copia del file nella proprietà stream",
+      "reason": "FileBinary è la sorgente; GlobalBinary della proprietà è la destinazione persistente nel database.",
+      "insight": "Il percorso del file sorgente non identifica la destinazione dopo la copia. Controlla separatamente lo status di CopyFromAndSave e quello di %Save senza sovrascrivere un errore.",
+      "challenge": "Se la copia fallisce ma il save successivo riesce, il solo ultimo sc dimostra che l’immagine è stata importata? No."
+    },
+    {
+      "title": "Dimensione totale e posizione di lettura",
+      "reason": "Le tre stringhe hanno 22, 22 e 21 caratteri: totale 65. Read(9) richiede al massimo nove caratteri dalla posizione corrente.",
+      "insight": "Size non dice dove si trova il cursore. Per un esempio ripetibile usa Rewind prima della lettura anziché generalizzare lo stato iniziale del flusso.",
+      "challenge": "Dopo Rewind e due Read(3) su ABCDEF, quali blocchi ottieni? ABC e DEF, mentre Size rimane 6."
+    },
+    {
+      "title": "Media e caso vuoto",
+      "reason": "85+92+78=255 e 255/3=85. Il ciclo usa indici da zero a count-1.",
+      "insight": "Il caso con count=0 richiede una politica esplicita prima della divisione. L’assenza di dati non deve diventare una divisione per zero.",
+      "challenge": "Per una lista vuota, quale media è obbligata dal calcolo? Nessuna: scegli un risultato o un errore coerente con il contratto."
+    },
+    {
+      "title": "Rimuovere non equivale a oscurare",
+      "reason": "%Remove elimina password dalla struttura serializzata, anziché sostituirla con stringa vuota o null.",
+      "insight": "La modifica riguarda quell’oggetto in memoria. Non dimostra che la password sia stata rimossa da log precedenti, altre copie o persistenza.",
+      "challenge": "Se user ha un alias prima della rimozione, l’alias vede ancora la proprietà? No, se punta allo stesso oggetto modificato."
+    },
+    {
+      "title": "Copia indipendente del contenuto binario",
+      "reason": "CopyFrom legge il PDF e riempie lo stream della proprietà; il salvataggio riuscito conserva una copia nel database.",
+      "insight": "Non viene creato un semplice collegamento al percorso: il ciclo di vita del contenuto copiato è distinto da quello del file sorgente.",
+      "challenge": "Cambiare il PDF sorgente dopo l’import aggiorna automaticamente l’allegato? No: occorre un nuovo trasferimento."
+    },
+    {
+      "title": "Serializzazione del grafo annidato",
+      "reason": "items contiene riferimenti a due oggetti; %ToJSON visita anche questi oggetti e produce la struttura completa.",
+      "insight": "Il total impostato manualmente è un dato separato: la serializzazione non ricalcola quantità per prezzo né garantisce la coerenza del totale.",
+      "challenge": "Se qty cambia dopo aver assegnato total, il totale si corregge da solo? No: serve una regola applicativa di ricalcolo."
+    },
+    {
+      "title": "Testo e terminatori di riga",
+      "reason": "WriteLine aggiunge il terminatore alla stringa vuota dell’esempio; Write aggiunge soltanto i caratteri forniti.",
+      "insight": "Il risultato visivo può essere uguale mentre la rappresentazione del newline varia per piattaforma o configurazione. Consideralo negli scambi di file.",
+      "challenge": "Per dati binari arbitrari, useresti FileCharacter confidando che i byte restino equivalenti? No: scegli uno stream binario."
+    }
+  ],
+  "T2.1": [
+    {
+      "title": "Atomicità di due modifiche",
+      "reason": "TSTART e TCOMMIT racchiudono il trasferimento in un’unità transazionale: il primo SET non deve diventare un’operazione definitiva separata dal secondo.",
+      "insight": "Il lock risolve una questione diversa, cioè il coordinamento fra processi. Una transazione non sostituisce il protocollo di concorrenza.",
+      "challenge": "Se altri processi possono cambiare contemporaneamente il saldo, basta aggiungere TSTART? No: serve anche una strategia coerente per gli accessi concorrenti."
+    },
+    {
+      "title": "Rollback del solo livello interno",
+      "reason": "TROLLBACK 1 elimina total e items scritti nel livello più interno; status e notes restano nel livello esterno poi confermato.",
+      "insight": "Annotare il livello accanto a ogni modifica permette di capire il risultato senza contare soltanto i comandi SET.",
+      "challenge": "Se notes fosse scritto prima del rollback nel livello 2, sopravviverebbe? No, sarebbe fra le modifiche annullate di quel livello."
+    },
+    {
+      "title": "Commit annidato e durabilità",
+      "reason": "I livelli stampati sono 1, 2, 1, 0. Il primo TCOMMIT chiude il livello interno, non rende definitiva una parte autonoma del lavoro.",
+      "insight": "Un metodo riutilizzabile può trovarsi già dentro una transazione del chiamante. Il suo TCOMMIT non deve essere raccontato come un commit esterno indipendente.",
+      "challenge": "Se il chiamante esegue rollback dopo il commit interno, i dati del metodo possono essere annullati? Sì."
+    },
+    {
+      "title": "Il lock è cooperativo",
+      "reason": "LOCK +^x entra in conflitto con richieste di lock compatibili sullo stesso ambito; non intercetta ogni SET o lettura diretta.",
+      "insight": "Tutti i percorsi che modificano lo stesso dato devono rispettare il protocollo scelto. Proteggere un solo metodo lascia altri percorsi capaci di aggirarlo.",
+      "challenge": "Un processo senza LOCK può leggere ^x mentre un altro lo blocca? Il lock applicativo da solo non impedisce quella lettura diretta."
+    },
+    {
+      "title": "Proteggere il record intero per convenzione",
+      "reason": "Il SET del telefono può riuscire perché il processo B non richiede il lock che A sta usando.",
+      "insight": "La granularità logica del lock non rende obbligatoria la convenzione: ragiona sia sul nome bloccato sia sui chiamanti che lo rispettano.",
+      "challenge": "Rinominare il lock da Patient a PatientLock obbliga gli altri SET ad aspettare? No: occorre che gli altri processi chiedano il lock concordato."
+    },
+    {
+      "title": "Timeout e ramo senza modifica",
+      "reason": "Con :5 il processo attende fino al timeout; $TEST distingue acquisizione e mancata acquisizione. Il codice ritorna l’errore prima del SET.",
+      "insight": "Controlla $TEST subito dopo il comando rilevante: il ramo che scrive deve essere raggiungibile soltanto dopo l’acquisizione riuscita.",
+      "challenge": "Se il lock non arriva, un retry può avvenire senza prima modificare la fattura? Sì: il ramo di errore deve aver lasciato intatti quei dati."
+    },
+    {
+      "title": "Compatibilità shared ed exclusive",
+      "reason": "Più lettori che richiedono shared possono coesistere; l’exclusive richiesto per la modifica entra in conflitto con quel gruppo.",
+      "insight": "Il modello riguarda richieste di lock compatibili: non confondere un lettore cooperativo con un accesso diretto che non chiede lock.",
+      "challenge": "Due processi con shared devono bloccarsi fra loro nello scenario? No; un terzo con exclusive deve invece attendere la compatibilità."
+    },
+    {
+      "title": "Escalation e granularità effettiva",
+      "reason": "La domanda propone l’escalation da molte righe a un lock di tabella come causa della riduzione di concorrenza.",
+      "insight": "La soglia è configurabile e le letture dipendono anche dall’isolamento: la frase tutte le altre letture sono bloccate è troppo generale. Misura il conflitto reale.",
+      "challenge": "Ridurre il numero di righe per transazione può cambiare il comportamento? Sì, ma altera anche i confini atomici e va valutato rispetto al requisito."
+    },
+    {
+      "title": "Escalation non è esaurimento della lock table",
+      "reason": "Sostituire lock di riga con un lock di tabella amplia l’ambito del conflitto; non significa che sia stato generato LOCKTABLEFULL.",
+      "insight": "Concorrenza limitata e capacità esaurita richiedono diagnosi differenti. Il nome dell’errore non va dedotto dalla sola presenza di attese.",
+      "challenge": "Se molti utenti attendono un singolo lock, hai provato che la lock table sia piena? No."
+    },
+    {
+      "title": "Versione e finestra di gara",
+      "reason": "Il controllo della versione esprime un’intenzione ottimistica: rifiutare un salvataggio basato su dati superati.",
+      "insight": "Il frammento non rende da solo atomica la coppia confronto-scrittura. Due processi possono leggere la stessa versione prima che uno scriva: serve un’operazione condizionale atomica o una sezione protetta coerente.",
+      "challenge": "Due salvataggi leggono entrambi versione 7 prima di aggiornarla: il semplice IF impedisce sempre il conflitto? No."
+    },
+    {
+      "title": "Rollback riuscito non significa operazione riuscita",
+      "reason": "Lock e transazione hanno ruoli complementari e il lock viene rilasciato dopo la conclusione transazionale.",
+      "insight": "Il CATCH del frammento annulla le modifiche ma poi il metodo ritorna $$$OK: nasconde il fallimento. In un metodo annidato va inoltre rispettato il livello transazionale del chiamante.",
+      "challenge": "Dopo aver catturato un errore e fatto rollback, è corretto restituire sempre successo? No: propaga lo status o l’eccezione appropriati."
+    },
+    {
+      "title": "Lock aggiuntivo e rilascio mirato",
+      "reason": "Il lock semplice su Patient definisce l’insieme corrente; +Appointment lo amplia e -Appointment lo riduce. Resta Patient.",
+      "insight": "Leggi l’intera sequenza come trasformazione di un insieme, non ogni riga isolata. Un rilascio mirato non equivale a liberare ogni risorsa.",
+      "challenge": "Se dopo il rilascio di Appointment vuoi liberare Patient, serve un’azione esplicita? Sì, nel protocollo di cleanup previsto."
+    },
+    {
+      "title": "LOCK semplice sostituisce l’insieme",
+      "reason": "Dopo +Order(1) e +Order(2), LOCK Order(3) senza più rilascia i precedenti e acquisisce il nuovo.",
+      "insight": "Un helper che usa un lock semplice può interferire con lock posseduti dal chiamante. Il segno cambia un effetto globale sullo stato del processo.",
+      "challenge": "La sequenza garantisce che Order(1) resti protetto fino alla fine? No, il lock semplice successivo lo rilascia."
+    },
+    {
+      "title": "Rollback completo e responsabilità del chiamante",
+      "reason": "TROLLBACK senza argomento annulla tutti i livelli aperti; non soltanto l’ultimo.",
+      "insight": "Dentro codice riutilizzabile, annullare tutta la transazione può travolgere lavoro del chiamante. Definisci chi possiede il confine e come viene comunicato l’errore.",
+      "challenge": "Con livello iniziale 2 e un livello aggiunto dal metodo, rollback completo torna a 2? No: torna a zero."
+    },
+    {
+      "title": "SQL e global condividono il contesto",
+      "reason": "Il rollback della transazione comprende la modifica del log e il lavoro SQL transazionale nello stesso processo.",
+      "insight": "Un log scritto nello stesso contesto può sparire proprio quando l’operazione fallisce. Se deve documentare il fallimento, progettane il momento e il meccanismo di persistenza.",
+      "challenge": "Puoi usare quel SET del log come prova duratura dopo il rollback? No, se è stato annullato con la transazione."
+    },
+    {
+      "title": "Tentativo senza attesa",
+      "reason": ":0 effettua un tentativo immediato e aggiorna $TEST. Nessun timeout esplicito non significa la stessa cosa.",
+      "insight": "Il ramo alternativo può saltare, riprovare o rispondere occupato. Deve evitare sia la scrittura non protetta sia un successo fittizio.",
+      "challenge": "Se il risultato è $TEST=0, è stato acquisito almeno temporaneamente il lock richiesto? No: il chiamante deve gestire la mancata acquisizione."
+    },
+    {
+      "title": "Fine del processo e cleanup",
+      "reason": "La fine del processo elimina i lock posseduti e comporta il rollback delle transazioni rimaste aperte.",
+      "insight": "Questo meccanismo di recupero non sostituisce la gestione ordinaria: durante un processo longevo un errore può lasciare lavoro incompleto finché il flusso non lo gestisce.",
+      "challenge": "Un errore catturato significa che il processo è terminato? No: potrebbe continuare e richiedere ancora cleanup esplicito."
+    },
+    {
+      "title": "Dynamic SQL e percorso dopo il rollback",
+      "reason": "Dynamic SQL partecipa al contesto transazionale ObjectScript: non richiede una transazione separata per annullare quelle modifiche.",
+      "insight": "Il frammento usa QUIT nel ciclo dopo TROLLBACK e poi raggiunge TCOMMIT e $$$OK: riconoscere la transazione comune non rende corretto quel percorso d’errore. Evita commit fuori contesto e falso successo.",
+      "challenge": "Dopo il rollback, quale informazione va conservata? Il fallimento che deve interrompere il percorso di commit e arrivare al chiamante."
+    }
+  ],
+  "T2.2": [
+    {
+      "title": "PPG e durata del log",
+      "reason": "^||queryLog appartiene al processo ed è eliminato alla sua fine. Il nome log non ne rende duratura la conservazione.",
+      "insight": "Processo e richiesta web possono avere vite diverse. Per un audit consultabile dopo l’uscita non basta scegliere un contenitore temporaneo isolato.",
+      "challenge": "Un nuovo processo può leggere quel log dopo la chiusura del precedente? No: non è un archivio condiviso persistente."
+    },
+    {
+      "title": "Database risolto dal mapping",
+      "reason": "La Location dei dati è ^EW3K.DuIo.1; per arrivare al database si risolve il mapping del namespace.",
+      "insight": "Il nome opaco non è un ostacolo se segui la definizione. Un nome leggibile sarebbe comunque insufficiente per saltare il mapping.",
+      "challenge": "Spostando un mapping senza rinominare il global, il codice applicativo può vedere una destinazione diversa? Sì."
+    },
+    {
+      "title": "Nodo contenitore senza valore",
+      "reason": "Phone ha figli 1 e 2 ma nessun valore diretto: $DATA restituisce 10.",
+      "insight": "Un controllo booleano generico di $DATA non distingue valore leggibile e sola presenza di figli. Se vuoi leggere il nodo, verifica la componente relativa al valore.",
+      "challenge": "Aggiungendo anche Phone=\"principale\", quale $DATA ottieni? 11."
+    },
+    {
+      "title": "Identità della voce e timestamp",
+      "reason": "$INCREMENT sul contatore alloca chiavi distinte nelle condizioni dello scenario; RANDOM in un intervallo finito può collidere.",
+      "insight": "Il contatore identifica la voce e il timestamp descrive quando è stata registrata. Neppure un numero allocato garantisce che il payload sia già scritto.",
+      "challenge": "Se un processo si interrompe tra allocazione e SET della voce, puoi osservare un buco? Sì."
+    },
+    {
+      "title": "Diagnostica specifica del componente",
+      "reason": "Il quiz attribuisce a ^%ISCLOG una scala universale: non assumere che ogni componente interpreti lo stesso valore nello stesso modo.",
+      "insight": "Consulta il logging della tecnologia concreta e annota configurazione precedente, volume e destinazione. Un flag globale non è una specifica completa di tutti gli eventi.",
+      "challenge": "Per diagnosticare un client HTTP, basta sapere che un altro componente usa ISCLOG=3? No: verifica le istruzioni del componente interessato."
+    },
+    {
+      "title": "Isolamento fra processi e riuso nello stesso processo",
+      "reason": "Ogni processo ha il proprio ^||calc, evitando collisioni tra esecuzioni concorrenti in processi diversi.",
+      "insight": "Due chiamate nello stesso processo possono invece ritrovare gli stessi nodi. L’inizializzazione del risultato e la durata del processo restano importanti.",
+      "challenge": "Se una seconda chiamata non azzera sum e count, la natura PPG impedisce l’accumulo precedente? No."
+    },
+    {
+      "title": "Ordine delle chiavi del log",
+      "reason": "Le chiavi numeriche canoniche 1, 2 e 10 vengono visitate in ordine numerico, non lessicografico.",
+      "insight": "La chiave definisce l’ordine di scansione, mentre il testo della voce non influisce su $ORDER.",
+      "challenge": "Cambiare Complete in Alpha sposta l’ID 10 prima dell’ID 2? No: non stai ordinando i valori."
+    },
+    {
+      "title": "Osservare l’intero albero",
+      "reason": "WRITE data mostra il valore radice; ZWRITE rende visibili anche A e B con i loro discendenti.",
+      "insight": "La rappresentazione di debug aiuta a distinguere valori, nodi intermedi e struttura. Un valore radice valido non dimostra che i sottonodi attesi esistano.",
+      "challenge": "Se data=\"test\" ma data(\"B\",1) manca, WRITE data rivela il problema? No, occorre ispezionare anche l’albero."
+    },
+    {
+      "title": "Lista codificata e vista leggibile",
+      "reason": "ZWRITE riconosce la lista e la presenta come $LB, anziché usarne i byte come testo da leggere.",
+      "insight": "Una vista di debug leggibile non cambia la rappresentazione del valore. Per elaborarlo usa funzioni di lista, non posizioni della stringa visualizzata.",
+      "challenge": "Le parentesi e le virgole mostrate da ZWRITE sono delimitatori da cercare con $PIECE nel valore originale? No."
+    },
+    {
+      "title": "Misurare una durata",
+      "reason": "$ZHOROLOG consente una differenza con frazioni di secondo adatta all’intervallo del codice.",
+      "insight": "$HOROLOG è una coppia giorno,secondi locali: sottrarre direttamente le sue stringhe non è un cronometro corretto. Anche la risoluzione del timer non garantisce che il campione sia rappresentativo.",
+      "challenge": "Se una prova dura 0.004 secondi, un contatore al secondo intero la misura bene? No."
+    },
+    {
+      "title": "Requisito dell’interfaccia di osservazione",
+      "reason": "La domanda richiede il Terminal: ZWRITE e una scansione $ORDER rispondono a quel requisito. Una pagina del Portal può essere utile ma non è il Terminal.",
+      "insight": "Una risposta tecnicamente valida in un altro strumento può non soddisfare il vincolo operativo. Leggi dove e come devi svolgere l’ispezione.",
+      "challenge": "$ORDER da solo visita automaticamente tutti i livelli? No: una scansione di primo livello richiede ulteriori passaggi per i discendenti."
+    },
+    {
+      "title": "Filtrare il giorno da un timestamp",
+      "reason": "La scansione estrae il primo elemento della lista e ne confronta la parte data con quella del giorno cercato.",
+      "insight": "Un timestamp completo non è uguale alla sola data; normalizza formato e porzione confrontata. Se il log cresce, la scansione totale può richiedere un’altra organizzazione delle chiavi.",
+      "challenge": "Con 2026-11-03 14:00:00, confrontare tutta la stringa con 2026-11-03 trova l’uguaglianza? No."
+    },
+    {
+      "title": "Contatore cumulativo e differenza di campioni",
+      "reason": "GlobalReferences del processo descrive attività osservabile tramite strumenti e query previste, non tramite un metodo dal nome inventato.",
+      "insight": "Per attribuire riferimenti a un’operazione considera la differenza fra due letture nello stesso processo e possibili attività estranee nell’intervallo.",
+      "challenge": "Un totale di un milione prova che l’ultima query ne abbia prodotti un milione? No: serve il confronto prima-dopo."
+    },
+    {
+      "title": "Scegliere la lente di profiling",
+      "reason": "Timer, monitoraggio per linea e strumenti SQL rispondono a domande diverse: durata complessiva, punto caldo nel codice e comportamento della query.",
+      "insight": "Prima individua dove passa il tempo, poi scegli uno strumento più preciso. Un log di errori non sostituisce una misura di prestazioni.",
+      "challenge": "Per sapere se il costo è FETCH o una trasformazione successiva, basta il solo tempo totale? No: separa le sezioni."
+    },
+    {
+      "title": "Metriche di sistema e cause locali",
+      "reason": "PERFMON raccoglie contatori di sistema; ISCLOG registra eventi diagnostici di componenti.",
+      "insight": "Un picco di I/O suggerisce un contesto da indagare, ma non identifica automaticamente il metodo responsabile. Collega la finestra temporale ai processi e al carico.",
+      "challenge": "Global references elevate significano sempre altrettante letture disco? No: riferimenti logici e I/O fisico sono metriche differenti."
+    }
+  ],
+  "T2.3": [
+    {
+      "title": "Privilegio sulla risorsa",
+      "reason": "Requires specifica una risorsa e i permessi RW prima dell’esecuzione del corpo. Un confronto con il nome utente non esprime quel requisito.",
+      "insight": "Un ruolo è un insieme di autorizzazioni, non il nome del permesso stesso. Il requisito deve essere leggibile come capacità richiesta dall’operazione.",
+      "challenge": "Un utente con un ruolo dal nome rassicurante ma senza RW soddisfa Requires? No: conta il privilegio effettivo."
+    },
+    {
+      "title": "Rifiuto prima degli effetti",
+      "reason": "La verifica declarativa fallisce prima che il metodo possa eliminare il paziente.",
+      "insight": "Collocare l’autorizzazione al confine evita effetti parziali precedenti al controllo. Il chiamante deve comunque gestire la modalità di errore prevista.",
+      "challenge": "Un log scritto dentro il corpo compare se Requires impedisce di entrare? No, quel corpo non viene eseguito."
+    },
+    {
+      "title": "Token di ruolo e sottostringhe",
+      "reason": "SuperAppAdmin contiene AppAdmin come testo ma non è lo stesso ruolo. L’operatore contains non verifica appartenenza esatta.",
+      "insight": "Prima scegli se controllare un ruolo specifico o un permesso su risorsa. Poi usa un confronto coerente con quella rappresentazione.",
+      "challenge": "Un elenco con NotAdmin deve autorizzare chi cerca Admin? No: serve corrispondenza del ruolo completo."
+    },
+    {
+      "title": "Eccezione e status di diniego",
+      "reason": "Requires e Check differiscono nel modo in cui il codice gestisce il fallimento: ingresso vietato con errore oppure ramo applicativo esplicito.",
+      "insight": "Se il contratto del servizio usa %Status, il controllo programmatico può integrarsi nel flusso; va però eseguito prima dell’azione protetta.",
+      "challenge": "Restituire uno status di errore obbliga automaticamente il chiamante a fermarsi? No: il chiamante deve controllarlo."
+    },
+    {
+      "title": "SQL costruito con dati non fidati",
+      "reason": "La concatenazione mette l’input dentro il testo SQL e permette di modificarne la struttura. %Prepare prepara anche una query già alterata.",
+      "insight": "L’errore sta nella costruzione precedente alla preparazione, non nella mancanza di un secondo controllo dopo l’esecuzione.",
+      "challenge": "Aggiungere %Prepare due volte rende sicura la query concatenata? No: il testo rimane contaminato."
+    },
+    {
+      "title": "Binding nella fase giusta",
+      "reason": "Il modello con ? prepara una struttura fissa e passa il valore separato a %Execute. Il valore non viene interpolato nel testo.",
+      "insight": "I parametri rappresentano valori, non nomi di colonne o clausole SQL. Per identificatori variabili serve una selezione controllata di quelli ammessi.",
+      "challenge": "Puoi sostituire ORDER BY NomeColonna usando ? come identificatore generico? Non è il contratto dei parametri di valore."
+    },
+    {
+      "title": "Isolamento temporaneo non è un controllo completo",
+      "reason": "La PPG riduce la condivisione involontaria fra processi e viene eliminata alla loro fine.",
+      "insight": "Non equivale a cifratura o isolamento fra utenti che riusano lo stesso processo. Non promette protezione da ogni strumento amministrativo o perdita tramite log.",
+      "challenge": "Due richieste servite in sequenza dallo stesso processo hanno automaticamente due PPG indipendenti? No: serve gestire anche il ciclo di vita dei dati."
+    },
+    {
+      "title": "Permessi effettivi, risultato booleano",
+      "reason": "Check restituisce 1 o 0 per il requisito specificato. Non restituisce un oggetto autorizzazione né concede il privilegio mancante.",
+      "insight": "Un controllo positivo per una risorsa non autorizza ogni altra operazione. Associa la risorsa verificata all’effetto che stai per compiere.",
+      "challenge": "Check su una risorsa di lettura prova anche il diritto di cancellare pazienti? No."
+    },
+    {
+      "title": "Incapsulamento e autorizzazione",
+      "reason": "Private limita l’accesso a un membro secondo le regole del linguaggio; Requires e Check verificano capacità dell’utente.",
+      "insight": "La selezione ampia del quiz mescola protezioni diverse. Non usare Private come sostituto del controllo sulla risorsa di un’operazione sensibile.",
+      "challenge": "Un metodo pubblico autorizzato può chiamare un helper Private senza ulteriori privilegi applicativi? La visibilità da sola non definisce quei privilegi."
+    },
+    {
+      "title": "Permesso minimo per la lettura",
+      "reason": "GRANT SELECT esprime la capacità di leggere la tabella. Aggiungere INSERT introduce un diritto non richiesto.",
+      "insight": "Il privilegio minimo rende il contratto del ruolo più chiaro e limita gli effetti possibili di un errore nell’applicazione.",
+      "challenge": "Un ruolo destinato ai report deve ricevere INSERT soltanto perché la sintassi GRANT lo consente? No."
+    },
+    {
+      "title": "Delega e granularità del GRANT",
+      "reason": "WITH GRANT OPTION aggiunge la possibilità di trasferire il privilegio; non è solo un sinonimo di SELECT.",
+      "insight": "Per i privilegi a livello di colonna elenca le colonne concesse, anziché inventare una sintassi sottrattiva EXCEPT COLUMN.",
+      "challenge": "Concedere SELECT e SELECT WITH GRANT OPTION produce la stessa possibilità di delega? No."
+    },
+    {
+      "title": "Embedded SQL e responsabilità applicativa",
+      "reason": "Le verifiche SQL dei privilegi non vanno presunte per Embedded SQL come per una normale esecuzione Dynamic SQL. L’applicazione deve applicare il controllo previsto.",
+      "insight": "Questo non elimina le altre protezioni del sistema o dei database. Separa il privilegio SQL dall’autorizzazione del servizio e dall’accesso fisico ai dati.",
+      "challenge": "Un codice Embedded SQL diventa autorizzato per tutti perché usa host variable? No: il binding tratta l’input, non concede permessi."
+    },
+    {
+      "title": "Revoca parziale e privilegi residui",
+      "reason": "Revocare INSERT, UPDATE e DELETE non equivale a trasformare ALL PRIVILEGES in sola lettura.",
+      "insight": "Valuta l’insieme effettivo rimanente, inclusi eventuali diritti ricevuti da altri ruoli o concessioni. La sottrazione di tre voci non prova il minimo privilegio.",
+      "challenge": "Dopo la revoca di scrittura puoi dichiarare automaticamente che il ruolo abbia solo SELECT? No."
+    },
+    {
+      "title": "Host variable e struttura SQL",
+      "reason": ":status passa un valore alla struttura Embedded SQL: un testo malevolo viene usato come dato del confronto.",
+      "insight": "Injection e autorizzazione sono due domande distinte. Una query parametrizzata può comunque essere eseguita da un servizio che concede troppo accesso.",
+      "challenge": "Un input contenente OR 1=1 modifica il WHERE se resta un valore host? No, non diventa codice SQL."
+    },
+    {
+      "title": "Comporre protezioni per problemi diversi",
+      "reason": "Binding, controllo delle risorse, privilegi minimi e gestione della durata dei temporanei coprono minacce diverse.",
+      "insight": "Non esiste un singolo comando che renda corretto tutto il servizio. Collegare ogni protezione al suo scopo evita di scambiare una PPG per autorizzazione o un GRANT per validazione dell’input.",
+      "challenge": "Una query parametrizzata può leggere più dati del necessario? Sì, se il suo WHERE o i permessi applicativi lo consentono."
+    }
+  ],
+  "T3.1": [
+    {
+      "title": "Durata del processo e dati temporanei",
+      "reason": "Il prefisso PPG stabilisce isolamento per processo e cancellazione alla sua fine.",
+      "insight": "Il contenuto testuale Update Successful non cambia il ciclo di vita: se deve restare una prova operativa, serve una destinazione con durata adatta.",
+      "challenge": "Riaprendo il Terminal dopo la fine del processo, ritrovi la PPG? No."
+    },
+    {
+      "title": "Volume e visibilità come criteri distinti",
+      "reason": "Per 200 MB di lavoro privato il quiz sceglie una PPG: evita di far coincidere il volume di lavoro con la memoria locale del processo.",
+      "insight": "La dimensione non basta: due elaborazioni che devono collaborare necessitano di visibilità condivisa, che una PPG non offre.",
+      "challenge": "Un secondo processo può completare l’elaborazione leggendo la PPG del primo? Non tramite quel contenitore privato."
+    },
+    {
+      "title": "Stesso nome, contenitori diversi",
+      "reason": "B legge il proprio ^||counter, non quello creato da A. Se nel suo contesto manca, la lettura diretta è indefinita.",
+      "insight": "Non confondere l’isolamento con il blocco: B non attende che A liberi un dato, sta cercando un dato diverso.",
+      "challenge": "Usando $GET in B otterresti automaticamente il contatore di A? No: soltanto il default per il dato assente in B."
+    },
+    {
+      "title": "Processo web e sessione utente",
+      "reason": "Le richieste possono passare da processi diversi: la PPG non è un archivio dello stato della sessione.",
+      "insight": "Un identificativo di sessione nel sottonodo non supera l’isolamento fisico del contenitore. Se devi condividere progresso, scegli uno storage condiviso con chiavi appropriate.",
+      "challenge": "Passare sessionId identico alle due richieste basta a condividere la PPG? No."
+    },
+    {
+      "title": "Cache e mapping temporaneo",
+      "reason": "Il comportamento di pulizia al riavvio dipende dalla destinazione temporanea riconosciuta e dai mapping effettivi.",
+      "insight": "Un nome che contiene cache non rende temporaneo un global ordinario. Verifica la mappa del namespace invece di basarti sul nome applicativo.",
+      "challenge": "Rinominare ^TaxCache in ^MyTempTax prova che sarà eliminato al riavvio? No."
+    },
+    {
+      "title": "Ricostruibilità dei dati intermedi",
+      "reason": "La PPG è adatta a parsed se i dati possono essere rigenerati e non devono sopravvivere al processo o al riavvio.",
+      "insight": "La scelta dello storage è anche una scelta sul recupero. Conserva separatamente ciò che permette di ripetere o riprendere l’import, se il requisito lo richiede.",
+      "challenge": "Puoi usare solo parsed come checkpoint duraturo dopo un arresto? No."
+    },
+    {
+      "title": "Allocazione atomica e coda completa",
+      "reason": "Il global temporaneo è condiviso e $INCREMENT evita collisioni sul contatore nelle condizioni concordate.",
+      "insight": "Allocare un numero non implementa da solo una coda affidabile: payload, ordine di disponibilità, consumo e perdita al riavvio richiedono regole proprie.",
+      "challenge": "Se il produttore si ferma dopo l’incremento, il consumatore può assumere che la voce sia pronta? No."
+    },
+    {
+      "title": "Persistenza e journaling",
+      "reason": "Nel contesto mostrato il global applicativo in un database duraturo è il dato che rimane dopo il riavvio.",
+      "insight": "Persistenza dei dati e journaling sono proprietà collegate ma distinte: non affermare che un global sopravvive solo perché ogni database è sempre journaled.",
+      "challenge": "Un database duraturo con journaling disabilitato diventa automaticamente una PPG? No."
+    },
+    {
+      "title": "Failover e database replicato",
+      "reason": "La domanda presuppone che PatientQueue sia in un database mirrored e che il dato confermato sia disponibile secondo quel contesto.",
+      "insight": "Un nome di global non certifica mirroring o disponibilità dopo failover: considera database, configurazione e stato della replica. IRISTEMP non è una coda di recupero.",
+      "challenge": "Spostando PatientQueue in uno storage temporaneo manterresti la stessa garanzia? No."
+    },
+    {
+      "title": "Contatore condiviso senza riscrittura residua",
+      "reason": "Una PPG conta soltanto le esecuzioni del processo corrente, non il totale fra processi.",
+      "insight": "Per un contatore condiviso usa il risultato atomico di $INCREMENT in una variabile locale. Evita di riscriverlo sullo stesso global in un SET esterno: una scrittura tardiva può riportare indietro il contatore.",
+      "challenge": "A ottiene 1 e ritarda la riscrittura; B ottiene e scrive 2; poi A scrive 1. Che problema emerge? Il valore condiviso torna indietro."
+    },
+    {
+      "title": "Cambio di processo e identità del dato",
+      "reason": "Il nuovo Terminal non recupera locali o PPG del precedente; il global persistente continua a essere consultabile nel mapping previsto.",
+      "insight": "Aprire una nuova finestra non è continuare lo stesso spazio locale di esecuzione. Il dato deve avere una durata compatibile con il passaggio.",
+      "challenge": "Il fatto che il nome x sia uguale ricrea il valore della sessione precedente? No."
+    },
+    {
+      "title": "Stato lungo il processo",
+      "reason": "La PPG conserva il contenuto tra metodi nello stesso processo e gestisce un insieme ampio senza trasformarlo in sole variabili locali.",
+      "insight": "Il nome sessionState può ingannare: il contenitore segue il processo, non automaticamente un utente o una sessione HTTP.",
+      "challenge": "Se due utenti vengono serviti in sequenza dallo stesso processo, occorre distinguere e ripulire i dati? Sì."
+    },
+    {
+      "title": "Temporaneo condiviso e protocollo di coordinamento",
+      "reason": "CacheTempQueue esprime nel contesto del quiz una convenzione di storage temporaneo condiviso.",
+      "insight": "Visibilità non significa coordinamento corretto: il polling di done e l’aggiunta degli elementi devono avere un protocollo che eviti perdita e consumo doppio.",
+      "challenge": "Due consumatori che vedono la stessa voce ne diventano automaticamente proprietari esclusivi? No."
+    },
+    {
+      "title": "Debug che sopravvive all’errore",
+      "reason": "Terminando il processo si perde la PPG, anche se il nome è debugLog e l’uscita è anomala.",
+      "insight": "Se il requisito è analizzare dopo il guasto, scegli un canale persistente e considera che un log transazionale può essere annullato dal rollback.",
+      "challenge": "Scrivere più dettagli nella stessa PPG risolve la perdita dopo la fine del processo? No."
+    },
+    {
+      "title": "Matrice di durata, visibilità e recupero",
+      "reason": "Un global ordinario in un database duraturo può sopravvivere al riavvio; il journaling dipende dal database.",
+      "insight": "Valuta separatamente quattro domande: chi vede il dato, quando viene eliminato, come viene recuperato e dove viene scritto.",
+      "challenge": "Tutti i global condivisi sono anche persistenti dopo il riavvio? No: quelli temporanei condivisi mostrano il contrario."
+    }
+  ],
+  "T3.2": [
+    {
+      "title": "Operatore aritmetico su testo",
+      "reason": "A e B non forniscono un prefisso numerico utile: con + entrano nel calcolo come zero nello scenario.",
+      "insight": "Il linguaggio non deduce l’intenzione di concatenare dal tipo visivo degli operandi. L’operatore scelto determina l’operazione.",
+      "challenge": "Per ottenere AB quale operatore usi? La concatenazione con underscore."
+    },
+    {
+      "title": "Formato per una sola colonna",
+      "reason": "%ODBCOUT converte la colonna indicata senza imporre lo stesso formato a tutte le altre.",
+      "insight": "Formato logico, formato di visualizzazione e valore temporale sono livelli distinti. Un consumatore deve sapere quale rappresentazione riceve.",
+      "challenge": "Impostare una modalità globale della query soddisfa il requisito di convertire solo una colonna? Non in generale."
+    },
+    {
+      "title": "Macro non risolta e include",
+      "reason": "L’errore segnala una macro non definita nel punto in cui viene compilata. Confronta questo esempio con Q6: le spiegazioni della fonte sul posizionamento degli include sono incoerenti.",
+      "insight": "Usa la dichiarazione Include della classe quando vuoi rendere esplicita la dipendenza comune; verifica il contesto prima di concludere che ogni #Include nel metodo sia vietato.",
+      "challenge": "La sola presenza del nome del file in un commento definisce la macro? No, il preprocessore deve ricevere la definizione nel contesto corretto."
+    },
+    {
+      "title": "Conversione del solo prefisso",
+      "reason": "10abc20 contribuisce con 10 all’addizione; il 20 finale non viene cercato e sommato.",
+      "insight": "Una conversione tollerante non è una validazione del formato. Se attendi un numero puro, scartare silenziosamente il suffisso può nascondere un input errato.",
+      "challenge": "Con abc10 ottieni 10 nello stesso calcolo? No: nello scenario il prefisso non numerico produce zero."
+    },
+    {
+      "title": "Due valori SQL distinti",
+      "reason": "IS NULL trova soltanto il valore SQL NULL e non le stringhe SQL di lunghezza zero.",
+      "insight": "Quando passi al livello ObjectScript ricordati della rappresentazione: stringa vuota per SQL NULL, $CHAR(0) per la stringa SQL vuota nel contesto illustrato.",
+      "challenge": "Sostituire IS NULL con ='' mantiene il risultato sulle stesse righe? No."
+    },
+    {
+      "title": "Dipendenza esplicita dalle macro standard",
+      "reason": "$$$OK deve essere definita nel contesto di compilazione. L’include della classe rende disponibili le macro previste.",
+      "insight": "Non correggere un errore di preprocessore cambiando il valore restituito a caso: preserva il contratto %Status e ripristina la dipendenza mancante.",
+      "challenge": "Se il nome di una macro contiene un refuso, aggiungere un include corretto risolve sempre? No: deve esistere proprio quella definizione."
+    },
+    {
+      "title": "Non trovato non è errore SQL",
+      "reason": "SQLCODE 100 identifica il caso senza riga nel SELECT INTO; zero e valori negativi richiedono rami diversi.",
+      "insight": "Non usare il vecchio contenuto della variabile host come prova di una nuova riga dopo un SELECT senza risultato.",
+      "challenge": "Se x conteneva un dato prima del SELECT che non trova nulla, puoi stamparlo come risultato attuale? No: prima verifica SQLCODE."
+    },
+    {
+      "title": "Modalità di selezione esplicita",
+      "reason": "Nel Dynamic SQL mostrato il default è logico: una %Date viene ricevuta come conteggio interno dei giorni.",
+      "insight": "Un numero che rappresenta una data non è una durata né un timestamp completo. Scegli il formato richiesto dall’interfaccia invece di affidarti all’aspetto stampato.",
+      "challenge": "Se il client richiede YYYY-MM-DD, basta restituire il numero logico? No, occorre la conversione appropriata."
+    },
+    {
+      "title": "Proiezione SQL predefinita",
+      "reason": "MyApp.Order è la proiezione predefinita della classe mostrata, con proprietà esposte come colonne e identità della riga nel contesto ordinario.",
+      "insight": "I nomi SQL possono essere personalizzati: quando integri una classe reale leggi la proiezione effettiva e considera identificatori riservati come Order.",
+      "challenge": "Il nome della classe prova sempre il nome pubblico della tabella? No, possono intervenire keyword di personalizzazione."
+    },
+    {
+      "title": "Tre risultati dell’INSERT",
+      "reason": "SQLCODE descrive l’esito, %ROWCOUNT il numero di righe e %ROWID l’identità generata nello scenario.",
+      "insight": "Il numero di righe non è l’ID. Leggi questi valori prima di eseguire altre istruzioni che possano aggiornarne il contesto.",
+      "challenge": "Se la nuova riga ha ID 700, %ROWCOUNT deve valere 700? No: vale uno per l’inserimento singolo riuscito."
+    },
+    {
+      "title": "Coercizione non è ricerca delle cifre",
+      "reason": "3.14abc diventa 3.14 per l’aritmetica; abc3.14 e stringa vuota contribuiscono come zero.",
+      "insight": "La stessa funzione applicata a input malformati può restituire numeri plausibili. Una risposta numerica non prova che l’input fosse valido.",
+      "challenge": "Quale controllo manca se accetti il risultato 1 per abc3.14+1 come misura valida? La validazione dell’intera rappresentazione numerica."
+    },
+    {
+      "title": "Macro e momento della sostituzione",
+      "reason": "$$$TaxRate viene sostituita con 0.07 prima dell’esecuzione; GetTax(100) calcola quindi 7.",
+      "insight": "Cambiare un file include non aggiorna magicamente il codice già compilato che ne aveva incorporato il valore.",
+      "challenge": "Se modifichi TaxRate a 0.08, cosa va considerato prima di attendersi 8? La ricompilazione del codice dipendente."
+    },
+    {
+      "title": "Parametro di valore e identificatore SQL",
+      "reason": "Status è passato con binding; tableName entra invece nel testo SQL. Le due superfici richiedono trattamenti diversi.",
+      "insight": "Scegli il nome tabella fra identificatori ammessi e non confondere tale selezione con il binding dei valori.",
+      "challenge": "Una query con un solo ? è automaticamente sicura in ogni sua parte? No: il resto del testo può ancora essere costruito con input non controllato."
+    },
+    {
+      "title": "FETCH e conteggio delle righe ricevute",
+      "reason": "Dopo cinque FETCH riusciti, il FETCH finale senza dati non porta il conteggio a sei.",
+      "insight": "La fine del cursore è un evento di controllo, non una riga. Elabora solo dopo aver verificato il risultato del FETCH.",
+      "challenge": "Incrementare il contatore prima di controllare SQLCODE può creare un errore di uno? Sì."
+    },
+    {
+      "title": "Sommare oppure concatenare",
+      "reason": "5 apples + 3 oranges usa i prefissi e produce 8; underscore conserva i testi formando 5 apples3 oranges.",
+      "insight": "I separatori non vengono inseriti automaticamente dalla concatenazione. Se vuoi uno spazio, devi aggiungerlo esplicitamente.",
+      "challenge": "Per ottenere 5 apples 3 oranges quale dato aggiungi? Una stringa contenente lo spazio tra i due operandi."
+    },
+    {
+      "title": "Esito e cardinalità dell’UPDATE",
+      "reason": "SQLCODE zero indica esecuzione riuscita e %ROWCOUNT riporta le cinquanta righe interessate nello scenario.",
+      "insight": "Un UPDATE riuscito con zero righe non è lo stesso fatto applicativo di un UPDATE riuscito con una riga. Il servizio può richiedere una cardinalità precisa.",
+      "challenge": "Per aggiornare un unico account, basta controllare SQLCODE=0? No: verifica anche il numero di righe atteso."
+    },
+    {
+      "title": "Metodo di classe e stored procedure",
+      "reason": "SqlProc espone esplicitamente il metodo alla proiezione SQL prevista; non tutti i ClassMethod diventano procedure.",
+      "insight": "Tabella, colonne e routine SQL sono superfici distinte. Documenta quali fanno parte dell’interfaccia pubblica e quali restano API ObjectScript.",
+      "challenge": "Aggiungere un helper ClassMethod privato all’implementazione lo rende automaticamente chiamabile con CALL? No."
+    }
+  ],
+  "T3.3": [
+    {
+      "title": "Lunghezza zero contro carattere zero",
+      "reason": "La stringa vuota non contiene caratteri; $CHAR(0) ne contiene uno. Il confronto è falso.",
+      "insight": "Un carattere invisibile può essere presente e significativo. Per capirlo osserva lunghezza e codice, non soltanto l’output sullo schermo.",
+      "challenge": "Se entrambi sembrano vuoti al Terminal, sono necessariamente uguali? No."
+    },
+    {
+      "title": "Rappresentazione SQL e ObjectScript",
+      "reason": "Nella proprietà persistente mostrata, il valore ObjectScript vuoto viene proiettato come SQL NULL.",
+      "insight": "La parola vuoto va accompagnata dal livello: stringa vuota ObjectScript e stringa SQL di lunghezza zero non sono la stessa rappresentazione.",
+      "challenge": "Per cercare quel valore in SQL usi =NULL? No: usa IS NULL."
+    },
+    {
+      "title": "Esaminare i byte invisibili",
+      "reason": "Lunghezza 1 e codice 0 descrivono $CHAR(0); lunghezza 0 e $ASCII=-1 descrivono la stringa vuota nel caso illustrato.",
+      "insight": "Il valore -1 di $ASCII sul vuoto è un segnale convenzionale, non il codice di un carattere effettivamente presente.",
+      "challenge": "Se $ASCII restituisce 0, la stringa deve avere lunghezza zero? No: può contenere il carattere NUL."
+    },
+    {
+      "title": "Contare righe e valori",
+      "reason": "IS NULL seleziona la sola riga nulla; COUNT(Code) conta le due righe non nulle, inclusa la stringa SQL vuota.",
+      "insight": "COUNT(*) cambia denominatore rispetto a COUNT(colonna). È una scelta di significato del report, non soltanto sintassi alternativa.",
+      "challenge": "Con tre righe di cui due NULL, quanto valgono COUNT(*) e COUNT(Code)? Tre e uno."
+    },
+    {
+      "title": "Verità numerica e uguaglianza",
+      "reason": "I due valori diversi producono entrambi falso quando interpretati numericamente dall’IF.",
+      "insight": "Essere falso in una condizione non rende due valori identici. Lo stesso vale per altre stringhe con conversione numerica zero.",
+      "challenge": "Puoi usare IF val come test universale di stringa non vuota? No."
+    },
+    {
+      "title": "COALESCE non scarta stringhe SQL vuote",
+      "reason": "Phone='' è un valore non NULL, quindi viene scelto prima dell’email.",
+      "insight": "Se il requisito applicativo considera inutilizzabili anche stringhe vuote o spazi, occorre normalizzarle esplicitamente prima del fallback.",
+      "challenge": "Per far passare COALESCE all’email basta che Phone appaia vuoto sullo schermo? No, deve essere NULL secondo SQL."
+    },
+    {
+      "title": "Popolazione della media",
+      "reason": "SUM ignora i NULL e vale 60; COUNT(Score)=3; AVG divide per tre, mentre COUNT(*) conta cinque righe.",
+      "insight": "Sostituire i NULL con zero cambia il significato della media: non è soltanto una correzione cosmetica dell’output.",
+      "challenge": "Con zero al posto dei due NULL, quale media ottieni? 60/5=12 invece di 20."
+    },
+    {
+      "title": "NUL come delimitatore reale",
+      "reason": "Il carattere zero separa i tre campi e $PIECE estrae Doe dalla seconda posizione.",
+      "insight": "Un delimitatore raro riduce alcune collisioni ma non garantisce che il dato non possa contenerlo. Il formato deve prevedere come trattare quel caso.",
+      "challenge": "Se un campo può contenere NUL, il semplice delimitatore è sempre reversibile? No, serve una codifica o struttura che preservi i confini."
+    },
+    {
+      "title": "IFNULL e variabile host",
+      "reason": "IFNULL sostituisce SQL NULL, non la stringa SQL ''. Il risultato SQL resta vuoto ma non nullo.",
+      "insight": "La descrizione visiva del quiz non basta a dedurre i byte della variabile host: controlla la rappresentazione prevista, che distingue $CHAR(0) dalla stringa ObjectScript vuota.",
+      "challenge": "Un fallback N/A deve comparire per qualsiasi campo visivamente vuoto? Solo se questa è la politica esplicitamente implementata."
+    },
+    {
+      "title": "Confronto esplicito con stringa vuota",
+      "reason": "IsEmpty confronta con la stringa vuota e distingue $CHAR(0) e zero, entrambi non uguali al vuoto.",
+      "insight": "Test di uguaglianza e interpretazione numerica di IF hanno scopi diversi. Scegli in base al significato di assenza del tuo campo.",
+      "challenge": "Una quantità numerica zero è necessariamente un campo mancante? No."
+    },
+    {
+      "title": "Aritmetica SQL e informazione mancante",
+      "reason": "Total-Discount restituisce NULL se Discount è NULL; nel contesto host illustrato arriva come stringa vuota.",
+      "insight": "Usare COALESCE(Discount,0) afferma una regola di dominio: sconto mancante significa nessuno sconto. Non è sempre la politica corretta.",
+      "challenge": "Se NULL significa sconto ancora da determinare, è corretto presentare subito il netto 100? Non senza decidere quella regola."
+    },
+    {
+      "title": "Origine non conservata nel valore",
+      "reason": "Proprietà mai impostata e proprietà impostata a stringa vuota arrivano alla stessa rappresentazione SQL nel modello mostrato.",
+      "insight": "Se devi distinguere non fornito da cancellato volontariamente, il valore da solo non basta: occorre modellare un’informazione aggiuntiva.",
+      "challenge": "Un SELECT può ricostruire sempre quale dei due percorsi è avvenuto? No."
+    },
+    {
+      "title": "UNKNOWN nel WHERE",
+      "reason": "City<>Boston esclude i NULL perché il confronto non è TRUE; il risultato è cinquanta, non settanta.",
+      "insight": "La negazione di un confronto non trasforma un valore sconosciuto in un confronto vero. L’inclusione dei NULL va richiesta esplicitamente.",
+      "challenge": "Come includi anche le venti città mancanti? Aggiungi OR City IS NULL, ottenendo settanta righe nello scenario."
+    },
+    {
+      "title": "Carattere invisibile memorizzato",
+      "reason": "Hello e World hanno cinque caratteri ciascuno, più il separatore NUL: lunghezza totale undici.",
+      "insight": "Memorizzare in un global non trasforma il carattere invisibile in assenza. Un’interfaccia esterna può però richiedere una codifica appropriata.",
+      "challenge": "Contando solo le lettere visibili ottieni la lunghezza corretta? No: manca il separatore."
+    },
+    {
+      "title": "Fallback e collisione con dati reali",
+      "reason": "Solo la riga con A e B entrambi NULL raggiunge il fallback none nell’esempio.",
+      "insight": "Se none può essere anche un valore reale, confrontare il risultato di COALESCE con none non prova che entrambi i campi fossero NULL.",
+      "challenge": "A='none' e B=NULL soddisfa lo stesso confronto? Sì: per cercare entrambi assenti usa i test IS NULL sui campi."
+    }
+  ],
+  "T3.4": [
+    {
+      "title": "Definire non è popolare",
+      "reason": "L’indice nuovo richiede dati coerenti con le righe già presenti: la sola definizione non dimostra che sia utilizzabile correttamente.",
+      "insight": "La mancata restituzione di righe non prova che i dati siano spariti. Verifica lo stato dell’indice e confronta il percorso di accesso.",
+      "challenge": "Se trovi le righe via un percorso diverso, quale ipotesi rafforzi? Un problema dell’indice o della sua selezionabilità, non una cancellazione certa dei dati."
+    },
+    {
+      "title": "Ricostruzione selettiva",
+      "reason": "La lista dei nomi permette di limitare %BuildIndices all’indice richiesto.",
+      "insight": "Un intervento più mirato può ridurre lavoro e impatto, ma richiede il nome esatto e il controllo dello status di ritorno.",
+      "challenge": "DO %BuildIndices è sufficiente per documentare un build riuscito? No: conserva e controlla il risultato previsto dall’API."
+    },
+    {
+      "title": "Rinomina logica e posizione fisica",
+      "reason": "FullName può essere mappato a un nuovo slot mentre i valori precedenti restano nello slot di Name.",
+      "insight": "Compilare uno schema non è una migrazione dei valori. Analizza insieme modello nuovo, storage esistente e compatibilità dei lettori.",
+      "challenge": "Se il nuovo campo appare NULL, è provato che il vecchio testo sia stato eliminato? No."
+    },
+    {
+      "title": "Riutilizzare uno slot consapevolmente",
+      "reason": "Nell’esempio FullName deve leggere la posizione 2 anziché la nuova posizione 4 vuota.",
+      "insight": "La correzione della mappa richiede compatibilità semantica: due nomi diversi possono condividere la stessa rappresentazione soltanto se il dato significa ancora la stessa cosa.",
+      "challenge": "Se FullName cambia anche struttura o codifica, basta rinominare il mapping? Non necessariamente: può servire migrare il valore."
+    },
+    {
+      "title": "Restringere un tipo richiede analisi dei dati",
+      "reason": "Il global non viene automaticamente ripulito da N/A o altri testi quando la proprietà diventa Integer.",
+      "insight": "Non presumere che ogni accesso converta N/A nello stesso modo. Inventaria i valori fuori contratto e definisci conversione, scarto o errore prima della migrazione.",
+      "challenge": "Qual è il primo controllo sui vecchi dati? Identificare quali rispettano davvero il nuovo dominio numerico."
+    },
+    {
+      "title": "Default per nuovi oggetti, backfill per vecchie righe",
+      "reason": "InitialExpression inizializza oggetti nuovi; non riempie gli slot mancanti di tutti i record già esistenti.",
+      "insight": "La migrazione deve distinguere il default futuro dal recupero storico. Scegli anche se un dato vecchio realmente ignoto debba ricevere un valore fittizio.",
+      "challenge": "Aggiungere Phone con default aggiorna automaticamente un milione di righe già salvate? No."
+    },
+    {
+      "title": "Formato dell’indice e ricostruzione",
+      "reason": "Cambiare bitmap in standard cambia la struttura attesa. I vecchi nodi non diventano corretti solo perché il nome resta uguale.",
+      "insight": "Un indice è un dato derivato con un formato. Aggiornare il codice che lo interpreta richiede mantenere coerente anche il contenuto.",
+      "challenge": "Stesso nome e stessa colonna provano che il vecchio indice sia ancora leggibile col nuovo tipo? No."
+    },
+    {
+      "title": "DDL e ciclo di build",
+      "reason": "CREATE INDEX normalmente include la costruzione per i dati esistenti nel contesto SQL previsto, diversamente dalla sola aggiunta nella classe.",
+      "insight": "Questo non autorizza a promettere assenza di attese o atomicità universale del deployment: verifica modalità, disponibilità e impatto del comando scelto.",
+      "challenge": "Prima di un indice su una tabella grande, cosa stimi oltre allo spazio finale? Tempo, accessi concorrenti e risorse del build."
+    },
+    {
+      "title": "Cache e invalidazione mirata",
+      "reason": "Un piano può richiedere rigenerazione dopo cambiamenti di schema; molti casi sono già gestiti dall’invalidazione automatica.",
+      "insight": "Il purge dell’intero namespace non è un rito obbligatorio: prima verifica quale piano viene usato e se è davvero obsoleto o congelato.",
+      "challenge": "Una query lenta dopo il deployment dimostra automaticamente che serva purgare tutto? No."
+    },
+    {
+      "title": "Rimuovere una proprietà non cancella i valori storici",
+      "reason": "Nel layout preservato, il vecchio Price resta nella sua posizione mentre Cost riceve uno slot nuovo.",
+      "insight": "La rimozione dall’interfaccia non equivale a rimozione fisica, aspetto rilevante anche per spazio e conservazione dei dati.",
+      "challenge": "Un esportatore che legge direttamente il global potrebbe ancora trovare Price? Sì, se il valore non è stato migrato o rimosso."
+    },
+    {
+      "title": "Build su sistema attivo",
+      "reason": "Il comando di build va scelto considerando stato selezionabile dell’indice, coordinamento con le scritture e lock.",
+      "insight": "Non interpretare adatto al sistema attivo come nessun blocco possibile. Pianifica la procedura con le opzioni e le garanzie della versione usata.",
+      "challenge": "Puoi cambiare indice in produzione senza controllare lettori e scrittori solo perché esiste BUILD INDEX? No."
+    },
+    {
+      "title": "Collazione come parte della chiave",
+      "reason": "Un indice costruito con EXACT contiene chiavi secondo la vecchia collazione; SQLUPPER richiede una rappresentazione coerente.",
+      "insight": "Il confronto logico e i byte della chiave devono concordare. Verifica anche effetti su uguaglianza, ordinamento e unicità prima di cambiare collazione.",
+      "challenge": "Due stringhe distinte solo per maiuscole possono diventare equivalenti con una nuova collazione? Sì, ed è un caso da controllare."
+    },
+    {
+      "title": "Statistiche nuove e piani dipendenti",
+      "reason": "TUNE TABLE può ricompilare le query dipendenti quando aggiorna le statistiche. Se i valori non cambiano, può non servire una ricompilazione.",
+      "insight": "Questo corregge la regola troppo generale di purgare sempre dopo ogni raccolta. I piani congelati sono un caso distinto.",
+      "challenge": "TUNE TABLE senza variazioni statistiche deve produrre per forza un piano diverso? No."
+    },
+    {
+      "title": "Stabilità degli slot dopo una rimozione",
+      "reason": "Phone resta nello slot 4 nel layout preservato: togliere Email non implica compattare tutti i valori.",
+      "insight": "La stabilità della mappa evita di reinterpretare dati esistenti. Rigenerare o modificare manualmente lo storage richiede una verifica specifica.",
+      "challenge": "Spostare Phone da 4 a 3 senza muovere i dati è una semplice pulizia estetica? No: cambia cosa viene letto."
+    },
+    {
+      "title": "Deployment composto, verifiche separate",
+      "reason": "Nuovo indice, rinomina e restringimento del tipo introducono tre problemi diversi: build, mapping e migrazione del dominio.",
+      "insight": "La risposta della fonte è troppo assoluta su conversione a zero e purge obbligatorio. Per ciascun cambiamento definisci una prova sul dato e sul piano reale.",
+      "challenge": "Un riavvio risolve automaticamente N/A trasformato in Integer e un mapping sbagliato? No."
+    },
+    {
+      "title": "Piano congelato e ottimizzazione nuova",
+      "reason": "Un piano congelato può mantenere il percorso precedente anche dopo l’aggiunta di un indice utile.",
+      "insight": "Congelamento e cache non sono la stessa cosa. Prova il percorso alternativo e confronta il comportamento prima di cambiare la scelta stabilizzata.",
+      "challenge": "Basta costruire un indice per obbligare ogni query congelata a usarlo? No."
+    },
+    {
+      "title": "Stabilità misurata dopo l’upgrade",
+      "reason": "Il freeze conserva una scelta di piano; il confronto con una nuova ottimizzazione permette di valutare se cambiarla.",
+      "insight": "Stabilità non significa velocità ottimale eterna: volume e distribuzione dei dati possono cambiare anche senza modificare la query.",
+      "challenge": "Un piano congelato prova che il tempo resterà identico con dieci volte i dati? No."
+    }
+  ],
+  "T3.5": [
+    {
+      "title": "P99 come sintomo da correlare",
+      "reason": "La ricompilazione occasionale dopo un purge è una spiegazione proposta per una coda lunga dei tempi.",
+      "insight": "P99 da solo non identifica la causa: attese di lock, I/O e carico possono produrre altri picchi. Correlare eventi e tempi è diverso da scegliere una storia plausibile.",
+      "challenge": "Se P50 resta basso, hai escluso ogni contesa? No."
+    },
+    {
+      "title": "Quando aggiornare le statistiche",
+      "reason": "Il punto utile è mantenere statistiche rappresentative del carico reale, non affidarsi ai soli dati di sviluppo.",
+      "insight": "La soglia del 20% non va trattata come legge universale: distribuzione, crescita e query influenzano la necessità di raccolta.",
+      "challenge": "Una piccola variazione concentrata su un valore molto usato può essere rilevante? Sì, anche senza raggiungere una percentuale fissa."
+    },
+    {
+      "title": "Statistiche non sono misure di latenza",
+      "reason": "TUNE TABLE descrive dimensioni e distribuzioni utili alle stime dell’ottimizzatore.",
+      "insight": "Un costo stimato non è un tempo misurato. Integra statistiche e piano con una prova rappresentativa quando valuti prestazioni reali.",
+      "challenge": "TUNE TABLE dimostra che una query dura meno di 100 ms? No."
+    },
+    {
+      "title": "Scansione completa nel contesto",
+      "reason": "Il master map viene letto per verificare City riga per riga nello scenario.",
+      "insight": "Una scansione è costosa per un filtro molto selettivo su tanti dati, ma può essere ragionevole se la query richiede una grande parte della tabella.",
+      "challenge": "Se il filtro accetta il 95% delle righe, un indice deve essere sempre più veloce? No."
+    },
+    {
+      "title": "Indice e recupero delle colonne",
+      "reason": "CityIdx individua gli ID candidati; Name deve poi essere recuperato dal master map perché il percorso non lo contiene.",
+      "insight": "Filtrare bene e coprire tutte le colonne sono due vantaggi distinti. Il secondo può ridurre letture aggiuntive, con costi di spazio e aggiornamento da valutare.",
+      "challenge": "COUNT(*) e SELECT Name richiedono sempre lo stesso lavoro? No."
+    },
+    {
+      "title": "Cronometro con unità esplicite",
+      "reason": "La differenza fra letture di $ZH misura un intervallo numerico con frazioni di secondo.",
+      "insight": "Distingui durata, timestamp e numero di iterazioni. Etichettare le unità evita di confondere secondi medi e millisecondi complessivi.",
+      "challenge": "2.5 secondi per 100 iterazioni quanto fanno in media? 0.025 secondi, cioè 25 ms."
+    },
+    {
+      "title": "Purge non sempre necessario",
+      "reason": "La risposta della fonte sui vecchi piani va letta insieme al comportamento documentato di TUNE TABLE, che può ricompilare le query dipendenti quando le statistiche cambiano.",
+      "insight": "Se manca un miglioramento, verifica statistiche effettive, piano congelato, indice disponibile e collo di bottiglia: non diagnosticare automaticamente cache vecchia.",
+      "challenge": "Raccogliere statistiche identiche garantisce un piano diverso dopo purge? No."
+    },
+    {
+      "title": "Ridurre lavoro prima del join",
+      "reason": "Il piano proposto suggerisce che molti candidati attraversano il join prima del filtro utile.",
+      "insight": "I contatori indicano dove indagare, non una prova universale dell’ordine interno di ogni operazione. Confronta il piano completo e una modifica mirata.",
+      "challenge": "Un indice su Status basta se Active seleziona quasi tutte le righe? Non necessariamente."
+    },
+    {
+      "title": "Filtro e ordinamento insieme",
+      "reason": "Il percorso scelto filtra per Status e richiede poi un sort; un indice composto Status,Name è un candidato per soddisfare entrambi nel caso adatto.",
+      "insight": "Non generalizzare che l’ottimizzatore possa usare sempre un solo indice: intersezioni e altri percorsi esistono. Leggi ciò che fa questa query concreta.",
+      "challenge": "Aggiungendo Name come seconda chiave elimini per forza ogni sort in ogni query? No: dipende dai predicati e dall’ordinamento richiesto."
+    },
+    {
+      "title": "Benchmark completo fino al consumo",
+      "reason": "Preparare una volta misura il riuso di uno statement. Il ciclo è utile se riproduce il lavoro che vuoi confrontare.",
+      "insight": "Per una SELECT, fermarsi a %Execute senza consumare i risultati può escludere parte del costo. Misura anche FETCH, trasformazioni e quantità effettivamente restituita.",
+      "challenge": "Due query con stesso execute ma fetch molto diverso sono equivalenti per l’utente? No."
+    },
+    {
+      "title": "Distribuzione media e valore dominante",
+      "reason": "La media del 33% non descrive Active, che occupa l’80% delle righe.",
+      "insight": "I parametri reali influenzano quante righe vanno lette. Un benchmark con il solo valore raro può rappresentare male il carico prevalente.",
+      "challenge": "Quale caso aggiungi al test con Closed raro? Active frequente, confrontando piano e quantità letta."
+    },
+    {
+      "title": "Ottimizzazione come verifica di ipotesi",
+      "reason": "Statistiche e indici possono migliorare una scansione selettiva su molti dati, ma ogni modifica deve avere una ragione verificabile.",
+      "insight": "Non aggiungere indiscriminatamente un indice per ogni colonna: considera costo delle scritture, build e benefici sul carico reale. Il purge non è sempre richiesto.",
+      "challenge": "Dopo tre modifiche insieme puoi attribuire con certezza il miglioramento a una sola? No."
+    },
+    {
+      "title": "Join e moltiplicazione del lavoro",
+      "reason": "Scansionare tutte le Person per ogni Address candidato può moltiplicare i record esaminati; gli indici appropriati possono restringere entrambi i lati.",
+      "insight": "Conta le iterazioni del ciclo esterno e il lavoro per iterazione. Due sorgenti lette non sono un problema di per sé; lo è il percorso sproporzionato.",
+      "challenge": "Con 1000 indirizzi candidati e 100000 persone scansionate ogni volta, quanti controlli teorici ottieni? Cento milioni."
+    },
+    {
+      "title": "Contare il bitmap senza espanderlo",
+      "reason": "Il piano combina due bitmap e conta i bit risultanti, evitando il recupero dei record in quel caso.",
+      "insight": "Non trasformare mentalmente ogni bit in una lettura della riga: il vantaggio qui è proprio mantenere il calcolo nella rappresentazione compatta.",
+      "challenge": "Se chiedi anche il nome di ogni riga, il solo conteggio dei bit soddisfa il risultato? No."
+    },
+    {
+      "title": "Misura osservata e complessità",
+      "reason": "0.045/0.001 dà un miglioramento osservato di 45 volte per quella prova con indice univoco.",
+      "insight": "La fonte chiama il lookup O(1), ma non è una garanzia generale per un indice ordinato. Il guadagno deriva dal percorso selettivo e va verificato con cache, carico e campioni comparabili.",
+      "challenge": "Puoi promettere 45 volte su ogni volume e macchina? No: è un risultato sperimentale del contesto mostrato."
+    }
+  ],
+  "T4.1": [
+    {
+      "title": "Chiavi numeriche prima delle stringhe",
+      "reason": "20 precede 100; le chiavi testuali vengono dopo nel contesto di collazione mostrato.",
+      "insight": "$ORDER ordina i subscritti, non i valori. La prima voce inserita e la prima voce visitata possono quindi differire.",
+      "challenge": "Se data(20) contiene Zebra e data(100) contiene Alpha, cambia la prima chiave? No: resta 20."
+    },
+    {
+      "title": "Due livelli, due cursori",
+      "reason": "Il ciclo esterno sceglie X o Y; quello interno riparte dai figli di ciascun ramo e ne stampa i valori.",
+      "insight": "Riinizializzare il cursore interno per ogni nuovo ramo evita di saltare figli a causa della posizione lasciata dal ramo precedente.",
+      "challenge": "Se key2 resta all’ultimo valore di X, puoi riusarlo senza reset per iniziare Y? Non è il percorso completo previsto."
+    },
+    {
+      "title": "Numero e codice alfanumerico",
+      "reason": "1,3,10 sono chiavi numeriche; 10A e 2B sono stringhe confrontate secondo la collazione dello scenario.",
+      "insight": "Il prefisso numerico usato in un’addizione non trasforma automaticamente un identificatore alfanumerico in un subscript numerico.",
+      "challenge": "2B deve stare prima di 10 perché comincia con 2? No: appartiene al gruppo delle stringhe."
+    },
+    {
+      "title": "Valore del contenitore e figli",
+      "reason": "warehouse ha Main e due discendenti: il risultato è 11.",
+      "insight": "Un nodo può svolgere contemporaneamente il ruolo di valore e di radice di un sottoalbero. Non serve scegliere una sola delle due possibilità.",
+      "challenge": "Eliminando solo il valore diretto ma conservando i figli, cosa ottieni? $DATA=10."
+    },
+    {
+      "title": "Separare chiave visitata e valore stampato",
+      "reason": "L’ordine 1,2,3,10 produce i valori A,D,B,C: la stampa è ADBC.",
+      "insight": "Per risolvere un loop scrivi prima la sequenza delle chiavi e poi sostituisci ciascuna con il suo valore. Non ordinare direttamente le lettere.",
+      "challenge": "Scambiando i valori di 2 e 10, cambiano le chiavi visitate? No, cambia soltanto il testo prodotto."
+    },
+    {
+      "title": "Scansione inversa",
+      "reason": "Con direzione -1 e punto iniziale previsto, $ORDER trova la chiave finale 40.",
+      "insight": "La direzione riguarda l’ordinamento delle chiavi, non il confronto del valore di prezzo.",
+      "challenge": "La voce dal prezzo maggiore è sempre quella restituita come ultima? Solo se il modello delle chiavi lo garantisce, non per effetto di $ORDER."
+    },
+    {
+      "title": "Chiave e valore nella stessa scansione",
+      "reason": "Il primo risultato è Alice e il terzo argomento riceve il valore 95 del nodo trovato.",
+      "insight": "Il valore associato non è la prossima chiave. Mantieni nomi distinti per il cursore e per il dato letto.",
+      "challenge": "Se cambi Alice da 95 a 60, la prima chiave resta Alice? Sì nel contesto testuale mostrato."
+    },
+    {
+      "title": "Zero è una chiave valida",
+      "reason": "I numeri vengono visitati come -3,-1,0,2. Il valore numerico zero non è il segnale di fine usato dal loop.",
+      "insight": "Un controllo IF key può fermarsi erroneamente a zero. Confronta esplicitamente con il sentinel stringa vuota previsto.",
+      "challenge": "Un loop che termina quando key è numericamente falso visita sempre arr(0)? No: può confondere una chiave valida con la fine."
+    },
+    {
+      "title": "Due informazioni in $DATA",
+      "reason": "Le quattro combinazioni descrivono presenza del valore e presenza di figli: 0,1,10,11.",
+      "insight": "Per la presenza di un valore usa $DATA(node)#2: è un resto modulo due, non l’operazione bitwise descritta erroneamente altrove dalla fonte.",
+      "challenge": "Quali risultati danno resto uno? 1 e 11."
+    },
+    {
+      "title": "Maiuscole e collazione",
+      "reason": "Nel contesto mostrato ABC precede Abc, che precede abc; i valori corrispondenti producono 231.",
+      "insight": "Non generalizzare un ordine ASCII a ogni collazione configurabile. Quando l’ordine è parte del contratto, controlla il contesto effettivo.",
+      "challenge": "Convertire tutte le chiavi a maiuscolo può mantenere tre voci distinte? Non se convergono sulla stessa chiave."
+    },
+    {
+      "title": "Refuso nel nome della variabile",
+      "reason": "Il cursore assegnato è key; ordKey non viene assegnato e genera l’errore prima del risultato atteso.",
+      "insight": "La scansione può essere perfettamente corretta mentre la stampa usa un identificatore diverso. Segui assegnazioni e letture della variabile segnalata.",
+      "challenge": "Inizializzare ordKey a vuoto corregge davvero il messaggio Order? No: eliminerebbe l’errore ma stamperebbe la variabile sbagliata."
+    },
+    {
+      "title": "Discendenti senza valore intermedio",
+      "reason": "Il SET del nodo profondo crea un ramo con a,b come contenitore, senza assegnargli un valore: $DATA=10.",
+      "insight": "L’esistenza di un percorso fino a un figlio non implica un valore a ogni livello intermedio.",
+      "challenge": "Leggere direttamente ^data(a,b) è sicuro solo perché c esiste? No."
+    },
+    {
+      "title": "Forma canonica di una chiave numerica",
+      "reason": "1.10 è la stessa chiave numerica di 1.1 nel caso mostrato; la visita dei valori produce BDAC.",
+      "insight": "Una rappresentazione testuale non canonica può avere altre regole: distingui il numero usato nel codice da un codice stringa che deve conservare zeri.",
+      "challenge": "I numeri 1.10 e 1.1 possono rappresentare due misure ma due nodi distinti dello stesso array numerico? No, come chiave numerica coincidono."
+    },
+    {
+      "title": "Ricreare i figli dopo KILL",
+      "reason": "KILL rimuove db e discendenti; i SET successivi ricreano solo host e port. Il contenitore torna a $DATA=10.",
+      "insight": "Per capire lo stato finale considera le scritture dopo la cancellazione, non soltanto l’effetto del KILL.",
+      "challenge": "La vecchia stringa assegnata al nodo db ricompare quando ricrei host? No."
+    },
+    {
+      "title": "Sentinel prima della dereferenziazione",
+      "reason": "Dopo 1 e 2, la terza chiamata trova la fine e restituisce la stringa vuota.",
+      "insight": "Controlla la fine immediatamente dopo l’avanzamento. Usare il sentinel come chiave in una lettura può creare un errore o un accesso non voluto.",
+      "challenge": "Dopo l’esaurimento è corretto leggere arr(key) senza un controllo? No."
+    },
+    {
+      "title": "Un livello per chiamata",
+      "reason": "$ORDER avanza fra fratelli; non visita automaticamente tutto il sottoalbero.",
+      "insight": "Per un percorso completo scegli cicli annidati quando i livelli sono noti, oppure uno strumento adatto alla scansione dei nodi. Non scambiare direzione inversa con discesa.",
+      "challenge": "Una seconda chiamata su arr(key) entra nei figli? No: continua al livello rappresentato dal riferimento."
+    },
+    {
+      "title": "Default di lettura non è scrittura",
+      "reason": "$GET restituisce 30 se timeout non ha un valore, anche quando ha soli discendenti.",
+      "insight": "Non conclude che il nodo sia stato creato. La fonte confonde #2 con un bitwise: # è il resto della divisione.",
+      "challenge": "Dopo set value=$GET(node,30), node deve contenere 30? No, il default ha agito sul risultato della lettura."
+    },
+    {
+      "title": "Contare gli avanzamenti sul giusto insieme",
+      "reason": "Le prime tre chiavi sono 100,200,500; Internal è il valore della terza, prima delle chiavi testuali.",
+      "insight": "Un codice numerico e un codice alfanumerico possono coesistere ma non vengono ordinati come una sola sequenza di testo.",
+      "challenge": "Il terzo avanzamento corrisponde alla terza riga scritta nel programma? Non necessariamente: conta l’ordine dei subscritti."
+    }
+  ],
+  "T4.2": [
+    {
+      "title": "Indice di posizione e cursore opaco",
+      "reason": "$LISTGET usa la posizione 3 a base uno e restituisce C. $LISTNEXT richiede invece uno stato di scansione.",
+      "insight": "Non usare il puntatore di iterazione come se fosse un numero di elemento. Le interfacce espongono due concetti diversi.",
+      "challenge": "Per prendere il primo elemento con LISTGET usi zero? No, usi uno."
+    },
+    {
+      "title": "Schema posizionale della lista",
+      "reason": "La seconda posizione del record è John: l’ordine dei campi costituisce lo schema implicito.",
+      "insight": "Una lista non assegna nomi ai campi. Cambiarne l’ordine senza aggiornare i lettori cambia il significato dei dati letti.",
+      "challenge": "Invertendo cognome e nome nella scrittura, LISTGET(record,2) continua a significare nome? Solo se aggiorni il contratto del formato."
+    },
+    {
+      "title": "Omissione e stringa vuota",
+      "reason": "L’elemento omesso usa il default N/A; un elemento esplicitamente vuoto resta vuoto.",
+      "insight": "Il default non è una sostituzione indiscriminata di ogni contenuto che sembra assente. Questa distinzione può rappresentare informazione utile.",
+      "challenge": "Con $LB(OrderA,\"\",Shipped), il secondo campo diventa N/A? No."
+    },
+    {
+      "title": "Lista in testo delimitato",
+      "reason": "La conversione produce Red,Green,Blue separati dal delimitatore scelto nello scenario.",
+      "insight": "Prima di esportare considera se i valori possano contenere il delimitatore. Il testo delimitato semplice può perdere i confini originari.",
+      "challenge": "Con due valori A e B,C e virgola come separatore, la ricostruzione è sempre univoca? No."
+    },
+    {
+      "title": "Importare un formato delimitato",
+      "reason": "LISTFROMSTRING separa Tokyo,London,Paris nei tre elementi e la seconda posizione è London.",
+      "insight": "Questo è uno split sul delimitatore, non necessariamente un parser CSV completo con virgolette ed escape.",
+      "challenge": "Una città scritta come valore CSV tra virgolette contenente una virgola viene sempre gestita come un campo unico? Non dal solo split ingenuo."
+    },
+    {
+      "title": "Iteratore di lista e valori omessi",
+      "reason": "Il puntatore parte da zero e viene aggiornato da LISTNEXT mentre il risultato della funzione indica se c’è un altro elemento.",
+      "insight": "Se un elemento è omesso, il valore di output può diventare indefinito. Proteggi la lettura e usa un contatore separato se ti serve la posizione.",
+      "challenge": "Puoi incrementare ptr manualmente per saltare esattamente un elemento? Non è un indice pubblico di elemento."
+    },
+    {
+      "title": "Unire strutture compatibili",
+      "reason": "La concatenazione delle due rappresentazioni di lista produce quattro elementi nello stesso ordine.",
+      "insight": "La validità deriva dal formato delle due parti: concatenare un testo arbitrario ai byte di una lista non è la stessa operazione.",
+      "challenge": "Aggiungere la stringa edit direttamente ai byte della lista equivale a LISTBUILD(edit)? No."
+    },
+    {
+      "title": "Sostituire un elemento",
+      "reason": "SET $LIST alla posizione due sostituisce Bannana con Banana senza cambiare gli altri elementi.",
+      "insight": "L’aggiornamento preserva il ruolo posizionale del campo. Non cerca tutte le occorrenze della parola nel testo.",
+      "challenge": "Se Bannana compare anche al quarto posto, viene corretta automaticamente anche lì? No."
+    },
+    {
+      "title": "Sottolista con estremi inclusi",
+      "reason": "Le posizioni da due a quattro contengono Tue,Wed,Thu: tre elementi.",
+      "insight": "La sottolista resta una lista codificata; solo la conversione successiva la rende testo con trattini.",
+      "challenge": "Quanto vale il numero di elementi da posizione 2 a 4 inclusa? Tre, cioè 4-2+1."
+    },
+    {
+      "title": "Ricerca dell’elemento esatto",
+      "reason": "LISTFIND trova Viewer alla posizione tre e restituisce zero se non lo trova.",
+      "insight": "Questo è utile per appartenenza a un insieme rappresentato da lista: evita falsi positivi dovuti a sottostringhe.",
+      "challenge": "SuperViewer equivale all’elemento Viewer nella ricerca esatta? No."
+    },
+    {
+      "title": "Accessor rigoroso e accessor con default",
+      "reason": "$LIST su un elemento omesso genera NULL VALUE; LISTGET consente una scelta di fallback.",
+      "insight": "Il comportamento corretto dipende dal contratto: un campo obbligatorio mancante può meritare un errore, non un valore inventato.",
+      "challenge": "Usare sempre un default rende automaticamente corretti tutti i record incompleti? No: può nascondere un problema di dati."
+    },
+    {
+      "title": "Struttura prima della rappresentazione visiva",
+      "reason": "La lista conserva i confini e distingue omissione e stringa vuota. ZWRITE la rende leggibile per il debug.",
+      "insight": "Questo non rende la lista un protocollo interoperabile da inviare come testo arbitrario: il destinatario deve conoscere la codifica oppure ricevere una conversione definita.",
+      "challenge": "Un consumatore JSON capisce automaticamente i byte di $LISTBUILD? No, occorre una trasformazione."
+    },
+    {
+      "title": "Validità strutturale e validità del record",
+      "reason": "LISTVALID verifica se l’input è una lista codificata, non se contiene i campi richiesti dal dominio.",
+      "insight": "Dopo la verifica strutturale controlla numero di elementi, posizioni obbligatorie e valori ammessi.",
+      "challenge": "Una lista valida con un solo campo è automaticamente un paziente completo? No."
+    },
+    {
+      "title": "Uguaglianza di contenuto",
+      "reason": "Le due costruzioni producono gli stessi tre elementi nello stesso ordine e LISTSAME li confronta come liste.",
+      "insight": "La provenienza del valore non determina l’uguaglianza. Ordine e contenuto del risultato restano ciò che deve essere verificato.",
+      "challenge": "X,Y,Z e Z,Y,X sono la stessa lista? No."
+    },
+    {
+      "title": "Posizione positiva come presenza",
+      "reason": "R05 è al secondo posto; il risultato 2 è vero nel ramo IF. Zero segnala l’assenza.",
+      "insight": "L’IF funziona qui perché il contratto di LISTFIND usa posizioni positive e zero per non trovato. Non estendere questo modello a DynamicArray a base zero.",
+      "challenge": "La posizione zero di un DynamicArray rappresenta sempre assenza? No, è il primo elemento valido."
+    }
+  ],
+  "T4.3": [
+    {
+      "title": "Indice del pezzo e numero del campo HL7",
+      "reason": "Smith^John^A è il sesto pezzo della stringa completa, contando anche PID come primo pezzo.",
+      "insight": "Il numero del pezzo grezzo e la numerazione dei campi del protocollo non sono automaticamente uguali: il segmento ha una propria struttura.",
+      "challenge": "Puoi usare ogni numero di campo HL7 direttamente come indice PIECE sull’intera stringa? Non senza considerare l’identificatore del segmento e le regole del formato."
+    },
+    {
+      "title": "Aggiornamento di un campo delimitato",
+      "reason": "SET $PIECE sostituisce il terzo campo New York con Boston e conserva gli altri campi.",
+      "insight": "Cambiare un campo delimitato è diverso da sostituire tutte le occorrenze di una parola nel record.",
+      "challenge": "Se New York compare anche in un altro campo, questa operazione lo modifica? No."
+    },
+    {
+      "title": "Intervallo di campi, delimitatori conservati",
+      "reason": "PIECE da due a quattro restituisce B-C-D, includendo i separatori interni.",
+      "insight": "Gli estremi riguardano i campi, non le posizioni dei caratteri. Una variante con campi lunghi mantiene la stessa selezione logica.",
+      "challenge": "Con A-BBBBB-C-D-E, il campo due diventa più lungo: la selezione 2..4 resta B...-C-D? Sì, è basata sui campi."
+    },
+    {
+      "title": "Larghezza fissa e spazi significativi",
+      "reason": "Nella stringa effettiva JOHN occupa 9..12 e gli spazi 13..16 restano nel risultato: lunghezza otto.",
+      "insight": "La spiegazione della fonte comprime visivamente gli spazi: il codice originale è ciò da contare. Usa delimitatori visivi o una tabella delle posizioni.",
+      "challenge": "Applicare trim al risultato conserva sempre il formato a larghezza fissa? No, può eliminarne il padding richiesto."
+    },
+    {
+      "title": "Sostituzione di un intervallo di caratteri",
+      "reason": "I caratteri C e D nelle posizioni 3..4 diventano X e Y: ABXYEF.",
+      "insight": "L’uguaglianza di lunghezza mantiene le posizioni successive nell’esempio. Una sostituzione di lunghezza diversa richiede attenzione al layout risultante.",
+      "challenge": "Questo comando sta selezionando il terzo e quarto campo separato da virgole? No, seleziona caratteri."
+    },
+    {
+      "title": "REPLACE e reinserimento dei risultati",
+      "reason": "Ogni chiamata produce la stringa trasformata, che viene riassegnata a result prima della sostituzione successiva.",
+      "insight": "L’ordine delle sostituzioni conta se il testo inserito contiene un altro segnaposto. Un template semplice non gestisce automaticamente escaping o contenuti annidati.",
+      "challenge": "Chiamare REPLACE senza conservare il risultato cambia template in posto? No."
+    },
+    {
+      "title": "Rimozione selettiva di caratteri",
+      "reason": "TRANSLATE elimina soltanto i caratteri elencati, lasciando le cifre nel caso mostrato.",
+      "insight": "Il risultato non è una validazione completa del telefono: altre lettere o simboli non elencati possono rimanere.",
+      "challenge": "Con 555abc e la stessa mappa, vengono eliminate anche abc? No."
+    },
+    {
+      "title": "Mappa di caratteri incompleta",
+      "reason": "Solo a ha una controparte nell’unico asterisco; le altre vocali elencate vengono eliminate. Hello diventa Hll.",
+      "insight": "Per sostituire ogni vocale con asterisco serve una controparte per ogni posizione della mappa. TRANSLATE non estende automaticamente l’ultimo carattere.",
+      "challenge": "Quale destinazione useresti per cinque vocali tutte verso asterisco? Cinque asterischi, uno per ogni carattere della mappa."
+    },
+    {
+      "title": "Trim ai soli bordi",
+      "reason": "<>W rimuove whitespace iniziale e finale ma conserva lo spazio fra Hello e World.",
+      "insight": "Il contenuto interno può essere parte del dato. Normalizzare non deve distruggere separazioni significative.",
+      "challenge": "La lunghezza di Hello World dopo trim è dieci? No, undici incluso lo spazio interno."
+    },
+    {
+      "title": "Rimuovere tutto il whitespace",
+      "reason": "*W elimina anche gli spazi interni e produce ABC.",
+      "insight": "Questa trasformazione è più forte del trim: A B e AB finiscono nello stesso risultato. Valuta se tale perdita di distinzione sia ammessa.",
+      "challenge": "Per pulire un nome completo, eliminare tutti gli spazi preserva sempre il significato? No."
+    },
+    {
+      "title": "Normalizzazione del caso",
+      "reason": "ZCONVERT con U produce maiuscolo nel contesto previsto.",
+      "insight": "Una rappresentazione normalizzata aiuta confronti coerenti, ma non sostituisce le regole di collazione né conserva la grafia originale.",
+      "challenge": "Se devi ristampare il nome esattamente come inserito, basta conservarne solo il maiuscolo? No."
+    },
+    {
+      "title": "Due livelli di quoting",
+      "reason": "Raddoppiare le virgolette produce un carattere doppio apice dentro una stringa ObjectScript.",
+      "insight": "Questa regola costruisce il testo della stringa nel linguaggio ospite. Non sostituisce il binding quando quel testo viene usato come dato SQL.",
+      "challenge": "Una stringa correttamente quotata in ObjectScript è automaticamente sicura da concatenare in SQL? No."
+    },
+    {
+      "title": "Addizione tollerante",
+      "reason": "3cats e 5dogs diventano 3 e 5 nel contesto aritmetico: risultato otto.",
+      "insight": "Questo comportamento può nascondere unità incompatibili. Il linguaggio non verifica che il significato delle quantità sia compatibile.",
+      "challenge": "Sommare 3kg e 5m con + produce un errore di unità? No: occorre validare il dominio nell’applicazione."
+    },
+    {
+      "title": "Regex come verifica sintattica",
+      "reason": "Il pattern di esempio riconosce user@example.com e MATCH restituisce un booleano.",
+      "insight": "Una regex che accetta la forma non prova l’esistenza della casella né la capacità di consegnare posta. Tieni distinti formato e verifica operativa.",
+      "challenge": "MATCH=1 dimostra che il destinatario riceverà il messaggio? No."
+    },
+    {
+      "title": "Numero di campi e numero di caratteri",
+      "reason": "LENGTH con delimitatore conta quattro pezzi; senza delimitatore conta sette caratteri.",
+      "insight": "Una stessa funzione può rispondere a domande diverse a seconda degli argomenti. Nomina la misura nel risultato che presenti.",
+      "challenge": "A^^C contiene solo due pezzi perché uno è vuoto? No: i pezzi sono tre."
+    },
+    {
+      "title": "Encoding adatto al contesto di output",
+      "reason": "La conversione HTML rende i caratteri di markup visualizzabili come testo nel contesto appropriato.",
+      "insight": "Non è una protezione universale per qualunque inserimento in JavaScript, URL, attributi o CSS. Il punto in cui usi la stringa determina l’encoding necessario.",
+      "challenge": "HTML encoding e parametrizzazione SQL risolvono lo stesso problema? No."
+    },
+    {
+      "title": "Campo vuoto e CSV completo",
+      "reason": "La seconda posizione fra due virgole è una stringa vuota e non genera da sola un errore.",
+      "insight": "PIECE gestisce il delimitatore, non tutte le regole di un CSV con campi quotati e virgole interne.",
+      "challenge": "Un record con cognome tra virgolette contenente virgola è sempre gestito correttamente da PIECE? No, serve un parser conforme al formato."
+    },
+    {
+      "title": "Sottostringa contro singoli caratteri",
+      "reason": "REPLACE trasforma i due an in X e dà bXXa; TRANSLATE mappa ogni a in X e n in Y, dando bXYXYX.",
+      "insight": "Rappresenta prima le unità su cui lavora la funzione: coppie di caratteri per REPLACE, caratteri indipendenti per TRANSLATE.",
+      "challenge": "TRANSLATE con from=an cerca la sequenza an intera? No."
+    }
+  ],
+  "T4.4": [
+    {
+      "title": "Il simbolo decide l’operazione",
+      "reason": "A+B usa conversione numerica e produce zero; la concatenazione richiede underscore.",
+      "insight": "Non dedurre l’operazione dal contenuto testuale. Questa tolleranza rende particolarmente importante validare un dato atteso come numero.",
+      "challenge": "A_B e A+B devono avere lo stesso risultato se entrambi sono stringhe? No."
+    },
+    {
+      "title": "Parentesi come confini di valutazione",
+      "reason": "Le parentesi producono 8 e 3; poi la sequenza esterna è 3+4=7, +8=15, /3=5.",
+      "insight": "La regola da applicare riguarda l’espressione aritmetica mostrata. Scrivi i passaggi anziché importare precedenze da SQL o da altri linguaggi.",
+      "challenge": "Togliere le parentesi attorno a 1+2 conserva necessariamente il risultato? No."
+    },
+    {
+      "title": "Somma prima della moltiplicazione nel flusso scritto",
+      "reason": "2+3 dà 5, poi *4 dà 20. Per 14 serve 2+(3*4).",
+      "insight": "Le parentesi rendono leggibile l’intenzione anche per chi conosce altri linguaggi. Il compilatore non ricostruisce la formula matematica desiderata.",
+      "challenge": "Quale espressione esplicita il risultato 20? (2+3)*4."
+    },
+    {
+      "title": "Resto e numero di bucket",
+      "reason": "47 contiene cinque gruppi da otto e lascia sette elementi: il resto è 7.",
+      "insight": "Con identificativi non negativi e divisore otto, i bucket possibili sono 0..7. L’indice della partizione non è il numero di gruppi completi.",
+      "challenge": "Per 48#8 quale bucket ottieni? Zero."
+    },
+    {
+      "title": "Quoziente intero e pagina",
+      "reason": "47 diviso per dieci dà quattro gruppi completi nel caso positivo mostrato.",
+      "insight": "Per una numerazione di pagina a base uno spesso serve un passaggio aggiuntivo. Prima chiarisci se 47 è un offset a base zero o un numero di record a base uno.",
+      "challenge": "Con offset zero e dimensione dieci, quale pagina a base uno contiene l’offset 47? La quinta."
+    },
+    {
+      "title": "Resto con operando negativo",
+      "reason": "Il caso -7#3 restituisce 2 secondo la semantica del resto ObjectScript.",
+      "insight": "Non trasferire automaticamente il risultato dell’operatore percentuale di un altro linguaggio. Verifica anche il segno del divisore quando generalizzi.",
+      "challenge": "Con divisore positivo tre, il risultato mostrato -1 sarebbe corretto per questo esercizio? No."
+    },
+    {
+      "title": "Istante locale come coppia",
+      "reason": "HOROLOG separa giorno e secondi del giorno; non è una stringa di data ISO.",
+      "insight": "I secondi si azzerano al cambio del giorno. Per intervalli o conversioni fra fusi non basta trattare l’intera coppia come un numero.",
+      "challenge": "A mezzanotte il contatore dei secondi continua oltre 86400? No, cambia il giorno e riparte la componente oraria."
+    },
+    {
+      "title": "Scomporre secondi del giorno",
+      "reason": "3661=3600+60+1, quindi la rappresentazione è 01:01:01 nel formato mostrato.",
+      "insight": "La funzione formatta una componente oraria; non deduce la data o il fuso dal solo numero di secondi.",
+      "challenge": "ZTIME(3661) identifica un istante unico nella storia? No, manca almeno la data e il contesto temporale."
+    },
+    {
+      "title": "Data aritmetica senza orario",
+      "reason": "HOROLOG+7 sfrutta il prefisso numerico del giorno; estrarre esplicitamente il primo pezzo rende l’intento più chiaro.",
+      "insight": "Il risultato è un giorno logico, non la coppia completa giorno,secondi spostata di una settimana.",
+      "challenge": "Se devi mantenere anche l’ora originaria, basta quel risultato numerico? No."
+    },
+    {
+      "title": "Parse di una data",
+      "reason": "ZDATEH con formato tre converte YYYY-MM-DD in giorno logico.",
+      "insight": "Un formato esplicito evita ambiguità fra giorno e mese. Considera anche il comportamento su date non valide prima di usare input esterni.",
+      "challenge": "2026-03-05 è interpretato come 3 maggio nel formato tre? No, è il 5 marzo."
+    },
+    {
+      "title": "Traccia dell’accumulatore",
+      "reason": "10-2=8, poi *3=24, poi +1=25.",
+      "insight": "Un’unica tabella dei risultati intermedi rende visibile il punto in cui l’intuizione basata sulle precedenze usuali diverge.",
+      "challenge": "Per ottenere cinque, quale parte moltiplichi prima esplicitamente? Usa 10-(2*3)+1."
+    },
+    {
+      "title": "Formato non è conversione di fuso",
+      "reason": "ZDATE con formato tre produce una data YYYY-MM-DD a partire dal giorno fornito.",
+      "insight": "Formattare il giorno locale non lo trasforma in una data UTC. Scegli prima il riferimento temporale corretto.",
+      "challenge": "Aggiungere la lettera Z al testo della data converte il dato in UTC? No."
+    },
+    {
+      "title": "Formula di fatturazione e parentesi",
+      "reason": "La sequenza 90,180,185,555 deriva dalla valutazione dell’espressione scritta.",
+      "insight": "Una formula finanziaria richiede intenzione chiara anche su arrotondamento e unità. Il risultato aritmetico corretto del linguaggio può essere il risultato applicativo sbagliato.",
+      "challenge": "Per ottenere 95 secondo la formula matematica proposta, come separi i prodotti? 100-(10*2)+(5*3)."
+    },
+    {
+      "title": "Timestamp e cronometro",
+      "reason": "HOROLOG è locale; ZTIMESTAMP rappresenta UTC con frazioni; ZHOROLOG è adatto a misurare intervalli dalla partenza dell’istanza.",
+      "insight": "Usare uno strumento per il ruolo sbagliato produce tempi plausibili ma semanticamente errati. La fonte parla di variabili speciali: l’esistenza di funzioni dal nome simile è un tema diverso.",
+      "challenge": "Per una durata breve scegli la sottrazione di HOROLOG completo? No, usa un timer coerente come ZHOROLOG."
+    },
+    {
+      "title": "Mezzanotte è un valore valido",
+      "reason": "Zero secondi dall’inizio del giorno si formatta come 00:00:00.",
+      "insight": "Zero non significa automaticamente orario mancante. Un test booleano sul numero potrebbe scartare proprio la mezzanotte.",
+      "challenge": "Se IF seconds è falso per zero, hai provato che il campo non sia stato fornito? No."
+    }
+  ],
+  "T4.5": [
+    {
+      "title": "Postcondizionale e ramo saltato",
+      "reason": "SET viene eseguito quando GET(person) è vuoto, sia per variabile mancante sia per stringa vuota.",
+      "insight": "Quando la condizione è falsa, phone non viene assegnato da questa riga: può conservare un valore precedente o restare indefinito.",
+      "challenge": "Se person è valorizzato ma phone manca, la riga garantisce un phone leggibile? No."
+    },
+    {
+      "title": "Verità del prefisso numerico",
+      "reason": "1abc è vero mentre abc è falso, secondo la conversione numerica dell’IF.",
+      "insight": "Il test booleano non equivale a stringa non vuota. Per quel requisito usa un confronto esplicito con la stringa vuota.",
+      "challenge": "abc è un input di lunghezza tre: IF abc deve quindi essere vero? No."
+    },
+    {
+      "title": "Valori diversi, stesso ramo falso",
+      "reason": "Stringa vuota, zero e testi che si convertono a zero arrivano tutti al ramo falso.",
+      "insight": "Un ramo condiviso non rende i dati equivalenti: potresti aver bisogno di distinguere assenza, zero valido e input malformato.",
+      "challenge": "Un conteggio zero e un campo mancante devono essere trattati sempre nello stesso modo? Dipende dal contratto, non dall’IF numerico."
+    },
+    {
+      "title": "Copertura del confine x=5",
+      "reason": "Con dieci viene scritto big e la seconda assegnazione è saltata.",
+      "insight": "Le condizioni x>5 e x<5 lasciano scoperto il valore cinque. Il codice può stampare un vecchio risultato o incontrare un indefinito.",
+      "challenge": "Cosa assegna a result quando x=5? Nulla da queste due righe; serve un ramo o un default esplicito."
+    },
+    {
+      "title": "Uscita dal metodo",
+      "reason": "RETURN found al secondo giro termina Process; il return finale non viene raggiunto.",
+      "insight": "Un risultato può essere stabilito dentro un ciclo ma appartenere al metodo intero. Scegli il comando di uscita in base a quel confine.",
+      "challenge": "Sostituendo con un QUIT semplice, il metodo salta anche il return finale? No, nel contesto mostrato esce dal ciclo."
+    },
+    {
+      "title": "Controllo prima dell’effetto",
+      "reason": "QUIT quando i=3 precede WRITE: quindi tre non viene stampato e il programma continua dopo il ciclo.",
+      "insight": "La posizione del controllo cambia il risultato. Fermarsi prima o dopo l’effetto distingue visita esclusiva e inclusiva del valore limite.",
+      "challenge": "Spostando QUIT dopo WRITE, apparirebbe anche tre? Sì nello stesso schema di ciclo."
+    },
+    {
+      "title": "Postcondizionali indipendenti",
+      "reason": "Viene eseguito soltanto WRITE con status active; l’altro comando resta saltato.",
+      "insight": "Due postcondizionali non creano necessariamente un ramo esaustivo. Un terzo stato può non produrre alcuna uscita.",
+      "challenge": "Con status pending compare automaticamente Offline? No."
+    },
+    {
+      "title": "Grammatica dei comandi",
+      "reason": "SET,DO,QUIT,WRITE ammettono la forma postcondizionale nel contesto previsto; non si aggiunge indiscriminatamente a qualunque keyword.",
+      "insight": "Una somiglianza visiva non è una regola sintattica universale. Controlla il comando specifico anziché combinare abbreviazioni e condizioni a intuito.",
+      "challenge": "FOR:condizione è la forma generale da usare per ogni loop? No."
+    },
+    {
+      "title": "Saltare una iterazione",
+      "reason": "CONTINUE sugli i pari evita il resto del corpo; solo 1,3,5,7,9 incrementano count.",
+      "insight": "Non esce dal ciclo intero. Spostare count prima di CONTINUE cambierebbe la misura che stai facendo.",
+      "challenge": "Con count prima della condizione otterresti ancora cinque? No, conteresti anche le iterazioni poi saltate."
+    },
+    {
+      "title": "Test booleano non validante",
+      "reason": "3.5abc viene interpretato come nonzero e produce TRUE.",
+      "insight": "Un valore vero non è necessariamente un numero scritto nel formato che la funzione richiede. Validazione e scelta del ramo sono due operazioni distinte.",
+      "challenge": "TRUE dimostra che il suffisso abc sia ammesso dal dominio? No."
+    },
+    {
+      "title": "Chiamata condizionata e assenza di effetto",
+      "reason": "Il DO è saltato perché x è vuoto; il WRITE successivo produce End.",
+      "insight": "Il postcondizionale agisce sul comando associato, non sul resto dell’intero metodo.",
+      "challenge": "Il WRITE End viene saltato perché il DO non è avvenuto? No."
+    },
+    {
+      "title": "Prima condizione vera",
+      "reason": "SELECT sceglie il ramo cat e restituisce Meow; il default finale copre gli altri casi.",
+      "insight": "L’ordine conta se più condizioni possono essere vere: il primo ramo soddisfatto determina il valore.",
+      "challenge": "Se un primo ramo 1:Unknown fosse messo all’inizio, raggiungeresti ancora Meow? No."
+    },
+    {
+      "title": "Selezione totale oppure errore esplicito",
+      "reason": "Nessuna condizione è vera e SELECT genera l’errore previsto.",
+      "insight": "Un default evita l’errore solo se il dominio prevede un valore per il caso restante. In altri casi l’errore può segnalare correttamente uno stato inatteso.",
+      "challenge": "Aggiungere sempre Unknown può nascondere una condizione impossibile che vorresti rilevare? Sì."
+    },
+    {
+      "title": "Segno e testo nelle condizioni",
+      "reason": "Valori negativi e prefissi frazionari nonzero risultano veri; una stringa con spazio iniziale non va trattata come un numero già validato.",
+      "insight": "Non semplificare vero a positivo: negativo cinque è nonzero. Definisci esplicitamente un confronto >0 se richiedi positività.",
+      "challenge": "IF -5 e IF -5>0 hanno lo stesso risultato? No."
+    },
+    {
+      "title": "QUIT con valore nel contesto sbagliato",
+      "reason": "Il frammento usa QUIT i dentro FOR, dove non è l’uscita con risultato prevista: per tornare dal metodo usa RETURN i.",
+      "insight": "Lo stesso nome di comando non ha un significato indipendente dal contesto di esecuzione. Leggi anche i blocchi circostanti.",
+      "challenge": "Per restituire la posizione due e saltare il return -1 finale, cosa usi? RETURN 2 nel punto della corrispondenza."
+    }
+  ],
+  "T4.6": [
+    {
+      "title": "Compatibilità e identità del nome",
+      "reason": "%IsA risponde al requisito della catena primaria nell’esempio Person/Patient; un confronto con il solo nome concreto rifiuta sottoclassi valide.",
+      "insight": "La fonte qui nega $CLASSNAME ma lo accetta in Q10: la funzione esiste. Inoltre per superclassi secondarie considera %Extends; prima di ogni metodo verifica l’oref.",
+      "challenge": "Un Patient deve chiamarsi esattamente Person per essere accettabile come Person? No."
+    },
+    {
+      "title": "Nome breve e qualificato",
+      "reason": "%ClassName(0) produce Invoice, mentre con uno produce MyApp.Invoice.",
+      "insight": "Il nome breve può collidere fra package. Usa il nome qualificato quando l’identità deve essere non ambigua.",
+      "challenge": "Billing.Invoice e MyApp.Invoice sono distinguibili dal solo nome breve? No."
+    },
+    {
+      "title": "Dispatch dinamico di classe",
+      "reason": "CLASSMETHOD seleziona la classe e il metodo da stringhe, poi inoltra gli argomenti.",
+      "insight": "La possibilità tecnica di invocare un nome non autorizza qualunque nome esterno. Limita i target previsti dal contratto di configurazione.",
+      "challenge": "Un parametro HTTP dovrebbe scegliere liberamente ogni classe e metodo? No, valida la selezione rispetto ai target ammessi."
+    },
+    {
+      "title": "Dispatch dinamico d’istanza",
+      "reason": "METHOD chiama Add sull’oref ricevuto e restituisce 30 per 10 e 20.",
+      "insight": "Serve un riferimento valido e un metodo compatibile con gli argomenti. La chiamata dinamica non verifica da sola la semantica dei dati.",
+      "challenge": "Un oggetto senza Add viene reso compatibile solo perché il nome è una variabile? No."
+    },
+    {
+      "title": "Factory con classe scelta a runtime",
+      "reason": "CLASSMETHOD chiama %New sulla classe User.Person scelta nella variabile.",
+      "insight": "Una factory utile controlla che la classe scelta appartenga alla famiglia prevista e gestisce un risultato di costruzione fallito prima di usarlo.",
+      "challenge": "Se la costruzione restituisce vuoto, è sicuro chiamare subito %ClassName? No."
+    },
+    {
+      "title": "Validità dell’oref prima del tipo",
+      "reason": "ISOBJECT distingue il testo Hello da un riferimento valido a un’istanza.",
+      "insight": "Un testo che assomiglia alla stampa di un oref non diventa un riferimento. Non ricostruire oggetti concatenando numeri e nomi.",
+      "challenge": "ISOBJECT=1 dimostra anche che sia una classe Patient? No, è una verifica successiva distinta."
+    },
+    {
+      "title": "Accesso dinamico a una proprietà",
+      "reason": "PROPERTY legge Name perché il nome della proprietà è il dato contenuto in propName.",
+      "insight": "L’accesso dinamico deve rispettare le proprietà consentite dall’interfaccia; un nome proveniente dall’esterno può esporre campi non previsti.",
+      "challenge": "Per un endpoint generico basta che la proprietà esista per restituirla a ogni utente? No."
+    },
+    {
+      "title": "Aprire metadati già esistenti",
+      "reason": "ClassDefinition.%OpenId apre la definizione identificata dal nome della classe; %New costruisce una definizione nuova.",
+      "insight": "La distinzione creare/aprire vale anche per i metadati. Non confondere l’istanza della classe applicativa con l’oggetto che ne descrive lo schema.",
+      "challenge": "Aprire la definizione di Person carica automaticamente il paziente con ID 1? No."
+    },
+    {
+      "title": "Membri dichiarati e membri effettivi",
+      "reason": "La collection Properties della definizione elenca i membri presenti in quella definizione sorgente.",
+      "insight": "Non dedurre che includa sempre l’intero insieme ereditato. Quando serve il modello effettivo considera il dizionario compilato appropriato.",
+      "challenge": "Una proprietà ereditata assente dal sorgente locale è necessariamente inesistente a runtime? No."
+    },
+    {
+      "title": "Tre domande di introspezione",
+      "reason": "ISOBJECT verifica il riferimento; ClassName identifica la classe; IsA ed Extends interrogano relazioni di tipo con contratti differenti.",
+      "insight": "La fonte è internamente incoerente su CLASSNAME e sull’intera gerarchia di IsA. La documentazione distingue la catena primaria dall’inclusione delle superclassi secondarie con Extends.",
+      "challenge": "Controllare il nome completo equivale a verificare qualsiasi relazione di ereditarietà? No."
+    },
+    {
+      "title": "Catena primaria transitiva",
+      "reason": "Employee deriva da Person, che deriva da Entity e Persistent: nell’esempio tutti i test riportati risultano veri.",
+      "insight": "La transitività della catena non va confusa con la presenza di qualunque superclass secondaria in una gerarchia multipla.",
+      "challenge": "Aggiungere un mixin secondario autorizza a generalizzare lo stesso test senza consultarne il contratto? No."
+    },
+    {
+      "title": "Scrittura dinamica e validazione successiva",
+      "reason": "SET PROPERTY assegna Timeout=30 tramite un nome variabile.",
+      "insight": "La modifica dello stato in memoria non prova il salvataggio né l’autorizzazione ad alterare un dato. Seleziona proprietà scrivibili e valida i valori.",
+      "challenge": "La sola assegnazione dinamica conferma che il nuovo Timeout sia stato persistito? No."
+    },
+    {
+      "title": "Sorgente e modello compilato",
+      "reason": "CompiledMethod descrive i metodi del modello compilato, inclusi quelli disponibili per ereditarietà nel contesto previsto.",
+      "insight": "Scegli il livello di introspezione in base alla domanda: dove è scritto un membro non coincide con quale comportamento è disponibile.",
+      "challenge": "Per elencare solo ciò che un autore ha dichiarato direttamente, useresti senza distinzione tutti i metodi compilati ereditati? No."
+    },
+    {
+      "title": "Schema non è valore d’istanza",
+      "reason": "PropertyDefinition descrive Name,Type,Required e SqlFieldName; non contiene il valore del campo del singolo paziente.",
+      "insight": "Un generatore di form usa metadati per struttura e vincoli, poi legge i dati da un’istanza o query. Le due fonti hanno ruoli diversi.",
+      "challenge": "Dal Required di una proprietà puoi sapere se il paziente 42 l’ha valorizzata? No."
+    },
+    {
+      "title": "Routing configurabile con confini chiari",
+      "reason": "La tabella handlers associa email a App.EmailHandler e la chiamata dinamica esegue Process su quella classe.",
+      "insight": "Il routing è una selezione di capacità. Controlla chi può modificare la tabella e che tutti i target rispettino la stessa firma e gestione degli errori.",
+      "challenge": "Un handler con firma incompatibile viene adattato automaticamente dal dispatch? No."
+    }
+  ],
+  "T4.7": [
+    {
+      "title": "Testo o byte",
+      "reason": "FileCharacter è adatto al testo e alle operazioni di riga; FileBinary conserva contenuti binari secondo il contratto appropriato.",
+      "insight": "La scelta si basa sul significato dei dati, non sull’estensione intuitiva del file. Per testo controlla anche la codifica.",
+      "challenge": "Un’immagine con nome file .txt diventa testo da convertire? No."
+    },
+    {
+      "title": "Scrivere e verificare lo status",
+      "reason": "Il frammento crea lo stream, sceglie Filename, scrive e salva.",
+      "insight": "Un percorso assegnato non prova che la scrittura sia riuscita. Conserva gli errori delle operazioni rilevanti invece di assumere che la riga successiva li risolva.",
+      "challenge": "Se %Save restituisce errore, stampare File creato è corretto? No."
+    },
+    {
+      "title": "Lettura a blocchi o per righe",
+      "reason": "Il loop continua finché AtEnd non segnala la fine e legge il prossimo contenuto.",
+      "insight": "Il confine di un blocco Read non è necessariamente una riga; scegli ReadLine quando il formato di elaborazione è per righe, considerando anche gli errori di lettura.",
+      "challenge": "Puoi trattare ogni risultato di Read come un record completo in ogni formato? No."
+    },
+    {
+      "title": "Rewind modifica il cursore",
+      "reason": "Rewind riporta la posizione di lettura all’inizio senza cancellare i dati.",
+      "insight": "Separare contenuto e posizione spiega perché una seconda scansione può essere vuota prima di rewind e identica dopo.",
+      "challenge": "Rewind svuota il file o il global che contiene il flusso? No."
+    },
+    {
+      "title": "Copia del contenuto e assegnazione di riferimento",
+      "reason": "CopyFrom trasferisce il contenuto; target=source crea invece un alias dell’oggetto nel caso dell’oref.",
+      "insight": "Dopo una copia corretta i due contenuti hanno vite distinte. Gestisci la posizione richiesta dalla sorgente e lo status secondo l’API concreta.",
+      "challenge": "Cambiare Filename su un alias riguarda anche l’altro nome di variabile? Sì, se entrambi indicano la stessa istanza."
+    },
+    {
+      "title": "Read non promette tutto il documento",
+      "reason": "I due Write producono Hello World e il piccolo esempio entra in una lettura dopo Rewind.",
+      "insight": "Non generalizzare che Read senza lunghezza restituisca sempre ogni byte rimanente di uno stream grande. Usa il ciclo AtEnd previsto.",
+      "challenge": "Per un flusso da 500 MB basta sempre un solo Read()? No."
+    },
+    {
+      "title": "Due assi indipendenti degli stream",
+      "reason": "File/Global indica il contenitore; Character/Binary il trattamento dei dati.",
+      "insight": "Scegli prima le due proprietà richieste, poi la classe risultante. I temporanei hanno un ciclo di vita diverso da una proprietà persistente.",
+      "challenge": "GlobalBinary significa file di testo nel filesystem? No: contenuto binario conservato in global."
+    },
+    {
+      "title": "Richiesta HTTP e configurazione della connessione",
+      "reason": "Server e percorso definiscono destinazione e risorsa per Get nell’esempio.",
+      "insight": "La configurazione non finisce nel nome del server: considera porta, timeout e TLS quando previsti dal requisito. Non assumere che un metodo inventato Execute sia parte dell’API.",
+      "challenge": "Server da solo identifica anche se usare TLS e quale porta? Non completamente."
+    },
+    {
+      "title": "Corpo come stream ed esito come livelli distinti",
+      "reason": "HttpResponse.Data è il flusso del corpo; StatusCode è il codice HTTP della risposta.",
+      "insight": "Prima controlla il risultato della richiesta, poi il codice HTTP, infine il formato del corpo. Uno status di trasporto positivo non implica risposta applicativa 200.",
+      "challenge": "Se il server risponde 404 con JSON di errore, puoi trattare il corpo come elenco utenti riuscito? No."
+    },
+    {
+      "title": "Dichiarazione Content-Type e contenuto reale",
+      "reason": "EntityBody contiene il testo JSON e ContentType ne dichiara il formato al destinatario.",
+      "insight": "L’header non rende valido un corpo malformato. Costruire JSON con una serializzazione appropriata evita errori di quoting e tipi.",
+      "challenge": "Scrivere testo arbitrario e dichiararlo application/json lo converte automaticamente? No."
+    },
+    {
+      "title": "Metodo HTTP e API disponibile",
+      "reason": "I metodi dedicati coprono i verbi elencati; per altri verbi si usa il meccanismo Send previsto.",
+      "insight": "Verifica l’API della versione concreta invece di dedurre un metodo da ogni nome del protocollo. Il verbo scelto non rende automaticamente idempotente la logica del server.",
+      "challenge": "Un metodo chiamato Options esiste necessariamente perché OPTIONS è un verbo HTTP? No."
+    },
+    {
+      "title": "Messaggio e trasporto della posta",
+      "reason": "MailMessage descrive il contenuto; SMTP gestisce l’invio tramite il server configurato.",
+      "insight": "Un invio accettato dal server non prova la consegna finale né la lettura. Sono eventi successivi e distinti.",
+      "challenge": "SMTP.Send riuscito dimostra che il destinatario ha letto l’email? No."
+    },
+    {
+      "title": "Destinatari come collection",
+      "reason": "To.Insert aggiunge un destinatario alla collection; TextData è lo stream del corpo.",
+      "insight": "Una collection non è una semplice proprietà scalare: l’operazione deve mantenere la sua struttura. Controlla lo status dell’invio e gestisci configurazione e autenticazione previste.",
+      "challenge": "Assegnare una stringa arbitraria a To equivale sempre a Insert? Non è il contratto mostrato."
+    },
+    {
+      "title": "Client FTP e risultato del trasferimento",
+      "reason": "FtpSession è la classe della funzionalità FTP nel quiz.",
+      "insight": "Conoscere il nome della classe non basta a garantire un trasferimento: verifica connessione, autenticazione, modalità e risultati delle operazioni nella documentazione della versione.",
+      "challenge": "Una connessione riuscita prova che il file sia stato copiato per intero? No."
+    },
+    {
+      "title": "TLS richiede una configurazione",
+      "reason": "Https sceglie il canale TLS; SSLConfiguration specifica la configurazione client richiesta dal contesto.",
+      "insight": "Server, porta, header e ContentType rispondono a requisiti differenti. Nessuna singola proprietà sostituisce la configurazione e la validazione previste per la connessione.",
+      "challenge": "Https=1 senza configurazione appropriata garantisce una connessione TLS riuscita? No."
+    }
+  ],
+  "T5.1": [
+    {
+      "title": "Diagnosi della macro nel contesto di compilazione",
+      "reason": "MPP5610 indica una definizione di macro non disponibile. La spiegazione della fonte sul divieto generale di #Include nel metodo non è affidabile come regola universale.",
+      "insight": "La documentazione ammette direttive macro nel contesto previsto: controlla sintassi, nome e posizione effettiva; un Include di classe esplicita una dipendenza condivisa.",
+      "challenge": "Il fatto che il file esista dimostra che la macro sia stata inclusa correttamente? No."
+    },
+    {
+      "title": "File trovato e simbolo mancante",
+      "reason": "AppMacros può esistere e definire LogInfo, ma il codice richiede LogError. Il nome esatto deve essere definito.",
+      "insight": "La presenza della dipendenza è un controllo diverso dalla presenza del simbolo al suo interno. Anche il preprocessore ha un proprio insieme di identificatori.",
+      "challenge": "Rinominare soltanto il file include crea automaticamente LogError? No."
+    },
+    {
+      "title": "Durata in secondi frazionari",
+      "reason": "ZH è l’abbreviazione di ZHOROLOG: sottraendo le due letture si ottiene una durata numerica.",
+      "insight": "Il valore assoluto non è una data UTC. Per confrontare prove considera carico e condizioni, non soltanto il numero di decimali stampati.",
+      "challenge": "Un intervallo .625 equivale a quanti millisecondi? 625."
+    },
+    {
+      "title": "Perché HOROLOG non è un cronometro",
+      "reason": "L’aritmetica sulla coppia giorno,secondi usa il prefisso numerico e perde la parte oraria.",
+      "insight": "Il numero 66818 dichiarato nell’esempio non segue in generale dalla sottrazione di due letture: nello stesso giorno il prefisso può dare differenza zero. Il difetto resta l’uso della rappresentazione sbagliata.",
+      "challenge": "Una differenza zero prova che non sia passato tempo? No, se hai sottratto i soli prefissi del giorno."
+    },
+    {
+      "title": "Strumento e namespace",
+      "reason": "PERFMON è un’utilità invocata dal Terminal nel contesto previsto; non è la stessa azione di aprire il dashboard.",
+      "insight": "Un nome vicino non identifica la stessa API. Verifica anche il namespace in cui il comando o la routine è disponibile.",
+      "challenge": "Aggiungere un percento al nome di una routine è una correzione innocua? No: può indicare un’altra routine o una inesistente."
+    },
+    {
+      "title": "Refuso nel nome del tipo",
+      "reason": "%Strig non identifica il tipo %String atteso dalla proprietà.",
+      "insight": "Un errore di definizione del modello può fermare la compilazione prima che esista un percorso runtime da provare. Parti dall’identificatore segnalato.",
+      "challenge": "Cambiare i dati dell’oggetto corregge il nome del tipo nella classe? No."
+    },
+    {
+      "title": "Sorgente presente e dipendenza compilata",
+      "reason": "La presenza del file sorgente di Base.Record non garantisce che il compilatore abbia la dipendenza disponibile nel contesto richiesto.",
+      "insight": "Controlla namespace, errori della superclasse e ordine delle dipendenze. La fonte propone altrove opzioni diverse: non inventare un flag dependencies dal nome plausibile.",
+      "challenge": "Compilare ripetutamente solo il figlio risolve un errore reale nel padre? No."
+    },
+    {
+      "title": "Analisi SQL e analisi del codice",
+      "reason": "Gli strumenti SQL mettono in relazione piano e statistiche runtime della query.",
+      "insight": "Se il collo di bottiglia è una trasformazione ObjectScript dopo il fetch, il piano da solo non lo spiega. Segui i confini dell’operazione completa.",
+      "challenge": "Una query veloce dimostra che tutto l’endpoint sia veloce? No."
+    },
+    {
+      "title": "Code dei tempi e ipotesi verificabili",
+      "reason": "Il quiz propone ricompilazioni sporadiche come spiegazione di un P99 elevato.",
+      "insight": "Per confermarlo servono eventi di cache/compilazione allineati ai campioni lenti. Il percentile non esclude attese o I/O.",
+      "challenge": "Se non ci sono ricompilazioni nei campioni lenti, devi mantenere comunque quella diagnosi? No."
+    },
+    {
+      "title": "Keyword e identificatori hanno regole diverse",
+      "reason": "Return,return,RETURN sono varianti del comando; il cambio di maiuscole non ne cambia il significato.",
+      "insight": "Questo non vale per i nomi delle variabili: city e City sono due identificatori diversi. Distingui il vocabolario del linguaggio dai dati e nomi applicativi.",
+      "challenge": "RETURN total e return Total devono leggere lo stesso valore? Non se total e Total non sono la stessa variabile definita."
+    },
+    {
+      "title": "Flag ricorsivo e precedenze di dipendenza",
+      "reason": "Il quiz chiarisce che r richiede la compilazione dei predecessori di dipendenza; d non significa dependencies.",
+      "insight": "I flag sono un’interfaccia documentata, non abbreviazioni da indovinare. Controlla quelli supportati nella versione e lo status della compilazione.",
+      "challenge": "Aggiungere d garantisce da solo l’ordinamento delle superclassi? Non secondo il significato del flag riportato."
+    },
+    {
+      "title": "Fase che produce l’errore",
+      "reason": "Macro non definita e sintassi del preprocessore appartengono alla fase MPP, prima delle verifiche successive del codice.",
+      "insight": "Individuare la fase restringe il problema: non cercare una soluzione nelle autorizzazioni del database per un simbolo macro mancante.",
+      "challenge": "Un include vuoto è necessariamente un errore MPP? No: può semplicemente non definire alcun simbolo."
+    },
+    {
+      "title": "Macro non è variabile runtime",
+      "reason": "DbName con prefisso $$$ deve essere risolto nella compilazione, non riceve un valore locale al momento della chiamata.",
+      "insight": "Definire una variabile omonima non ripara una macro assente. Le due categorie vivono in fasi differenti.",
+      "challenge": "SET DbName prima della chiamata definisce $$$DbName? No."
+    },
+    {
+      "title": "Rapporto di cache e baseline",
+      "reason": "L’efficienza di cache è un rapporto fra riferimenti logici e letture, non una percentuale da confrontare con cento.",
+      "insight": "Le soglie di salute dipendono dal carico. Un rapporto isolato suggerisce un’indagine, mentre throughput, latenza e I/O effettivo permettono di valutarne l’impatto.",
+      "challenge": "Efficienza 150 significa automaticamente 150%? No."
+    },
+    {
+      "title": "Punto caldo per linea",
+      "reason": "MONLBL permette di collegare hit e tempo alle linee della routine.",
+      "insight": "Una linea frequente ma economica e una rara ma costosa richiedono interventi diversi. Valuta contributo complessivo e numero di esecuzioni.",
+      "challenge": "La linea con più hit è necessariamente quella che consuma più tempo? No."
+    }
+  ],
+  "T5.2": [
+    {
+      "title": "Stack corrente e contesto dell’errore",
+      "reason": "PLACE descrive le posizioni dei frame disponibili. La fonte semplifica $STACK(-1) come profondità corrente.",
+      "insight": "La documentazione distingue $STACK corrente e il massimo livello di contesto informativo con -1, specialmente durante la gestione dell’errore. Non assumere che il momento del logging coincida con quello del guasto.",
+      "challenge": "Una funzione di logging aggiunge il proprio contesto di chiamata? Sì: distinguilo dallo stack conservato dell’errore."
+    },
+    {
+      "title": "Tradurre un’eccezione in status",
+      "reason": "AsStatus rende l’errore adatto a un contratto che restituisce %Status invece di propagare un’eccezione.",
+      "insight": "La traduzione non risolve il guasto. Il chiamante deve ancora controllare e trattare il risultato negativo.",
+      "challenge": "Dopo AsStatus è corretto ignorare il valore e restituire OK? No, se l’operazione non è stata recuperata."
+    },
+    {
+      "title": "Errore del caricamento oppure dell’uso",
+      "reason": "Il mancato record produce un valore vuoto; l’accesso successivo a Process genera INVALID OREF.",
+      "insight": "Per diagnosticare la causa iniziale controlla il risultato subito dopo OpenId, invece di aspettare l’errore secondario sulla dereferenziazione.",
+      "challenge": "Aggiungere il terzo argomento .sc rende automaticamente valido obj? No: devi ancora verificarlo."
+    },
+    {
+      "title": "Ponte da status a eccezione",
+      "reason": "ThrowOnError continua con OK e genera una StatusException quando sc contiene un errore.",
+      "insight": "Scegli un punto esplicito dove convertire lo stile di gestione. Non presumere che ogni %Status negativo attivi già il CATCH.",
+      "challenge": "Senza ThrowOnError o altro THROW, uno status di errore entra da solo nel CATCH? No."
+    },
+    {
+      "title": "Quale profondità dello stack",
+      "reason": "Il valore -1 è collegato al contesto informativo disponibile e non va generalizzato come sinonimo immutabile della profondità corrente.",
+      "insight": "Durante una gestione di errore possono essere disponibili frame relativi al punto del guasto. Usa i descrittori documentati e considera quando acquisisci l’informazione.",
+      "challenge": "Per il livello corrente basta sostituire a intuito ogni uso di STACK con STACK(-1)? No."
+    },
+    {
+      "title": "THROW richiede un oggetto eccezione",
+      "reason": "I due esempi costruiscono o avvolgono un’eccezione; raise e signal non sono i comandi ObjectScript mostrati.",
+      "insight": "Il contenitore dell’errore e il suo messaggio sono differenti: una stringa o uno status non diventano un oggetto solo perché rappresentano un problema.",
+      "challenge": "throw sc è equivalente a ThrowStatus(sc)? No, la macro costruisce il wrapper appropriato."
+    },
+    {
+      "title": "Eccezione generale e status avvolto",
+      "reason": "StatusException conserva un %Status; General rappresenta un errore applicativo nominato nel modello previsto.",
+      "insight": "La classe da scegliere dipende dall’origine e dal contratto dell’errore, non dalla severità percepita del testo.",
+      "challenge": "Per propagare un %Status già composto devi ricostruirlo manualmente in una stringa? No, puoi avvolgerlo nel tipo previsto."
+    },
+    {
+      "title": "Rappresentazione per l’utente",
+      "reason": "GetErrorText produce testo leggibile a partire dallo status codificato.",
+      "insight": "Il testo serve alla presentazione e alla diagnosi; non usarlo come unico protocollo per identificare e ricostruire tutti i dettagli strutturati dell’errore.",
+      "challenge": "Confrontare messaggi localizzati è il modo più robusto di classificare gli errori? No."
+    },
+    {
+      "title": "Predicati sul tipo di ritorno giusto",
+      "reason": "ISOK e ISERR interpretano %Status. Non sono un controllo generico per qualsiasi valore restituito da un metodo.",
+      "insight": "Prima di applicare la macro identifica il contratto: oref, contatore, booleano e status hanno significati differenti.",
+      "challenge": "Applicare ISOK a un ID dimostra il successo di un caricamento? No."
+    },
+    {
+      "title": "Catturare selettivamente",
+      "reason": "Il CATCH gestisce il caso noto e rilancia ex per gli altri, mantenendo la possibilità di gestione esterna.",
+      "insight": "Registrare un errore non equivale a recuperarlo. Se non puoi completare l’operazione, propaga il fallimento anziché continuare silenziosamente.",
+      "challenge": "Un catch che scrive solo un messaggio e prosegue è sempre corretto? No."
+    },
+    {
+      "title": "Conversione esplicita prima del throw",
+      "reason": "ThrowStatus e CreateFromStatus producono il tipo richiesto dal comando THROW.",
+      "insight": "La validità del contenuto e la validità del contenitore sono controlli separati. Un %Status ben formato non è già un oref eccezione.",
+      "challenge": "Se sc è un errore composto, basta passarlo direttamente a THROW? No: usa la conversione prevista."
+    },
+    {
+      "title": "Posizione nel codice compilato",
+      "reason": "Location usa label+offset^routine e aiuta a individuare il punto del guasto.",
+      "insight": "L’offset del compilato non è necessariamente il numero di riga del file sorgente corrente. Conserva il contesto di versione e mappatura quando indaghi.",
+      "challenge": "Aprire la riga sette del file modificato oggi identifica sempre ProcessOrder+7 del guasto di ieri? No."
+    },
+    {
+      "title": "Dati dell’eccezione e campi del log",
+      "reason": "Name,Code,Data e Location appartengono al modello previsto. Timestamp e severità non vengono dedotti automaticamente da ogni eccezione.",
+      "insight": "Il log può aggiungere tempo, operazione e correlazione come informazioni proprie, senza attribuirle a proprietà inesistenti.",
+      "challenge": "Se vuoi sapere quando hai registrato ex, dove prendi il timestamp? Dal contesto di logging esplicitamente aggiunto."
+    },
+    {
+      "title": "Accumulare errori richiede indipendenza",
+      "reason": "ADDSC combina gli status per riferire più fallimenti, invece di fermarsi al primo.",
+      "insight": "Eseguire tutti gli import è sensato solo se le fasi successive non dipendono da un prerequisito fallito. Aggregare non risolve le dipendenze.",
+      "challenge": "Se ImportOrders richiede Customers validi, va sempre eseguito dopo un fallimento dei clienti? No, definisci la politica di arresto o recupero."
+    },
+    {
+      "title": "Scomporre uno status composto",
+      "reason": "DecomposeStatus rende disponibili le singole voci in una struttura utile al report.",
+      "insight": "Presentare tutti gli errori aiuta la correzione, ma conserva anche lo status strutturato quando deve essere propagato fra metodi.",
+      "challenge": "Stampare una sola voce prova che non ne esistano altre? No."
+    },
+    {
+      "title": "RETURN di errore non attiva CATCH",
+      "reason": "Il codice riconosce lo status di Step1 e lo restituisce direttamente; non viene lanciata un’eccezione.",
+      "insight": "TRY non trasforma ogni valore negativo in un evento di controllo. Questo spiega perché un CATCH può non essere raggiunto anche se l’operazione fallisce.",
+      "challenge": "Per arrivare intenzionalmente al CATCH con quel risultato, cosa manca? Una conversione e un throw appropriati."
+    },
+    {
+      "title": "Descrittori dello stack",
+      "reason": "PLACE,MCODE ed ECODE descrivono informazioni diverse; CALLER non è un descrittore da inventare.",
+      "insight": "MCODE è il testo della linea nel contesto disponibile, non un timestamp. Usa il descrittore che risponde alla domanda diagnostica e considera i limiti del contesto conservato.",
+      "challenge": "PLACE restituisce automaticamente l’ora del guasto? No."
+    },
+    {
+      "title": "Log strutturato e possibilità di osservazione",
+      "reason": "Il frammento registra proprietà dell’eccezione e posizioni dei frame; non soltanto un messaggio generico.",
+      "insight": "Lo stack acquisito durante il logging va interpretato rispetto al contesto dell’errore. Controlla inoltre se il log può essere annullato da una transazione ancora aperta.",
+      "challenge": "Un log in un global è sempre una prova duratura anche dopo rollback? Non se la sua scrittura viene annullata con la transazione."
+    }
+  ],
+  "T5.3": [
+    {
+      "title": "Autorizzazione al database",
+      "reason": "Il percorso nel PROTECT orienta la diagnosi verso la risorsa del database nel contesto del cambio namespace.",
+      "insight": "Non confondere permessi SQL sulla tabella, permessi della risorsa e stato del database. Un conflitto di lock non si diagnostica dal nome PROTECT; anche i timeout di lock hanno il loro protocollo.",
+      "challenge": "Concedere UPDATE SQL risolve sempre la mancanza di accesso al database? No."
+    },
+    {
+      "title": "La variabile nominata dall’errore",
+      "reason": "Il cursore assegnato è key mentre la lettura usa ordKey. Il messaggio identifica proprio il nome non definito.",
+      "insight": "Correggi il flusso del dato, non soltanto il sintomo: assegnare un default a ordKey potrebbe mascherare il refuso.",
+      "challenge": "Quale valore volevi probabilmente stampare? La chiave effettivamente restituita da ORDER."
+    },
+    {
+      "title": "Fine del ciclo prima della lettura",
+      "reason": "Spostando il controllo dopo WRITE si tenta di usare la chiave vuota prodotta alla fine della scansione.",
+      "insight": "Il problema è l’ordine di controllo e uso. Il tipo esatto di errore con subscritti nulli dipende anche da struttura e configurazione, non è universale.",
+      "challenge": "Abilitare subscritti nulli rende corretto visitare il sentinel come un record? No."
+    },
+    {
+      "title": "Terminazione e dominio del fattoriale",
+      "reason": "Il caso base ferma la discesa prima che n continui indefinitamente nei negativi.",
+      "insight": "Per un’API reale valida anche il dominio: n<=1 come ritorno uno non deve far apparire ogni numero negativo come un fattoriale valido.",
+      "challenge": "Accettare Factorial(-5)=1 è necessariamente corretto? No, serve una precondizione coerente."
+    },
+    {
+      "title": "Refuso e sensitività al caso",
+      "reason": "agee non è age e non è stato assegnato. L’errore emerge nel punto della lettura.",
+      "insight": "Non generalizzare dalle keyword senza distinzione di maiuscole ai nomi delle variabili, che devono corrispondere esattamente.",
+      "challenge": "AGE e age sono la stessa variabile perché WRITE e write sono lo stesso comando? No."
+    },
+    {
+      "title": "Leggere il messaggio strutturato",
+      "reason": "UNDEFINED identifica la categoria; zProcess+15^App.Engine.1 la posizione; *config il riferimento mancante.",
+      "insight": "Queste informazioni restringono il punto da investigare ma non spiegano ancora perché l’assegnazione non sia avvenuta: segui i percorsi precedenti.",
+      "challenge": "La posizione del guasto coincide sempre con la riga che ha introdotto il difetto? No, può essere la prima lettura di un dato mai inizializzato."
+    },
+    {
+      "title": "PROTECT e database read-only",
+      "reason": "L’accesso può fallire per privilegi mancanti oppure per una scrittura verso database montato in sola lettura.",
+      "insight": "La soluzione dipende dalla causa: concedere un ruolo non cambia automaticamente la modalità di montaggio del database.",
+      "challenge": "Un utente molto privilegiato può scrivere in un database montato read-only solo grazie al ruolo? Non è la soluzione del problema di montaggio."
+    },
+    {
+      "title": "Default senza inventare un dato obbligatorio",
+      "reason": "GET(timeout,30) evita la lettura di una variabile indefinita usando il default scelto.",
+      "insight": "Usalo quando trenta è un valore previsto dal contratto. Un default su un identificatore obbligatorio può invece nascondere un bug.",
+      "challenge": "GET(customerId,0) rende valido un cliente mancante? No."
+    },
+    {
+      "title": "Elemento omesso e politica della somma",
+      "reason": "La terza posizione è omessa e LIST rigoroso genera NULL VALUE prima della somma.",
+      "insight": "Decidi se un punteggio mancante debba causare errore, essere ignorato o valere zero. Sono tre statistiche differenti.",
+      "challenge": "Usare LISTGET(...,0) conserva sempre il significato originario della media? No: può cambiare il denominatore previsto."
+    },
+    {
+      "title": "Ricorsione che cresce anche la chiave",
+      "reason": "Il codice amplia il subscript a ogni chiamata, quindi può incontrare il limite di chiave prima di esaurire lo stack nel contesto descritto.",
+      "insight": "I limiti dipendono dalla rappresentazione codificata, dal tipo di array e dal contesto. Non memorizzare 250 chiamate come soglia universale.",
+      "challenge": "Una ricorsione senza crescita della chiave incontra necessariamente SUBSCRIPT prima di FRAMESTACK? No."
+    },
+    {
+      "title": "Validità del subscript e contesto",
+      "reason": "Chiave troppo lunga e subscript nullo non consentito sono categorie da verificare; numeri negativi sono invece chiavi valide nel caso ordinario.",
+      "insight": "Il limite riguarda il riferimento codificato, non una regola inventata di trentuno caratteri per ogni pezzo. I subscritti nulli dipendono dalla configurazione.",
+      "challenge": "ORDER(global(\"\")) come partenza equivale a scrivere un nodo nullo? No."
+    },
+    {
+      "title": "Destinazione esplicita e privilegio effettivo",
+      "reason": "Il riferimento esteso sceglie una destinazione diversa: l’utente applicativo può non avere il permesso di scriverci.",
+      "insight": "Il fatto che il codice possa costruire un riferimento non ne autorizza l’esecuzione. Verifica anche che la destinazione sia davvero quella prevista dal dato applicativo.",
+      "challenge": "Rimuovere il nome del database senza capire il mapping è una correzione sicura? No."
+    },
+    {
+      "title": "NEW non inizializza il valore",
+      "reason": "total viene letto nell’addizione prima di essere assegnato; SET total=0 definisce l’accumulatore.",
+      "insight": "Creare un nuovo ambito e assegnare un valore iniziale sono operazioni diverse. L’invariante della somma parte da zero, non da una variabile appena nascosta.",
+      "challenge": "NEW total da solo rende total+1 uguale a uno? No."
+    },
+    {
+      "title": "city e City sono distinti",
+      "reason": "Il codice assegna city e usa City nel subscript: il riferimento letto non è stato definito.",
+      "insight": "La chiave composita può essere corretta nel disegno e sbagliata per un solo identificatore. Confronta l’errore con le assegnazioni effettive.",
+      "challenge": "Mettere City fra virgolette legge il valore di city? No, scrive un testo letterale diverso dal dato voluto."
+    },
+    {
+      "title": "Categorie diverse richiedono diagnosi diverse",
+      "reason": "SUBSCRIPT riguarda un riferimento non valido; FRAMESTACK la profondità delle chiamate; UNDEFINED un valore assente; STORE le risorse di memoria del processo.",
+      "insight": "Aumentare un limite può ritardare un difetto senza risolverlo. Cerca strutture illimitate o ricorsioni errate prima di cambiare capacità.",
+      "challenge": "Liberare spazio disco risolve necessariamente STORE? No, non è la risorsa indicata da quella categoria."
+    },
+    {
+      "title": "Media senza argomenti",
+      "reason": "La lista variadica senza argomenti può lasciare il contatore indefinito; GET(scores,0) consente di rilevare n=0 prima di usarlo.",
+      "insight": "La guardia deve precedere sia il ciclo sia la divisione. Inizializzare n a zero e poi dividere per n sposta soltanto l’errore.",
+      "challenge": "Per n=0 esiste un risultato aritmetico obbligato della media? No, definisci un risultato di assenza o un errore applicativo."
+    },
+    {
+      "title": "Ciclo di grafo e ciclo di chiamate",
+      "reason": "Seguire Next dentro WHILE non aumenta necessariamente lo stack: un collegamento circolare può far ripetere gli stessi nodi indefinitamente.",
+      "insight": "Per rilevare un ciclo conserva i nodi già visitati; un semplice limite di iterazioni protegge la durata ma non spiega da solo la struttura difettosa.",
+      "challenge": "Il caso 1→2→3→1 richiede ricorsione per essere infinito? No."
+    },
+    {
+      "title": "Record referenziato non più disponibile",
+      "reason": "Il customerId conservato nell’ordine non garantisce che OpenId restituisca ancora un cliente; il successivo .Email su vuoto causa INVALID OREF.",
+      "insight": "L’esistenza deve essere verificata al momento dell’uso. Gestisci il caso senza cliente secondo il contratto, distinguendolo dagli errori di caricamento.",
+      "challenge": "Aver verificato il cliente ieri elimina la necessità di controllarlo oggi? No."
+    }
+  ]
+}

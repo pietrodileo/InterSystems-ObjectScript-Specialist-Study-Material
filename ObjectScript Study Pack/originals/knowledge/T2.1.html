@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Study guide for T2.1: Ensures Data Integrity - part of the InterSystems ObjectScript Specialist certification. Learn key concepts, best practices, and exam preparation tips.">
+    <meta name="keywords" content="InterSystems certification, ObjectScript Specialist, T2.1: Ensures Data Integrity, exam preparation, practice quiz">
+    <meta name="author" content="exam-prep.es">
+    <meta name="robots" content="index, follow">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://exam-prep.es/exams/objectscript/knowledge/T2.1.html">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://exam-prep.es/exams/objectscript/knowledge/T2.1.html">
+    <meta property="og:title" content="T2.1: Ensures Data Integrity - InterSystems ObjectScript Specialist Study Guide">
+    <meta property="og:description" content="Study guide for T2.1: Ensures Data Integrity - part of the InterSystems ObjectScript Specialist certification. Learn key concepts, best practices, and exam preparation tips.">
+    <meta property="og:image" content="https://exam-prep.es/images/og-image.png">
+    <meta property="og:site_name" content="InterSystems Certification Prep">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://exam-prep.es/exams/objectscript/knowledge/T2.1.html">
+    <meta name="twitter:title" content="T2.1: Ensures Data Integrity - InterSystems ObjectScript Specialist Study Guide">
+    <meta name="twitter:description" content="Study guide for T2.1: Ensures Data Integrity - part of the InterSystems ObjectScript Specialist certification. Learn key concepts, best practices, and exam preparation tips.">
+    <meta name="twitter:image" content="https://exam-prep.es/images/og-image.png">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+    <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+
+    <!-- hreflang Tags -->
+    <link rel="alternate" hreflang="en" href="https://exam-prep.es/exams/objectscript/knowledge/T2.1.html" />
+    <link rel="alternate" hreflang="es" href="https://exam-prep.es/exams/objectscript/knowledge/es/T2.1.html" />
+    <link rel="alternate" hreflang="x-default" href="https://exam-prep.es/exams/objectscript/knowledge/T2.1.html" />
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../colors.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+    <link rel="stylesheet" href="../../../css/consent.css">
+
+    <title>T2.1: Ensures Data Integrity - InterSystems ObjectScript Specialist Study Guide | exam-prep.es</title>
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "T2.1: Ensures Data Integrity - InterSystems ObjectScript Specialist Study Guide",
+    "description": "Study guide for T2.1: Ensures Data Integrity - part of the InterSystems ObjectScript Specialist certification. Learn key concepts, best practices, and exam preparation tips.",
+    "author": {
+        "@type": "Organization",
+        "name": "exam-prep.es"
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "InterSystems Certification Prep",
+        "url": "https://exam-prep.es"
+    },
+    "inLanguage": "en",
+    "about": {
+        "@type": "Course",
+        "name": "InterSystems ObjectScript Specialist"
+    }
+}
+    </script>
+</head>
+<body>
+    <div class="container">
+        <nav class="nav-bar">
+            <a href="../index.html" class="back-link">&#8592; Back to Topics</a>
+            <div class="lang-toggle">
+                <a href="T2.1.html" class="lang-btn active">EN</a>
+                <a href="es/T2.1.html" class="lang-btn">ES</a>
+            </div>
+            <a href="../quiz.html?file=quizzes/T2.1-quiz.json" class="quiz-link">Take Quiz &#8594;</a>
+            <div class="auth-bar">
+                <button id="loginBtn" class="auth-btn login-btn" onclick="Auth.login()">Sign In</button>
+                <div id="userInfo" class="user-info">
+                    <div id="userAvatar" class="user-avatar">?</div>
+                    <span id="userName" class="user-name">User</span>
+                </div>
+                <button id="logoutBtn" class="auth-btn logout-btn" onclick="Auth.logout()">Sign Out</button>
+            </div>
+        </nav>
+
+        <header class="header">
+            <h1>T2.1: Ensures Data Integrity</h1>
+            <p>Knowledge Review - InterSystems ObjectScript Specialist</p>
+        </header>
+
+        <nav class="toc">
+            <h3>Contents</h3>
+            <ol>
+                <li><a href="#section-1">Manages transactions</a></li>
+                <li><a href="#section-2">Manages rollbacks</a></li>
+                <li><a href="#section-3">Describes how LOCKs enforce concurrency</a></li>
+                <li><a href="#section-4">Describes lock escalation threshold and effect on row locks versus table locks</a></li>
+                <li><a href="#section-5">Differentiates between pessimistic and optimistic concurrency controls</a></li>
+                <li><a href="#section-6">Uses transactions and applies concurrency controls in SQL scripts</a></li>
+            </ol>
+        </nav>
+
+        <main class="content">
+            <section id="section-1" class="knowledge-item">
+                <h2>1. Manages transactions <button class="subsection-report-btn" onclick="openReportModal('section-1', 'Section 1')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>TSTART</strong>: Begins a transaction and increments $TLEVEL by 1</li>
+                        <li><strong>TCOMMIT</strong>: Commits the transaction and decrements $TLEVEL by 1; actual commit occurs only when $TLEVEL returns to 0</li>
+                        <li><strong>$TLEVEL</strong>: Special variable tracking transaction nesting depth (0 = no active transaction, max 255)</li>
+                        <li><strong>Nested transactions</strong>: Each TSTART/TCOMMIT pair creates a nesting level; inner commits are deferred until the outermost TCOMMIT</li>
+                        <li><strong>Journaling</strong>: All global changes within a transaction are journaled automatically, regardless of database journal settings</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Overview</h4>
+                        <p>Transactions in ObjectScript guarantee atomicity: either all changes within the transaction are applied, or none are. The TSTART command marks the beginning of a transaction and increments the $TLEVEL special variable. TCOMMIT marks the end of a successful transaction and decrements $TLEVEL. The actual commit to the database only happens when $TLEVEL reaches 0, meaning the outermost transaction has completed.</p>
+                        <h4>Basic Transaction Pattern</h4>
+                        <pre><code class="language-objectscript"> TSTART
+ TRY {
+     SET ^Data(&quot;account&quot;, 1001, &quot;balance&quot;) = ^Data(&quot;account&quot;, 1001, &quot;balance&quot;) - 500
+     SET ^Data(&quot;account&quot;, 1002, &quot;balance&quot;) = ^Data(&quot;account&quot;, 1002, &quot;balance&quot;) + 500
+     TCOMMIT
+ }
+ CATCH ex {
+     TROLLBACK
+     WRITE &quot;Error: &quot;, ex.DisplayString(), !
+ }</code></pre>
+                        <h4>Nested Transactions</h4>
+                        <p>InterSystems IRIS supports nested transactions up to 255 levels. Each TSTART increments $TLEVEL, and each TCOMMIT decrements it. The key concept is that inner TCOMMIT calls do not actually commit data -- commitment is deferred until $TLEVEL reaches 0.</p>
+                        <pre><code class="language-objectscript"> WRITE &quot;$TLEVEL = &quot;, $TLEVEL, !   // 0
+ TSTART
+ WRITE &quot;$TLEVEL = &quot;, $TLEVEL, !   // 1
+ SET ^Data(&quot;outer&quot;) = &quot;value1&quot;
+ TSTART
+ WRITE &quot;$TLEVEL = &quot;, $TLEVEL, !   // 2
+ SET ^Data(&quot;inner&quot;) = &quot;value2&quot;
+ TCOMMIT                           // $TLEVEL back to 1 (not yet committed)
+ TCOMMIT                           // $TLEVEL back to 0 (all changes committed)</code></pre>
+                        <p>This design allows modular code where called methods can issue their own TSTART/TCOMMIT without knowing whether the caller already started a transaction.</p>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GAPPS_tp" target="_blank">Transaction Processing</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_ctstart" target="_blank">TSTART Command</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_ctcommit" target="_blank">TCOMMIT Command</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="section-2" class="knowledge-item">
+                <h2>2. Manages rollbacks <button class="subsection-report-btn" onclick="openReportModal('section-2', 'Section 2')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>TROLLBACK</strong> (no argument): Rolls back ALL transaction levels and resets $TLEVEL to 0</li>
+                        <li><strong>TROLLBACK 1</strong>: Rolls back only the current nesting level and decrements $TLEVEL by 1</li>
+                        <li><strong>Partial rollback</strong>: TROLLBACK 1 undoes only the changes made at the current $TLEVEL</li>
+                        <li><strong>Non-rollbackable operations</strong>: Local variables, $INCREMENT, $SEQUENCE, LOCK operations, and process-private globals are NOT rolled back</li>
+                        <li><strong>Error handling</strong>: Always pair TROLLBACK with TRY-CATCH blocks for robust transaction management</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Full Rollback vs Partial Rollback</h4>
+                        <p>TROLLBACK without an argument performs a complete rollback of all transaction levels, resetting $TLEVEL to 0 and undoing all global changes made since the first TSTART. TROLLBACK 1 performs a partial rollback, undoing only the changes made at the current $TLEVEL and decrementing $TLEVEL by 1.</p>
+                        <pre><code class="language-objectscript"> TSTART
+ SET ^Data(&quot;A&quot;) = 100
+ TSTART
+ SET ^Data(&quot;B&quot;) = 200
+ TROLLBACK 1                  // Only ^Data(&quot;B&quot;) = 200 is rolled back; $TLEVEL decremented to 1
+ WRITE &quot;$TLEVEL = &quot;, $TLEVEL, !  // 1
+ TCOMMIT                      // ^Data(&quot;A&quot;) = 100 is committed</code></pre>
+                        <h4>Complete Rollback Pattern</h4>
+                        <pre><code class="language-objectscript"> TSTART
+ SET ^Data(&quot;A&quot;) = 100
+ TSTART
+ SET ^Data(&quot;B&quot;) = 200
+ TROLLBACK                    // ALL changes rolled back; $TLEVEL reset to 0
+ WRITE &quot;$TLEVEL = &quot;, $TLEVEL, !  // 0</code></pre>
+                        <h4>Critical: What TROLLBACK Does NOT Undo</h4>
+                        <p>Several operations are not affected by TROLLBACK:</p>
+                        <ul>
+                            <li><strong>Local variables</strong>: Changes to local variables persist after rollback</li>
+                            <li><strong>$INCREMENT / $SEQUENCE</strong>: These atomic operations are not transactional</li>
+                            <li><strong>LOCK operations</strong>: Locks acquired within a transaction are released at the end of the transaction, but TROLLBACK does not "undo" lock operations</li>
+                            <li><strong>Process-private globals</strong> (^||PPG): Not journaled, therefore not rolled back</li>
+                        </ul>
+                        <pre><code class="language-objectscript"> SET localVar = &quot;before&quot;
+ TSTART
+ SET localVar = &quot;during&quot;
+ SET ^Data(&quot;test&quot;) = &quot;transactional&quot;
+ TROLLBACK
+ WRITE localVar, !          // &quot;during&quot; -- local variable NOT rolled back
+ WRITE $GET(^Data(&quot;test&quot;))  // &quot;&quot; -- global change WAS rolled back</code></pre>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_ctrollback" target="_blank">TROLLBACK Command</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GAPPS_tp" target="_blank">Rolling Back Transactions</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="section-3" class="knowledge-item">
+                <h2>3. Describes how LOCKs enforce concurrency <button class="subsection-report-btn" onclick="openReportModal('section-3', 'Section 3')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>Incremental lock</strong>: `LOCK +lockname` acquires a lock without releasing existing locks</li>
+                        <li><strong>Incremental unlock</strong>: `LOCK -lockname` releases a specific lock without affecting others</li>
+                        <li><strong>Classic LOCK</strong>: `LOCK lockname` releases ALL existing locks and acquires the new one (rarely used)</li>
+                        <li><strong>Lock timeout</strong>: `LOCK +lockname:timeout` specifies maximum wait time in seconds; check $TEST for success</li>
+                        <li><strong>Exclusive locks</strong>: Any lock without `#"S"` is exclusive (the default); blocks all other locks on that resource</li>
+                        <li><strong>Shared locks</strong>: `LOCK +lockname#"S"` allows multiple readers; exclusive locks block other processes</li>
+                        <li><strong>Lock type flags</strong>: `#"S"` (shared), `#"E"` (escalating), `#"I"` (immediate unlock), `#"D"` (deferred unlock) — combinable (e.g., `#"SI"`)</li>
+                        <li><strong>Immediate unlock</strong>: `LOCK -lockname#"I"` releases a lock immediately even within a transaction, overriding the default deferred behavior</li>
+                        <li><strong>Lock table</strong>: System-wide resource viewable in Management Portal under System Operation > Locks</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Incremental Lock Pattern</h4>
+                        <p>The standard pattern in modern ObjectScript uses incremental locks (+/-) to manage concurrency without accidentally releasing other locks held by the process.</p>
+                        <pre><code class="language-objectscript"> // Acquire lock with 5-second timeout
+ LOCK +^Data(&quot;account&quot;, acctId):5
+ IF &#x27;$TEST {
+     WRITE &quot;Could not acquire lock&quot;, !
+     QUIT
+ }
+ TRY {
+     // Critical section: read-modify-write
+     SET balance = ^Data(&quot;account&quot;, acctId, &quot;balance&quot;)
+     SET ^Data(&quot;account&quot;, acctId, &quot;balance&quot;) = balance + amount
+     TCOMMIT
+ }
+ CATCH ex {
+     TROLLBACK
+ }
+ LOCK -^Data(&quot;account&quot;, acctId)     // Always release the lock</code></pre>
+                        <h4>Shared vs Exclusive Locks</h4>
+                        <p>Any lock without the <code>#&quot;S&quot;</code> flag is an <strong>exclusive lock</strong> (also called a write lock). There is no explicit "exclusive" flag — the absence of <code>#&quot;S&quot;</code> makes a lock exclusive by default. Shared locks allow multiple processes to read concurrently, while exclusive locks provide sole access:</p>
+                        <ul>
+                            <li>An existing <strong>shared lock</strong> prevents other processes from acquiring an <strong>exclusive lock</strong> on that resource</li>
+                            <li>An existing <strong>exclusive lock</strong> prevents other processes from acquiring <strong>any lock</strong> (shared or exclusive) on that resource</li>
+                            <li>Multiple processes <strong>can</strong> hold shared locks on the same resource simultaneously</li>
+                        </ul>
+                        <pre><code class="language-objectscript"> // Shared lock for reading (multiple readers allowed)
+ LOCK +^Data(&quot;report&quot;)#&quot;S&quot;:5
+ IF $TEST {
+     // Read operations
+     LOCK -^Data(&quot;report&quot;)#&quot;S&quot;
+ }
+
+ // Exclusive lock for writing (blocks all other locks)
+ LOCK +^Data(&quot;report&quot;):5
+ IF $TEST {
+     // Write operations
+     LOCK -^Data(&quot;report&quot;)
+ }</code></pre>
+                        <h4>Lock Type Flags</h4>
+                        <p>The LOCK command supports type flags specified after <code>#</code> in quotes. Available flags:</p>
+                        <table class="detail-table">
+                            <thead><tr><th>Flag</th><th>Meaning</th><th>Lock</th><th>Unlock</th><th>Description</th></tr></thead>
+                            <tbody>
+                            <tr><td><code>&quot;S&quot;</code></td><td>Shared</td><td>Yes</td><td>Yes</td><td>Multiple readers allowed</td></tr>
+                            <tr><td><code>&quot;E&quot;</code></td><td>Escalating</td><td>Yes</td><td>Yes</td><td>Participates in lock escalation</td></tr>
+                            <tr><td><code>&quot;I&quot;</code></td><td>Immediate</td><td>No</td><td>Yes</td><td>Releases lock immediately, even within a transaction</td></tr>
+                            <tr><td><code>&quot;D&quot;</code></td><td>Deferred</td><td>No</td><td>Yes</td><td>Defers unlock until transaction ends (default behavior within transactions)</td></tr>
+                            </tbody>
+                        </table>
+                        <p>Flags can be combined: <code>#&quot;SE&quot;</code> (shared escalating), <code>#&quot;SI&quot;</code> (shared immediate unlock), <code>#&quot;EI&quot;</code> (escalating immediate unlock).</p>
+                        <h4>Immediate vs Deferred Unlock Within Transactions</h4>
+                        <p>By default, locks acquired within a transaction are held until TCOMMIT or TROLLBACK, even if explicitly released with <code>LOCK -</code>. This is <strong>deferred unlock</strong> behavior (<code>#&quot;D&quot;</code>, the default within transactions).</p>
+                        <p><strong>Immediate unlock</strong> (<code>#&quot;I&quot;</code>) overrides this behavior and releases the lock right away, even inside a transaction:</p>
+                        <pre><code class="language-objectscript"> TSTART
+ LOCK +^Data(&quot;temp&quot;):5
+ // ... work with ^Data(&quot;temp&quot;) ...
+ LOCK -^Data(&quot;temp&quot;)#&quot;I&quot;          // Released NOW, not at TCOMMIT
+ // ... other work continues in the transaction ...
+ TCOMMIT</code></pre>
+                        <p>Use immediate unlock when you need to release a lock within a transaction because the protected resource is no longer needed and you want to minimize lock contention. Use the default deferred behavior when the lock must be held for the full duration of the transaction to ensure data integrity.</p>
+                        <h4>Lock Table</h4>
+                        <p>The lock table is a system-wide in-memory structure that tracks all current locks. It can be viewed through the Management Portal (System Operation > Locks) or programmatically. The lock table has a configurable size (locksiz parameter). When the lock table is full, new lock requests fail with a <LOCK> error.</p>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_clock" target="_blank">LOCK Command</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_concurrency" target="_blank">Lock Management</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="section-4" class="knowledge-item">
+                <h2>4. Describes lock escalation threshold and effect on row locks versus table locks <button class="subsection-report-btn" onclick="openReportModal('section-4', 'Section 4')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>Default threshold</strong>: 1000 row-level locks per table triggers automatic escalation to a table-level lock</li>
+                        <li><strong>Escalation behavior</strong>: All individual row locks are replaced by a single table-level lock</li>
+                        <li><strong>Performance trade-off</strong>: Table locks reduce lock table overhead but block all concurrent access to the table</li>
+                        <li><strong>Configurable threshold</strong>: Adjustable via $SYSTEM.SQL.Util.SetOption("LockThreshold", value) or Management Portal</li>
+                        <li><strong>Scope</strong>: Threshold applies per-process, per-table</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>How Lock Escalation Works</h4>
+                        <p>When a process acquires row-level locks through SQL operations (INSERT, UPDATE, DELETE), InterSystems IRIS tracks the number of locks per table. Once the number of row locks for a single table exceeds the lock escalation threshold (default 1000), the system automatically escalates to a table-level lock. This replaces all individual row locks with a single lock on the entire table.</p>
+                        <pre><code class="language-objectscript"> // Check current lock escalation threshold
+ WRITE $SYSTEM.SQL.Util.GetOption(&quot;LockThreshold&quot;), !   // Default: 1000
+
+ // Change the threshold
+ DO $SYSTEM.SQL.Util.SetOption(&quot;LockThreshold&quot;, 2000)</code></pre>
+                        <h4>Impact on Concurrency</h4>
+                        <ul>
+                            <li><strong>Before escalation</strong>: Other processes can access rows that are not individually locked. Fine-grained concurrency is maintained.</li>
+                            <li><strong>After escalation</strong>: The entire table is locked. Other processes attempting to lock any row in the same table will block (or fail on timeout). This can cause significant concurrency bottlenecks.</li>
+                        </ul>
+                        <h4>When Escalation Occurs</h4>
+                        <p>Lock escalation typically happens during:</p>
+                        <ul>
+                            <li>Large batch INSERT operations</li>
+                            <li>Bulk UPDATE affecting many rows</li>
+                            <li>DELETE operations on large result sets</li>
+                            <li>Long-running transactions that accumulate row locks</li>
+                        </ul>
+                        <h4>Best Practices</h4>
+                        <ul>
+                            <li>Keep transactions short to minimize the number of accumulated row locks</li>
+                            <li>For intentional bulk operations, consider explicitly acquiring a table-level lock first (to avoid gradual escalation) and using %NOLOCK on concurrent read queries, or increasing the threshold temporarily</li>
+                            <li>Monitor the lock table in Management Portal to detect escalation events</li>
+                            <li>The threshold is a system-wide setting; changing it affects all processes</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_concurrency" target="_blank">Lock Escalation Threshold</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_tables" target="_blank">SQL Configuration Settings</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="section-5" class="knowledge-item">
+                <h2>5. Differentiates between pessimistic and optimistic concurrency controls <button class="subsection-report-btn" onclick="openReportModal('section-5', 'Section 5')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>Pessimistic concurrency</strong>: Locks resources BEFORE reading; guarantees no conflicts but reduces throughput</li>
+                        <li><strong>Optimistic concurrency</strong>: Reads without locking; checks for conflicts at commit time; better throughput for low-contention scenarios</li>
+                        <li><strong>%ConcurrencyMode</strong>: Object property controlling lock behavior (0=None, 1=Atomic, 2=SharedAtomicRetain, 3=SharedRetain, 4=PessimisticRetain)</li>
+                        <li><strong>Optimistic via %VersionId</strong>: Uses a version counter to detect concurrent modifications</li>
+                        <li><strong>SQL ISOLATION LEVEL</strong>: READ UNCOMMITTED, READ COMMITTED (default), READ VERIFIED provide different concurrency guarantees</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Pessimistic Concurrency</h4>
+                        <p>In pessimistic concurrency, a process acquires an exclusive lock on a resource before reading or modifying it. This prevents other processes from accessing the resource until the lock is released. It is suitable for high-contention scenarios where conflicts are frequent.</p>
+                        <pre><code class="language-objectscript"> // Pessimistic approach: lock first, then read and modify
+ LOCK +^Data(&quot;customer&quot;, custId):5
+ IF &#x27;$TEST {
+     WRITE &quot;Resource busy&quot;, !
+     QUIT
+ }
+ SET data = ^Data(&quot;customer&quot;, custId)
+ // ... modify data ...
+ SET ^Data(&quot;customer&quot;, custId) = data
+ LOCK -^Data(&quot;customer&quot;, custId)</code></pre>
+                        <h4>Optimistic Concurrency</h4>
+                        <p>In optimistic concurrency, a process reads data without acquiring locks. Before committing changes, it verifies that no other process has modified the data in the meantime. If a conflict is detected, the operation is retried or reported as a failure. This works well in low-contention environments.</p>
+                        <pre><code class="language-objectscript"> // Optimistic approach using %VersionId in persistent classes
+ SET obj = ##class(MyApp.Customer).%OpenId(custId)
+ // ... modify obj properties ...
+ SET sc = obj.%Save()
+ IF $$$ISERR(sc) {
+     // Check if it&#x27;s a concurrency conflict
+     // %VersionId mismatch means another process modified the object
+     WRITE &quot;Concurrency conflict - retry needed&quot;, !
+ }</code></pre>
+                        <h4>Object Concurrency Modes (%ConcurrencyMode)</h4>
+                        <p>InterSystems IRIS persistent objects support several concurrency modes:</p>
+                        <ul>
+                            <li><strong>0 (None)</strong>: No locking; fastest but no protection</li>
+                            <li><strong>1 (Atomic)</strong>: Lock during %Save only; protects writes but reads may be stale</li>
+                            <li><strong>2 (SharedAtomicRetain)</strong>: Shared lock on read, exclusive on write; balanced approach</li>
+                            <li><strong>3 (SharedRetain)</strong>: Shared lock on open retained until close</li>
+                            <li><strong>4 (PessimisticRetain)</strong>: Exclusive lock on open retained until close; maximum protection</li>
+                        </ul>
+                        <pre><code class="language-objectscript"> // Open with pessimistic locking
+ SET obj = ##class(MyApp.Customer).%OpenId(custId, 4, .sc)  // concurrency = 4</code></pre>
+                        <h4>SQL Isolation Levels</h4>
+                        <ul>
+                            <li><strong>READ UNCOMMITTED</strong>: No locks; may read uncommitted data (dirty reads)</li>
+                            <li><strong>READ COMMITTED</strong> (default): Reads only committed data; uses brief shared locks</li>
+                            <li><strong>READ VERIFIED</strong>: Re-reads data at end of operation to verify consistency</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_concurrency" target="_blank">Concurrency Control</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_concurrency" target="_blank">Object Concurrency</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_concurrency" target="_blank">SQL Transaction Isolation Levels</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="section-6" class="knowledge-item">
+                <h2>6. Uses transactions and applies concurrency controls in SQL scripts <button class="subsection-report-btn" onclick="openReportModal('section-6', 'Section 6')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>&sql(START TRANSACTION)</strong>: Begins an SQL transaction (equivalent to TSTART)</li>
+                        <li><strong>&sql(COMMIT)</strong>: Commits the SQL transaction</li>
+                        <li><strong>&sql(ROLLBACK)</strong>: Rolls back the SQL transaction</li>
+                        <li><strong>SQLCODE</strong>: Check after each SQL statement; 0 = success, 100 = no data, negative = error</li>
+                        <li><strong>%NOLOCK hint</strong>: Bypasses row locking for SELECT operations in read-only scenarios</li>
+                        <li><strong>Parameterized queries</strong>: Use host variables (:variable) in embedded SQL for safe value binding</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Basic Embedded SQL Transaction Pattern</h4>
+                        <pre><code class="language-objectscript"> &amp;sql(START TRANSACTION)
+ &amp;sql(UPDATE Account SET Balance = Balance - :amount WHERE AccountId = :fromAcct)
+ IF SQLCODE &lt; 0 {
+     &amp;sql(ROLLBACK)
+     WRITE &quot;Error on debit: &quot;, %msg, !
+     QUIT
+ }
+ &amp;sql(UPDATE Account SET Balance = Balance + :amount WHERE AccountId = :toAcct)
+ IF SQLCODE &lt; 0 {
+     &amp;sql(ROLLBACK)
+     WRITE &quot;Error on credit: &quot;, %msg, !
+     QUIT
+ }
+ &amp;sql(COMMIT)</code></pre>
+                        <h4>Mixing ObjectScript and SQL Transactions</h4>
+                        <p>TSTART and &sql(START TRANSACTION) work with the same underlying transaction mechanism. They share $TLEVEL:</p>
+                        <pre><code class="language-objectscript"> TSTART
+ SET ^AuditLog($INCREMENT(^AuditLog)) = $HOROLOG _ &quot;|Transfer&quot;
+ &amp;sql(UPDATE Account SET Balance = Balance - :amount WHERE AccountId = :fromAcct)
+ IF SQLCODE &lt; 0 {
+     TROLLBACK
+     QUIT
+ }
+ TCOMMIT</code></pre>
+                        <h4>Using %NOLOCK for Read-Only Operations</h4>
+                        <p>The %NOLOCK hint tells SQL not to acquire shared locks during SELECT operations, improving performance for read-only queries where strict consistency is not required:</p>
+                        <pre><code class="language-objectscript"> &amp;sql(SELECT Name, Balance INTO :name, :bal
+      FROM Account %NOLOCK
+      WHERE AccountId = :acctId)</code></pre>
+                        <p>This is particularly useful for reporting queries that should not block concurrent write operations and do not need to participate in transaction isolation.</p>
+                        <h4>Checking SQL Permissions Within Transactions</h4>
+                        <p>SQL operations within transactions respect the same privilege model. Combine transaction management with error handling for privilege failures:</p>
+                        <pre><code class="language-objectscript"> &amp;sql(START TRANSACTION)
+ &amp;sql(INSERT INTO SensitiveData (PatientId, Diagnosis) VALUES (:pid, :diag))
+ IF SQLCODE = -99 {
+     &amp;sql(ROLLBACK)
+     WRITE &quot;Insufficient SQL privileges&quot;, !
+     QUIT
+ }
+ &amp;sql(COMMIT)</code></pre>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_esql" target="_blank">Embedded SQL</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GAPPS_tp" target="_blank">SQL Transaction Processing</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_concurrency" target="_blank">%NOLOCK Query Hint</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <div class="exam-prep">
+                <h2>Exam Preparation Summary</h2>
+                <h3>Critical Concepts to Master:</h3>
+                <ol>
+                    <li><strong>Transaction lifecycle</strong>: TSTART increments $TLEVEL, TCOMMIT decrements it, actual commit happens only at $TLEVEL = 0</li>
+                    <li><strong>TROLLBACK vs TROLLBACK 1</strong>: Full rollback resets $TLEVEL to 0; partial rollback decrements by 1</li>
+                    <li><strong>Incremental locks</strong>: Always use LOCK +/- pattern; understand shared (#"S") vs exclusive (default) locks; know lock type flags (#"I" immediate, #"D" deferred, #"E" escalating)</li>
+                    <li><strong>Lock escalation</strong>: Default 1000 row locks triggers table-level lock; configurable via $SYSTEM.SQL.Util.SetOption</li>
+                    <li><strong>Pessimistic vs optimistic</strong>: Pessimistic locks before reading, optimistic checks at commit time; know the %ConcurrencyMode values (0-4)</li>
+                    <li><strong>SQL transactions</strong>: &sql(START TRANSACTION/COMMIT/ROLLBACK) share $TLEVEL with TSTART/TCOMMIT/TROLLBACK</li>
+                </ol>
+                <h3>Common Exam Scenarios:</h3>
+                <ul>
+                    <li>Predicting $TLEVEL values after a sequence of TSTART, TCOMMIT, TROLLBACK, and TROLLBACK 1 commands</li>
+                    <li>Identifying what is and is NOT rolled back (local variables and $INCREMENT are not rolled back)</li>
+                    <li>Choosing between pessimistic and optimistic concurrency for given application scenarios</li>
+                    <li>Recognizing when lock escalation will occur and its impact on concurrent access</li>
+                    <li>Fixing embedded SQL transaction patterns that lack proper error handling or rollback</li>
+                    <li>Understanding the effect of %NOLOCK on query behavior</li>
+                </ul>
+                <h3>Hands-On Practice Recommendations:</h3>
+                <ul>
+                    <li>Write nested transaction code and verify $TLEVEL at each step using WRITE $TLEVEL</li>
+                    <li>Experiment with TROLLBACK 1 in nested transactions and observe which changes persist</li>
+                    <li>Open two terminal sessions and observe LOCK blocking behavior with timeouts</li>
+                    <li>Use Management Portal (System Operation > Locks) to view the lock table during testing</li>
+                    <li>Write embedded SQL transactions with intentional errors and verify ROLLBACK behavior</li>
+                    <li>Test lock escalation by inserting more than 1000 rows in a single transaction and monitoring the lock table</li>
+                </ul>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <a href="../quiz.html?file=quizzes/T2.1-quiz.json" class="take-quiz-btn">Take the Quiz</a>
+        </footer>
+    </div>
+
+    <div id="reportModal" class="report-modal">
+        <div class="report-content">
+            <h3>Report an Issue</h3>
+            <label for="issueType">Issue Type</label>
+            <select id="issueType">
+                <option value="confusing">Confusing Content</option>
+                <option value="wrong_answer">Incorrect Information</option>
+                <option value="outdated">Outdated Content</option>
+                <option value="formatting">Formatting Issue</option>
+                <option value="typo">Typo</option>
+                <option value="other">Other</option>
+            </select>
+            <label for="issueDescription">Description</label>
+            <textarea id="issueDescription" placeholder="Please describe the issue..."></textarea>
+            <div style="display: flex; align-items: center; gap: 10px; margin: 15px 0;">
+                <input type="checkbox" id="wantEmailNotification" style="width: 18px; height: 18px;">
+                <label for="wantEmailNotification" style="margin: 0; cursor: pointer;">
+                    Notify me by email when resolved
+                </label>
+            </div>
+            <div class="report-actions">
+                <button class="report-cancel" onclick="closeReportModal()">Cancel</button>
+                <button class="report-submit" onclick="submitReport()">Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../../js/config.js"></script>
+    <script src="../../../js/auth.js"></script>
+    <script src="../../../js/api.js"></script>
+    <script>
+        const CERTIFICATION_NAME = 'ObjectScript-Specialist';
+        const TOPIC_REF = 'T2.1';
+
+        document.addEventListener('DOMContentLoaded', function() {
+            updateAuthUI();
+            trackKnowledgeView();
+        });
+
+        function updateAuthUI() {
+            const loginBtn = document.getElementById('loginBtn');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const userInfo = document.getElementById('userInfo');
+            const userAvatar = document.getElementById('userAvatar');
+            const userName = document.getElementById('userName');
+
+            if (typeof Auth !== 'undefined' && Auth.isAuthenticated()) {
+                const user = Auth.getUser();
+                loginBtn.style.display = 'none';
+                logoutBtn.style.display = 'inline-block';
+                userInfo.style.display = 'flex';
+                if (user) {
+                    const initial = (user.name || user.email || '?')[0].toUpperCase();
+                    userAvatar.textContent = initial;
+                    userName.textContent = user.name || user.email || 'User';
+                }
+            } else {
+                loginBtn.style.display = 'inline-block';
+                logoutBtn.style.display = 'none';
+                userInfo.style.display = 'none';
+            }
+        }
+
+        async function trackKnowledgeView() {
+            if (typeof Auth === 'undefined' || !Auth.isAuthenticated()) {
+                return;
+            }
+
+            try {
+                await Api.trackKnowledge(CERTIFICATION_NAME, TOPIC_REF);
+                console.log('Knowledge view tracked:', TOPIC_REF);
+            } catch (error) {
+                console.log('View tracking skipped:', error.message);
+            }
+        }
+
+        function openReportModal(sectionId, sectionTitle) {
+            if (typeof Auth === 'undefined' || !Auth.isAuthenticated()) {
+                alert('Please sign in to report issues.');
+                return;
+            }
+            // Store section context
+            window.currentReportSection = {
+                id: sectionId || 'general',
+                title: sectionTitle || 'General'
+            };
+            // Update modal header to show section
+            const modalHeader = document.querySelector('#reportModal h3');
+            if (modalHeader && sectionTitle) {
+                modalHeader.textContent = 'Report Issue: ' + sectionTitle;
+            } else if (modalHeader) {
+                modalHeader.textContent = 'Report an Issue';
+            }
+            document.getElementById('wantEmailNotification').checked = false;
+            document.getElementById('reportModal').classList.add('active');
+        }
+
+        function closeReportModal() {
+            document.getElementById('reportModal').classList.remove('active');
+            document.getElementById('issueType').value = 'confusing';
+            document.getElementById('issueDescription').value = '';
+        }
+
+        async function submitReport() {
+            const issueType = document.getElementById('issueType').value;
+            const description = document.getElementById('issueDescription').value.trim();
+            const wantEmailNotification = document.getElementById('wantEmailNotification').checked;
+            const sectionContext = window.currentReportSection || { id: 'general', title: 'General' };
+
+            if (!description) {
+                alert('Please provide a description of the issue.');
+                return;
+            }
+
+            // Build content reference with section context
+            const contentRef = sectionContext.id !== 'general'
+                ? `${TOPIC_REF} (${sectionContext.title})`
+                : TOPIC_REF;
+
+            try {
+                await Api.reportProblem({
+                    certificationName: CERTIFICATION_NAME,
+                    contentType: 'knowledge',
+                    contentReference: contentRef,
+                    issueType: issueType,
+                    description: description,
+                    wantEmailNotification: wantEmailNotification
+                });
+                alert('Thank you! Your report has been submitted.');
+                closeReportModal();
+            } catch (error) {
+                if (error.status === 429) {
+                    const retryMinutes = Math.ceil((error.data?.retryAfter || 3600) / 60);
+                    alert(`You've submitted too many reports recently. Please wait ${retryMinutes} minutes before submitting another report.`);
+                } else {
+                    alert('Failed to submit report: ' + error.message);
+                }
+            }
+        }
+
+        document.querySelectorAll('.detailed-notes h3').forEach(h3 => {
+            h3.style.cursor = 'pointer';
+        });
+    </script>
+    <script src="../../../js/consent.js"></script>
+    <script src="../../../js/analytics.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            CookieConsent.init();
+            Analytics.init();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1392 @@
+{
+  "language": "English",
+  "count": 44,
+  "images": [
+    {
+      "chapter": "T1.1",
+      "kind": "core",
+      "file": "T1 - Manages Data Model/T1.1: Uses Classes/Approfondimenti esercizi/schema-esercizi.png",
+      "source_image": "exec-6d7b6e52-f45c-4716-a0a9-43429ffea379.png",
+      "mode": "built-in ImageGen",
+      "language": "English",
+      "generation_prompt": "Create a clear, colorful engineering infographic in English for T1.1. Use the supplied facts only; preserve exact ObjectScript and SQL syntax. Panels: [{\"title\": \"1. Follow the storage map\", \"example\": \"BME → explicit Location ^EW3K.DuIo.3 → namespace mapping → database destination\", \"explanation\": \"The index name finds its explicit location. The global name does not identify the database without resolving mappings. Trap: do not guess a global suffix.\"}, {\"title\": \"2. Business key, ID and count\", \"example\": \"MessageId=JTE810 → unique MIIdx lookup → illustrative internal ID=42 → record; IDs {1,2,8}: count=3, maximum=8\", \"explanation\": \"The API must receive the kind of identity it expects. Missing IDs do not prove deletion, and the ID counter is not COUNT(*).\"}, {\"title\": \"3. Different return contracts\", \"example\": \"%New → in-memory oref; %Save → %Status → check success/error\", \"explanation\": \"Creating an object is separate from saving it. A successful save inside an outer transaction is not that transaction's final commit.\"}]",
+      "panels": [
+        {
+          "title": "1. Follow the storage map",
+          "example": "BME → explicit Location ^EW3K.DuIo.3 → namespace mapping → database destination",
+          "explanation": "The index name finds its explicit location. The global name does not identify the database without resolving mappings. Trap: do not guess a global suffix."
+        },
+        {
+          "title": "2. Business key, ID and count",
+          "example": "MessageId=JTE810 → unique MIIdx lookup → illustrative internal ID=42 → record; IDs {1,2,8}: count=3, maximum=8",
+          "explanation": "The API must receive the kind of identity it expects. Missing IDs do not prove deletion, and the ID counter is not COUNT(*)."
+        },
+        {
+          "title": "3. Different return contracts",
+          "example": "%New → in-memory oref; %Save → %Status → check success/error",
+          "explanation": "Creating an object is separate from saving it. A successful save inside an outer transaction is not that transaction's final commit."
+        }
+      ],
+      "width": 1752,
+      "height": 897,
+      "sha256": "492c52538052b73ebbe474a99053c79f16e24e402bbe9f13ba96cc5d12122c97"
+    },
+    {
+      "chapter": "T1.2",
+      "kind": "core",
+      "file": "T1 - Manages Data Model/T1.2: Creates Properties and Indexes/Approfondimenti esercizi/schema-esercizi.png",
+      "source_image": "exec-59e5a93b-450f-4ae0-94a6-07ff2d046dbf.png",
+      "mode": "built-in ImageGen",
+      "language": "English",
+      "generation_prompt": "Create a clear, colorful engineering infographic in English for T1.2. Use the supplied facts only; preserve exact ObjectScript and SQL syntax. Panels: [{\"title\": \"1. Validate each constraint\", \"example\": \"Missing Name + Category=Toys → two violations; valid Price does not cancel them\", \"explanation\": \"Required, VALUELIST and numeric bounds are independent. Check %Status; do not rely on silent truncation.\"}, {\"title\": \"2. Intersect candidate sets\", \"example\": \"Shipped IDs {1,3,5}; North IDs {3,4,5}; AND → {3,5}\", \"explanation\": \"Both predicates must hold for the same row. A COUNT-only plan may count the bitmap; fetching other columns can require record reads.\"}, {\"title\": \"3. Choose the representation\", \"example\": \"Small bounded text → string; large text → Character stream; raw bytes → Binary stream\", \"explanation\": \"For derived values define read-time or maintained calculation. Trap: selecting a stream does not guarantee every compression setting.\"}]",
+      "panels": [
+        {
+          "title": "1. Validate each constraint",
+          "example": "Missing Name + Category=Toys → two violations; valid Price does not cancel them",
+          "explanation": "Required, VALUELIST and numeric bounds are independent. Check %Status; do not rely on silent truncation."
+        },
+        {
+          "title": "2. Intersect candidate sets",
+          "example": "Shipped IDs {1,3,5}; North IDs {3,4,5}; AND → {3,5}",
+          "explanation": "Both predicates must hold for the same row. A COUNT-only plan may count the bitmap; fetching other columns can require record reads."
+        },
+        {
+          "title": "3. Choose the representation",
+          "example": "Small bounded text → string; large text → Character stream; raw bytes → Binary stream",
+          "explanation": "For derived values define read-time or maintained calculation. Trap: selecting a stream does not guarantee every compression setting."
+        }
+      ],
+      "width": 1752,
+      "height": 897,
+      "sha256": "5e23b1c4b9d4ad407ae92a77fa689f944bbe0aee19c282805da3f8695c5d884b"
+    },
+    {
+      "chapter": "T1.3",
+      "kind": "core",
+      "file": "T1 - Manages Data Model/T1.3: Creates ObjectScript Methods/Approfondimenti esercizi/schema-esercizi.png",
+      "source_image": "exec-9b815225-d725-474d-9ae8-5e621bd551a4.png",
+      "mode": "built-in ImageGen",
+      "language": "English",
+      "generation_prompt": "Create a clear, colorful engineering infographic in English for T1.3. Use the supplied facts only; preserve exact ObjectScript and SQL syntax. Panels: [{\"title\": \"1. By-reference variable versus shared object\", \"example\": \"Call with .array → caller's tree; pass oref by value → same object; reassign local oref → caller unchanged\", \"explanation\": \"Mutating a shared object differs from replacing the caller's variable. Output does not automatically clear a variable.\"}, {\"title\": \"2. Instance state accumulates\", \"example\": \"Counter starts 0 → Increment()=1 → Increment(5)=6 → Increment()=7; separate instance starts 0\", \"explanation\": \"The default argument applies when omitted. It does not reset the object's property at each call.\"}, {\"title\": \"3. Extend the parent contract\", \"example\": \"##super() error → return error; OK → child validation; Final → no later override\", \"explanation\": \"The child adds checks without erasing the parent's failure. Final is enforced at compilation.\"}]",
+      "panels": [
+        {
+          "title": "1. By-reference variable versus shared object",
+          "example": "Call with .array → caller's tree; pass oref by value → same object; reassign local oref → caller unchanged",
+          "explanation": "Mutating a shared object differs from replacing the caller's variable. Output does not automatically clear a variable."
+        },
+        {
+          "title": "2. Instance state accumulates",
+          "example": "Counter starts 0 → Increment()=1 → Increment(5)=6 → Increment()=7; separate instance starts 0",
+          "explanation": "The default argument applies when omitted. It does not reset the object's property at each call."
+        },
+        {
+          "title": "3. Extend the parent contract",
+          "example": "##super() error → return error; OK → child validation; Final → no later override",
+          "explanation": "The child adds checks without erasing the parent's failure. Final is enforced at compilation."
+        }
+      ],
+      "width": 1672,
+      "height": 941,
+      "sha256": "e23e67ada0a00b3777c8de5c0d6d30f72b81f2678941650b4aa8c08c4236ebb6"
+    },
+    {
+      "chapter": "T1.4",
+      "kind": "core",
+      "file": "T1 - Manages Data Model/T1.4: Uses Complex Structures/Approfondimenti esercizi/schema-esercizi.png",
+      "source_image": "exec-275bb11a-4323-4e07-a60d-c7c52255c4e5.png",
+      "mode": "built-in ImageGen",
+      "language": "English",
+      "generation_prompt": "Create a clear, colorful engineering infographic in English for T1.4. Use the supplied facts only; preserve exact ObjectScript and SQL syntax. Panels: [{\"title\": \"1. Parse context determines meaning\", \"example\": \"Ordinary ObjectScript: undefined variable true → error; JSON literal {\\\"active\\\":true} → boolean\", \"explanation\": \"JSON keywords belong to the JSON literal parser. A missing property is different from explicit null.\"}, {\"title\": \"2. Shared zero-based array\", \"example\": \"obj.values and arr → SAME array [10,20,30]; arr.%Set(1,99) → [10,99,30]\", \"explanation\": \"Index 1 is the second element. Assigning an oref does not clone the array.\"}, {\"title\": \"3. Read position is separate from size\", \"example\": \"ABCDEF → Rewind → Read(3)=ABC → Read(3)=DEF; Size stays 6\", \"explanation\": \"Reads advance the cursor, not the total content size. Make Rewind explicit before a repeatable demonstration.\"}]",
+      "panels": [
+        {
+          "title": "1. Parse context determines meaning",
+          "example": "Ordinary ObjectScript: undefined variable true → error; JSON literal {\"active\":true} → boolean",
+          "explanation": "JSON keywords belong to the JSON literal parser. A missing property is different from explicit null."
+        },
+        {
+          "title": "2. Shared zero-based array",
+          "example": "obj.values and arr → SAME array [10,20,30]; arr.%Set(1,99) → [10,99,30]",
+          "explanation": "Index 1 is the second element. Assigning an oref does not clone the array."
+        },
+        {
+          "title": "3. Read position is separate from size",
+          "example": "ABCDEF → Rewind → Read(3)=ABC → Read(3)=DEF; Size stays 6",
+          "explanation": "Reads advance the cursor, not the total content size. Make Rewind explicit before a repeatable demonstration."
+        }
+      ],
+      "width": 1753,
+      "height": 897,
+      "sha256": "4886a61f52d0b9560b671d24155cc46406339f8fcfe5e673b005c5e388365f59"
+    },
+    {
+      "chapter": "T2.1",
+      "kind": "core",
+      "file": "T2 - Basic Programming/T2.1: Ensures Data Integrity/Approfondimenti esercizi/schema-esercizi.png",
+      "source_image": "exec-eb64e19e-cab4-49b5-91f9-86c24d894807.png",
+      "mode": "built-in ImageGen",
+      "language": "English",
+      "generation_prompt": "Create a clear, colorful engineering infographic in English for T2.1. Use the supplied facts only; preserve exact ObjectScript and SQL syntax. Panels: [{\"title\": \"1. Track transaction levels\", \"example\": \"Outer TSTART: status; inner TSTART: total and items; TROLLBACK 1 removes inner changes; notes then outer commit\", \"explanation\": \"Only status and notes remain in this example. Inner commit is not an independent transaction.\"}, {\"title\": \"2. Locks and atomicity are different\", \"example\": \"A holds a lock; B requests the conflicting lock → waits; alternative B bypasses LOCK → direct write can proceed\", \"explanation\": \"Locks are cooperative. Transactions group changes; neither mechanism replaces the other. Draw these as alternative paths, not one sequence.\"}, {\"title\": \"3. Simple LOCK replaces the set\", \"example\": \"LOCK +Order(1) → {1}; +Order(2) → {1,2}; simple LOCK Order(3) → {3}\", \"explanation\": \"Incremental locks add to the current set. A simple LOCK releases previous locks and acquires the requested set.\"}]",
+      "panels": [
+        {
+          "title": "1. Track transaction levels",
+          "example": "Outer TSTART: status; inner TSTART: total and items; TROLLBACK 1 removes inner changes; notes then outer commit",
+          "explanation": "Only status and notes remain in this example. Inner commit is not an independent transaction."
+        },
+        {
+          "title": "2. Locks and atomicity are different",
+          "example": "A holds a lock; B requests the conflicting lock → waits; alternative B bypasses LOCK → direct write can proceed",
+          "explanation": "Locks are cooperative. Transactions group changes; neither mechanism replaces the other. Draw these as alternative paths, not one sequence."
+        },
+        {
+          "title": "3. Simple LOCK replaces the set",
+          "example": "LOCK +Order(1) → {1}; +Order(2) → {1,2}; simple LOCK Order(3) → {3}",
+          "explanation": "Incremental locks add to the current set. A simple LOCK releases previous locks and acquires the requested set."
+        }
+      ],
+      "width": 1754,
+      "height": 897,
+      "sha256": "0b044d99cca8a94f5e89f80272761f75ab79c545ef8f80358fd87142dc126593"
+    },
+    {
+      "chapter": "T2.2",
+      "kind": "core",
+      "file": "T2 - Basic Programming/T2.2: Tracks Application Data/Approfondimenti esercizi/schema-esercizi.png",
+      "source_image": "exec-bf3e72c5-9510-46e0-87cb-ae7c1bc650b6.png",
+      "mode": "built-in ImageGen",
+      "language": "English",
+      "generation_prompt": "Create a clear, colorful engineering infographic in English for T2.2. Use the supplied facts only; preserve exact ObjectScript and SQL syntax. Panels: [{\"title\": \"1. Two independent node properties\", \"example\": \"No value/no children:0; value only:1; children only:10; value and children:11\", \"explanation\": \"A parent with only children is not directly readable as a value. Use $DATA(node)#2 to test value presence; # is modulo.\"}, {\"title\": \"2. Match logging lifetime\", \"example\": \"Counter → entry identity; timestamp → time; PPG → process lifetime; durable audit → durable storage\", \"explanation\": \"An ID is not a timestamp. A process-private log disappears when the process ends.\"}, {\"title\": \"3. Measure the right quantity\", \"example\": \"Elapsed=2.5 seconds across 100 operations → 0.025 seconds=25 ms average\", \"explanation\": \"Use $ZHOROLOG differences for elapsed timing. Logical references, disk I/O and duration describe different quantities.\"}]",
+      "panels": [
+        {
+          "title": "1. Two independent node properties",
+          "example": "No value/no children:0; value only:1; children only:10; value and children:11",
+          "explanation": "A parent with only children is not directly readable as a value. Use $DATA(node)#2 to test value presence; # is modulo."
+        },
+        {
+          "title": "2. Match logging lifetime",
+          "example": "Counter → entry identity; timestamp → time; PPG → process lifetime; durable audit → durable storage",
+          "explanation": "An ID is not a timestamp. A process-private log disappears when the process ends."
+        },
+        {
+          "title": "3. Measure the right quantity",
+          "example": "Elapsed=2.5 seconds across 100 operations → 0.025 seconds=25 ms average",
+          "explanation": "Use $ZHOROLOG differences for elapsed timing. Logical references, disk I/O and duration describe different quantities."
+        }
+      ],
+      "width": 2172,
+      "height": 724,
+      "sha256": "69bcba060d8ffe39217b2bca117d4fba94b8c1d3eb46fffd9373da1b16fcb283"
+    },
+    {
+      "chapter": "T2.3",
+      "kind": "core",
+      "file": "T2 - Basic Programming/T2.3: Implements Security Features/Approfondimenti esercizi/schema-esercizi.png",
+      "source_image": "exec-61140159-eb46-4d97-9cd9-00986a00de70.png",
+      "mode": "built-in ImageGen",
+      "language": "English",
+      "generation_prompt": "Create a clear, colorful engineering infographic in English for T2.3. Use the supplied facts only; preserve exact ObjectScript and SQL syntax. Panels: [{\"title\": \"1. Exact role and resource checks\", \"example\": \"SuperAppAdmin contains AppAdmin as text but is not the same role\", \"explanation\": \"Substring tests can falsely authorize. Check exact membership or the effective resource permission appropriate to the operation.\"}, {\"title\": \"2. Prepare structure, bind values\", \"example\": \"Fixed template with ? → %Prepare; separate user value → %Execute(value)\", \"explanation\": \"Parameters stay data rather than SQL structure. Table and column identifiers require a controlled choice, not a value placeholder.\"}, {\"title\": \"3. Authorization is a separate concern\", \"example\": \"Embedded SQL: application checks SQL authorization; ordinary Dynamic SQL: SQL privilege checks apply\", \"explanation\": \"Host-variable binding addresses injection. Private visibility and process-private temporary data do not replace authorization.\"}]",
+      "panels": [
+        {
+          "title": "1. Exact role and resource checks",
+          "example": "SuperAppAdmin contains AppAdmin as text but is not the same role",
+          "explanation": "Substring tests can falsely authorize. Check exact membership or the effective resource permission appropriate to the operation."
+        },
+        {
+          "title": "2. Prepare structure, bind values",
+          "example": "Fixed template with ? → %Prepare; separate user value → %Execute(value)",
+          "explanation": "Parameters stay data rather than SQL structure. Table and column identifiers require a controlled choice, not a value placeholder."
+        },
+        {
+          "title": "3. Authorization is a separate concern",
+          "example": "Embedded SQL: application checks SQL authorization; ordinary Dynamic SQL: SQL privilege checks apply",
+          "explanation": "Host-variable binding addresses injection. Private visibility and process-private temporary data do not replace authorization."
+        }
+      ],
+      "width": 1797,
+      "height": 875,
+      "sha256": "74e0f68e10735ef36ac2dfeb6dc77a756f5558e8a797d76d94f0efce066f044e"
+    },
+    {
+      "chapter": "T3.1",
+      "kind": "core",
+      "file": "T3 - IRIS Features/T3.1: Differentiates Storage Media/Approfondimenti esercizi/schema-esercizi.png",
+      "source_image": "exec-b5973e1a-8b21-4af6-a25c-c5a293301d8a.png",
+      "mode": "built-in ImageGen",
+      "language": "English",
+      "generation_prompt": "Create a clear, colorful engineering infographic in English for T3.1. Use the supplied facts only; preserve exact ObjectScript and SQL syntax. Panels: [{\"title\": \"1. Storage choices\", \"example\": \"PPG: private process workspace; shared temporary global: shared until temporary storage resets; durable global: persistent database\", \"explanation\": \"Visibility and lifetime are separate axes. Mapping determines the physical database; names alone are not guarantees.\"}, {\"title\": \"2. Process versus session\", \"example\": \"One browser session → request A/process 1 and request B/process 2 → different PPGs\", \"explanation\": \"A process-private workspace is not cross-request session storage. Same process can also outlive one request.\"}, {\"title\": \"3. Counter versus operation\", \"example\": \"Atomic $INCREMENT allocates a number → separate payload write\", \"explanation\": \"A unique allocated key does not make the entire operation atomic. Gaps are possible if the producer stops before writing data.\"}]",
+      "panels": [
+        {
+          "title": "1. Storage choices",
+          "example": "PPG: private process workspace; shared temporary global: shared until temporary storage resets; durable global: persistent database",
+          "explanation": "Visibility and lifetime are separate axes. Mapping determines the physical database; names alone are not guarantees."
+        },
+        {
+          "title": "2. Process versus session",
+          "example": "One browser session → request A/process 1 and request B/process 2 → different PPGs",
+          "explanation": "A process-private workspace is not cross-request session storage. Same process can also outlive one request."
+        },
+        {
+          "title": "3. Counter versus operation",
+          "example": "Atomic $INCREMENT allocates a number → separate payload write",
+          "explanation": "A unique allocated key does not make the entire operation atomic. Gaps are possible if the producer stops before writing data."
+        }
+      ],
+      "width": 1536,
+      "height": 1024,
+      "sha256": "b78e19ad6c526e11798d76abf4b1806bdc3f7f8ea4d9ec3c7fac4a31981ae73d"
+    },
+    {
+      "chapter": "T3.2",
+      "kind": "core",
+      "file": "T3 - IRIS Features/T3.2: Leverages ObjectScript - SQL Features/Approfondimenti esercizi/schema-esercizi.png",
+      "source_image": "exec-6c8538d8-8d1d-4850-b7c7-90419d889d8e.png",
+      "mode": "built-in ImageGen",
+      "language": "English",
+      "generation_prompt": "Create a clear, colorful engineering infographic in English for T3.2. Use the supplied facts only; preserve exact ObjectScript and SQL syntax. Panels: [{\"title\": \"1. Arithmetic versus concatenation\", \"example\": \"x=\\\"5 apples\\\", y=\\\"3 oranges\\\"; x+y → 8; x_y → \\\"5 apples3 oranges\\\"\", \"explanation\": \"Arithmetic reads numeric prefixes. Concatenation preserves text and inserts no separator automatically.\"}, {\"title\": \"2. Compile-time substitution\", \"example\": \"Macro TaxRate=0.07 → compiled expression amount*0.07 → GetTax(100)=7\", \"explanation\": \"A macro expands before execution. Updating an include requires considering dependent recompilation.\"}, {\"title\": \"3. Fetch before processing\", \"example\": \"FETCH → SQLCODE 0: process row; 100: finish; negative: handle error; then close cursor\", \"explanation\": \"The final no-data fetch is not another row. Avoid reusing stale host variables after it.\"}]",
+      "panels": [
+        {
+          "title": "1. Arithmetic versus concatenation",
+          "example": "x=\"5 apples\", y=\"3 oranges\"; x+y → 8; x_y → \"5 apples3 oranges\"",
+          "explanation": "Arithmetic reads numeric prefixes. Concatenation preserves text and inserts no separator automatically."
+        },
+        {
+          "title": "2. Compile-time substitution",
+          "example": "Macro TaxRate=0.07 → compiled expression amount*0.07 → GetTax(100)=7",
+          "explanation": "A macro expands before execution. Updating an include requires considering dependent recompilation."
+        },
+        {
+          "title": "3. Fetch before processing",
+          "example": "FETCH → SQLCODE 0: process row; 100: finish; negative: handle error; then close cursor",
+          "explanation": "The final no-data fetch is not another row. Avoid reusing stale host variables after it."
+        }
+      ],
+      "width": 1672,
+      "height": 941,
+      "sha256": "f8e2987e623e5a43b9af5c35e8e64c7eb17e910f53c564e4655a803b6f0d246b"
+    },
+    {
+      "chapter": "T3.3",
+      "kind": "core",
+      "file": "T3 - IRIS Features/T3.3: Handles Nulls/Approfondimenti esercizi/schema-esercizi.png",
+      "source_image": "exec-c22da023-0880-4abc-9785-555f232d5799.png",
+      "mode": "built-in ImageGen",
+      "language": "English",
+      "generation_prompt": "Create a clear, colorful engineering infographic in English for T3.3. Use the supplied facts only; preserve exact ObjectScript and SQL syntax. Panels: [{\"title\": \"1. Undefined, empty and NUL\", \"example\": \"Undefined variable: no value; ObjectScript \\\"\\\": length 0; $CHAR(0): length 1\", \"explanation\": \"In the shown SQL mapping, ObjectScript empty string represents SQL NULL, while $CHAR(0) represents SQL ''. Keep JSON null separate.\"}, {\"title\": \"2. Aggregates ignore SQL NULL\", \"example\": \"Scores 10,20,30,NULL,NULL → SUM=60, COUNT(Score)=3, AVG=20, COUNT(*)=5\", \"explanation\": \"Replacing missing scores with zero changes the population and yields AVG=12 instead of 20.\"}, {\"title\": \"3. WHERE keeps TRUE only\", \"example\": \"100 rows: Boston 30, other cities 50, NULL 20; City<>Boston → 50; add OR City IS NULL → 70\", \"explanation\": \"The comparison with NULL is UNKNOWN, not TRUE. Negating a comparison does not automatically include missing values.\"}]",
+      "panels": [
+        {
+          "title": "1. Undefined, empty and NUL",
+          "example": "Undefined variable: no value; ObjectScript \"\": length 0; $CHAR(0): length 1",
+          "explanation": "In the shown SQL mapping, ObjectScript empty string represents SQL NULL, while $CHAR(0) represents SQL ''. Keep JSON null separate."
+        },
+        {
+          "title": "2. Aggregates ignore SQL NULL",
+          "example": "Scores 10,20,30,NULL,NULL → SUM=60, COUNT(Score)=3, AVG=20, COUNT(*)=5",
+          "explanation": "Replacing missing scores with zero changes the population and yields AVG=12 instead of 20."
+        },
+        {
+          "title": "3. WHERE keeps TRUE only",
+          "example": "100 rows: Boston 30, other cities 50, NULL 20; City<>Boston → 50; add OR City IS NULL → 70",
+          "explanation": "The comparison with NULL is UNKNOWN, not TRUE. Negating a comparison does not automatically include missing values."
+        }
+      ],
+      "width": 1536,
+      "height": 1024,
+      "sha256": "4b1f93866a3c7c716e6bdc58fffe3f3500966fbfb0af344d981347b139c0c76b"
+    },
+    {
+      "chapter": "T3.4",
+      "kind": "core",
+      "file": "T3 - IRIS Features/T3.4: Handles Schema Evolution/Approfondimenti esercizi/schema-esercizi.png",
+      "source_image": "exec-abd54ac1-899e-4d06-8a69-dfdeb5289c0a.png",
+      "mode": "built-in ImageGen",
+      "language": "English",
+      "generation_prompt": "Create a clear, colorful engineering infographic in English for T3.4. Use the supplied facts only; preserve exact ObjectScript and SQL syntax. Panels: [{\"title\": \"1. Rename is not migration\", \"example\": \"Existing Name data in slot 2; new FullName mapped to slot 4 → appears empty\", \"explanation\": \"Read the actual storage map. Reuse a compatible mapping or migrate data deliberately; compilation alone does not move old values.\"}, {\"title\": \"2. Index lifecycle\", \"example\": \"Define → compile → populate existing data → verify coherent/selectable index\", \"explanation\": \"New type or collation needs matching index data. A definition is not evidence of a successful build.\"}, {\"title\": \"3. Plan lifecycle\", \"example\": \"New statistics or index → possible new optimization; frozen plan → retained choice\", \"explanation\": \"Cache invalidation and freezing are distinct. TUNE TABLE may recompile dependent queries when statistics change; do not purge by ritual.\"}]",
+      "panels": [
+        {
+          "title": "1. Rename is not migration",
+          "example": "Existing Name data in slot 2; new FullName mapped to slot 4 → appears empty",
+          "explanation": "Read the actual storage map. Reuse a compatible mapping or migrate data deliberately; compilation alone does not move old values."
+        },
+        {
+          "title": "2. Index lifecycle",
+          "example": "Define → compile → populate existing data → verify coherent/selectable index",
+          "explanation": "New type or collation needs matching index data. A definition is not evidence of a successful build."
+        },
+        {
+          "title": "3. Plan lifecycle",
+          "example": "New statistics or index → possible new optimization; frozen plan → retained choice",
+          "explanation": "Cache invalidation and freezing are distinct. TUNE TABLE may recompile dependent queries when statistics change; do not purge by ritual."
+        }
+      ],
+      "width": 1536,
+      "height": 1024,
+      "sha256": "92c01a42e4f9ba42fe37e9523331e8382b078001a4644f22afe5829f32267c8c"
+    },
+    {
+      "chapter": "T3.5",
+      "kind": "core",
+      "file": "T3 - IRIS Features/T3.5: Ensures Scalability and Performance/Approfondimenti esercizi/schema-esercizi.png",
+      "source_image": "exec-160c8fa3-9baf-4b0a-aa94-0fe1c7275a12.png",
+      "mode": "built-in ImageGen",
+      "language": "English",
+      "generation_prompt": "Create a clear, colorful engineering infographic in English for T3.5. Use the supplied facts only; preserve exact ObjectScript and SQL syntax. Panels: [{\"title\": \"1. Candidate rows versus row reads\", \"example\": \"Selective index → candidate IDs → optional master-map reads for requested columns\", \"explanation\": \"Index filtering does not always cover the whole query. A common value matching 80% can favor a different plan from a rare value.\"}, {\"title\": \"2. Measure the whole result\", \"example\": \"A: execute 10 ms + fetch 90 ms =100 ms; B: execute 30 ms + fetch 20 ms =50 ms\", \"explanation\": \"Timing only execute would rank these backwards. Compare equivalent rows, transformations and cache conditions.\"}, {\"title\": \"3. One hypothesis at a time\", \"example\": \"Observe → form hypothesis → change one relevant factor → measure result and cost\", \"explanation\": \"Keep warm/cold cache conditions separate. An added index also affects storage, build time and writes.\"}]",
+      "panels": [
+        {
+          "title": "1. Candidate rows versus row reads",
+          "example": "Selective index → candidate IDs → optional master-map reads for requested columns",
+          "explanation": "Index filtering does not always cover the whole query. A common value matching 80% can favor a different plan from a rare value."
+        },
+        {
+          "title": "2. Measure the whole result",
+          "example": "A: execute 10 ms + fetch 90 ms =100 ms; B: execute 30 ms + fetch 20 ms =50 ms",
+          "explanation": "Timing only execute would rank these backwards. Compare equivalent rows, transformations and cache conditions."
+        },
+        {
+          "title": "3. One hypothesis at a time",
+          "example": "Observe → form hypothesis → change one relevant factor → measure result and cost",
+          "explanation": "Keep warm/cold cache conditions separate. An added index also affects storage, build time and writes."
+        }
+      ],
+      "width": 1536,
+      "height": 1024,
+      "sha256": "739b037e2da8b2e348e51bece764295bd152c684efaa7d6e53fecc577d94b998"
+    },
+    {
+      "chapter": "T4.1",
+      "kind": "core",
+      "file": "T4 - Functions & APIs/T4.1: Traverses and Sorts Arrays/Approfondimenti esercizi/schema-esercizi.png",
+      "source_image": "exec-ecc12674-f251-4bae-9a6a-be59bda8db23.png",
+      "mode": "built-in ImageGen",
+      "language": "English",
+      "generation_prompt": "Create a clear, colorful engineering infographic in English for T4.1. Use the supplied facts only; preserve exact ObjectScript and SQL syntax. Panels: [{\"title\": \"1. Keys choose the order\", \"example\": \"arr(1)=A, arr(2)=D, arr(3)=B, arr(10)=C → keys 1,2,3,10 → output ADBC\", \"explanation\": \"$ORDER traverses subscripts, not values or insertion order. Do not alphabetize the letters to solve the loop.\"}, {\"title\": \"2. Parent state and safe defaults\", \"example\": \"warehouse has value Main and children aisle1,aisle2 → $DATA(parent)=11; each leaf with a value → 1\", \"explanation\": \"Children alone would give parent state 10. $GET(timeout,30) returns a default without writing it to the node.\"}, {\"title\": \"3. Guard the sentinel\", \"example\": \"Advance → test empty-string end marker → only then read; reset inner cursor for each outer branch\", \"explanation\": \"Zero can be a valid key. The end test must happen before dereferencing the result of traversal.\"}]",
+      "panels": [
+        {
+          "title": "1. Keys choose the order",
+          "example": "arr(1)=A, arr(2)=D, arr(3)=B, arr(10)=C → keys 1,2,3,10 → output ADBC",
+          "explanation": "$ORDER traverses subscripts, not values or insertion order. Do not alphabetize the letters to solve the loop."
+        },
+        {
+          "title": "2. Parent state and safe defaults",
+          "example": "warehouse has value Main and children aisle1,aisle2 → $DATA(parent)=11; each leaf with a value → 1",
+          "explanation": "Children alone would give parent state 10. $GET(timeout,30) returns a default without writing it to the node."
+        },
+        {
+          "title": "3. Guard the sentinel",
+          "example": "Advance → test empty-string end marker → only then read; reset inner cursor for each outer branch",
+          "explanation": "Zero can be a valid key. The end test must happen before dereferencing the result of traversal."
+        }
+      ],
+      "width": 1536,
+      "height": 1024,
+      "sha256": "73800ebd3b326cade48c119b00436dd298179b8b4e7d910ea0b83b2c1c65c568"
+    },
+    {
+      "chapter": "T4.2",
+      "kind": "core",
+      "file": "T4 - Functions & APIs/T4.2: Manipulates Lists/Approfondimenti esercizi/schema-esercizi.png",
+      "source_image": "exec-964c1a9f-4e59-4d24-9c6d-2540925d80e5.png",
+      "mode": "built-in ImageGen",
+      "language": "English",
+      "generation_prompt": "Create a clear, colorful engineering infographic in English for T4.2. Use the supplied facts only; preserve exact ObjectScript and SQL syntax. Panels: [{\"title\": \"1. Three different cases\", \"example\": \"$LB(\\\"A\\\",,\\\"C\\\"): omitted position 2 → LISTGET default; $LB(\\\"A\\\",\\\"\\\",\\\"C\\\"): explicit empty → empty; beyond list → default\", \"explanation\": \"An omitted element differs from a present empty string. Strict $LIST access to an omitted element can raise NULL VALUE.\"}, {\"title\": \"2. LISTNEXT pointer\", \"example\": \"Initialize ptr=0 → $LISTNEXT updates pointer and value → stop when function returns 0\", \"explanation\": \"The pointer is opaque, not the element number. An omitted element can leave the value undefined; use a separate counter and a safe value check.\"}, {\"title\": \"3. Delimiter conversion can lose structure\", \"example\": \"Two elements [\\\"A|B\\\",\\\"C\\\"] → delimited text A|B|C → ambiguous split\", \"explanation\": \"Binary lists preserve element boundaries. A simple delimiter conversion needs an escaping contract if values contain the delimiter.\"}]",
+      "panels": [
+        {
+          "title": "1. Three different cases",
+          "example": "$LB(\"A\",,\"C\"): omitted position 2 → LISTGET default; $LB(\"A\",\"\",\"C\"): explicit empty → empty; beyond list → default",
+          "explanation": "An omitted element differs from a present empty string. Strict $LIST access to an omitted element can raise NULL VALUE."
+        },
+        {
+          "title": "2. LISTNEXT pointer",
+          "example": "Initialize ptr=0 → $LISTNEXT updates pointer and value → stop when function returns 0",
+          "explanation": "The pointer is opaque, not the element number. An omitted element can leave the value undefined; use a separate counter and a safe value check."
+        },
+        {
+          "title": "3. Delimiter conversion can lose structure",
+          "example": "Two elements [\"A|B\",\"C\"] → delimited text A|B|C → ambiguous split",
+          "explanation": "Binary lists preserve element boundaries. A simple delimiter conversion needs an escaping contract if values contain the delimiter."
+        }
+      ],
+      "width": 1536,
+      "height": 1024,
+      "sha256": "643ea6fa6e67280d118df8a5911562aaa5fa402b115b599a567a793f3214f2f7"
+    },
+    {
+      "chapter": "T4.3",
+      "kind": "core",
+      "file": "T4 - Functions & APIs/T4.3: Manipulates Strings/Approfondimenti esercizi/schema-esercizi.png",
+      "source_image": "exec-48218037-5e6b-413e-9e0a-94ef53954403.png",
+      "mode": "built-in ImageGen",
+      "language": "English",
+      "generation_prompt": "Create a clear, colorful engineering infographic in English for T4.3. Use the supplied facts only; preserve exact ObjectScript and SQL syntax. Panels: [{\"title\": \"1. Field versus character range\", \"example\": \"$PIECE selects delimiter-separated fields; $EXTRACT selects inclusive character positions\", \"explanation\": \"Empty fields still occupy positions. Fixed-width extraction retains padding spaces; it does not trim automatically.\"}, {\"title\": \"2. Same input, different operation\", \"example\": \"banana → REPLACE substring an with X → bXXa; independently banana → TRANSLATE a→X,n→Y → bXYXYX\", \"explanation\": \"REPLACE matches multi-character units; TRANSLATE maps individual characters. Draw two independent branches from the original input.\"}, {\"title\": \"3. Preserve meaning during cleanup\", \"example\": \"Edge trim keeps the middle space; removing all whitespace loses it; HTML text escaping preserves literal markup display\", \"explanation\": \"Normalization can lose information. Match output encoding to the actual HTML, script, URL or other destination context.\"}]",
+      "panels": [
+        {
+          "title": "1. Field versus character range",
+          "example": "$PIECE selects delimiter-separated fields; $EXTRACT selects inclusive character positions",
+          "explanation": "Empty fields still occupy positions. Fixed-width extraction retains padding spaces; it does not trim automatically."
+        },
+        {
+          "title": "2. Same input, different operation",
+          "example": "banana → REPLACE substring an with X → bXXa; independently banana → TRANSLATE a→X,n→Y → bXYXYX",
+          "explanation": "REPLACE matches multi-character units; TRANSLATE maps individual characters. Draw two independent branches from the original input."
+        },
+        {
+          "title": "3. Preserve meaning during cleanup",
+          "example": "Edge trim keeps the middle space; removing all whitespace loses it; HTML text escaping preserves literal markup display",
+          "explanation": "Normalization can lose information. Match output encoding to the actual HTML, script, URL or other destination context."
+        }
+      ],
+      "width": 1536,
+      "height": 1024,
+      "sha256": "45b862c1722b4f146324673219acc5649235df89d04adc29c57edf35fd88d6a7"
+    },
+    {
+      "chapter": "T4.4",
+      "kind": "core",
+      "file": "T4 - Functions & APIs/T4.4: Mathematical, Logical, and Date - Time Operations/Approfondimenti esercizi/schema-esercizi.png",
+      "source_image": "exec-5c481960-4d6e-4e03-81dd-4f36950a2dd7.png",
+      "mode": "built-in ImageGen",
+      "language": "English",
+      "generation_prompt": "Create a clear, colorful engineering infographic in English for T4.4. Use the supplied facts only; preserve exact ObjectScript and SQL syntax. Panels: [{\"title\": \"1. Arithmetic trace\", \"example\": \"10-2*3+1 → 8 → 24 → 25; 10-(2*3)+1 → 5\", \"explanation\": \"Parentheses define the intended grouping. The same symbols with a different grouping express a different formula.\"}, {\"title\": \"2. Complete groups and remainder\", \"example\": \"47 = 5×8 + 7; integer quotient 5; modulo remainder 7; 48 = 6×8 + 0\", \"explanation\": \"Quotient counts full groups; remainder gives what is left. Use symbolic groups rather than an inaccurate number of decorative boxes.\"}, {\"title\": \"3. Three time roles\", \"example\": \"$HOROLOG: local day,seconds; $ZTIMESTAMP: UTC date/time with fractions; $ZHOROLOG: elapsed seconds since startup\", \"explanation\": \"Use a duration timer for code intervals. Midnight rollover makes naive second-of-day subtraction incorrect without the day.\"}]",
+      "panels": [
+        {
+          "title": "1. Arithmetic trace",
+          "example": "10-2*3+1 → 8 → 24 → 25; 10-(2*3)+1 → 5",
+          "explanation": "Parentheses define the intended grouping. The same symbols with a different grouping express a different formula."
+        },
+        {
+          "title": "2. Complete groups and remainder",
+          "example": "47 = 5×8 + 7; integer quotient 5; modulo remainder 7; 48 = 6×8 + 0",
+          "explanation": "Quotient counts full groups; remainder gives what is left. Use symbolic groups rather than an inaccurate number of decorative boxes."
+        },
+        {
+          "title": "3. Three time roles",
+          "example": "$HOROLOG: local day,seconds; $ZTIMESTAMP: UTC date/time with fractions; $ZHOROLOG: elapsed seconds since startup",
+          "explanation": "Use a duration timer for code intervals. Midnight rollover makes naive second-of-day subtraction incorrect without the day."
+        }
+      ],
+      "width": 1536,
+      "height": 1024,
+      "sha256": "f6e58e9f2f1903f796053c15176a3bea1b74d8c6cd9a198adceaba754829fe6c"
+    },
+    {
+      "chapter": "T4.5",
+      "kind": "core",
+      "file": "T4 - Functions & APIs/T4.5: Decision and Control Structures/Approfondimenti esercizi/schema-esercizi.png",
+      "source_image": "exec-8baf1069-5d39-45f4-9d2b-22479a4933ab.png",
+      "mode": "built-in ImageGen",
+      "language": "English",
+      "generation_prompt": "Create a clear, colorful engineering infographic in English for T4.5. Use the supplied facts only; preserve exact ObjectScript and SQL syntax. Panels: [{\"title\": \"1. Numeric truth conversion\", \"example\": \"\\\"abc\\\" → 0 → false; \\\"1abc\\\" → 1 → true; nonempty test → explicit comparison with empty string\", \"explanation\": \"A Boolean test does not validate a numeric input and does not mean text is nonempty.\"}, {\"title\": \"2. Exit the intended scope\", \"example\": \"CONTINUE → next iteration; plain QUIT in FOR → after loop; RETURN value → caller\", \"explanation\": \"QUIT behavior depends on context. Do not use QUIT with a value inside the shown FOR as a method return.\"}, {\"title\": \"3. Cover the boundary\", \"example\": \"x>5: big; x<5: small; x=5: explicit equal/default case; SELECT: first true branch wins\", \"explanation\": \"A skipped assignment can leave an old or undefined result. A final true SELECT branch provides a fallback when that is the desired contract.\"}]",
+      "panels": [
+        {
+          "title": "1. Numeric truth conversion",
+          "example": "\"abc\" → 0 → false; \"1abc\" → 1 → true; nonempty test → explicit comparison with empty string",
+          "explanation": "A Boolean test does not validate a numeric input and does not mean text is nonempty."
+        },
+        {
+          "title": "2. Exit the intended scope",
+          "example": "CONTINUE → next iteration; plain QUIT in FOR → after loop; RETURN value → caller",
+          "explanation": "QUIT behavior depends on context. Do not use QUIT with a value inside the shown FOR as a method return."
+        },
+        {
+          "title": "3. Cover the boundary",
+          "example": "x>5: big; x<5: small; x=5: explicit equal/default case; SELECT: first true branch wins",
+          "explanation": "A skipped assignment can leave an old or undefined result. A final true SELECT branch provides a fallback when that is the desired contract."
+        }
+      ],
+      "width": 1536,
+      "height": 1024,
+      "sha256": "b186a81b6792506023184329e49a6bf12fb69c1d68e74ef156d3748d83423fdc"
+    },
+    {
+      "chapter": "T4.6",
+      "kind": "core",
+      "file": "T4 - Functions & APIs/T4.6: Executes Methods and Queries Objects/Approfondimenti esercizi/schema-esercizi.png",
+      "source_image": "exec-858bda0f-ffb6-4a1a-b683-d2328c050cef.png",
+      "mode": "built-in ImageGen",
+      "language": "English",
+      "generation_prompt": "Create a clear, colorful engineering infographic in English for T4.6. Use the supplied facts only; preserve exact ObjectScript and SQL syntax. Panels: [{\"title\": \"1. Validity before type\", \"example\": \"$ISOBJECT(obj) → valid oref → then class/inheritance check\", \"explanation\": \"%IsA concerns the primary chain; %Extends includes secondary superclasses. A declared parameter type is not a reason to dereference an invalid value.\"}, {\"title\": \"2. Dynamic access\", \"example\": \"Allowed method Add → $METHOD(obj,\\\"Add\\\",10,20) → 30; allowed property Timeout → set value 30\", \"explanation\": \"Dynamic names still need allowed targets and compatible contracts. Runtime selection does not authorize arbitrary members.\"}, {\"title\": \"3. Source versus compiled metadata\", \"example\": \"MethodDefinition: source declaration; CompiledMethod: compiled methods including inherited behavior; PropertyDefinition: property schema\", \"explanation\": \"Method metadata does not contain property values. Use the instance for data and the appropriate dictionary for structure.\"}]",
+      "panels": [
+        {
+          "title": "1. Validity before type",
+          "example": "$ISOBJECT(obj) → valid oref → then class/inheritance check",
+          "explanation": "%IsA concerns the primary chain; %Extends includes secondary superclasses. A declared parameter type is not a reason to dereference an invalid value."
+        },
+        {
+          "title": "2. Dynamic access",
+          "example": "Allowed method Add → $METHOD(obj,\"Add\",10,20) → 30; allowed property Timeout → set value 30",
+          "explanation": "Dynamic names still need allowed targets and compatible contracts. Runtime selection does not authorize arbitrary members."
+        },
+        {
+          "title": "3. Source versus compiled metadata",
+          "example": "MethodDefinition: source declaration; CompiledMethod: compiled methods including inherited behavior; PropertyDefinition: property schema",
+          "explanation": "Method metadata does not contain property values. Use the instance for data and the appropriate dictionary for structure."
+        }
+      ],
+      "width": 1536,
+      "height": 1024,
+      "sha256": "3a649e924b97dfc298396dc41673ebe2619a4d5353cd83f30a18df52849c9f58"
+    },
+    {
+      "chapter": "T4.7",
+      "kind": "core",
+      "file": "T4 - Functions & APIs/T4.7: Uses APIs for Common Operations/Approfondimenti esercizi/schema-esercizi.png",
+      "source_image": "exec-8bbc123f-ef4c-4977-94b1-ad6cfeda1b3c.png",
+      "mode": "built-in ImageGen",
+      "language": "English",
+      "generation_prompt": "Create a clear, colorful engineering infographic in English for T4.7. Use the supplied facts only; preserve exact ObjectScript and SQL syntax. Panels: [{\"title\": \"1. Two independent stream choices\", \"example\": \"File versus Global: destination; Character versus Binary: data treatment; cursor: position within content\", \"explanation\": \"Choose representation by meaning and destination. Rewind changes position, not contents; Read may return a chunk.\"}, {\"title\": \"2. HTTP result layers\", \"example\": \"Get/Post returns %Status → inspect HttpResponse.StatusCode → consume HttpResponse.Data stream → parse expected format\", \"explanation\": \"A successful transport status does not guarantee a successful HTTP application response. TLS needs suitable client configuration.\"}, {\"title\": \"3. Message versus delivery\", \"example\": \"MailMessage: recipients, subject, body → SMTP.Send: transport submission → later delivery → possible reading\", \"explanation\": \"Acceptance by the SMTP server does not prove delivery or reading. Check and propagate the send result.\"}]",
+      "panels": [
+        {
+          "title": "1. Two independent stream choices",
+          "example": "File versus Global: destination; Character versus Binary: data treatment; cursor: position within content",
+          "explanation": "Choose representation by meaning and destination. Rewind changes position, not contents; Read may return a chunk."
+        },
+        {
+          "title": "2. HTTP result layers",
+          "example": "Get/Post returns %Status → inspect HttpResponse.StatusCode → consume HttpResponse.Data stream → parse expected format",
+          "explanation": "A successful transport status does not guarantee a successful HTTP application response. TLS needs suitable client configuration."
+        },
+        {
+          "title": "3. Message versus delivery",
+          "example": "MailMessage: recipients, subject, body → SMTP.Send: transport submission → later delivery → possible reading",
+          "explanation": "Acceptance by the SMTP server does not prove delivery or reading. Check and propagate the send result."
+        }
+      ],
+      "width": 1536,
+      "height": 1024,
+      "sha256": "0201c4de36a627fe78714b9f71ff6c5d7ecb6c3639d9ad80b65166ba6670299b"
+    },
+    {
+      "chapter": "T5.1",
+      "kind": "core",
+      "file": "T5 - Error Handling/T5.1: Uses Troubleshooting Tools/Approfondimenti esercizi/schema-esercizi.png",
+      "source_image": "exec-ead46652-3cde-47d0-b10e-2dee52469931.png",
+      "mode": "built-in ImageGen",
+      "language": "English",
+      "generation_prompt": "Create a clear, colorful engineering infographic in English for T5.1. Use the supplied facts only; preserve exact ObjectScript and SQL syntax. Panels: [{\"title\": \"1. Classify the failing stage\", \"example\": \"Preprocessor: macro/include; compiler: syntax/type/dependency; runtime: values and operations\", \"explanation\": \"A missing macro is not fixed by changing database privileges. Confirm the actual dependency rather than inventing compiler flags.\"}, {\"title\": \"2. Duration timer\", \"example\": \"$ZH is a valid abbreviation for $ZHOROLOG; end-start=0.625 seconds=625 ms\", \"explanation\": \"$HOROLOG is a local day,seconds pair, not a numeric elapsed timer. More printed decimals do not alone make a benchmark representative.\"}, {\"title\": \"3. Choose the right lens\", \"example\": \"System monitor → workload and I/O; SQL tools → plans and query work; MONLBL → line hits and time\", \"explanation\": \"Use cumulative counters as differences over a defined interval. An event log is not a substitute for a performance profile.\"}]",
+      "panels": [
+        {
+          "title": "1. Classify the failing stage",
+          "example": "Preprocessor: macro/include; compiler: syntax/type/dependency; runtime: values and operations",
+          "explanation": "A missing macro is not fixed by changing database privileges. Confirm the actual dependency rather than inventing compiler flags."
+        },
+        {
+          "title": "2. Duration timer",
+          "example": "$ZH is a valid abbreviation for $ZHOROLOG; end-start=0.625 seconds=625 ms",
+          "explanation": "$HOROLOG is a local day,seconds pair, not a numeric elapsed timer. More printed decimals do not alone make a benchmark representative."
+        },
+        {
+          "title": "3. Choose the right lens",
+          "example": "System monitor → workload and I/O; SQL tools → plans and query work; MONLBL → line hits and time",
+          "explanation": "Use cumulative counters as differences over a defined interval. An event log is not a substitute for a performance profile."
+        }
+      ],
+      "width": 1536,
+      "height": 1024,
+      "sha256": "7fca050ae7f98cfc0b736d8a5c04ff35ca5be8272379befec0976a81100fa36f"
+    },
+    {
+      "chapter": "T5.2",
+      "kind": "core",
+      "file": "T5 - Error Handling/T5.2: Handles and Logs Runtime Errors/Approfondimenti esercizi/schema-esercizi.png",
+      "source_image": "exec-a221fefb-611f-48b5-bf08-d86a353cea87.png",
+      "mode": "built-in ImageGen",
+      "language": "English",
+      "generation_prompt": "Create a clear, colorful engineering infographic in English for T5.2. Use the supplied facts only; preserve exact ObjectScript and SQL syntax. Panels: [{\"title\": \"1. Two failure channels\", \"example\": \"Method returns error %Status → caller tests it; method throws exception → CATCH runs\", \"explanation\": \"Returning an error is not throwing it. ThrowOnError explicitly bridges an error status to a StatusException.\"}, {\"title\": \"2. Logging is not recovery\", \"example\": \"Caught known recoverable case → handle it; otherwise log useful context → propagate failure\", \"explanation\": \"Do not return OK merely because an exception was recorded. Exception details and available stack context describe different aspects of the failure.\"}, {\"title\": \"3. Structured errors and presentation\", \"example\": \"Multiple statuses → ADDSC compound status → DecomposeStatus individual messages → GetErrorText readable text\", \"explanation\": \"Keep the structured status for propagation. Human-readable text is for reporting, not a replacement for the error contract.\"}]",
+      "panels": [
+        {
+          "title": "1. Two failure channels",
+          "example": "Method returns error %Status → caller tests it; method throws exception → CATCH runs",
+          "explanation": "Returning an error is not throwing it. ThrowOnError explicitly bridges an error status to a StatusException."
+        },
+        {
+          "title": "2. Logging is not recovery",
+          "example": "Caught known recoverable case → handle it; otherwise log useful context → propagate failure",
+          "explanation": "Do not return OK merely because an exception was recorded. Exception details and available stack context describe different aspects of the failure."
+        },
+        {
+          "title": "3. Structured errors and presentation",
+          "example": "Multiple statuses → ADDSC compound status → DecomposeStatus individual messages → GetErrorText readable text",
+          "explanation": "Keep the structured status for propagation. Human-readable text is for reporting, not a replacement for the error contract."
+        }
+      ],
+      "width": 1536,
+      "height": 1024,
+      "sha256": "71ce7963bdcf836dd51e809483d5c02e36938a8e4f3686384374ca2cf6b8db13"
+    },
+    {
+      "chapter": "T5.3",
+      "kind": "core",
+      "file": "T5 - Error Handling/T5.3: Diagnoses Common Errors/Approfondimenti esercizi/schema-esercizi.png",
+      "source_image": "exec-6df5041f-4a25-4bba-88f2-eedeec9f6d83.png",
+      "mode": "built-in ImageGen",
+      "language": "English",
+      "generation_prompt": "Create a clear, colorful engineering infographic in English for T5.3. Use the supplied facts only; preserve exact ObjectScript and SQL syntax. Panels: [{\"title\": \"1. Identify the actual missing thing\", \"example\": \"City and city differ; traversal end sentinel → stop before read; empty oref → handle before property access\", \"explanation\": \"UNDEFINED, SUBSCRIPT and INVALID OREF point to different failures. Do not solve a typo by inserting an unrelated default.\"}, {\"title\": \"2. Make termination explicit\", \"example\": \"Recursive factorial: valid input and base case; graph loop: visited nodes; average: n=0 guard\", \"explanation\": \"A numeric limit, growing key and call depth are different constraints. Fix the termination rule before increasing limits.\"}, {\"title\": \"3. Missing-data policy changes the answer\", \"example\": \"Scores total=70; three present → 70/3≈23.33; treating a fourth missing score as zero → 70/4=17.50\", \"explanation\": \"Reject, ignore or replace with zero are different domain decisions. Choose before calculating rather than silencing every missing-value error.\"}]",
+      "panels": [
+        {
+          "title": "1. Identify the actual missing thing",
+          "example": "City and city differ; traversal end sentinel → stop before read; empty oref → handle before property access",
+          "explanation": "UNDEFINED, SUBSCRIPT and INVALID OREF point to different failures. Do not solve a typo by inserting an unrelated default."
+        },
+        {
+          "title": "2. Make termination explicit",
+          "example": "Recursive factorial: valid input and base case; graph loop: visited nodes; average: n=0 guard",
+          "explanation": "A numeric limit, growing key and call depth are different constraints. Fix the termination rule before increasing limits."
+        },
+        {
+          "title": "3. Missing-data policy changes the answer",
+          "example": "Scores total=70; three present → 70/3≈23.33; treating a fourth missing score as zero → 70/4=17.50",
+          "explanation": "Reject, ignore or replace with zero are different domain decisions. Choose before calculating rather than silencing every missing-value error."
+        }
+      ],
+      "width": 1536,
+      "height": 1024,
+      "sha256": "9f49ad7aed686bd5911b4f150852249a3f74aea5b030765ab974e7eba86bd7ee"
+    },
+    {
+      "chapter": "T1.1",
+      "kind": "further_insights",
+      "file": "T1 - Manages Data Model/T1.1: Uses Classes/Approfondimenti esercizi/schema-esercizi-extra.png",
+      "source_image": "exec-c17a7176-48c3-44e5-8d4f-5bf593fad002.png",
+      "mode": "built-in ImageGen",
+      "language": "English",
+      "generation_prompt": "Create a clear, colorful engineering infographic in English for T1.1. Use the supplied facts only; preserve exact ObjectScript and SQL syntax. Panels: [{\"title\": \"Inherited behavior\", \"example\": \"Truck + Vehicle → PickupTruck\", \"explanation\": \"The subclass inherits properties and behavior. A local override supplies the chosen implementation. Trap: inherited state is not limited to locally declared properties.\"}, {\"title\": \"Creation and persistence\", \"example\": \"%New → %OnNew → in-memory oref; successful %Save → %Status\", \"explanation\": \"Construction initializes the object. It does not alone create a saved row. An outer transaction still needs its own commit.\"}, {\"title\": \"Deletion semantics\", \"example\": \"%DeleteExtent: deletes instances with the callbacks defined by its contract\", \"explanation\": \"Choose according to required application effects. Trap: deleting rows is different from dropping the table definition. Do not invent callback ordering.\"}, {\"title\": \"Utilities and documentation\", \"example\": \"ClassMethod: no implicit instance; ///: member description\", \"explanation\": \"A stateless helper needs no persistence. Documentation belongs with the declaration and explains inputs, outputs and constraints.\"}]",
+      "panels": [
+        {
+          "title": "Inherited behavior",
+          "example": "Truck + Vehicle → PickupTruck",
+          "explanation": "The subclass inherits properties and behavior. A local override supplies the chosen implementation. Trap: inherited state is not limited to locally declared properties."
+        },
+        {
+          "title": "Creation and persistence",
+          "example": "%New → %OnNew → in-memory oref; successful %Save → %Status",
+          "explanation": "Construction initializes the object. It does not alone create a saved row. An outer transaction still needs its own commit."
+        },
+        {
+          "title": "Deletion semantics",
+          "example": "%DeleteExtent: deletes instances with the callbacks defined by its contract",
+          "explanation": "Choose according to required application effects. Trap: deleting rows is different from dropping the table definition. Do not invent callback ordering."
+        },
+        {
+          "title": "Utilities and documentation",
+          "example": "ClassMethod: no implicit instance; ///: member description",
+          "explanation": "A stateless helper needs no persistence. Documentation belongs with the declaration and explains inputs, outputs and constraints."
+        }
+      ],
+      "width": 1536,
+      "height": 1024,
+      "sha256": "4ebe140072002984cdefa9327580579f905821551f3956b736135c8bf99eaee5"
+    },
+    {
+      "chapter": "T1.2",
+      "kind": "further_insights",
+      "file": "T1 - Manages Data Model/T1.2: Creates Properties and Indexes/Approfondimenti esercizi/schema-esercizi-extra.png",
+      "source_image": "exec-7a344bb5-0c05-4369-8899-134e852eda0b.png",
+      "mode": "built-in ImageGen",
+      "language": "English",
+      "generation_prompt": "Create a clear, colorful engineering infographic in English for T1.2. Use the supplied facts only; preserve exact ObjectScript and SQL syntax. Panels: [{\"title\": \"Independent constraints\", \"example\": \"Missing Name + Category=Toys → Required and VALUELIST violations\", \"explanation\": \"A valid Price does not compensate for two invalid properties. Check the save status rather than assuming assignments were accepted.\"}, {\"title\": \"Defaults are initial values\", \"example\": \"%New → Role=Viewer, LoginCount=0, CreatedAt=current time\", \"explanation\": \"Two objects created close together can share the same timestamp. Trap: creation time is not a uniqueness guarantee.\"}, {\"title\": \"Virtual versus maintained\", \"example\": \"FullName: calculate on read; TotalAmount: maintain stored calculation\", \"explanation\": \"The formula is not the whole contract. Define when the value is recomputed and whether it is stored.\"}, {\"title\": \"Relationships and composite keys\", \"example\": \"Employee.DeptCode → Department; index (SensorId,ReadingTime)\", \"explanation\": \"A foreign key needs an existing parent. The composite index first narrows the sensor, then the time range.\"}]",
+      "panels": [
+        {
+          "title": "Independent constraints",
+          "example": "Missing Name + Category=Toys → Required and VALUELIST violations",
+          "explanation": "A valid Price does not compensate for two invalid properties. Check the save status rather than assuming assignments were accepted."
+        },
+        {
+          "title": "Defaults are initial values",
+          "example": "%New → Role=Viewer, LoginCount=0, CreatedAt=current time",
+          "explanation": "Two objects created close together can share the same timestamp. Trap: creation time is not a uniqueness guarantee."
+        },
+        {
+          "title": "Virtual versus maintained",
+          "example": "FullName: calculate on read; TotalAmount: maintain stored calculation",
+          "explanation": "The formula is not the whole contract. Define when the value is recomputed and whether it is stored."
+        },
+        {
+          "title": "Relationships and composite keys",
+          "example": "Employee.DeptCode → Department; index (SensorId,ReadingTime)",
+          "explanation": "A foreign key needs an existing parent. The composite index first narrows the sensor, then the time range."
+        }
+      ],
+      "width": 1536,
+      "height": 1024,
+      "sha256": "2105f2626a0a133b700fe1a7814182feaeafca4493daa910c83cd346ef11597b"
+    },
+    {
+      "chapter": "T1.3",
+      "kind": "further_insights",
+      "file": "T1 - Manages Data Model/T1.3: Creates ObjectScript Methods/Approfondimenti esercizi/schema-esercizi-extra.png",
+      "source_image": "exec-fb6196e3-1951-48ba-9425-7fc46fcd8755.png",
+      "mode": "built-in ImageGen",
+      "language": "English",
+      "generation_prompt": "Create a clear, colorful engineering infographic in English for T1.3. Use the supplied facts only; preserve exact ObjectScript and SQL syntax. Panels: [{\"title\": \"Execution context\", \"example\": \"Instance Method → current object; ClassMethod → no implicit instance\", \"explanation\": \"Class methods can call other class methods and read class parameters. They do not implicitly own instance property state.\"}, {\"title\": \"Output does not clear\", \"example\": \"Before: result=old; call with .result; no assignment → result remains old\", \"explanation\": \"The dot passes the caller variable by reference. Output documents intent; the method must explicitly initialize or assign its promised result.\"}, {\"title\": \"Inherited algorithm\", \"example\": \"Base.Process → Child.FetchData returns raw text → Base.Process uppercases it\", \"explanation\": \"The base defines the sequence while the child supplies a step. Trap: the uppercase conversion belongs to Process in this example.\"}, {\"title\": \"Parent validation and Final\", \"example\": \"Parent error → return it; parent OK → child checks\", \"explanation\": \"Use ##super() to extend the parent method. Final prevents further overrides at compile time; calling ##super() does not bypass Final.\"}]",
+      "panels": [
+        {
+          "title": "Execution context",
+          "example": "Instance Method → current object; ClassMethod → no implicit instance",
+          "explanation": "Class methods can call other class methods and read class parameters. They do not implicitly own instance property state."
+        },
+        {
+          "title": "Output does not clear",
+          "example": "Before: result=old; call with .result; no assignment → result remains old",
+          "explanation": "The dot passes the caller variable by reference. Output documents intent; the method must explicitly initialize or assign its promised result."
+        },
+        {
+          "title": "Inherited algorithm",
+          "example": "Base.Process → Child.FetchData returns raw text → Base.Process uppercases it",
+          "explanation": "The base defines the sequence while the child supplies a step. Trap: the uppercase conversion belongs to Process in this example."
+        },
+        {
+          "title": "Parent validation and Final",
+          "example": "Parent error → return it; parent OK → child checks",
+          "explanation": "Use ##super() to extend the parent method. Final prevents further overrides at compile time; calling ##super() does not bypass Final."
+        }
+      ],
+      "width": 1536,
+      "height": 1024,
+      "sha256": "28d202768ffb88dd8facc4f7a9b1ed5c8579cd7b5c6fea4ed695159ec32cf8da"
+    },
+    {
+      "chapter": "T1.4",
+      "kind": "further_insights",
+      "file": "T1 - Manages Data Model/T1.4: Uses Complex Structures/Approfondimenti esercizi/schema-esercizi-extra.png",
+      "source_image": "exec-1d188e64-00c9-423b-9654-ca7fc9c9289f.png",
+      "mode": "built-in ImageGen",
+      "language": "English",
+      "generation_prompt": "Create a clear, colorful engineering infographic in English for T1.4. Use the supplied facts only; preserve exact ObjectScript and SQL syntax. Panels: [{\"title\": \"Iterator is a separate object\", \"example\": \"DynamicObject → %GetIterator() → iterator.%GetNext(.key,.value)\", \"explanation\": \"Call %GetNext on the iterator, not on the container. The cursor owns traversal state.\"}, {\"title\": \"Missing, null and empty\", \"example\": \"{} versus {\\\"field\\\":null} versus {\\\"field\\\":\\\"\\\"}\", \"explanation\": \"Removing a property differs from setting it to null. The API contract decides whether a missing field means no change.\"}, {\"title\": \"Copy versus alias\", \"example\": \"File contents → CopyFrom → independent GlobalBinary; arr and obj.values → same array\", \"explanation\": \"Copying content separates lifetimes. Assigning an object reference preserves shared mutations.\"}, {\"title\": \"Average needs a precondition\", \"example\": \"85+92+78=255; count=3; average=85\", \"explanation\": \"For count=0, do not divide. Choose an explicit missing-data result or error instead of inventing an average.\"}]",
+      "panels": [
+        {
+          "title": "Iterator is a separate object",
+          "example": "DynamicObject → %GetIterator() → iterator.%GetNext(.key,.value)",
+          "explanation": "Call %GetNext on the iterator, not on the container. The cursor owns traversal state."
+        },
+        {
+          "title": "Missing, null and empty",
+          "example": "{} versus {\"field\":null} versus {\"field\":\"\"}",
+          "explanation": "Removing a property differs from setting it to null. The API contract decides whether a missing field means no change."
+        },
+        {
+          "title": "Copy versus alias",
+          "example": "File contents → CopyFrom → independent GlobalBinary; arr and obj.values → same array",
+          "explanation": "Copying content separates lifetimes. Assigning an object reference preserves shared mutations."
+        },
+        {
+          "title": "Average needs a precondition",
+          "example": "85+92+78=255; count=3; average=85",
+          "explanation": "For count=0, do not divide. Choose an explicit missing-data result or error instead of inventing an average."
+        }
+      ],
+      "width": 1536,
+      "height": 1024,
+      "sha256": "fd00cd90eed1e891e45d1d65b32102e4998f8b21e1712dcf24fa49d17ae6ba94"
+    },
+    {
+      "chapter": "T2.1",
+      "kind": "further_insights",
+      "file": "T2 - Basic Programming/T2.1: Ensures Data Integrity/Approfondimenti esercizi/schema-esercizi-extra.png",
+      "source_image": "exec-f3d91005-5505-4272-a3ec-39c167d21e4b.png",
+      "mode": "built-in ImageGen",
+      "language": "English",
+      "generation_prompt": "Create a clear, colorful engineering infographic in English for T2.1. Use the supplied facts only; preserve exact ObjectScript and SQL syntax. Panels: [{\"title\": \"Version check race\", \"example\": \"A and B both read v=7 before either writes; both pass separate checks\", \"explanation\": \"A check followed by a separate write is not atomic. Use a suitable atomic conditional update or a coherent protected section.\"}, {\"title\": \"Rollback is not success\", \"example\": \"Error → rollback changes → report failure\", \"explanation\": \"Restoring data does not complete the requested operation. Trap: returning OK after the catch hides the failure.\"}, {\"title\": \"Nested levels\", \"example\": \"0 → TSTART → 1 → TSTART → 2 → TCOMMIT → 1 → TCOMMIT → 0\", \"explanation\": \"The inner commit is not an independent durable commit. Full rollback may also undo the caller's transaction.\"}, {\"title\": \"No-wait lock attempt\", \"example\": \"Timeout 0 → $TEST=1 acquired; $TEST=0 unavailable\", \"explanation\": \"Do not write on the failure branch. Retry through another acquisition attempt or report busy.\"}]",
+      "panels": [
+        {
+          "title": "Version check race",
+          "example": "A and B both read v=7 before either writes; both pass separate checks",
+          "explanation": "A check followed by a separate write is not atomic. Use a suitable atomic conditional update or a coherent protected section."
+        },
+        {
+          "title": "Rollback is not success",
+          "example": "Error → rollback changes → report failure",
+          "explanation": "Restoring data does not complete the requested operation. Trap: returning OK after the catch hides the failure."
+        },
+        {
+          "title": "Nested levels",
+          "example": "0 → TSTART → 1 → TSTART → 2 → TCOMMIT → 1 → TCOMMIT → 0",
+          "explanation": "The inner commit is not an independent durable commit. Full rollback may also undo the caller's transaction."
+        },
+        {
+          "title": "No-wait lock attempt",
+          "example": "Timeout 0 → $TEST=1 acquired; $TEST=0 unavailable",
+          "explanation": "Do not write on the failure branch. Retry through another acquisition attempt or report busy."
+        }
+      ],
+      "width": 1536,
+      "height": 1024,
+      "sha256": "df1b2450d2789683fe0ebf291c45865ec018f74be3a89557c82d5d549304201e"
+    },
+    {
+      "chapter": "T2.2",
+      "kind": "further_insights",
+      "file": "T2 - Basic Programming/T2.2: Tracks Application Data/Approfondimenti esercizi/schema-esercizi-extra.png",
+      "source_image": "exec-c17a0d23-4a3d-4058-ae48-46bbbbbe8283.png",
+      "mode": "built-in ImageGen",
+      "language": "English",
+      "generation_prompt": "Create a clear, colorful engineering infographic in English for T2.2. Use the supplied facts only; preserve exact ObjectScript and SQL syntax. Panels: [{\"title\": \"A branch is not a value\", \"example\": \"Phone has children but no value → $DATA=10; add a value → 11\", \"explanation\": \"Descendants alone do not make the parent readable as a value. Trap: nonzero $DATA does not always mean a value exists.\"}, {\"title\": \"Three log concepts\", \"example\": \"Counter → key; timestamp → time; payload → message\", \"explanation\": \"Allocating a key does not write the entry. An interruption before the payload can leave a gap.\"}, {\"title\": \"Measure the interval\", \"example\": \"References before=1000; after=1300; difference=300\", \"explanation\": \"A cumulative counter does not describe the last operation by itself. Logical references and disk reads are different metrics.\"}, {\"title\": \"Choose the lens\", \"example\": \"Timer: elapsed duration; line monitor: hot code; SQL tools: query work\", \"explanation\": \"An event log does not replace performance measurements. Select the tool according to the question.\"}]",
+      "panels": [
+        {
+          "title": "A branch is not a value",
+          "example": "Phone has children but no value → $DATA=10; add a value → 11",
+          "explanation": "Descendants alone do not make the parent readable as a value. Trap: nonzero $DATA does not always mean a value exists."
+        },
+        {
+          "title": "Three log concepts",
+          "example": "Counter → key; timestamp → time; payload → message",
+          "explanation": "Allocating a key does not write the entry. An interruption before the payload can leave a gap."
+        },
+        {
+          "title": "Measure the interval",
+          "example": "References before=1000; after=1300; difference=300",
+          "explanation": "A cumulative counter does not describe the last operation by itself. Logical references and disk reads are different metrics."
+        },
+        {
+          "title": "Choose the lens",
+          "example": "Timer: elapsed duration; line monitor: hot code; SQL tools: query work",
+          "explanation": "An event log does not replace performance measurements. Select the tool according to the question."
+        }
+      ],
+      "width": 1536,
+      "height": 1024,
+      "sha256": "52629badfae00a95f975444e51bbe84f54e507f35a514cd5544a028e04719e43"
+    },
+    {
+      "chapter": "T2.3",
+      "kind": "further_insights",
+      "file": "T2 - Basic Programming/T2.3: Implements Security Features/Approfondimenti esercizi/schema-esercizi-extra.png",
+      "source_image": "exec-b1b1f13d-f93d-41d8-a0fb-bd713f937dc2.png",
+      "mode": "built-in ImageGen",
+      "language": "English",
+      "generation_prompt": "Create a clear, colorful engineering infographic in English for T2.3. Use the supplied facts only; preserve exact ObjectScript and SQL syntax. Panels: [{\"title\": \"Keep values separate\", \"example\": \"Fixed SQL template with ? → %Prepare; input value → %Execute(input)\", \"explanation\": \"Binding keeps input as data. Preparing text already built with untrusted concatenation does not make it safe.\"}, {\"title\": \"Three distinct checks\", \"example\": \"Exact role membership; effective resource permission; Private visibility\", \"explanation\": \"A substring is not a role token. Private limits member visibility and does not replace resource authorization.\"}, {\"title\": \"Partial revocation\", \"example\": \"ALL PRIVILEGES minus INSERT, UPDATE, DELETE is not necessarily SELECT only\", \"explanation\": \"Check remaining rights and grants from other roles. Removing three privileges does not prove least privilege.\"}, {\"title\": \"Embedded SQL responsibility\", \"example\": \"Host variables keep values separate; application checks authorization\", \"explanation\": \"Injection protection does not grant permission. Do not assume ordinary Dynamic SQL privilege checks apply identically to Embedded SQL.\"}]",
+      "panels": [
+        {
+          "title": "Keep values separate",
+          "example": "Fixed SQL template with ? → %Prepare; input value → %Execute(input)",
+          "explanation": "Binding keeps input as data. Preparing text already built with untrusted concatenation does not make it safe."
+        },
+        {
+          "title": "Three distinct checks",
+          "example": "Exact role membership; effective resource permission; Private visibility",
+          "explanation": "A substring is not a role token. Private limits member visibility and does not replace resource authorization."
+        },
+        {
+          "title": "Partial revocation",
+          "example": "ALL PRIVILEGES minus INSERT, UPDATE, DELETE is not necessarily SELECT only",
+          "explanation": "Check remaining rights and grants from other roles. Removing three privileges does not prove least privilege."
+        },
+        {
+          "title": "Embedded SQL responsibility",
+          "example": "Host variables keep values separate; application checks authorization",
+          "explanation": "Injection protection does not grant permission. Do not assume ordinary Dynamic SQL privilege checks apply identically to Embedded SQL."
+        }
+      ],
+      "width": 1536,
+      "height": 1024,
+      "sha256": "24b8aec7e09a47252817d248b149644986183ba6932d6e5c4a5c5ea900809540"
+    },
+    {
+      "chapter": "T3.1",
+      "kind": "further_insights",
+      "file": "T3 - IRIS Features/T3.1: Differentiates Storage Media/Approfondimenti esercizi/schema-esercizi-extra.png",
+      "source_image": "exec-cd2f19ed-f6e3-480c-b846-09a05f3db4b1.png",
+      "mode": "built-in ImageGen",
+      "language": "English",
+      "generation_prompt": "Create a clear, colorful engineering infographic in English for T3.1. Use the supplied facts only; preserve exact ObjectScript and SQL syntax. Panels: [{\"title\": \"Four decisions\", \"example\": \"Who can see it? How long does it last? How is it recovered? Where is it mapped?\", \"explanation\": \"Names alone do not establish durability or journaling. Inspect the container and database mapping.\"}, {\"title\": \"Process is not web session\", \"example\": \"Request A → process 1; request B → process 2; their PPGs are separate\", \"explanation\": \"A PPG follows its process, not the browser session. Reusing a session ID does not overcome process isolation.\"}, {\"title\": \"Allocation versus queue entry\", \"example\": \"Atomic $INCREMENT → allocate key → write payload\", \"explanation\": \"A crash between allocation and payload can leave a gap. Allocation alone does not implement reliable queue consumption.\"}, {\"title\": \"Avoid writing a stale counter back\", \"example\": \"A obtains 1; B obtains 2; A later writes 1 back → counter regresses\", \"explanation\": \"Keep the increment result in a local variable. A separate later write to the shared counter can overwrite a newer value.\"}]",
+      "panels": [
+        {
+          "title": "Four decisions",
+          "example": "Who can see it? How long does it last? How is it recovered? Where is it mapped?",
+          "explanation": "Names alone do not establish durability or journaling. Inspect the container and database mapping."
+        },
+        {
+          "title": "Process is not web session",
+          "example": "Request A → process 1; request B → process 2; their PPGs are separate",
+          "explanation": "A PPG follows its process, not the browser session. Reusing a session ID does not overcome process isolation."
+        },
+        {
+          "title": "Allocation versus queue entry",
+          "example": "Atomic $INCREMENT → allocate key → write payload",
+          "explanation": "A crash between allocation and payload can leave a gap. Allocation alone does not implement reliable queue consumption."
+        },
+        {
+          "title": "Avoid writing a stale counter back",
+          "example": "A obtains 1; B obtains 2; A later writes 1 back → counter regresses",
+          "explanation": "Keep the increment result in a local variable. A separate later write to the shared counter can overwrite a newer value."
+        }
+      ],
+      "width": 1536,
+      "height": 1024,
+      "sha256": "6f9b060b78dff4b30b59644fecaa569426865cadd5585ce65a372a7b42cf22f8"
+    },
+    {
+      "chapter": "T3.2",
+      "kind": "further_insights",
+      "file": "T3 - IRIS Features/T3.2: Leverages ObjectScript - SQL Features/Approfondimenti esercizi/schema-esercizi-extra.png",
+      "source_image": "exec-e6a3777e-c855-4335-8696-9d7f76a5b95d.png",
+      "mode": "built-in ImageGen",
+      "language": "English",
+      "generation_prompt": "Create a clear, colorful engineering infographic in English for T3.2. Use the supplied facts only; preserve exact ObjectScript and SQL syntax. Panels: [{\"title\": \"Coercion is not validation\", \"example\": \"10abc20 + 5 → 10 + 5 → 15\", \"explanation\": \"Arithmetic uses the numeric prefix rather than searching all digits. A plausible answer does not prove valid numeric input.\"}, {\"title\": \"Three SQL outcomes\", \"example\": \"SQLCODE 0: successful operation; 100: no row; negative: error\", \"explanation\": \"After SELECT finds no row, do not present an old host-variable value as a fresh result.\"}, {\"title\": \"Values versus identifiers\", \"example\": \"Status=? → bound value; variable table name → allowlisted identifier\", \"explanation\": \"A parameter protects a value. It does not validate other SQL text constructed from untrusted input.\"}, {\"title\": \"Macro dependencies\", \"example\": \"Include definitions → expansion → compilation → execution\", \"explanation\": \"Changing an include file does not automatically replace values already compiled into dependent code.\"}]",
+      "panels": [
+        {
+          "title": "Coercion is not validation",
+          "example": "10abc20 + 5 → 10 + 5 → 15",
+          "explanation": "Arithmetic uses the numeric prefix rather than searching all digits. A plausible answer does not prove valid numeric input."
+        },
+        {
+          "title": "Three SQL outcomes",
+          "example": "SQLCODE 0: successful operation; 100: no row; negative: error",
+          "explanation": "After SELECT finds no row, do not present an old host-variable value as a fresh result."
+        },
+        {
+          "title": "Values versus identifiers",
+          "example": "Status=? → bound value; variable table name → allowlisted identifier",
+          "explanation": "A parameter protects a value. It does not validate other SQL text constructed from untrusted input."
+        },
+        {
+          "title": "Macro dependencies",
+          "example": "Include definitions → expansion → compilation → execution",
+          "explanation": "Changing an include file does not automatically replace values already compiled into dependent code."
+        }
+      ],
+      "width": 1672,
+      "height": 941,
+      "sha256": "cc0bf4829a9df1f44ca2f6dd806eca34a31fe31fb6a79280c9b062b4d0f5c1fb"
+    },
+    {
+      "chapter": "T3.3",
+      "kind": "further_insights",
+      "file": "T3 - IRIS Features/T3.3: Handles Nulls/Approfondimenti esercizi/schema-esercizi-extra.png",
+      "source_image": "exec-5656218b-31bb-4c1a-83b0-5a31380a36c0.png",
+      "mode": "built-in ImageGen",
+      "language": "English",
+      "generation_prompt": "Create a clear, colorful engineering infographic in English for T3.3. Use the supplied facts only; preserve exact ObjectScript and SQL syntax. Panels: [{\"title\": \"Keep the representation layer explicit\", \"example\": \"ObjectScript empty string → SQL NULL; ObjectScript $CHAR(0) → SQL empty string ''\", \"explanation\": \"NUL is one character; an ObjectScript empty string has length zero. Invisible does not mean absent.\"}, {\"title\": \"Average over which population?\", \"example\": \"10,20,30,NULL,NULL → SUM=60; COUNT(Score)=3; AVG=20; COUNT(*)=5\", \"explanation\": \"Replacing NULLs with zeros changes the average to 60/5=12. This changes the meaning, not just the display.\"}, {\"title\": \"COALESCE keeps SQL empty strings\", \"example\": \"Phone='' is not NULL → selected before Email\", \"explanation\": \"If the domain treats blank or whitespace as absent, normalize explicitly before choosing a fallback.\"}, {\"title\": \"Fallback text can be real data\", \"example\": \"A='none', B=NULL → COALESCE(A,B,'none')='none'\", \"explanation\": \"Matching the fallback text does not prove both inputs were NULL. Test A IS NULL AND B IS NULL when that is the question.\"}]",
+      "panels": [
+        {
+          "title": "Keep the representation layer explicit",
+          "example": "ObjectScript empty string → SQL NULL; ObjectScript $CHAR(0) → SQL empty string ''",
+          "explanation": "NUL is one character; an ObjectScript empty string has length zero. Invisible does not mean absent."
+        },
+        {
+          "title": "Average over which population?",
+          "example": "10,20,30,NULL,NULL → SUM=60; COUNT(Score)=3; AVG=20; COUNT(*)=5",
+          "explanation": "Replacing NULLs with zeros changes the average to 60/5=12. This changes the meaning, not just the display."
+        },
+        {
+          "title": "COALESCE keeps SQL empty strings",
+          "example": "Phone='' is not NULL → selected before Email",
+          "explanation": "If the domain treats blank or whitespace as absent, normalize explicitly before choosing a fallback."
+        },
+        {
+          "title": "Fallback text can be real data",
+          "example": "A='none', B=NULL → COALESCE(A,B,'none')='none'",
+          "explanation": "Matching the fallback text does not prove both inputs were NULL. Test A IS NULL AND B IS NULL when that is the question."
+        }
+      ],
+      "width": 1774,
+      "height": 887,
+      "sha256": "d2b5cd29ed5b4788b34d5d269b8ed872adb1d10a795a5cfa80e94a6c9fa46fb3"
+    },
+    {
+      "chapter": "T3.4",
+      "kind": "further_insights",
+      "file": "T3 - IRIS Features/T3.4: Handles Schema Evolution/Approfondimenti esercizi/schema-esercizi-extra.png",
+      "source_image": "exec-7813cee7-3440-40f7-9491-8e1233c12f25.png",
+      "mode": "built-in ImageGen",
+      "language": "English",
+      "generation_prompt": "Create a clear, colorful engineering infographic in English for T3.4. Use the supplied facts only; preserve exact ObjectScript and SQL syntax. Panels: [{\"title\": \"New defaults versus old rows\", \"example\": \"New instance → InitialExpression; existing row → missing new storage slot\", \"explanation\": \"A creation default does not backfill historical rows. Decide whether old unknown values should be filled or remain unknown.\"}, {\"title\": \"Rename and storage slot\", \"example\": \"Old Name in slot 2; new FullName must read the intended slot\", \"explanation\": \"Compiling a renamed property is not a data migration. Check the storage mapping before assuming values vanished.\"}, {\"title\": \"Index representation matters\", \"example\": \"Old type/collation → changed definition → coherent rebuild\", \"explanation\": \"The same index name does not make incompatible stored keys valid. Check build state and availability during deployment.\"}, {\"title\": \"Statistics, cache and frozen plans\", \"example\": \"Changed statistics may recompile dependent queries; frozen plan is a separate case\", \"explanation\": \"Do not purge the whole namespace by habit. Verify the actual plan and the invalidation behavior.\"}]",
+      "panels": [
+        {
+          "title": "New defaults versus old rows",
+          "example": "New instance → InitialExpression; existing row → missing new storage slot",
+          "explanation": "A creation default does not backfill historical rows. Decide whether old unknown values should be filled or remain unknown."
+        },
+        {
+          "title": "Rename and storage slot",
+          "example": "Old Name in slot 2; new FullName must read the intended slot",
+          "explanation": "Compiling a renamed property is not a data migration. Check the storage mapping before assuming values vanished."
+        },
+        {
+          "title": "Index representation matters",
+          "example": "Old type/collation → changed definition → coherent rebuild",
+          "explanation": "The same index name does not make incompatible stored keys valid. Check build state and availability during deployment."
+        },
+        {
+          "title": "Statistics, cache and frozen plans",
+          "example": "Changed statistics may recompile dependent queries; frozen plan is a separate case",
+          "explanation": "Do not purge the whole namespace by habit. Verify the actual plan and the invalidation behavior."
+        }
+      ],
+      "width": 1536,
+      "height": 1024,
+      "sha256": "0add06a2273674aee718e13a910207aa7216056cde728c0f2939a971f7434e81"
+    },
+    {
+      "chapter": "T3.5",
+      "kind": "further_insights",
+      "file": "T3 - IRIS Features/T3.5: Ensures Scalability and Performance/Approfondimenti esercizi/schema-esercizi-extra.png",
+      "source_image": "exec-3f6114ff-6067-43e7-81b5-097a87b9d365.png",
+      "mode": "built-in ImageGen",
+      "language": "English",
+      "generation_prompt": "Create a clear, colorful engineering infographic in English for T3.5. Use the supplied facts only; preserve exact ObjectScript and SQL syntax. Panels: [{\"title\": \"P99 is a clue\", \"example\": \"Slow tail → correlate compilation, locks, disk I/O and workload\", \"explanation\": \"A cache purge is one possible cause. A percentile alone does not establish the diagnosis.\"}, {\"title\": \"Measure through consumption\", \"example\": \"Prepare → execute → fetch → transform → user result\", \"explanation\": \"Timing only execute can omit work for a SELECT. Consume equivalent results in both benchmark variants.\"}, {\"title\": \"Skew changes useful plans\", \"example\": \"Average Status selectivity ≈33%; Active matches 80%\", \"explanation\": \"A frequent parameter can need a different access path from a rare value. Test representative distributions.\"}, {\"title\": \"Filter plus ordering\", \"example\": \"WHERE Status and ORDER BY Name → candidate index (Status,Name)\", \"explanation\": \"A composite index may serve both needs in a suitable query. Verify the plan and account for extra write cost.\"}]",
+      "panels": [
+        {
+          "title": "P99 is a clue",
+          "example": "Slow tail → correlate compilation, locks, disk I/O and workload",
+          "explanation": "A cache purge is one possible cause. A percentile alone does not establish the diagnosis."
+        },
+        {
+          "title": "Measure through consumption",
+          "example": "Prepare → execute → fetch → transform → user result",
+          "explanation": "Timing only execute can omit work for a SELECT. Consume equivalent results in both benchmark variants."
+        },
+        {
+          "title": "Skew changes useful plans",
+          "example": "Average Status selectivity ≈33%; Active matches 80%",
+          "explanation": "A frequent parameter can need a different access path from a rare value. Test representative distributions."
+        },
+        {
+          "title": "Filter plus ordering",
+          "example": "WHERE Status and ORDER BY Name → candidate index (Status,Name)",
+          "explanation": "A composite index may serve both needs in a suitable query. Verify the plan and account for extra write cost."
+        }
+      ],
+      "width": 1752,
+      "height": 897,
+      "sha256": "0207e2baa6ccc9bf5abbd504774940b9506f7a1655ab761612739a5c231d8dbf"
+    },
+    {
+      "chapter": "T4.1",
+      "kind": "further_insights",
+      "file": "T4 - Functions & APIs/T4.1: Traverses and Sorts Arrays/Approfondimenti esercizi/schema-esercizi-extra.png",
+      "source_image": "exec-1533d3e2-aff1-437d-b808-6f92aab0ff9b.png",
+      "mode": "built-in ImageGen",
+      "language": "English",
+      "generation_prompt": "Create a clear, colorful engineering infographic in English for T4.1. Use the supplied facts only; preserve exact ObjectScript and SQL syntax. Panels: [{\"title\": \"Zero is a valid key\", \"example\": \"Numeric keys -3,-1,0,2 are visited in that order\", \"explanation\": \"Do not terminate a loop with a generic numeric false test on the key. Compare against the documented empty-string sentinel.\"}, {\"title\": \"Two levels need two cursors\", \"example\": \"Outer key selects branch → reset inner cursor → visit that branch's children\", \"explanation\": \"Leaving the inner cursor at its old position can skip children in the next branch.\"}, {\"title\": \"Default is not a write\", \"example\": \"$GET(node,30) → value 30 when node has no value\", \"explanation\": \"The returned default does not create the node. $DATA(node)#2 tests value presence; # is modulo.\"}, {\"title\": \"Read only after the end test\", \"example\": \"Advance key → key empty? stop : read value\", \"explanation\": \"Using the end sentinel as a data key is a control-flow mistake, even if a configuration permits null subscripts.\"}]",
+      "panels": [
+        {
+          "title": "Zero is a valid key",
+          "example": "Numeric keys -3,-1,0,2 are visited in that order",
+          "explanation": "Do not terminate a loop with a generic numeric false test on the key. Compare against the documented empty-string sentinel."
+        },
+        {
+          "title": "Two levels need two cursors",
+          "example": "Outer key selects branch → reset inner cursor → visit that branch's children",
+          "explanation": "Leaving the inner cursor at its old position can skip children in the next branch."
+        },
+        {
+          "title": "Default is not a write",
+          "example": "$GET(node,30) → value 30 when node has no value",
+          "explanation": "The returned default does not create the node. $DATA(node)#2 tests value presence; # is modulo."
+        },
+        {
+          "title": "Read only after the end test",
+          "example": "Advance key → key empty? stop : read value",
+          "explanation": "Using the end sentinel as a data key is a control-flow mistake, even if a configuration permits null subscripts."
+        }
+      ],
+      "width": 1536,
+      "height": 1024,
+      "sha256": "0977c45ae8d999a575aa3cddb67aa163b081887b4dfd4ad52c784e6262456e78"
+    },
+    {
+      "chapter": "T4.2",
+      "kind": "further_insights",
+      "file": "T4 - Functions & APIs/T4.2: Manipulates Lists/Approfondimenti esercizi/schema-esercizi-extra.png",
+      "source_image": "exec-232dd04f-d807-409a-a54f-fb4ef3a50b06.png",
+      "mode": "built-in ImageGen",
+      "language": "English",
+      "generation_prompt": "Create a clear, colorful engineering infographic in English for T4.2. Use the supplied facts only; preserve exact ObjectScript and SQL syntax. Panels: [{\"title\": \"Structural validity first\", \"example\": \"$LISTVALID(input) → valid encoding? → then validate record fields\", \"explanation\": \"A valid list can still contain the wrong number of elements or invalid domain values.\"}, {\"title\": \"Opaque cursor versus position\", \"example\": \"$LISTGET: 1-based position; $LISTNEXT: pointer starts at 0 and is updated internally\", \"explanation\": \"Do not increment the opaque pointer as if it were an element index. Keep a separate counter if needed.\"}, {\"title\": \"List versus delimited text\", \"example\": \"Elements \\\"A|B\\\" and \\\"C\\\" → text \\\"A|B|C\\\" loses original boundaries\", \"explanation\": \"A delimiter conversion is not always reversible. CSV quoting and escaping require an appropriate parser.\"}, {\"title\": \"Exact membership\", \"example\": \"Roles [Admin,Editor,Viewer] → $LISTFIND(Viewer)=3; absent→0\", \"explanation\": \"A full element match differs from substring contains. SuperViewer is not the element Viewer.\"}]",
+      "panels": [
+        {
+          "title": "Structural validity first",
+          "example": "$LISTVALID(input) → valid encoding? → then validate record fields",
+          "explanation": "A valid list can still contain the wrong number of elements or invalid domain values."
+        },
+        {
+          "title": "Opaque cursor versus position",
+          "example": "$LISTGET: 1-based position; $LISTNEXT: pointer starts at 0 and is updated internally",
+          "explanation": "Do not increment the opaque pointer as if it were an element index. Keep a separate counter if needed."
+        },
+        {
+          "title": "List versus delimited text",
+          "example": "Elements \"A|B\" and \"C\" → text \"A|B|C\" loses original boundaries",
+          "explanation": "A delimiter conversion is not always reversible. CSV quoting and escaping require an appropriate parser."
+        },
+        {
+          "title": "Exact membership",
+          "example": "Roles [Admin,Editor,Viewer] → $LISTFIND(Viewer)=3; absent→0",
+          "explanation": "A full element match differs from substring contains. SuperViewer is not the element Viewer."
+        }
+      ],
+      "width": 1536,
+      "height": 1024,
+      "sha256": "e31e756d42d49d2faecd8bc70162ca20abb3c4cfef88b6c592d7064d44f71b41"
+    },
+    {
+      "chapter": "T4.3",
+      "kind": "further_insights",
+      "file": "T4 - Functions & APIs/T4.3: Manipulates Strings/Approfondimenti esercizi/schema-esercizi-extra.png",
+      "source_image": "exec-2f342112-515a-4d66-a925-305e826e6fe0.png",
+      "mode": "built-in ImageGen",
+      "language": "English",
+      "generation_prompt": "Create a clear, colorful engineering infographic in English for T4.3. Use the supplied facts only; preserve exact ObjectScript and SQL syntax. Panels: [{\"title\": \"Pieces versus protocol fields\", \"example\": \"PID segment name is piece 1 in the raw string\", \"explanation\": \"Protocol field numbering and raw $PIECE positions can differ. Count empty pieces instead of dropping them.\"}, {\"title\": \"Character map with missing targets\", \"example\": \"$TRANSLATE(\\\"Hello\\\",\\\"aeiou\\\",\\\"*\\\") → Hll\", \"explanation\": \"Only a maps to the one target character. Other listed vowels have no counterpart and are deleted, not replaced by stars.\"}, {\"title\": \"Trim versus erase whitespace\", \"example\": \"\\\"  Hello World  \\\" → edge trim: \\\"Hello World\\\"; remove all whitespace: \\\"HelloWorld\\\"\", \"explanation\": \"Internal whitespace may carry meaning. A stronger cleanup can merge values that used to be distinct.\"}, {\"title\": \"Encoding depends on output context\", \"example\": \"HTML text escaping → displays markup as text in the intended context\", \"explanation\": \"HTML encoding is not universal protection for JavaScript, URLs, CSS or SQL. Choose the encoding for the actual destination.\"}]",
+      "panels": [
+        {
+          "title": "Pieces versus protocol fields",
+          "example": "PID segment name is piece 1 in the raw string",
+          "explanation": "Protocol field numbering and raw $PIECE positions can differ. Count empty pieces instead of dropping them."
+        },
+        {
+          "title": "Character map with missing targets",
+          "example": "$TRANSLATE(\"Hello\",\"aeiou\",\"*\") → Hll",
+          "explanation": "Only a maps to the one target character. Other listed vowels have no counterpart and are deleted, not replaced by stars."
+        },
+        {
+          "title": "Trim versus erase whitespace",
+          "example": "\"  Hello World  \" → edge trim: \"Hello World\"; remove all whitespace: \"HelloWorld\"",
+          "explanation": "Internal whitespace may carry meaning. A stronger cleanup can merge values that used to be distinct."
+        },
+        {
+          "title": "Encoding depends on output context",
+          "example": "HTML text escaping → displays markup as text in the intended context",
+          "explanation": "HTML encoding is not universal protection for JavaScript, URLs, CSS or SQL. Choose the encoding for the actual destination."
+        }
+      ],
+      "width": 1536,
+      "height": 1024,
+      "sha256": "c39bcd101048599a48054b00c98d8dde392534db438eae67572b66ca78a6aa1c"
+    },
+    {
+      "chapter": "T4.4",
+      "kind": "further_insights",
+      "file": "T4 - Functions & APIs/T4.4: Mathematical, Logical, and Date - Time Operations/Approfondimenti esercizi/schema-esercizi-extra.png",
+      "source_image": "exec-8a57f383-326f-4b85-9a58-c27a45361ba7.png",
+      "mode": "built-in ImageGen",
+      "language": "English",
+      "generation_prompt": "Create a clear, colorful engineering infographic in English for T4.4. Use the supplied facts only; preserve exact ObjectScript and SQL syntax. Panels: [{\"title\": \"Parentheses express intent\", \"example\": \"2+3*4 → 5*4 → 20; 2+(3*4) → 14\", \"explanation\": \"Trace the written arithmetic expression left to right outside parentheses. Do not import another language's precedence.\"}, {\"title\": \"Quotient versus remainder\", \"example\": \"47 divided by 10: four full groups, remainder seven; offset 47 → page 5 for 1-based pages of 10\", \"explanation\": \"Clarify offset base and page base. Integer quotient and human page number are different values.\"}, {\"title\": \"Date is not full timestamp\", \"example\": \"$HOROLOG: day,seconds; extracting day+7 → a day number only\", \"explanation\": \"The numeric prefix trick does not preserve time of day. Make the conversion explicit.\"}, {\"title\": \"Midnight is valid zero\", \"example\": \"0 seconds since midnight → 00:00:00\", \"explanation\": \"A numerically false time value can be perfectly valid. A truth test does not establish whether the field was provided.\"}]",
+      "panels": [
+        {
+          "title": "Parentheses express intent",
+          "example": "2+3*4 → 5*4 → 20; 2+(3*4) → 14",
+          "explanation": "Trace the written arithmetic expression left to right outside parentheses. Do not import another language's precedence."
+        },
+        {
+          "title": "Quotient versus remainder",
+          "example": "47 divided by 10: four full groups, remainder seven; offset 47 → page 5 for 1-based pages of 10",
+          "explanation": "Clarify offset base and page base. Integer quotient and human page number are different values."
+        },
+        {
+          "title": "Date is not full timestamp",
+          "example": "$HOROLOG: day,seconds; extracting day+7 → a day number only",
+          "explanation": "The numeric prefix trick does not preserve time of day. Make the conversion explicit."
+        },
+        {
+          "title": "Midnight is valid zero",
+          "example": "0 seconds since midnight → 00:00:00",
+          "explanation": "A numerically false time value can be perfectly valid. A truth test does not establish whether the field was provided."
+        }
+      ],
+      "width": 1536,
+      "height": 1024,
+      "sha256": "104603cf6aea1a9feec238dfa702445a9d380beb05fc5d541ba093c8f2ba1eca"
+    },
+    {
+      "chapter": "T4.5",
+      "kind": "further_insights",
+      "file": "T4 - Functions & APIs/T4.5: Decision and Control Structures/Approfondimenti esercizi/schema-esercizi-extra.png",
+      "source_image": "exec-96fdb615-3434-4291-bc9a-39b2aafa5c35.png",
+      "mode": "built-in ImageGen",
+      "language": "English",
+      "generation_prompt": "Create a clear, colorful engineering infographic in English for T4.5. Use the supplied facts only; preserve exact ObjectScript and SQL syntax. Panels: [{\"title\": \"Uncovered boundary\", \"example\": \"x>5 → big; x<5 → small; x=5 → no assignment\", \"explanation\": \"Two conditions do not automatically cover every input. Initialize the result or define the missing branch.\"}, {\"title\": \"Three exit scopes\", \"example\": \"CONTINUE → next iteration; plain QUIT in this FOR → after loop; RETURN → caller\", \"explanation\": \"Choose the exit according to the scope you want to leave. QUIT with an argument inside the shown FOR is not a method return.\"}, {\"title\": \"First true SELECT branch\", \"example\": \"cat→Meow; final 1:Unknown covers other values\", \"explanation\": \"The first true condition wins. Without any true branch SELECT raises an error; decide whether a default is semantically correct.\"}, {\"title\": \"Truthy is not nonempty\", \"example\": \"\\\"abc\\\" → numeric 0 → false; \\\"1abc\\\" → 1 → true\", \"explanation\": \"For nonempty text, compare explicitly with the empty string. For positive quantity, use an explicit >0 test.\"}]",
+      "panels": [
+        {
+          "title": "Uncovered boundary",
+          "example": "x>5 → big; x<5 → small; x=5 → no assignment",
+          "explanation": "Two conditions do not automatically cover every input. Initialize the result or define the missing branch."
+        },
+        {
+          "title": "Three exit scopes",
+          "example": "CONTINUE → next iteration; plain QUIT in this FOR → after loop; RETURN → caller",
+          "explanation": "Choose the exit according to the scope you want to leave. QUIT with an argument inside the shown FOR is not a method return."
+        },
+        {
+          "title": "First true SELECT branch",
+          "example": "cat→Meow; final 1:Unknown covers other values",
+          "explanation": "The first true condition wins. Without any true branch SELECT raises an error; decide whether a default is semantically correct."
+        },
+        {
+          "title": "Truthy is not nonempty",
+          "example": "\"abc\" → numeric 0 → false; \"1abc\" → 1 → true",
+          "explanation": "For nonempty text, compare explicitly with the empty string. For positive quantity, use an explicit >0 test."
+        }
+      ],
+      "width": 1536,
+      "height": 1024,
+      "sha256": "75ef4d1507135306dfd6aded29227211bcb772500421f2fc1d4da7be16465293"
+    },
+    {
+      "chapter": "T4.6",
+      "kind": "further_insights",
+      "file": "T4 - Functions & APIs/T4.6: Executes Methods and Queries Objects/Approfondimenti esercizi/schema-esercizi-extra.png",
+      "source_image": "exec-ca43493a-eae9-4d54-b696-4e131ad7a9dc.png",
+      "mode": "built-in ImageGen",
+      "language": "English",
+      "generation_prompt": "Create a clear, colorful engineering infographic in English for T4.6. Use the supplied facts only; preserve exact ObjectScript and SQL syntax. Panels: [{\"title\": \"Validity before identity\", \"example\": \"$ISOBJECT → valid oref? → then class name or inheritance test\", \"explanation\": \"Text that looks like a printed reference is not an object. $CLASSNAME is a real function; short names can collide.\"}, {\"title\": \"Inheritance contract\", \"example\": \"%IsA: primary-superclass chain; %Extends: includes secondary superclasses\", \"explanation\": \"Do not use exact concrete class-name equality when subclasses should be accepted. Check the intended inheritance relation.\"}, {\"title\": \"Metadata versus instance data\", \"example\": \"PropertyDefinition → name,type,Required,SQL name; object instance → current value\", \"explanation\": \"The schema does not contain a particular patient's field value. Source definitions and compiled inherited members also serve different questions.\"}, {\"title\": \"Dynamic dispatch needs boundaries\", \"example\": \"Configured handler name → allowed class/method → compatible call\", \"explanation\": \"The ability to call a runtime string is not permission to call every member. Validate targets, arguments and error contracts.\"}]",
+      "panels": [
+        {
+          "title": "Validity before identity",
+          "example": "$ISOBJECT → valid oref? → then class name or inheritance test",
+          "explanation": "Text that looks like a printed reference is not an object. $CLASSNAME is a real function; short names can collide."
+        },
+        {
+          "title": "Inheritance contract",
+          "example": "%IsA: primary-superclass chain; %Extends: includes secondary superclasses",
+          "explanation": "Do not use exact concrete class-name equality when subclasses should be accepted. Check the intended inheritance relation."
+        },
+        {
+          "title": "Metadata versus instance data",
+          "example": "PropertyDefinition → name,type,Required,SQL name; object instance → current value",
+          "explanation": "The schema does not contain a particular patient's field value. Source definitions and compiled inherited members also serve different questions."
+        },
+        {
+          "title": "Dynamic dispatch needs boundaries",
+          "example": "Configured handler name → allowed class/method → compatible call",
+          "explanation": "The ability to call a runtime string is not permission to call every member. Validate targets, arguments and error contracts."
+        }
+      ],
+      "width": 1536,
+      "height": 1024,
+      "sha256": "cdd96e49aff98105f2e14671cdf89a2d0575fecce0a91674c5a5409949b8de13"
+    },
+    {
+      "chapter": "T4.7",
+      "kind": "further_insights",
+      "file": "T4 - Functions & APIs/T4.7: Uses APIs for Common Operations/Approfondimenti esercizi/schema-esercizi-extra.png",
+      "source_image": "exec-58336ef9-18a5-4573-ba2e-5814d2630128.png",
+      "mode": "built-in ImageGen",
+      "language": "English",
+      "generation_prompt": "Create a clear, colorful engineering infographic in English for T4.7. Use the supplied facts only; preserve exact ObjectScript and SQL syntax. Panels: [{\"title\": \"Read is a chunk contract\", \"example\": \"Rewind → read while not AtEnd → consume blocks\", \"explanation\": \"A tiny Hello World example may fit one Read. Do not assume one Read returns a whole large document.\"}, {\"title\": \"HTTP has multiple outcomes\", \"example\": \"Request %Status → response HTTP StatusCode → parse body stream\", \"explanation\": \"Transport success does not make 404 a successful user lookup. Content-Type does not repair malformed JSON.\"}, {\"title\": \"Email has multiple stages\", \"example\": \"MailMessage content → SMTP.Send acceptance → later delivery → reading\", \"explanation\": \"A send result does not prove final delivery or that a person read the message. These are separate events.\"}, {\"title\": \"TLS is configuration\", \"example\": \"Https selects TLS; SSLConfiguration supplies the client configuration\", \"explanation\": \"Hostname and an HTTPS flag do not replace certificate trust, protocol settings and the required client configuration.\"}]",
+      "panels": [
+        {
+          "title": "Read is a chunk contract",
+          "example": "Rewind → read while not AtEnd → consume blocks",
+          "explanation": "A tiny Hello World example may fit one Read. Do not assume one Read returns a whole large document."
+        },
+        {
+          "title": "HTTP has multiple outcomes",
+          "example": "Request %Status → response HTTP StatusCode → parse body stream",
+          "explanation": "Transport success does not make 404 a successful user lookup. Content-Type does not repair malformed JSON."
+        },
+        {
+          "title": "Email has multiple stages",
+          "example": "MailMessage content → SMTP.Send acceptance → later delivery → reading",
+          "explanation": "A send result does not prove final delivery or that a person read the message. These are separate events."
+        },
+        {
+          "title": "TLS is configuration",
+          "example": "Https selects TLS; SSLConfiguration supplies the client configuration",
+          "explanation": "Hostname and an HTTPS flag do not replace certificate trust, protocol settings and the required client configuration."
+        }
+      ],
+      "width": 1536,
+      "height": 1024,
+      "sha256": "e26fb90539a477440a278c8781127ec8a4469ed74afc8be54d4c717f339aeff5"
+    },
+    {
+      "chapter": "T5.1",
+      "kind": "further_insights",
+      "file": "T5 - Error Handling/T5.1: Uses Troubleshooting Tools/Approfondimenti esercizi/schema-esercizi-extra.png",
+      "source_image": "exec-1df8fc3d-dd10-4033-9431-43df5fd6f4ae.png",
+      "mode": "built-in ImageGen",
+      "language": "English",
+      "generation_prompt": "Create a clear, colorful engineering infographic in English for T5.1. Use the supplied facts only; preserve exact ObjectScript and SQL syntax. Panels: [{\"title\": \"Dependency versus symbol\", \"example\": \"Include file exists → does it define the exact requested macro?\", \"explanation\": \"LogInfo is not LogError. Check syntax, context and exact definitions before changing unrelated runtime code.\"}, {\"title\": \"Keywords versus variable names\", \"example\": \"RETURN and return: same command; city and City: different variables\", \"explanation\": \"Command case-insensitivity does not extend to application identifiers. A case mismatch can produce UNDEFINED.\"}, {\"title\": \"Performance metrics need context\", \"example\": \"High hit count ≠ high total time; cache-efficiency ratio ≠ percentage\", \"explanation\": \"Compare duration, frequency, logical references and physical I/O against a representative workload.\"}, {\"title\": \"P99 needs corroboration\", \"example\": \"Slow tail → inspect compilation events, waits and I/O during slow samples\", \"explanation\": \"A purge can explain some slow calls. The percentile alone does not prove that cause.\"}]",
+      "panels": [
+        {
+          "title": "Dependency versus symbol",
+          "example": "Include file exists → does it define the exact requested macro?",
+          "explanation": "LogInfo is not LogError. Check syntax, context and exact definitions before changing unrelated runtime code."
+        },
+        {
+          "title": "Keywords versus variable names",
+          "example": "RETURN and return: same command; city and City: different variables",
+          "explanation": "Command case-insensitivity does not extend to application identifiers. A case mismatch can produce UNDEFINED."
+        },
+        {
+          "title": "Performance metrics need context",
+          "example": "High hit count ≠ high total time; cache-efficiency ratio ≠ percentage",
+          "explanation": "Compare duration, frequency, logical references and physical I/O against a representative workload."
+        },
+        {
+          "title": "P99 needs corroboration",
+          "example": "Slow tail → inspect compilation events, waits and I/O during slow samples",
+          "explanation": "A purge can explain some slow calls. The percentile alone does not prove that cause."
+        }
+      ],
+      "width": 1536,
+      "height": 1024,
+      "sha256": "deffa380140b951d52876c6525b3a92621e1a8c38d25a9c4b8ab4e8b5056f0d3"
+    },
+    {
+      "chapter": "T5.2",
+      "kind": "further_insights",
+      "file": "T5 - Error Handling/T5.2: Handles and Logs Runtime Errors/Approfondimenti esercizi/schema-esercizi-extra.png",
+      "source_image": "exec-e23c2684-4306-4c45-9a05-af4900004eef.png",
+      "mode": "built-in ImageGen",
+      "language": "English",
+      "generation_prompt": "Create a clear, colorful engineering infographic in English for T5.2. Use the supplied facts only; preserve exact ObjectScript and SQL syntax. Panels: [{\"title\": \"Output is not a new status\", \"example\": \"Returned error %Status → explicit test; thrown exception → CATCH\", \"explanation\": \"TRY does not convert a returned status into a thrown exception. Use the documented bridge when the contract requires it.\"}, {\"title\": \"Aggregate only independent failures\", \"example\": \"Customers failed → can Orders still run safely?\", \"explanation\": \"ADDSC collects errors, but it does not satisfy failed prerequisites. Define whether later steps can proceed.\"}, {\"title\": \"Compiled location is not source line number\", \"example\": \"Location: label+offset^routine → map to the correct compiled version\", \"explanation\": \"The offset is not automatically a line in today's edited source file. Preserve the relevant version context.\"}, {\"title\": \"Timestamp belongs to logging context\", \"example\": \"Exception Name,Code,Data,Location + explicit log time and correlation\", \"explanation\": \"Do not invent Timestamp or Severity properties on the base exception. Interpret the stack in its actual error-handling context.\"}]",
+      "panels": [
+        {
+          "title": "Output is not a new status",
+          "example": "Returned error %Status → explicit test; thrown exception → CATCH",
+          "explanation": "TRY does not convert a returned status into a thrown exception. Use the documented bridge when the contract requires it."
+        },
+        {
+          "title": "Aggregate only independent failures",
+          "example": "Customers failed → can Orders still run safely?",
+          "explanation": "ADDSC collects errors, but it does not satisfy failed prerequisites. Define whether later steps can proceed."
+        },
+        {
+          "title": "Compiled location is not source line number",
+          "example": "Location: label+offset^routine → map to the correct compiled version",
+          "explanation": "The offset is not automatically a line in today's edited source file. Preserve the relevant version context."
+        },
+        {
+          "title": "Timestamp belongs to logging context",
+          "example": "Exception Name,Code,Data,Location + explicit log time and correlation",
+          "explanation": "Do not invent Timestamp or Severity properties on the base exception. Interpret the stack in its actual error-handling context."
+        }
+      ],
+      "width": 1536,
+      "height": 1024,
+      "sha256": "8ac682e57dc1675363c5d4c68e1a626a9932d0df7d73dd248574e25fba9e617e"
+    },
+    {
+      "chapter": "T5.3",
+      "kind": "further_insights",
+      "file": "T5 - Error Handling/T5.3: Diagnoses Common Errors/Approfondimenti esercizi/schema-esercizi-extra.png",
+      "source_image": "exec-66da5406-b953-4953-9dee-ef55de52fe89.png",
+      "mode": "built-in ImageGen",
+      "language": "English",
+      "generation_prompt": "Create a clear, colorful engineering infographic in English for T5.3. Use the supplied facts only; preserve exact ObjectScript and SQL syntax. Panels: [{\"title\": \"Initialization is separate from scope\", \"example\": \"NEW total → scope change; SET total=0 → value exists\", \"explanation\": \"An accumulator needs an explicit initial value. A default that merely masks a typo is not a root-cause fix.\"}, {\"title\": \"PROTECT has distinct causes\", \"example\": \"Missing resource privilege OR attempted write to read-only database\", \"explanation\": \"Check the database and access context. Granting a role does not itself change a read-only mount.\"}, {\"title\": \"Recursion and graph cycles differ\", \"example\": \"Recursive calls → growing stack; WHILE following 1→2→3→1 → repeated nodes\", \"explanation\": \"A visited-node set detects a cycle. A loop can be infinite without creating deeper stack frames.\"}, {\"title\": \"Recheck at use time\", \"example\": \"Stored customer ID → %OpenId → empty result? handle it before .Email\", \"explanation\": \"An old reference does not guarantee the record still exists. Validity at creation time is not validity at today's use.\"}]",
+      "panels": [
+        {
+          "title": "Initialization is separate from scope",
+          "example": "NEW total → scope change; SET total=0 → value exists",
+          "explanation": "An accumulator needs an explicit initial value. A default that merely masks a typo is not a root-cause fix."
+        },
+        {
+          "title": "PROTECT has distinct causes",
+          "example": "Missing resource privilege OR attempted write to read-only database",
+          "explanation": "Check the database and access context. Granting a role does not itself change a read-only mount."
+        },
+        {
+          "title": "Recursion and graph cycles differ",
+          "example": "Recursive calls → growing stack; WHILE following 1→2→3→1 → repeated nodes",
+          "explanation": "A visited-node set detects a cycle. A loop can be infinite without creating deeper stack frames."
+        },
+        {
+          "title": "Recheck at use time",
+          "example": "Stored customer ID → %OpenId → empty result? handle it before .Email",
+          "explanation": "An old reference does not guarantee the record still exists. Validity at creation time is not validity at today's use."
+        }
+      ],
+      "width": 1536,
+      "height": 1024,
+      "sha256": "5238a680a0b97699104699967f3030adccc2b4c121af93ae3be9d136e35bd7d2"
+    }
+  ]
+}

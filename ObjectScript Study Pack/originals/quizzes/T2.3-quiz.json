@@ -1,0 +1,209 @@
+{
+  "quiz": {
+    "title": "T2.3: Security Features",
+    "description": "Scenario-based questions on variable/global security, $ROLES for permission checking, the Requires keyword on methods, $SYSTEM.Security.Check, SQL injection prevention, embedded SQL permission checks, and GRANT/REVOKE in InterSystems IRIS ObjectScript",
+    "version": "2.2",
+    "publishedDate": "2026-09-17",
+    "questions": [
+      {
+        "id": 1,
+        "type": "single",
+        "question": "Consider the following class method:\n\nClassMethod CreateAccount(name As %String, password As %String) As %Status\n{\n    set oref = ##class(Sample.Person).%New()\n    set oref.name = name\n    set oref.pswd = password\n    //Rest of code\n}\n\nThis class method contains sensitive code that should only be executed by users who have read and write privileges on the %Create_Account resource.\n\nWhich of the following shows how this can be protected against unprivileged execution?",
+        "options": [
+          "ClassMethod CreateAccount(name As %String, password As %String) As %Status\n{\n    if $ROLES [ \"%Create_Account:R,W\" {\n       set oref = ##class(Sample.Person).%New()\n       set oref.name = name\n       set oref.pswd = password\n    } else {\n        return $$$ERROR(\"NO PERMISSION\")\n    }\n}",
+          "ClassMethod CreateAccount(name As %String, password As %String) As %Status\n{\n    if $USERNAME = \"Administrator\" {\n       set oref = ##class(Sample.Person).%New()\n       set oref.name = name\n       set oref.pswd = password\n    } else {\n        return $$$ERROR(\"NO PERMISSION\")\n    }\n}",
+          "ClassMethod CreateAccount(name As %String, password As %String) As %Status [ Requires = \"%Create_Account:RW\" ]\n{\n    set oref = ##class(Sample.Person).%New()\n    set oref.name = name\n    set oref.pswd = password\n    //Rest of code\n}",
+          "ClassMethod CreateAccount(name As %String, password As %String) As %Status\n{\n    if System.Security.Check(\"%Create_Account\", \"U\") {\n       set oref = ##class(Sample.Person).%New()\n       set oref.name = name\n       set oref.pswd = password\n    } else {\n        return $$$ERROR(\"NO PERMISSION\")\n    }\n}"
+        ],
+        "correct": [2],
+        "explanation": "The Requires keyword is the correct mechanism for enforcing resource-based security on a method. Option (a) checks $ROLES, but $ROLES contains role names not resource permissions, and the [ operator can produce false matches. Option (b) hardcodes a username, which is fragile and not resource-based. Option (d) uses incorrect syntax (should be $SYSTEM.Security.Check) and checks \"U\" (USE) instead of RW. The Requires keyword declaratively enforces that the caller must have RW permission on %Create_Account before the method body executes. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=ROBJ_method_requires)"
+      },
+      {
+        "id": 2,
+        "type": "single",
+        "question": "A developer writes the following method:\n\nClassMethod DeletePatient(id As %Integer) As %Status [ Requires = \"%Admin_Manage:RW\" ]\n{\n  SET sc = ##class(Patient).%DeleteId(id)\n  QUIT sc\n}\n\nA user who does NOT have RW permission on %Admin_Manage calls this method. What happens?",
+        "options": [
+          "The method executes but returns an error %Status",
+          "The method executes with read-only behavior, skipping the delete",
+          "A <PROTECT> error is thrown before the method body executes",
+          "The method silently returns $$$OK without executing"
+        ],
+        "correct": [2],
+        "explanation": "When a method has the Requires keyword, the system checks the caller's privileges before executing the method body. If the user does not hold the required permission (RW on %Admin_Manage), a <PROTECT> error is thrown immediately. No code inside the method runs. This is a declarative security enforcement mechanism. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=ROBJ_method_requires)"
+      },
+      {
+        "id": 3,
+        "type": "single",
+        "question": "A developer needs to check at runtime whether the current user has the \"AppAdmin\" role. They write:\n\nIF $ROLES [ \"AppAdmin\" {\n  ; grant admin access\n}\n\nA tester logs in with only the \"SuperAppAdmin\" role and gains admin access. What went wrong?",
+        "options": [
+          "$ROLES is encrypted and cannot be checked with the [ operator",
+          "The [ (contains) operator matches substrings, so \"SuperAppAdmin\" contains \"AppAdmin\" and produces a false positive",
+          "$ROLES only works inside class methods, not in routines",
+          "The IF syntax is incorrect; it should be IF ($ROLES [ \"AppAdmin\")"
+        ],
+        "correct": [1],
+        "explanation": "The [ (contains) operator checks if the right operand is a substring of the left operand. Since \"SuperAppAdmin\" contains \"AppAdmin\" as a substring, the check succeeds incorrectly. A safer approach is to parse $ROLES with $PIECE using the comma delimiter and check for an exact match, or use $LISTFROMSTRING($ROLES, \",\") and $LISTFIND for exact role matching. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_vroles)"
+      },
+      {
+        "id": 4,
+        "type": "single",
+        "question": "A developer writes two versions of a sensitive method:\n\nVersion A:\nClassMethod Transfer(from, to, amt) As %Status [ Requires = \"%Financial:RW\" ]\n{\n  ; transfer logic\n}\n\nVersion B:\nClassMethod Transfer(from, to, amt) As %Status\n{\n  IF '$SYSTEM.Security.Check(\"%Financial\", \"RW\") {\n    QUIT $$$ERROR($$$GeneralError, \"Insufficient privileges\")\n  }\n  ; transfer logic\n}\n\nWhat is the key difference between these approaches?",
+        "options": [
+          "Version A checks permissions at compile time; Version B checks at runtime",
+          "Version A throws a <PROTECT> error automatically before the method body runs; Version B returns an error status that the caller must handle",
+          "Version A only works for ClassMethods; Version B works for both ClassMethods and instance Methods",
+          "Version A requires the resource to exist in the system; Version B does not"
+        ],
+        "correct": [1],
+        "explanation": "Both check permissions at runtime. The key difference is the failure behavior: Requires (Version A) throws a <PROTECT> error before any method code executes, which is an exception. $SYSTEM.Security.Check (Version B) allows the developer to handle the failure gracefully by returning an error status. Version B gives more control over error handling, while Version A is simpler and more declarative. Both work for ClassMethods and instance Methods. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=ROBJ_method_requires)"
+      },
+      {
+        "id": 5,
+        "type": "single",
+        "question": "A web application accepts a patient name from user input and searches the database:\n\nClassMethod Search(name As %String) As %Status\n{\n  SET sql = \"SELECT * FROM Patient WHERE Name = '\"_name_\"'\"\n  SET stmt = ##class(%SQL.Statement).%New()\n  SET sc = stmt.%Prepare(sql)\n  SET rs = stmt.%Execute()\n  ; process results\n}\n\nAn attacker enters the following as the name parameter:\n\n' OR 1=1 --\n\nWhat happens?",
+        "options": [
+          "The query returns no results because the name does not match any patient",
+          "A <SYNTAX> error is thrown because the SQL is malformed",
+          "The query returns ALL patient records because the injected OR 1=1 always evaluates to true, and -- comments out the rest",
+          "The %Prepare method rejects the query because it detects the injection attempt"
+        ],
+        "correct": [2],
+        "explanation": "This is a classic SQL injection attack. The user input is concatenated directly into the SQL string, producing: SELECT * FROM Patient WHERE Name = '' OR 1=1 --'. The OR 1=1 condition is always true, so all rows are returned. The -- comments out the trailing quote. The %Prepare method does not detect injection; it simply prepares whatever SQL string is given. Parameterized queries with ? placeholders prevent this. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_dynsql)"
+      },
+      {
+        "id": 6,
+        "type": "single",
+        "question": "Consider the following two implementations of a patient search:\n\nVersion A:\nSET sql = \"SELECT * FROM Patient WHERE Name = ?\" \nSET stmt = ##class(%SQL.Statement).%New()\nSET sc = stmt.%Prepare(sql)\nSET rs = stmt.%Execute(userInput)\n\nVersion B:\nSET sql = \"SELECT * FROM Patient WHERE Name = '\"_userInput_\"'\"\nSET stmt = ##class(%SQL.Statement).%New()\nSET sc = stmt.%Prepare(sql)\nSET rs = stmt.%Execute()\n\nWhich statement is correct?",
+        "options": [
+          "Version A is vulnerable because ? allows arbitrary input to bypass the query",
+          "Version B is vulnerable because user input is concatenated directly into the SQL string, enabling SQL injection",
+          "Both are equally secure because %SQL.Statement sanitizes input automatically",
+          "Neither is vulnerable because InterSystems IRIS prevents SQL injection at the database level"
+        ],
+        "correct": [1],
+        "explanation": "Version B concatenates user input directly into the SQL string, allowing SQL injection. An attacker can inject malicious SQL (e.g., ' OR 1=1 --). Version A uses a parameterized query with ?, passing the value separately via %Execute(userInput). The parameter is always treated as data, never as SQL code, completely preventing injection. %SQL.Statement does NOT auto-sanitize concatenated strings. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_dynsql)"
+      },
+      {
+        "id": 7,
+        "type": "single",
+        "question": "A developer stores sensitive query results during processing:\n\nClassMethod ProcessReport(query As %String)\n{\n  SET stmt = ##class(%SQL.Statement).%New()\n  SET sc = stmt.%Prepare(query)\n  SET rs = stmt.%Execute()\n  WHILE rs.%Next() {\n    SET ^||results($I(^||results)) = rs.%GetData(1)_\"|\"_rs.%GetData(2)\n  }\n  ; process ^||results\n  ; ... done, process ends\n}\n\nWhat security benefit does using ^||results provide over ^results?",
+        "options": [
+          "^||results is encrypted at rest while ^results is not",
+          "^||results is isolated to the current process and automatically cleaned up when the process ends, preventing data leakage between concurrent processes",
+          "^||results is stored in a separate, access-controlled database",
+          "^||results cannot be viewed in the Management Portal"
+        ],
+        "correct": [1],
+        "explanation": "Process-private globals (^||) are visible only to the creating process. Using ^||results ensures no other process can access the sensitive query results, and they are automatically deleted when the process ends. With ^results, concurrent processes could see each other's data, and the data would persist after the process ends unless explicitly killed. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_globals#GCOS_globals_ppg)"
+      },
+      {
+        "id": 8,
+        "type": "single",
+        "question": "A developer needs to programmatically check if the current user can access the %DB_PRODUCTION database resource before attempting an operation:\n\nIF $SYSTEM.Security.Check(\"%DB_PRODUCTION\", \"RW\") {\n  ; perform database write operations\n} ELSE {\n  SET sc = $$$ERROR($$$GeneralError, \"No write access to production database\")\n}\n\nWhat does $SYSTEM.Security.Check return?",
+        "options": [
+          "A %Status value that must be checked with $$$ISOK",
+          "1 if the user has the specified permission on the resource, 0 otherwise",
+          "The name of the role that grants the permission",
+          "A comma-delimited list of all permissions the user has on the resource"
+        ],
+        "correct": [1],
+        "explanation": "$SYSTEM.Security.Check(resource, permission) returns 1 if the current user has the specified permission on the given resource, and 0 otherwise. This is the standard programmatic way to verify resource-based privileges at runtime. It checks the effective permissions based on all roles assigned to the user. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCAS_rsrcs)"
+      },
+      {
+        "id": 9,
+        "type": "multiple",
+        "question": "A developer needs to protect a method that manages user accounts. Which of the following are valid approaches to restrict execution?",
+        "options": [
+          "ClassMethod ManageUser() [ Requires = \"%Admin_Secure:USE\" ] to enforce resource-based security declaratively",
+          "Checking $ROLES within the method body and returning an error if the required role is absent",
+          "Using $SYSTEM.Security.Check() inside the method to verify privileges programmatically",
+          "Making the method Private so only the same class can call it",
+          "Using the Encrypted keyword to prevent unauthorized access to the method"
+        ],
+        "correct": [0, 1, 2, 3],
+        "explanation": "All four approaches provide different levels of protection. Requires enforces resource-based security declaratively (throws <PROTECT> on failure). Checking $ROLES provides role-based authorization. $SYSTEM.Security.Check offers programmatic privilege verification with custom error handling. Private restricts access to the same class (encapsulation, not security per se, but limits the attack surface). There is no Encrypted keyword for methods. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=ROBJ_method_requires)"
+      },
+      {
+        "id": 10,
+        "type": "single",
+        "question": "A database administrator needs to grant a nurse role the ability to read patient data but not modify it. Which SQL statement is correct?",
+        "options": [
+          "GRANT SELECT ON Patient TO NurseRole",
+          "GRANT READ ON Patient TO NurseRole",
+          "ALLOW SELECT ON Patient FOR NurseRole",
+          "GRANT SELECT, INSERT ON Patient TO NurseRole"
+        ],
+        "correct": [0],
+        "explanation": "GRANT SELECT ON Patient TO NurseRole grants read-only access. SELECT is the SQL privilege for reading data. There is no READ privilege or ALLOW command in SQL. Option (d) would also grant INSERT (write) permission, which is not what was requested. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RSQL_grant)"
+      },
+      {
+        "id": 11,
+        "type": "multiple",
+        "question": "A database administrator executes the following SQL statements:\n\nGRANT SELECT, INSERT ON Patient TO NurseRole\nGRANT ALL PRIVILEGES ON Patient TO AdminRole\nGRANT SELECT ON Patient TO NurseRole WITH GRANT OPTION\nGRANT EXECUTE ON GetPatientHistory TO NurseRole\n\nWhich of these GRANT statements are valid in InterSystems IRIS SQL?",
+        "options": [
+          "GRANT SELECT, INSERT ON Patient TO NurseRole",
+          "GRANT ALL PRIVILEGES ON Patient TO AdminRole",
+          "GRANT SELECT ON Patient TO NurseRole WITH GRANT OPTION",
+          "GRANT EXECUTE ON GetPatientHistory TO NurseRole",
+          "GRANT SELECT ON Patient TO NurseRole EXCEPT COLUMN SSN"
+        ],
+        "correct": [0, 1, 2, 3],
+        "explanation": "All four of the statements shown are valid: several privileges can be granted in one statement, ALL PRIVILEGES grants every applicable privilege on the table, WITH GRANT OPTION lets the grantee pass the privilege on, and EXECUTE can be granted on a stored procedure. EXCEPT COLUMN is not InterSystems SQL syntax -- column-level control is expressed by naming the columns you DO grant, as in GRANT SELECT (Name, MRN) ON Patient TO NurseRole, not by subtracting one. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RSQL_grant)",
+        "revised": true
+      },
+      {
+        "id": 12,
+        "type": "single",
+        "question": "A developer writes Embedded SQL that updates patient records:\n\n&sql(UPDATE Patient SET Status = 'Active' WHERE PatientId = :patId)\n\nThe user running this code has SELECT privilege on Patient but NOT UPDATE. What happens?",
+        "options": [
+          "The UPDATE executes successfully because Embedded SQL bypasses SQL privilege checks",
+          "A <PROTECT> error is thrown at the ObjectScript level",
+          "SQLCODE is set to a negative value indicating a privilege error, and %msg contains the error description",
+          "The UPDATE silently does nothing and SQLCODE is set to 100 (no rows)"
+        ],
+        "correct": [0],
+        "explanation": "Embedded SQL does NOT check SQL privileges. The InterSystems documentation states: 'Embedded SQL statements do not perform privilege checking; it is assumed that applications using Embedded SQL will check for privileges before using Embedded SQL statements.' Therefore the UPDATE executes successfully regardless of the user's SQL privileges. SQL privilege enforcement only applies to Dynamic SQL, ODBC, JDBC, and the SQL Shell. Developers who need privilege checking with Embedded SQL should use %CHECKPRIV explicitly before the operation. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_privileges)"
+      },
+      {
+        "id": 13,
+        "type": "single",
+        "question": "A developer writes the following code to revoke excessive privileges:\n\nREVOKE INSERT, UPDATE, DELETE ON Patient FROM ReportRole\n\nThe ReportRole was previously granted ALL PRIVILEGES on Patient. After this REVOKE, which privileges does ReportRole still hold?",
+        "options": [
+          "No privileges remain; REVOKE removes all granted privileges",
+          "Only SELECT remains, since INSERT, UPDATE, and DELETE were revoked",
+          "ALL PRIVILEGES minus the three revoked ones, but the exact remaining set depends on the table type",
+          "The REVOKE fails because you cannot partially revoke ALL PRIVILEGES"
+        ],
+        "correct": [2],
+        "explanation": "REVOKE removes specific privileges. ALL PRIVILEGES on a table includes %ALTER, SELECT, INSERT, UPDATE, DELETE, and REFERENCES. After revoking INSERT, UPDATE, and DELETE, the remaining privileges are SELECT, %ALTER, and REFERENCES — not just SELECT. The exact set of privileges included in ALL PRIVILEGES depends on the object type (table vs view vs procedure), so the remaining privileges after a partial revoke depend on what ALL PRIVILEGES originally granted. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RSQL_revoke)"
+      },
+      {
+        "id": 14,
+        "type": "single",
+        "question": "A developer writes a search method that accepts user input:\n\nClassMethod FindOrders(status As %String) As %Status\n{\n  &sql(DECLARE OrderCursor CURSOR FOR\n    SELECT OrderId, Total FROM Orders WHERE Status = :status)\n  &sql(OPEN OrderCursor)\n  ; process results\n}\n\nIs this code vulnerable to SQL injection? Why or why not?",
+        "options": [
+          "Yes, because the :status host variable is still concatenated into the SQL at runtime",
+          "No, because Embedded SQL with host variables (:status) treats the input as a data value, not as SQL code, preventing injection",
+          "Yes, because DECLARE CURSOR does not support parameterized input",
+          "No, but only because Embedded SQL is compiled at class compile time, making it immune to all runtime attacks"
+        ],
+        "correct": [1],
+        "explanation": "Embedded SQL host variables (prefixed with :) are treated as parameterized input. The value of the ObjectScript variable 'status' is passed as data, not interpreted as SQL code. This provides the same SQL injection protection as ? parameters in Dynamic SQL. Even if the user passes malicious input like ' OR 1=1 --, it is treated as a literal string value. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_esql)"
+      },
+      {
+        "id": 15,
+        "type": "multiple",
+        "question": "Which of the following are security best practices when developing ObjectScript applications that access databases?",
+        "options": [
+          "Use parameterized queries (? placeholders or :hostvar) for all SQL with user input to prevent injection",
+          "Store sensitive temporary data in process-private globals (^||) rather than regular globals",
+          "Use the Requires keyword or $SYSTEM.Security.Check to enforce authorization on sensitive methods",
+          "Embed database credentials directly in application code for convenience and reliability",
+          "Follow the principle of least privilege by using GRANT and REVOKE to give each role only the permissions it needs"
+        ],
+        "correct": [0, 1, 2, 4],
+        "explanation": "Security best practices include: parameterized queries to prevent SQL injection, PPGs for temporary sensitive data isolation, role/resource checks for authorization, and following the principle of least privilege with GRANT/REVOKE. Embedding credentials in code is a serious security anti-pattern; credentials should be managed through configuration or secret management systems. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_dynsql)"
+      }
+    ]
+  }
+}

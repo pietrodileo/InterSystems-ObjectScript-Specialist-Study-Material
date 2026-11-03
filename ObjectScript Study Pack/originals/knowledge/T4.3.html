@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Study guide for T4.3: Manipulates Strings - part of the InterSystems ObjectScript Specialist certification. Learn key concepts, best practices, and exam preparation tips.">
+    <meta name="keywords" content="InterSystems certification, ObjectScript Specialist, T4.3: Manipulates Strings, exam preparation, practice quiz">
+    <meta name="author" content="exam-prep.es">
+    <meta name="robots" content="index, follow">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://exam-prep.es/exams/objectscript/knowledge/T4.3.html">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://exam-prep.es/exams/objectscript/knowledge/T4.3.html">
+    <meta property="og:title" content="T4.3: Manipulates Strings - InterSystems ObjectScript Specialist Study Guide">
+    <meta property="og:description" content="Study guide for T4.3: Manipulates Strings - part of the InterSystems ObjectScript Specialist certification. Learn key concepts, best practices, and exam preparation tips.">
+    <meta property="og:image" content="https://exam-prep.es/images/og-image.png">
+    <meta property="og:site_name" content="InterSystems Certification Prep">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://exam-prep.es/exams/objectscript/knowledge/T4.3.html">
+    <meta name="twitter:title" content="T4.3: Manipulates Strings - InterSystems ObjectScript Specialist Study Guide">
+    <meta name="twitter:description" content="Study guide for T4.3: Manipulates Strings - part of the InterSystems ObjectScript Specialist certification. Learn key concepts, best practices, and exam preparation tips.">
+    <meta name="twitter:image" content="https://exam-prep.es/images/og-image.png">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+    <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+
+    <!-- hreflang Tags -->
+    <link rel="alternate" hreflang="en" href="https://exam-prep.es/exams/objectscript/knowledge/T4.3.html" />
+    <link rel="alternate" hreflang="es" href="https://exam-prep.es/exams/objectscript/knowledge/es/T4.3.html" />
+    <link rel="alternate" hreflang="x-default" href="https://exam-prep.es/exams/objectscript/knowledge/T4.3.html" />
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../colors.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+    <link rel="stylesheet" href="../../../css/consent.css">
+
+    <title>T4.3: Manipulates Strings - InterSystems ObjectScript Specialist Study Guide | exam-prep.es</title>
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "T4.3: Manipulates Strings - InterSystems ObjectScript Specialist Study Guide",
+    "description": "Study guide for T4.3: Manipulates Strings - part of the InterSystems ObjectScript Specialist certification. Learn key concepts, best practices, and exam preparation tips.",
+    "author": {
+        "@type": "Organization",
+        "name": "exam-prep.es"
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "InterSystems Certification Prep",
+        "url": "https://exam-prep.es"
+    },
+    "inLanguage": "en",
+    "about": {
+        "@type": "Course",
+        "name": "InterSystems ObjectScript Specialist"
+    }
+}
+    </script>
+</head>
+<body>
+    <div class="container">
+        <nav class="nav-bar">
+            <a href="../index.html" class="back-link">&#8592; Back to Topics</a>
+            <div class="lang-toggle">
+                <a href="T4.3.html" class="lang-btn active">EN</a>
+                <a href="es/T4.3.html" class="lang-btn">ES</a>
+            </div>
+            <a href="../quiz.html?file=quizzes/T4.3-quiz.json" class="quiz-link">Take Quiz &#8594;</a>
+            <div class="auth-bar">
+                <button id="loginBtn" class="auth-btn login-btn" onclick="Auth.login()">Sign In</button>
+                <div id="userInfo" class="user-info">
+                    <div id="userAvatar" class="user-avatar">?</div>
+                    <span id="userName" class="user-name">User</span>
+                </div>
+                <button id="logoutBtn" class="auth-btn logout-btn" onclick="Auth.logout()">Sign Out</button>
+            </div>
+        </nav>
+
+        <header class="header">
+            <h1>T4.3: Manipulates Strings</h1>
+            <p>Knowledge Review - InterSystems ObjectScript Specialist</p>
+        </header>
+
+        <nav class="toc">
+            <h3>Contents</h3>
+            <ol>
+                <li><a href="#section-1">$PIECE for delimited strings</a></li>
+                <li><a href="#section-2">$EXTRACT for substrings</a></li>
+                <li><a href="#section-3">$REPLACE, $TRANSLATE, $ZSTRIP</a></li>
+                <li><a href="#section-4">String concatenation</a></li>
+                <li><a href="#section-5">Regular expressions</a></li>
+                <li><a href="#section-6">$ZCONVERT for encoding</a></li>
+                <li><a href="#section-7">Escaping special characters</a></li>
+            </ol>
+        </nav>
+
+        <main class="content">
+            <section id="section-1" class="knowledge-item">
+                <h2>1. $PIECE for delimited strings <button class="subsection-report-btn" onclick="openReportModal('section-1', 'Section 1')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>$PIECE($P)</strong>: Extracts a substring based on a delimiter and piece number</li>
+                        <li><strong>$P(string, delimiter, from, to)</strong>: Extracts pieces from position "from" to "to"</li>
+                        <li><strong>SET $PIECE</strong>: Modifies a specific piece in-place: SET $P(var, delim, pos) = newValue</li>
+                        <li><strong>1-based positions</strong>: First piece is position 1</li>
+                        <li><strong>Multi-character delimiters</strong>: Delimiter can be more than one character: $P(str, "::", 2)</li>
+                        <li><strong>Beyond range</strong>: Requesting a piece beyond the last delimiter returns empty string</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Overview</h4>
+                        <p>$PIECE is one of the most frequently used ObjectScript functions. It works with delimited strings, extracting or replacing segments based on a specified delimiter. Unlike lists, $PIECE works on plain strings without any special encoding.</p>
+                        <h4>Basic Extraction</h4>
+                        <pre><code class="language-objectscript"> SET record = &quot;Smith^John^42^New York&quot;
+
+ // Extract individual pieces (1-based)
+ WRITE $PIECE(record, &quot;^&quot;, 1), !     // Smith
+ WRITE $PIECE(record, &quot;^&quot;, 2), !     // John
+ WRITE $PIECE(record, &quot;^&quot;, 3), !     // 42
+ WRITE $PIECE(record, &quot;^&quot;, 4), !     // New York
+
+ // $P shorthand
+ WRITE $P(record, &quot;^&quot;, 1), !         // Smith
+
+ // Piece beyond range returns &quot;&quot;
+ WRITE $P(record, &quot;^&quot;, 10), !        // (empty string)</code></pre>
+                        <h4>Extracting Multiple Pieces</h4>
+                        <pre><code class="language-objectscript"> SET record = &quot;Smith^John^42^New York^Engineer&quot;
+
+ // Extract pieces 2 through 4
+ WRITE $P(record, &quot;^&quot;, 2, 4), !      // John^42^New York
+
+ // Extract from piece 3 to end
+ WRITE $P(record, &quot;^&quot;, 3, *), !      // 42^New York^Engineer
+
+ // First piece only (default when no position given)
+ WRITE $P(record, &quot;^&quot;), !            // Smith</code></pre>
+                        <h4>Modifying Pieces with SET $PIECE</h4>
+                        <pre><code class="language-objectscript"> SET record = &quot;Smith^John^42^New York&quot;
+
+ // Replace piece 3 (age)
+ SET $PIECE(record, &quot;^&quot;, 3) = 43
+ WRITE record, !    // Smith^John^43^New York
+
+ // $P shorthand for SET
+ SET $P(record, &quot;^&quot;, 4) = &quot;Boston&quot;
+ WRITE record, !    // Smith^John^43^Boston
+
+ // Setting a piece beyond current range extends the string
+ SET $P(record, &quot;^&quot;, 6) = &quot;Active&quot;
+ WRITE record, !    // Smith^John^43^Boston^^Active
+ // Note: piece 5 is empty, creating two consecutive delimiters</code></pre>
+                        <h4>Building Strings Piece by Piece</h4>
+                        <pre><code class="language-objectscript"> // Start with empty string and build incrementally
+ SET msg = &quot;&quot;
+ SET $P(msg, &quot;|&quot;, 1) = &quot;MSH&quot;
+ SET $P(msg, &quot;|&quot;, 2) = &quot;^~\&amp;&quot;
+ SET $P(msg, &quot;|&quot;, 3) = &quot;SENDING_APP&quot;
+ WRITE msg, !    // MSH|^~\&amp;|SENDING_APP</code></pre>
+                        <h4>Multi-Character Delimiters</h4>
+                        <pre><code class="language-objectscript"> SET data = &quot;key1::value1::key2::value2&quot;
+ WRITE $P(data, &quot;::&quot;, 1), !    // key1
+ WRITE $P(data, &quot;::&quot;, 2), !    // value1
+ WRITE $P(data, &quot;::&quot;, 4), !    // value2</code></pre>
+                        <h4>Counting Pieces with $LENGTH</h4>
+                        <pre><code class="language-objectscript"> SET csv = &quot;a,b,c,d,e&quot;
+ WRITE $LENGTH(csv, &quot;,&quot;), !    // 5 (number of comma-delimited pieces)
+
+ SET empty = &quot;&quot;
+ WRITE $LENGTH(empty, &quot;,&quot;), !  // 1 (empty string = 1 piece)</code></pre>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fpiece" target="_blank">$PIECE Function</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fpiece#RCOS_fpiece_set" target="_blank">SET $PIECE</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="section-2" class="knowledge-item">
+                <h2>2. $EXTRACT for substrings <button class="subsection-report-btn" onclick="openReportModal('section-2', 'Section 2')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>$EXTRACT($E)</strong>: Extracts characters by position: $E(string, from, to)</li>
+                        <li><strong>Single character</strong>: $E(string, n) extracts the nth character (1-based)</li>
+                        <li><strong>Range</strong>: $E(string, from, to) extracts a substring</li>
+                        <li><strong>SET $EXTRACT</strong>: Replaces characters in-place: SET $E(var, from, to) = replacement</li>
+                        <li><strong>From end</strong>: $E(string, *) gets last character; $E(string, *-n) counts from end</li>
+                        <li><strong>$LENGTH</strong>: Returns the number of characters in a string</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Overview</h4>
+                        <p>$EXTRACT works at the character level, extracting or replacing individual characters or substrings by position. Unlike $PIECE which works with delimiters, $EXTRACT uses numeric positions within the string.</p>
+                        <h4>Basic Character Extraction</h4>
+                        <pre><code class="language-objectscript"> SET name = &quot;ObjectScript&quot;
+
+ // Single character (1-based)
+ WRITE $EXTRACT(name, 1), !        // O
+ WRITE $EXTRACT(name, 7), !        // S
+
+ // $E shorthand
+ WRITE $E(name, 1), !              // O
+
+ // Character range
+ WRITE $E(name, 1, 6), !           // Object
+ WRITE $E(name, 7, 12), !          // Script
+
+ // From end
+ WRITE $E(name, *), !              // t (last char)
+ WRITE $E(name, *-5, *), !         // Script (last 6 chars)</code></pre>
+                        <h4>Modifying with SET $EXTRACT</h4>
+                        <pre><code class="language-objectscript"> SET word = &quot;Hello&quot;
+
+ // Replace single character
+ SET $E(word, 1) = &quot;J&quot;
+ WRITE word, !                     // Jello
+
+ // Replace range (different length OK)
+ SET $E(word, 1, 3) = &quot;Mars&quot;
+ WRITE word, !                     // Marslo
+
+ // Replace with shorter string
+ SET word = &quot;Hello World&quot;
+ SET $E(word, 6, 6) = &quot;-&quot;
+ WRITE word, !                     // Hello-World</code></pre>
+                        <h4>Using $LENGTH for String Length</h4>
+                        <pre><code class="language-objectscript"> SET str = &quot;ObjectScript&quot;
+ WRITE $LENGTH(str), !             // 12
+
+ // Get last N characters
+ SET n = 6
+ WRITE $E(str, $L(str) - n + 1, $L(str)), !   // Script
+
+ // Or more concisely
+ WRITE $E(str, *-5, *), !                       // Script</code></pre>
+                        <h4>Practical Patterns</h4>
+                        <pre><code class="language-objectscript"> // Check if string starts with a prefix
+ SET filename = &quot;report_2025.pdf&quot;
+ IF $E(filename, 1, 7) = &quot;report_&quot; {
+     WRITE &quot;It&#x27;s a report file&quot;, !
+ }
+
+ // Check file extension
+ SET ext = $E(filename, *-2, *)
+ WRITE &quot;Extension: &quot;, ext, !       // pdf
+
+ // Pad a string to fixed width
+ SET num = &quot;42&quot;
+ SET padded = $E(&quot;00000&quot; _ num, *-4, *)
+ WRITE padded, !                   // 00042
+
+ // Truncate a string
+ SET longStr = &quot;This is a very long string&quot;
+ SET truncated = $E(longStr, 1, 10) _ &quot;...&quot;
+ WRITE truncated, !                // This is a ...</code></pre>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fextract" target="_blank">$EXTRACT Function</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_flength" target="_blank">$LENGTH Function</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="section-3" class="knowledge-item">
+                <h2>3. $REPLACE, $TRANSLATE, $ZSTRIP <button class="subsection-report-btn" onclick="openReportModal('section-3', 'Section 3')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>$REPLACE</strong>: Replaces all occurrences of a substring: $REPLACE(string, old, new)</li>
+                        <li><strong>$TRANSLATE($TR)</strong>: Character-by-character replacement: $TR(string, fromChars, toChars)</li>
+                        <li><strong>$TRANSLATE deletion</strong>: If toChars is shorter, unmatched fromChars are deleted</li>
+                        <li><strong>$ZSTRIP</strong>: Removes characters by category/mask: $ZSTRIP(string, mask, removeChars, keepChars)</li>
+                        <li><strong>$ZSTRIP masks</strong>: "<" strip leading, ">" strip trailing, "*" strip all, "<>" strip both ends</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Overview</h4>
+                        <p>These three functions handle different string transformation needs: $REPLACE for substring replacement, $TRANSLATE for character-level mapping, and $ZSTRIP for removing categories of characters.</p>
+                        <h4>$REPLACE: Substring Replacement</h4>
+                        <pre><code class="language-objectscript"> SET str = &quot;Hello World, Hello IRIS&quot;
+
+ // Replace all occurrences
+ WRITE $REPLACE(str, &quot;Hello&quot;, &quot;Hi&quot;), !
+ // Output: Hi World, Hi IRIS
+
+ // Case-sensitive
+ WRITE $REPLACE(str, &quot;hello&quot;, &quot;hi&quot;), !
+ // Output: Hello World, Hello IRIS (no change -- case mismatch)
+
+ // Remove by replacing with empty string
+ WRITE $REPLACE(str, &quot; Hello&quot;, &quot;&quot;), !
+ // Output: Hello World, IRIS
+
+ // Replace multi-character sequences
+ SET path = &quot;C:\Users\Admin\Documents&quot;
+ WRITE $REPLACE(path, &quot;\&quot;, &quot;/&quot;), !
+ // Output: C:/Users/Admin/Documents</code></pre>
+                        <h4>$TRANSLATE: Character-by-Character Mapping</h4>
+                        <pre><code class="language-objectscript"> // Map characters one-to-one
+ SET str = &quot;Hello World&quot;
+ WRITE $TRANSLATE(str, &quot;lo&quot;, &quot;LO&quot;), !
+ // Output: HeLLO WOrLd
+
+ // $TR shorthand
+ WRITE $TR(str, &quot;HW&quot;, &quot;hw&quot;), !
+ // Output: hello world
+
+ // Delete characters (toChars shorter than fromChars)
+ SET phone = &quot;(555) 123-4567&quot;
+ WRITE $TR(phone, &quot;()- &quot;, &quot;&quot;), !
+ // Output: 5551234567
+
+ // ROT13 encoding
+ SET msg = &quot;Hello&quot;
+ SET from = &quot;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz&quot;
+ SET to   = &quot;NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm&quot;
+ WRITE $TR(msg, from, to), !
+ // Output: Uryyb
+
+ // Convert to uppercase (simple ASCII)
+ SET lower = &quot;hello world&quot;
+ WRITE $TR(lower, &quot;abcdefghijklmnopqrstuvwxyz&quot;, &quot;ABCDEFGHIJKLMNOPQRSTUVWXYZ&quot;), !
+ // Output: HELLO WORLD
+ // Better: use $ZCONVERT(lower, &quot;U&quot;) -- see item 6</code></pre>
+                        <h4>$ZSTRIP: Category-Based Removal</h4>
+                        <pre><code class="language-objectscript"> SET str = &quot;  Hello 123 World!  &quot;
+
+ // Strip leading and trailing whitespace
+ WRITE $ZSTRIP(str, &quot;&lt;&gt;W&quot;), !
+ // Output: Hello 123 World!
+
+ // Strip all whitespace
+ WRITE $ZSTRIP(str, &quot;*W&quot;), !
+ // Output: Hello123World!
+
+ // Strip leading whitespace only
+ WRITE $ZSTRIP(str, &quot;&lt;W&quot;), !
+ // Output: Hello 123 World!  (trailing space preserved)
+
+ // Strip all non-numeric characters
+ SET mixed = &quot;abc123def456&quot;
+ WRITE $ZSTRIP(mixed, &quot;*A&quot;), !
+ // Output: 123456 (strips all alpha, leaving digits)
+
+ // Strip specific characters
+ SET data = &quot;###Hello###&quot;
+ WRITE $ZSTRIP(data, &quot;&lt;&gt;&quot;, &quot;#&quot;), !
+ // Output: Hello (strips # from both ends)
+
+ // Common masks:
+ // &quot;W&quot; = whitespace, &quot;A&quot; = alphabetic, &quot;N&quot; = numeric
+ // &quot;P&quot; = punctuation, &quot;C&quot; = control characters
+ // &quot;L&quot; = lowercase, &quot;U&quot; = uppercase, &quot;E&quot; = everything
+
+ // Strip all punctuation
+ SET text = &quot;Hello, World! How are you?&quot;
+ WRITE $ZSTRIP(text, &quot;*P&quot;), !
+ // Output: Hello World How are you</code></pre>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_freplace" target="_blank">$REPLACE Function</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_ftranslate" target="_blank">$TRANSLATE Function</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fzstrip" target="_blank">$ZSTRIP Function</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="section-4" class="knowledge-item">
+                <h2>4. String concatenation <button class="subsection-report-btn" onclick="openReportModal('section-4', 'Section 4')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>Concatenation operator (_)</strong>: The underscore joins strings: "Hello" _ " " _ "World"</li>
+                        <li><strong>No template literals</strong>: ObjectScript does not support string interpolation or template strings</li>
+                        <li><strong>Type coercion</strong>: Non-string values are automatically converted when concatenated</li>
+                        <li><strong>Building strings in loops</strong>: Common pattern to build output incrementally</li>
+                        <li><strong>$CHAR for special characters</strong>: Use $CHAR(n) to concatenate non-printable characters</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Overview</h4>
+                        <p>ObjectScript uses the underscore character (_) as its string concatenation operator. There is no string interpolation or template literal syntax -- all string building uses explicit concatenation.</p>
+                        <h4>Basic Concatenation</h4>
+                        <pre><code class="language-objectscript"> SET first = &quot;John&quot;
+ SET last = &quot;Smith&quot;
+
+ // Simple concatenation
+ SET fullName = first _ &quot; &quot; _ last
+ WRITE fullName, !                  // John Smith
+
+ // Multiple concatenations
+ SET greeting = &quot;Hello, &quot; _ first _ &quot; &quot; _ last _ &quot;!&quot;
+ WRITE greeting, !                  // Hello, John Smith!
+
+ // Numeric coercion
+ SET age = 42
+ SET msg = first _ &quot; is &quot; _ age _ &quot; years old&quot;
+ WRITE msg, !                       // John is 42 years old</code></pre>
+                        <h4>Special Characters with $CHAR</h4>
+                        <pre><code class="language-objectscript"> // Newline character
+ SET crlf = $CHAR(13, 10)
+ SET multiLine = &quot;Line 1&quot; _ crlf _ &quot;Line 2&quot;
+
+ // Tab character
+ SET tab = $CHAR(9)
+ SET tsv = &quot;Col1&quot; _ tab _ &quot;Col2&quot; _ tab _ &quot;Col3&quot;
+
+ // Double quote within a string
+ SET quoted = &quot;He said &quot; _ $CHAR(34) _ &quot;hello&quot; _ $CHAR(34)
+ WRITE quoted, !                    // He said &quot;hello&quot;</code></pre>
+                        <h4>Building Strings in Loops</h4>
+                        <pre><code class="language-objectscript"> // Build a comma-separated list
+ SET result = &quot;&quot;
+ SET sep = &quot;&quot;
+ FOR i = 1:1:5 {
+     SET result = result _ sep _ i
+     SET sep = &quot;,&quot;
+ }
+ WRITE result, !                    // 1,2,3,4,5
+
+ // Alternative: build then strip trailing separator
+ SET result = &quot;&quot;
+ FOR i = 1:1:5 {
+     SET result = result _ i _ &quot;,&quot;
+ }
+ SET result = $E(result, 1, *-1)    // Remove trailing comma
+ WRITE result, !                    // 1,2,3,4,5</code></pre>
+                        <h4>Concatenation vs WRITE</h4>
+                        <pre><code class="language-objectscript"> // WRITE outputs directly (more efficient for display)
+ WRITE &quot;Name: &quot;, first, &quot; &quot;, last, !
+
+ // Concatenation builds a string value (for storage/return)
+ SET output = &quot;Name: &quot; _ first _ &quot; &quot; _ last
+ RETURN output</code></pre>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_operators#GCOS_operators_string" target="_blank">Concatenation Operator</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fchar" target="_blank">$CHAR Function</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="section-5" class="knowledge-item">
+                <h2>5. Regular expressions <button class="subsection-report-btn" onclick="openReportModal('section-5', 'Section 5')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>$MATCH(string, regex)</strong>: Returns 1 if the entire string matches the regex pattern</li>
+                        <li><strong>$LOCATE(string, regex, start, end, value)</strong>: Searches for a regex match within the string</li>
+                        <li><strong>Pattern match operator (?)</strong>: ObjectScript native pattern syntax (not regex): string ? pattern</li>
+                        <li><strong>ICU regex syntax</strong>: $MATCH and $LOCATE use ICU regular expression syntax</li>
+                        <li><strong>$LOCATE returns position</strong>: Returns the starting position of the match (0 if no match)</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Overview</h4>
+                        <p>ObjectScript offers two pattern matching systems: ICU regular expressions ($MATCH, $LOCATE) and the native ObjectScript pattern match operator (?). Regular expressions are more powerful and flexible; the native operator is simpler for basic validation.</p>
+                        <h4>$MATCH: Full String Match</h4>
+                        <pre><code class="language-objectscript"> // $MATCH tests if ENTIRE string matches the regex
+ WRITE $MATCH(&quot;hello123&quot;, &quot;[a-z]+\d+&quot;), !        // 1 (matches)
+ WRITE $MATCH(&quot;hello123!&quot;, &quot;[a-z]+\d+&quot;), !        // 0 (! not matched)
+
+ // Email validation
+ SET email = &quot;user@example.com&quot;
+ WRITE $MATCH(email, &quot;[^@]+@[^@]+\.[^@]+&quot;), !     // 1
+
+ // Phone number format
+ SET phone = &quot;555-123-4567&quot;
+ WRITE $MATCH(phone, &quot;\d{3}-\d{3}-\d{4}&quot;), !      // 1
+
+ // Case-insensitive with (?i)
+ WRITE $MATCH(&quot;Hello&quot;, &quot;(?i)hello&quot;), !             // 1</code></pre>
+                        <h4>$LOCATE: Search Within String</h4>
+                        <pre><code class="language-objectscript"> SET text = &quot;The price is $42.50 today&quot;
+
+ // Find a number pattern
+ SET pos = $LOCATE(text, &quot;\d+\.?\d*&quot;)
+ WRITE &quot;Found at position: &quot;, pos, !              // 16
+
+ // With start position, end position, and matched value
+ SET start = 1
+ SET pos = $LOCATE(text, &quot;\d+\.?\d*&quot;, start, .end, .matched)
+ WRITE &quot;Match: &quot;, matched, !                      // 42.50
+ WRITE &quot;Start: &quot;, pos, &quot; End: &quot;, end, !           // Start: 16 End: 21
+
+ // Find all matches in a loop
+ SET text = &quot;abc 123 def 456 ghi 789&quot;
+ SET start = 1
+ FOR {
+     SET pos = $LOCATE(text, &quot;\d+&quot;, start, .end, .matched)
+     QUIT:pos=0
+     WRITE &quot;Found: &quot;, matched, &quot; at &quot;, pos, !
+     SET start = end
+ }
+ // Output:
+ //   Found: 123 at 5
+ //   Found: 456 at 13
+ //   Found: 789 at 21</code></pre>
+                        <h4>Native Pattern Match Operator (?)</h4>
+                        <pre><code class="language-objectscript"> // Pattern syntax: count + code
+ // N = numeric, A = alphabetic, P = punctuation
+ // E = any character, L = lowercase, U = uppercase
+
+ // Exactly 3 digits
+ WRITE &quot;123&quot; ? 3N, !                // 1
+ WRITE &quot;12A&quot; ? 3N, !                // 0
+
+ // Variable count: .N means &quot;zero or more digits&quot;
+ WRITE &quot;123&quot; ? .N, !                // 1
+ WRITE &quot;&quot; ? .N, !                   // 1
+
+ // 1 or more alpha followed by 1 or more numeric
+ WRITE &quot;abc123&quot; ? 1.A1.N, !         // 1
+
+ // Literal characters in quotes
+ WRITE &quot;2025-01-15&quot; ? 4N1&quot;-&quot;2N1&quot;-&quot;2N, !   // 1
+
+ // US phone: (555) 123-4567
+ WRITE &quot;(555) 123-4567&quot; ? 1&quot;(&quot;3N1&quot;) &quot;3N1&quot;-&quot;4N, !  // 1</code></pre>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fmatch" target="_blank">$MATCH Function</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_flocate" target="_blank">$LOCATE Function</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_operators#GCOS_operators_pattern" target="_blank">Pattern Matching</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_regexp" target="_blank">Regular Expressions</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="section-6" class="knowledge-item">
+                <h2>6. $ZCONVERT for encoding <button class="subsection-report-btn" onclick="openReportModal('section-6', 'Section 6')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>$ZCONVERT($ZCVT)</strong>: Converts strings between encodings and cases</li>
+                        <li><strong>Case conversion</strong>: $ZCVT(str, "U") uppercase, $ZCVT(str, "L") lowercase, $ZCVT(str, "W") title case</li>
+                        <li><strong>Encoding direction</strong>: "O" for output encoding, "I" for input decoding</li>
+                        <li><strong>HTML encoding</strong>: $ZCVT(str, "O", "HTML") converts < > & " to HTML entities</li>
+                        <li><strong>URL encoding</strong>: $ZCVT(str, "O", "URL") percent-encodes special characters</li>
+                        <li><strong>JSON encoding</strong>: $ZCVT(str, "O", "JSON") escapes for JSON string values</li>
+                        <li><strong>XML encoding</strong>: $ZCVT(str, "O", "XML") converts for XML/XHTML content</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Overview</h4>
+                        <p>$ZCONVERT (abbreviated $ZCVT) is a versatile function used for case conversion and encoding/decoding strings for various output formats. It is essential for web development, data integration, and security (preventing injection attacks).</p>
+                        <h4>Case Conversion</h4>
+                        <pre><code class="language-objectscript"> SET str = &quot;Hello World&quot;
+
+ // Uppercase
+ WRITE $ZCONVERT(str, &quot;U&quot;), !         // HELLO WORLD
+
+ // Lowercase
+ WRITE $ZCONVERT(str, &quot;L&quot;), !         // hello world
+
+ // Title case (first letter of each word)
+ SET str2 = &quot;hello world&quot;
+ WRITE $ZCVT(str2, &quot;W&quot;), !            // Hello World
+
+ // Works with Unicode characters
+ SET french = &quot;ecole&quot;
+ WRITE $ZCVT(french, &quot;U&quot;), !          // ECOLE</code></pre>
+                        <h4>HTML Encoding (Output)</h4>
+                        <pre><code class="language-objectscript"> SET html = &quot;&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;&quot;
+
+ // Encode for safe HTML output
+ WRITE $ZCVT(html, &quot;O&quot;, &quot;HTML&quot;), !
+ // Output: &amp;lt;script&amp;gt;alert(&amp;#39;XSS&amp;#39;)&amp;lt;/script&amp;gt;
+
+ // Decode HTML entities back
+ SET encoded = &quot;&amp;lt;b&amp;gt;Bold&amp;lt;/b&amp;gt;&quot;
+ WRITE $ZCVT(encoded, &quot;I&quot;, &quot;HTML&quot;), !
+ // Output: &lt;b&gt;Bold&lt;/b&gt;</code></pre>
+                        <h4>URL Encoding</h4>
+                        <pre><code class="language-objectscript"> SET query = &quot;name=John Smith&amp;city=New York&quot;
+
+ // Encode for URL
+ WRITE $ZCVT(query, &quot;O&quot;, &quot;URL&quot;), !
+ // Output: name%3DJohn+Smith%26city%3DNew+York
+
+ // Decode URL-encoded string
+ SET encoded = &quot;Hello%20World%21&quot;
+ WRITE $ZCVT(encoded, &quot;I&quot;, &quot;URL&quot;), !
+ // Output: Hello World!</code></pre>
+                        <h4>JSON Encoding</h4>
+                        <pre><code class="language-objectscript"> SET str = &quot;He said &quot;&quot;hello&quot;&quot; and left&quot;
+
+ // Encode for JSON string value
+ WRITE $ZCVT(str, &quot;O&quot;, &quot;JSON&quot;), !
+ // Output: He said \&quot;hello\&quot; and left
+
+ // Handles control characters
+ SET withTab = &quot;Line1&quot; _ $CHAR(9) _ &quot;Line2&quot;
+ WRITE $ZCVT(withTab, &quot;O&quot;, &quot;JSON&quot;), !
+ // Output: Line1\tLine2</code></pre>
+                        <h4>XML Encoding</h4>
+                        <pre><code class="language-objectscript"> SET xml = &quot;&lt;tag attr=&quot;&quot;value&quot;&quot;&gt;Data &amp; more&lt;/tag&gt;&quot;
+
+ WRITE $ZCVT(xml, &quot;O&quot;, &quot;XML&quot;), !
+ // Output: &amp;lt;tag attr=&amp;quot;value&amp;quot;&amp;gt;Data &amp;amp; more&amp;lt;/tag&amp;gt;</code></pre>
+                        <h4>UTF-8 Encoding</h4>
+                        <pre><code class="language-objectscript"> // Convert to/from UTF-8 bytes
+ SET str = &quot;Hello&quot;
+ SET utf8 = $ZCVT(str, &quot;O&quot;, &quot;UTF8&quot;)
+ SET back = $ZCVT(utf8, &quot;I&quot;, &quot;UTF8&quot;)</code></pre>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fzconvert" target="_blank">$ZCONVERT Function</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="section-7" class="knowledge-item">
+                <h2>7. Escaping special characters <button class="subsection-report-btn" onclick="openReportModal('section-7', 'Section 7')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>Doubling quotes</strong>: Embed a quote in a string by doubling it: "He said ""hello"""</li>
+                        <li><strong>$CHAR($C)</strong>: Generate characters by ASCII/Unicode code point: $C(34) for double quote</li>
+                        <li><strong>$ASCII($A)</strong>: Get the numeric code of a character: $A("A") returns 65</li>
+                        <li><strong>Control characters</strong>: Use $CHAR for tab (9), newline (10), carriage return (13)</li>
+                        <li><strong>No backslash escapes</strong>: ObjectScript does NOT use \ for escape sequences in strings</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Overview</h4>
+                        <p>ObjectScript strings are delimited by double quotes. To include special characters within strings, you either double the quote character or use $CHAR to generate characters by their code point. There are no backslash escape sequences like in C or JavaScript.</p>
+                        <h4>Doubling Quotes</h4>
+                        <pre><code class="language-objectscript"> // Embed a double quote by doubling it
+ SET msg = &quot;He said &quot;&quot;hello&quot;&quot; to everyone&quot;
+ WRITE msg, !
+ // Output: He said &quot;hello&quot; to everyone
+
+ // Multiple quotes
+ SET str = &quot;The value is &quot;&quot;42&quot;&quot; not &quot;&quot;43&quot;&quot;&quot;
+ WRITE str, !
+ // Output: The value is &quot;42&quot; not &quot;43&quot;
+
+ // Empty quoted string within a string
+ SET str = &quot;An empty string is &quot;&quot;&quot;&quot;.&quot;
+ WRITE str, !
+ // Output: An empty string is &quot;&quot;.</code></pre>
+                        <h4>$CHAR and $ASCII</h4>
+                        <pre><code class="language-objectscript"> // $CHAR generates characters from code points
+ WRITE $CHAR(65), !                 // A
+ WRITE $CHAR(97), !                 // a
+ WRITE $CHAR(48), !                 // 0
+
+ // Multiple characters at once
+ WRITE $CHAR(72, 101, 108, 108, 111), !   // Hello
+
+ // Special characters
+ SET tab = $CHAR(9)
+ SET lf = $CHAR(10)
+ SET cr = $CHAR(13)
+ SET crlf = $CHAR(13, 10)
+ SET quote = $CHAR(34)
+
+ // $C shorthand
+ SET pipe = $C(124)                 // |
+
+ // $ASCII returns the code point
+ WRITE $ASCII(&quot;A&quot;), !               // 65
+ WRITE $ASCII(&quot;a&quot;), !               // 97
+ WRITE $ASCII(&quot;0&quot;), !               // 48
+
+ // $A shorthand; get specific position
+ SET str = &quot;Hello&quot;
+ WRITE $A(str, 1), !                // 72 (H)
+ WRITE $A(str, 5), !                // 111 (o)
+
+ // -1 for position beyond string length
+ WRITE $A(str, 99), !               // -1</code></pre>
+                        <h4>Practical Escaping Patterns</h4>
+                        <pre><code class="language-objectscript"> // Building SQL with quoted values (for illustration -- use parameters in practice!)
+ SET name = &quot;O&#x27;Brien&quot;
+ // In SQL, single quotes are doubled
+ SET escaped = $REPLACE(name, &quot;&#x27;&quot;, &quot;&#x27;&#x27;&quot;)
+ WRITE &quot;SELECT * FROM Table WHERE Name = &#x27;&quot;, escaped, &quot;&#x27;&quot;, !
+ // Output: SELECT * FROM Table WHERE Name = &#x27;O&#x27;&#x27;Brien&#x27;
+
+ // Building JSON manually (prefer %DynamicObject in practice)
+ SET key = &quot;name&quot;
+ SET val = &quot;John &quot;&quot;JD&quot;&quot; Doe&quot;
+ SET json = &quot;{&quot; _ $C(34) _ key _ $C(34) _ &quot;:&quot; _ $C(34) _ $ZCVT(val, &quot;O&quot;, &quot;JSON&quot;) _ $C(34) _ &quot;}&quot;
+ WRITE json, !
+ // Output: {&quot;name&quot;:&quot;John \&quot;JD\&quot; Doe&quot;}
+
+ // Build a string with mixed special characters
+ SET header = &quot;Name&quot; _ $C(9) _ &quot;Age&quot; _ $C(9) _ &quot;City&quot;
+ SET row = &quot;Alice&quot; _ $C(9) _ &quot;30&quot; _ $C(9) _ &quot;NYC&quot;
+ WRITE header, !
+ WRITE row, !
+ // Tab-separated output</code></pre>
+                        <h4>Character Testing</h4>
+                        <pre><code class="language-objectscript"> // Check if character is a digit
+ SET ch = &quot;5&quot;
+ SET code = $A(ch)
+ IF (code &gt;= 48) &amp;&amp; (code &lt;= 57) {
+     WRITE ch, &quot; is a digit&quot;, !
+ }
+
+ // Check if character is uppercase letter
+ SET ch = &quot;A&quot;
+ SET code = $A(ch)
+ IF (code &gt;= 65) &amp;&amp; (code &lt;= 90) {
+     WRITE ch, &quot; is uppercase&quot;, !
+ }</code></pre>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fchar" target="_blank">$CHAR Function</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fascii" target="_blank">$ASCII Function</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_types#GCOS_types_string" target="_blank">String Literals</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <div class="exam-prep">
+                <h2>Exam Preparation Summary</h2>
+                <h3>Critical Concepts to Master:</h3>
+                <ol>
+                    <li><strong>$PIECE vs $EXTRACT</strong>: $PIECE works with delimiters, $EXTRACT works with character positions</li>
+                    <li><strong>SET $PIECE / SET $EXTRACT</strong>: Both can modify strings in-place</li>
+                    <li><strong>$REPLACE vs $TRANSLATE</strong>: $REPLACE replaces substrings; $TRANSLATE maps characters one-to-one</li>
+                    <li><strong>$ZSTRIP masks</strong>: Know "<" (leading), ">" (trailing), "*" (all), and character classes (W, A, N, P)</li>
+                    <li><strong>$ZCONVERT directions</strong>: "O" for output encoding, "I" for input decoding; "U"/"L"/"W" for case</li>
+                    <li><strong>$MATCH vs $LOCATE</strong>: $MATCH tests entire string; $LOCATE searches within a string</li>
+                    <li><strong>Pattern operator (?)</strong>: Native syntax with codes (N, A, E, P, L, U) -- different from regex</li>
+                    <li><strong>Quote escaping</strong>: Double the quote character -- no backslash escapes in ObjectScript</li>
+                    <li><strong>$CHAR/$ASCII</strong>: Convert between characters and numeric code points</li>
+                    <li><strong>$LENGTH with delimiter</strong>: $L(str, delim) counts pieces, not characters</li>
+                </ol>
+                <h3>Common Exam Scenarios:</h3>
+                <ul>
+                    <li>Extracting fields from delimited records using $PIECE</li>
+                    <li>Modifying specific pieces with SET $PIECE</li>
+                    <li>Choosing between $REPLACE and $TRANSLATE for a transformation task</li>
+                    <li>Stripping whitespace or specific characters with $ZSTRIP</li>
+                    <li>HTML-encoding user input with $ZCONVERT for XSS prevention</li>
+                    <li>Writing regex patterns for $MATCH validation</li>
+                    <li>Escaping quotes in string literals</li>
+                    <li>Using $EXTRACT to get substrings by position</li>
+                </ul>
+                <h3>Hands-On Practice Recommendations:</h3>
+                <ul>
+                    <li>Parse HL7 messages using $PIECE with ^ and | delimiters</li>
+                    <li>Build and modify delimited strings using SET $PIECE</li>
+                    <li>Use $TRANSLATE to remove unwanted characters from user input</li>
+                    <li>Practice $ZSTRIP with different masks on various string types</li>
+                    <li>Encode and decode strings with $ZCONVERT for HTML, URL, JSON, and XML</li>
+                    <li>Write $MATCH patterns for email, phone, and date validation</li>
+                    <li>Use $LOCATE to find and extract all matches from a text string</li>
+                    <li>Experiment with the native pattern operator (?) for simple validations</li>
+                </ul>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <a href="../quiz.html?file=quizzes/T4.3-quiz.json" class="take-quiz-btn">Take the Quiz</a>
+        </footer>
+    </div>
+
+    <div id="reportModal" class="report-modal">
+        <div class="report-content">
+            <h3>Report an Issue</h3>
+            <label for="issueType">Issue Type</label>
+            <select id="issueType">
+                <option value="confusing">Confusing Content</option>
+                <option value="wrong_answer">Incorrect Information</option>
+                <option value="outdated">Outdated Content</option>
+                <option value="formatting">Formatting Issue</option>
+                <option value="typo">Typo</option>
+                <option value="other">Other</option>
+            </select>
+            <label for="issueDescription">Description</label>
+            <textarea id="issueDescription" placeholder="Please describe the issue..."></textarea>
+            <div style="display: flex; align-items: center; gap: 10px; margin: 15px 0;">
+                <input type="checkbox" id="wantEmailNotification" style="width: 18px; height: 18px;">
+                <label for="wantEmailNotification" style="margin: 0; cursor: pointer;">
+                    Notify me by email when resolved
+                </label>
+            </div>
+            <div class="report-actions">
+                <button class="report-cancel" onclick="closeReportModal()">Cancel</button>
+                <button class="report-submit" onclick="submitReport()">Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../../js/config.js"></script>
+    <script src="../../../js/auth.js"></script>
+    <script src="../../../js/api.js"></script>
+    <script>
+        const CERTIFICATION_NAME = 'ObjectScript-Specialist';
+        const TOPIC_REF = 'T4.3';
+
+        document.addEventListener('DOMContentLoaded', function() {
+            updateAuthUI();
+            trackKnowledgeView();
+        });
+
+        function updateAuthUI() {
+            const loginBtn = document.getElementById('loginBtn');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const userInfo = document.getElementById('userInfo');
+            const userAvatar = document.getElementById('userAvatar');
+            const userName = document.getElementById('userName');
+
+            if (typeof Auth !== 'undefined' && Auth.isAuthenticated()) {
+                const user = Auth.getUser();
+                loginBtn.style.display = 'none';
+                logoutBtn.style.display = 'inline-block';
+                userInfo.style.display = 'flex';
+                if (user) {
+                    const initial = (user.name || user.email || '?')[0].toUpperCase();
+                    userAvatar.textContent = initial;
+                    userName.textContent = user.name || user.email || 'User';
+                }
+            } else {
+                loginBtn.style.display = 'inline-block';
+                logoutBtn.style.display = 'none';
+                userInfo.style.display = 'none';
+            }
+        }
+
+        async function trackKnowledgeView() {
+            if (typeof Auth === 'undefined' || !Auth.isAuthenticated()) {
+                return;
+            }
+
+            try {
+                await Api.trackKnowledge(CERTIFICATION_NAME, TOPIC_REF);
+                console.log('Knowledge view tracked:', TOPIC_REF);
+            } catch (error) {
+                console.log('View tracking skipped:', error.message);
+            }
+        }
+
+        function openReportModal(sectionId, sectionTitle) {
+            if (typeof Auth === 'undefined' || !Auth.isAuthenticated()) {
+                alert('Please sign in to report issues.');
+                return;
+            }
+            // Store section context
+            window.currentReportSection = {
+                id: sectionId || 'general',
+                title: sectionTitle || 'General'
+            };
+            // Update modal header to show section
+            const modalHeader = document.querySelector('#reportModal h3');
+            if (modalHeader && sectionTitle) {
+                modalHeader.textContent = 'Report Issue: ' + sectionTitle;
+            } else if (modalHeader) {
+                modalHeader.textContent = 'Report an Issue';
+            }
+            document.getElementById('wantEmailNotification').checked = false;
+            document.getElementById('reportModal').classList.add('active');
+        }
+
+        function closeReportModal() {
+            document.getElementById('reportModal').classList.remove('active');
+            document.getElementById('issueType').value = 'confusing';
+            document.getElementById('issueDescription').value = '';
+        }
+
+        async function submitReport() {
+            const issueType = document.getElementById('issueType').value;
+            const description = document.getElementById('issueDescription').value.trim();
+            const wantEmailNotification = document.getElementById('wantEmailNotification').checked;
+            const sectionContext = window.currentReportSection || { id: 'general', title: 'General' };
+
+            if (!description) {
+                alert('Please provide a description of the issue.');
+                return;
+            }
+
+            // Build content reference with section context
+            const contentRef = sectionContext.id !== 'general'
+                ? `${TOPIC_REF} (${sectionContext.title})`
+                : TOPIC_REF;
+
+            try {
+                await Api.reportProblem({
+                    certificationName: CERTIFICATION_NAME,
+                    contentType: 'knowledge',
+                    contentReference: contentRef,
+                    issueType: issueType,
+                    description: description,
+                    wantEmailNotification: wantEmailNotification
+                });
+                alert('Thank you! Your report has been submitted.');
+                closeReportModal();
+            } catch (error) {
+                if (error.status === 429) {
+                    const retryMinutes = Math.ceil((error.data?.retryAfter || 3600) / 60);
+                    alert(`You've submitted too many reports recently. Please wait ${retryMinutes} minutes before submitting another report.`);
+                } else {
+                    alert('Failed to submit report: ' + error.message);
+                }
+            }
+        }
+
+        document.querySelectorAll('.detailed-notes h3').forEach(h3 => {
+            h3.style.cursor = 'pointer';
+        });
+    </script>
+    <script src="../../../js/consent.js"></script>
+    <script src="../../../js/analytics.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            CookieConsent.init();
+            Analytics.init();
+        });
+    </script>
+</body>
+</html>

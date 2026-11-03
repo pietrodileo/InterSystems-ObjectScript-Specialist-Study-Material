@@ -1,0 +1,232 @@
+{
+    "quiz": {
+        "title": "T3.4: Schema Evolution",
+        "description": "Test your knowledge of adding indexes to existing properties, %BuildIndices, renaming properties with data, changing datatypes, purging cached queries, and storage definition management.",
+        "version": "2.0",
+        "publishedDate": "2026-03-05",
+        "questions": [
+            {
+                "id": 1,
+                "type": "single",
+                "question": "A developer adds a new index to a class with 500,000 existing rows:\n\nClass Sample.Order Extends %Persistent\n{\nProperty OrderDate As %Date;\nProperty Status As %String;\nIndex StatusIdx On Status;  // newly added\n}\n\nAfter compiling the class, they run:\n\n&sql(SELECT * FROM Sample.\"Order\" WHERE Status = 'Active')\n\nThe query returns no results, even though there are rows with Status = 'Active'. What is the most likely cause?",
+                "options": [
+                    "The index definition has a syntax error",
+                    "The index was compiled but not populated with existing data; %BuildIndices must be run",
+                    "Standard indexes cannot be used on %String properties",
+                    "The SQL query has incorrect syntax for using the index"
+                ],
+                "correct": [1],
+                "explanation": "Compiling a class with a new index only creates the index definition and generates maintenance code for future inserts/updates. The 500,000 existing rows are NOT automatically indexed. The optimizer selects the new (empty) index, which returns no data — making it appear as if no matching rows exist. Running ##class(Sample.Order).%BuildIndices($LB(\"StatusIdx\")) populates the index with existing data. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_defpersobj#GOBJ_indices_build)"
+            },
+            {
+                "id": 2,
+                "type": "single",
+                "question": "A developer needs to build only the StatusIdx index on a large table without affecting other indexes. Which code is correct?",
+                "options": [
+                    "do ##class(Sample.Order).%BuildIndices()",
+                    "do ##class(Sample.Order).%BuildIndices($LB(\"StatusIdx\"))",
+                    "do $SYSTEM.SQL.BuildIndex(\"Sample.Order\", \"StatusIdx\")",
+                    "do ##class(Sample.Order).%PurgeIndices($LB(\"StatusIdx\"))"
+                ],
+                "correct": [1],
+                "explanation": "%BuildIndices accepts a $ListBuild of specific index names to build. Passing $LB(\"StatusIdx\") builds only that index, leaving other indexes untouched. Option A (no args) rebuilds ALL indexes. Option C is not a valid method. Option D purges rather than builds. Selective building is important for large tables where rebuilding all indexes would be time-consuming. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_defpersobj#GOBJ_indices_build)"
+            },
+            {
+                "id": 3,
+                "type": "single",
+                "question": "A developer renames a property in a persistent class:\n\n// Before:\nProperty Name As %String;   // stored in slot 2 of the global\n\n// After:\nProperty FullName As %String;\n\nThe class has 100,000 rows. After compiling, they query:\n\n&sql(SELECT FullName FROM Sample.Person WHERE ID = 1)\n\nWhat is the result?",
+                "options": [
+                    "The original Name value is returned because the compiler auto-migrates",
+                    "An empty string (NULL) because FullName maps to a new empty storage slot",
+                    "A compilation error because the property cannot be renamed",
+                    "The original Name value is returned because the storage slot number is preserved"
+                ],
+                "correct": [1],
+                "explanation": "When a property is renamed, the compiler treats FullName as a new property and assigns it a new slot in the storage definition. The original data remains in the old slot mapped to 'Name'. The result is that FullName appears empty for all existing rows. To fix this, manually edit the storage definition XML to map FullName to the original slot number, or migrate the data. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_storage)"
+            },
+            {
+                "id": 4,
+                "type": "single",
+                "question": "A developer renamed a property from Name to FullName in a persistent class with 100,000 rows. After compiling, FullName returns empty for all existing rows. The developer examines the storage definition and sees:\n\n<Data name=\"PersonDefaultData\">\n  <Value name=\"1\"><Value>%%CLASSNAME</Value></Value>\n  <Value name=\"2\"><Value>Name</Value></Value>\n  <Value name=\"3\"><Value>DOB</Value></Value>\n  <Value name=\"4\"><Value>FullName</Value></Value>\n</Data>\n\nWhat should the developer do to make existing data accessible through the FullName property?",
+                "options": [
+                    "Run %BuildIndices() to rebuild the data",
+                    "Change <Value name=\"2\"><Value>Name</Value></Value> to <Value name=\"2\"><Value>FullName</Value></Value> and remove slot 4",
+                    "Delete all data and reimport it",
+                    "Run $SYSTEM.SQL.Schema.ImportDDL() to refresh the schema"
+                ],
+                "correct": [1],
+                "explanation": "The fix is to edit the storage definition to map FullName to slot 2 (where the original Name data resides) and remove the unused slot 4. This tells the runtime to read FullName from the same global position where Name data was stored. After the edit, recompile the class. No data migration is needed because the global data is unchanged. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_storage)"
+            },
+            {
+                "id": 5,
+                "type": "single",
+                "question": "A developer changes a property's datatype on a table with existing data:\n\n// Before:\nProperty Score As %String;\n\n// After:\nProperty Score As %Integer;\n\nThe existing data includes values: \"85\", \"92\", \"N/A\", \"78\", \"\"\n\nAfter compiling, what happens to the underlying global data?",
+                "options": [
+                    "The global data is automatically converted to integer format",
+                    "The global data is unchanged; the old string values remain as-is in the storage slots",
+                    "The non-numeric values are deleted from the global",
+                    "The class fails to compile because existing data does not match the new type"
+                ],
+                "correct": [1],
+                "explanation": "Changing a property's datatype and recompiling does NOT modify the underlying global data. The string values (\"85\", \"N/A\", etc.) remain exactly as stored. This creates a risk: non-numeric values like \"N/A\" are still in the global but may cause unpredictable behavior when accessed through the %Integer property — the result depends on the access path, validation settings, and IRIS version. This is why datatype narrowing on existing data requires a data migration step. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_storage)"
+            },
+            {
+                "id": 6,
+                "type": "single",
+                "question": "A developer adds a new property to a class that already has 50,000 rows and compiles:\n\nClass Sample.Person Extends %Persistent\n{\nProperty Name As %String;\nProperty Email As %String;\nProperty Phone As %String [ InitialExpression = \"000-000-0000\" ];\n}\n\nThe Phone property is newly added. After compiling, what value does Phone contain for existing rows?",
+                "options": [
+                    "\"000-000-0000\" because the InitialExpression is applied retroactively",
+                    "NULL (empty string) because existing global data has no value for the new slot",
+                    "An <UNDEFINED> error when accessed",
+                    "\"000-000-0000\" because IRIS runs a background migration on compile"
+                ],
+                "correct": [1],
+                "explanation": "InitialExpression is only applied when a NEW object is created with %New(). Existing rows in the global have no data in the storage slot for Phone, so it reads as empty string (NULL in SQL). The class compilation does NOT modify existing global data. To set default values for existing rows, run an UPDATE statement or ObjectScript loop. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_storage)"
+            },
+            {
+                "id": 7,
+                "type": "single",
+                "question": "A developer adds a bitmap index to an existing class, compiles, and builds it:\n\nIndex StatusIdx On Status [Type = bitmap];\n\nA query using the bitmap index works correctly:\n\n&sql(SELECT COUNT(*) FROM Sample.Order WHERE Status = 'Pending')\n\nLater, the developer changes the index to a standard index:\n\nIndex StatusIdx On Status;\n\nAfter recompiling (but NOT rebuilding), what happens to queries using StatusIdx?",
+                "options": [
+                    "Queries work correctly because the data format is the same",
+                    "Queries may return incorrect results because the bitmap index data format is different from standard index format",
+                    "An error occurs because the index type cannot be changed",
+                    "The index is automatically rebuilt when the type changes"
+                ],
+                "correct": [1],
+                "explanation": "Bitmap indexes and standard indexes have fundamentally different data structures in the global. Bitmap indexes store bit-string representations; standard indexes store individual key-value entries. After changing the type without rebuilding, the old bitmap data remains in the global but is interpreted as standard index data, leading to incorrect results. Always run %BuildIndices after changing an index type. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_defpersobj#GOBJ_indices_build)"
+            },
+            {
+                "id": 8,
+                "type": "single",
+                "question": "A developer uses CREATE INDEX via SQL DDL:\n\n&sql(CREATE INDEX CityIdx ON TABLE Sample.Person (City))\nwrite SQLCODE\n\nHow does this differ from adding the index in the class definition?",
+                "options": [
+                    "CREATE INDEX only creates the definition; %BuildIndices must still be called",
+                    "CREATE INDEX creates the definition AND automatically builds the index for existing data",
+                    "CREATE INDEX is slower because it does not use the class compiler",
+                    "CREATE INDEX cannot create bitmap indexes"
+                ],
+                "correct": [1],
+                "explanation": "The CREATE INDEX DDL statement both creates the index definition in the class and automatically populates it with existing data in one step. This is different from adding an index in the class definition and compiling, where you must separately call %BuildIndices(). CREATE INDEX is convenient for production schema changes because it handles both steps atomically. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RSQL_createindex)"
+            },
+            {
+                "id": 9,
+                "type": "single",
+                "question": "A developer modifies a persistent class by adding a column and recompiles. They then notice that some dynamic SQL queries return stale results. What should they do?",
+                "options": [
+                    "Restart the IRIS instance to clear all caches",
+                    "Purge cached queries using $SYSTEM.SQL.Purge() or the Management Portal",
+                    "Recompile all classes in the namespace",
+                    "Delete and recreate the %SQL.Statement objects"
+                ],
+                "correct": [1],
+                "explanation": "When a table structure changes, cached query plans may become stale. While IRIS automatically purges many affected cached queries on schema change, some edge cases (especially with dynamic SQL) may require manual purging. $SYSTEM.SQL.Purge() forces all cached queries in the namespace to be regenerated on next execution. The Management Portal also provides a UI for this. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_queries#GSQL_cachedqueries_purge)"
+            },
+            {
+                "id": 10,
+                "type": "single",
+                "question": "Consider the following sequence of operations:\n\n// Step 1: Original class with data\nClass Sample.Product Extends %Persistent\n{\nProperty Name As %String;\nProperty Price As %Numeric;\n}\n// 10,000 rows exist\n\n// Step 2: Developer removes Price and adds Cost\nClass Sample.Product Extends %Persistent\n{\nProperty Name As %String;\nProperty Cost As %Numeric;\n}\n\nAfter compiling step 2, what happens to the storage definition and the old Price data?",
+                "options": [
+                    "The Price data is automatically deleted from the global",
+                    "Cost is assigned a new slot; the old Price slot remains in the storage definition mapped to the removed property, and the Price data stays in the global",
+                    "An error prevents compilation when a property is removed",
+                    "Cost is assigned to the same slot as Price, causing Cost to read old Price values"
+                ],
+                "correct": [1],
+                "explanation": "The IRIS compiler preserves existing storage slots by default. When Price is removed and Cost is added, the old Price slot remains occupied in the storage definition (still mapped to 'Price'), and Cost is assigned a new slot. The old Price data stays in the global — it is never deleted by schema changes. Cost reads from its new (empty) slot for existing rows. The orphaned Price data wastes storage space but does not cause data corruption. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_storage)"
+            },
+            {
+                "id": 11,
+                "type": "single",
+                "question": "A developer needs to rebuild indexes on a 10-million-row table on a live production system. Which approach does InterSystems recommend?",
+                "options": [
+                    "do ##class(Sample.BigTable).%BuildIndices()",
+                    "BUILD INDEX FOR TABLE Sample.BigTable",
+                    "do ##class(Sample.BigTable).%PurgeIndices() followed by %BuildIndices()",
+                    "DROP INDEX and CREATE INDEX for each index"
+                ],
+                "correct": [1],
+                "explanation": "InterSystems recommends using the BUILD INDEX SQL command for live systems. BUILD INDEX acquires an extent lock by default, temporarily marks the index as not selectable (so queries don't use it while it's being built), and any INSERT/UPDATE operations that occur during the build are included in the process. This makes it safe to use on an active system. %BuildIndices() is also available but BUILD INDEX is the preferred approach per the documentation. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_tables#GSQL_indices_building)"
+            },
+            {
+                "id": 12,
+                "type": "single",
+                "question": "A developer changes the collation of a property that has an existing index:\n\n// Before:\nProperty LastName As %String(COLLATION = \"EXACT\");\nIndex NameIdx On LastName;\n\n// After:\nProperty LastName As %String(COLLATION = \"SQLUPPER\");\nIndex NameIdx On LastName;\n\nAfter compiling but NOT rebuilding the index, what happens when a query uses NameIdx?",
+                "options": [
+                    "Queries work correctly because collation only affects display",
+                    "Queries may return incorrect or incomplete results because the index entries use the old collation",
+                    "The compilation fails because collation changes require dropping the index first",
+                    "IRIS automatically rebuilds the index when collation changes"
+                ],
+                "correct": [1],
+                "explanation": "Index entries are stored using the collation in effect at build time. Changing from EXACT to SQLUPPER means the index should store uppercased values, but existing entries still have the original EXACT values (mixed case). This mismatch causes queries to miss rows or return incorrect results. The index must be rebuilt after any collation change: do ##class(Sample.Class).%BuildIndices($LB(\"NameIdx\")). (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_defpersobj#GOBJ_indices_build)"
+            },
+            {
+                "id": 13,
+                "type": "single",
+                "question": "A developer runs TUNE TABLE on a frequently queried table. What happens to existing cached queries for that table?",
+                "options": [
+                    "Cached queries are unaffected; the developer must manually purge them",
+                    "TUNE TABLE automatically recompiles all cached queries for the table so they use the new statistics",
+                    "Cached queries are deleted and must be re-created manually",
+                    "TUNE TABLE only affects new queries; existing cached queries keep the old plan until the IRIS instance is restarted"
+                ],
+                "correct": [1],
+                "explanation": "TUNE TABLE automatically recompiles all existing cached queries for the specified table to use the new statistics values. No manual purge is needed. However, if TUNE TABLE does not change any values (e.g., the data hasn't changed since the last run), cached queries are not recompiled since recompilation would produce the same plans. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RSQL_tunetable)"
+            },
+            {
+                "id": 14,
+                "type": "single",
+                "question": "A developer removes a property from a class and recompiles:\n\n// Before:\nClass Sample.Person Extends %Persistent\n{\nProperty Name As %String;       // slot 2\nProperty Email As %String;      // slot 3\nProperty Phone As %String;      // slot 4\n}\n\n// After:\nClass Sample.Person Extends %Persistent\n{\nProperty Name As %String;       // slot 2\nProperty Phone As %String;      // slot ?\n}\n\nWhat happens to the Phone data in existing rows if the developer does NOT review the storage definition?",
+                "options": [
+                    "Phone data is unchanged and accessible because it keeps slot 4",
+                    "Phone may be reassigned to slot 3 and read the old Email data instead",
+                    "Phone data is automatically migrated from slot 4 to slot 3",
+                    "The compilation fails because Email data still exists in the global"
+                ],
+                "correct": [0],
+                "explanation": "When a property is removed, InterSystems IRIS preserves the existing storage definition slots by default. The compiler typically keeps Phone in slot 4 and marks slot 3 (formerly Email) as unused in the storage definition. However, if the developer manually edits or regenerates the storage definition, Phone could be reassigned. Always verify the storage XML after removing properties. The old Email data remains in slot 3 of the global, orphaned but not deleted. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_storage)"
+            },
+            {
+                "id": 15,
+                "type": "multiple",
+                "question": "A developer performs the following schema evolution steps on a production table with 1 million rows:\n\n1. Adds a new index: Index CityIdx On City [Type = bitmap];\n2. Changes Property Score As %String to Property Score As %Integer;\n3. Renames Property Addr to Property Address;\n4. Compiles the class.\n\nWhich additional steps are required for correct behavior? (Select all that apply)",
+                "options": [
+                    "Run %BuildIndices($LB(\"CityIdx\")) to populate the new bitmap index",
+                    "Review and fix the storage definition to map Address to the original Addr storage slot",
+                    "Run a data migration to convert non-numeric Score values before they cause silent data corruption",
+                    "Purge cached queries so new plans reflect the schema changes",
+                    "Restart the IRIS instance"
+                ],
+                "correct": [0, 1, 2, 3],
+                "explanation": "All four steps are needed: (A) New indexes must be built for existing data. (B) Renamed properties need storage definition fixes to read from the original slot. (C) Changing %String to %Integer means non-numeric strings like \"N/A\" will silently become 0. (D) Cached queries may use stale plans. Restarting IRIS (E) is not required for any of these changes. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_storage)"
+            },
+            {
+                "id": 16,
+                "type": "single",
+                "question": "A developer adds a new index to a production table and runs BUILD INDEX to populate it. TUNE TABLE is also run and confirms updated statistics. However, a critical query that should benefit from the new index still uses the old query plan. What is the most likely cause?",
+                "options": [
+                    "BUILD INDEX did not complete successfully",
+                    "The query has a frozen plan that prevents it from being reoptimized",
+                    "TUNE TABLE must be run a second time for the new index to be recognized",
+                    "The IRIS instance must be restarted for new indexes to become visible to the optimizer"
+                ],
+                "correct": [1],
+                "explanation": "Frozen plans are retained across compiles, TUNE TABLE, and even system upgrades. A frozen plan will not be recompiled to use the new index. The developer must explicitly unfreeze the plan (using UNFREEZE PLANS or $SYSTEM.SQL.Statement.UnfreezeStatement()) so a new plan can be generated. The %NOFPLAN keyword can also be used to temporarily ignore the frozen plan for testing. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_queries#GSQL_cachedqueries_freeze)"
+            },
+            {
+                "id": 17,
+                "type": "single",
+                "question": "A DBA wants to protect all query plans for a critical table before a system upgrade, so that query performance is not affected. Which approach is correct?",
+                "options": [
+                    "FREEZE PLANS FOR TABLE Sample.CriticalTable",
+                    "PURGE CACHED QUERIES FOR TABLE Sample.CriticalTable",
+                    "Export the table data before upgrading",
+                    "Set the table to read-only mode during the upgrade"
+                ],
+                "correct": [0],
+                "explanation": "FREEZE PLANS FOR TABLE freezes all query plans associated with the specified table. Frozen plans are retained across system upgrades, ensuring query performance is predictable. After the upgrade, the DBA can use the pessimistic strategy: test queries with %NOFPLAN to compare the new plan against the frozen plan, and unfreeze only if the new plan performs better. Plans can also be frozen/unfrozen per-statement, per-schema, or namespace-wide. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_queries#GSQL_cachedqueries_freeze)"
+            }
+        ]
+    }
+}

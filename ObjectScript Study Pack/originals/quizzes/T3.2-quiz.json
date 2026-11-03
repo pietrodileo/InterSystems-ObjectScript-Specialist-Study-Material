@@ -1,0 +1,233 @@
+{
+    "quiz": {
+        "title": "T3.2: ObjectScript and SQL Features",
+        "description": "Test your knowledge of weak typing, include files/macros, object-to-SQL projection, embedded vs dynamic SQL, runtime vs select modes, SQLCODE, %ROWCOUNT, and ROWID through scenario-based questions.",
+        "version": "2.2",
+        "publishedDate": "2026-04-21",
+        "questions": [
+            {
+                "id": 1,
+                "type": "single",
+                "question": "Which of the following is the result of this expression?\n\n\"A\" + \"B\"",
+                "options": [
+                    "\"AB\"",
+                    "<SYNTAX>",
+                    "\"0\"",
+                    "<COMMAND>",
+                    "0"
+                ],
+                "correct": [4],
+                "explanation": "ObjectScript is weakly typed and the + operator is always arithmetic addition. When a string does not begin with a digit, its numeric value is 0. Both \"A\" and \"B\" evaluate to 0, so \"A\" + \"B\" = 0 + 0 = 0. String concatenation requires the _ operator, not +. No error is thrown because type coercion is automatic. (Reference: InterSystems Practice Question Q16; https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_operators#GCOS_operators_arith)"
+            },
+            {
+                "id": 2,
+                "type": "single",
+                "question": "Consider the following columns in a table:\n\nProperty UTCPurchaseDate As %Date;\nProperty LocalPurchaseDate As %Date;\n\nYour application has a query that retrieves these dates so they can be sent to two different external systems. Currently, both dates are returned in logical format. However, UTCPurchaseDate must be sent in ODBC format while LocalPurchaseDate must stay in logical format.\n\nWhich of the following enforces the returned value of UTCPurchaseDate to be ODBC while keeping LocalPurchaseDate in logical format?",
+                "options": [
+                    "Call $SYSTEM.SQL.Util.SetOption(\"SelectMode\", 1) to set SelectMode to ODBC before the query",
+                    "Set the Display Mode to ODBC in the Management Portal Execute Query interface",
+                    "Call ##class(%SQL.Statement).%New(1) to set the SelectMode of the query to ODBC",
+                    "Use the %ODBCOUT function in the SQL query on the UTCPurchaseDate column"
+                ],
+                "correct": [3],
+                "explanation": "The %ODBCOUT function can be applied to individual columns within a query to convert them to ODBC format while leaving other columns in their current mode. Options A, B, and C would change the mode for ALL columns in the query, not just UTCPurchaseDate. Only %ODBCOUT provides per-column format control. (Reference: InterSystems Practice Question Q10; https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RSQL_selectmode)"
+            },
+            {
+                "id": 3,
+                "type": "single",
+                "question": "Consider the following class:\n\nClass Sample.Person Extends %RegisteredObject\n{\n\nClassMethod ProcessAddress(Address As %String)\n{\n    #Include Sample.AreaCodes\n    set code = $$$FindAreaCode($P(Address, \" \"))\n    //Omitted\n}\n\n}\n\nThe class previously compiled successfully. After editing the method to add a new line, you get:\n\nERROR: Sample.Person.cls\nERROR:  Sample.Person.1(5) : MPP5610 : Referenced macro not defined: 'FindAreaCode'\n\nWhich of the following is the most likely source of the error?",
+                "options": [
+                    "The new code added to the method has a syntax error",
+                    "The new code modified the Address string so it is no longer accepted by the FindAreaCode macro",
+                    "IRIS received an update that removed the FindAreaCode macro",
+                    "There is no include file - the #Include is inside the method body instead of at the class level"
+                ],
+                "correct": [3],
+                "explanation": "The #Include directive must be placed at the class level, not inside a method body. When #Include appears inside a method, it is not processed as a preprocessor directive. The class previously compiled by coincidence or the #Include was in the correct location before editing. The #Include should be moved to the top of the class definition or specified using the class keyword Include = \"Sample.AreaCodes\". (Reference: InterSystems Practice Question Q21; https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_macros#GCOS_macros_include)"
+            },
+            {
+                "id": 4,
+                "type": "single",
+                "question": "What is the result of the following ObjectScript expression?\n\nwrite \"10abc20\" + 5",
+                "options": [
+                    "15",
+                    "\"10abc205\"",
+                    "An <ILLEGAL VALUE> error",
+                    "5"
+                ],
+                "correct": [0],
+                "explanation": "ObjectScript's weak typing converts strings to numbers by extracting the leading numeric portion. The string \"10abc20\" has a numeric value of 10 (parsing stops at 'a', the first non-numeric character). Therefore 10 + 5 = 15. No error is thrown because automatic type coercion is a core feature of ObjectScript. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_operators#GCOS_operators_arith)"
+            },
+            {
+                "id": 5,
+                "type": "single",
+                "question": "Consider a table Sample.Person with an Email field. The following SQL statements were executed:\n\n&sql(INSERT INTO Sample.Person (Email) VALUES (''))\n&sql(INSERT INTO Sample.Person (Email) VALUES (''))\n&sql(INSERT INTO Sample.Person (Email) VALUES (NULL))\n\nAssuming no other records, what will be the value of x when:\n\n&sql(SELECT COUNT(*) INTO :x FROM Sample.Person WHERE Email IS NULL)",
+                "options": [
+                    "0",
+                    "1",
+                    "2",
+                    "3"
+                ],
+                "correct": [1],
+                "explanation": "In InterSystems IRIS, SQL '' (zero-length string) and SQL NULL are NOT the same. Inserting '' stores $C(0) in the ObjectScript layer (a distinct, length-1 non-NULL value); inserting NULL stores \"\" (the ObjectScript empty string, which is how IRIS represents SQL NULL). The IS NULL condition matches only the rows stored as \"\", so only the one explicit NULL insert matches. COUNT(*) returns 1. The two '' inserts are SQL zero-length strings — valid non-NULL values that would be found by `Email = ''` instead. (Reference: InterSystems Practice Question Q11; https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_langelements#GSQL_langelements_null)"
+            },
+            {
+                "id": 6,
+                "type": "single",
+                "question": "A developer writes the following class:\n\nClass MyApp.Utils Extends %RegisteredObject\n{\n\nClassMethod Calculate() As %Status\n{\n    // business logic\n    return $$$OK\n}\n\n}\n\nThe class fails to compile with an error about $$$OK being an undefined macro. What is the fix?",
+                "options": [
+                    "Replace $$$OK with the literal value 1",
+                    "Add Include %occInclude at the class level",
+                    "Replace return with quit",
+                    "$$$OK is only available in %Persistent classes, not %RegisteredObject"
+                ],
+                "correct": [1],
+                "explanation": "$$$OK is a macro defined in the %occInclude include file (which itself includes %occStatus). The class-level keyword is 'Include' (placed before the Class keyword), not '#Include' (which is a preprocessor directive used inside method bodies). Without an Include directive, the compiler cannot resolve the macro. Adding 'Include %occInclude' at the class level makes $$$OK, $$$ISERR, $$$ThrowOnError, and other standard macros available. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_macros#GCOS_macros_include)",
+                "revised": true
+            },
+            {
+                "id": 7,
+                "type": "single",
+                "question": "Consider the following embedded SQL code:\n\n&sql(SELECT Name, DOB INTO :name, :dob FROM Sample.Person WHERE ID = 999)\nif SQLCODE = 0 {\n    write \"Found: \", name\n} elseif SQLCODE = 100 {\n    write \"Not found\"\n} else {\n    write \"Error: \", SQLCODE\n}\n\nIf no row with ID 999 exists, what is displayed?",
+                "options": [
+                    "Found: followed by an empty string",
+                    "Not found",
+                    "Error: -1",
+                    "An <UNDEFINED> error because SQLCODE is not defined"
+                ],
+                "correct": [1],
+                "explanation": "When an embedded SQL SELECT INTO finds no matching rows, SQLCODE is set to 100. SQLCODE = 0 means successful execution with data returned. Negative SQLCODE values indicate actual errors. The code correctly checks for SQLCODE = 100, so \"Not found\" is displayed. SQLCODE is automatically available as a local variable after any &sql() statement. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RSQL_sqlcode)"
+            },
+            {
+                "id": 8,
+                "type": "single",
+                "question": "A developer writes the following dynamic SQL:\n\nset stmt = ##class(%SQL.Statement).%New()\nset sc = stmt.%Prepare(\"SELECT Name, DOB FROM Sample.Person WHERE City = ?\")\nset rs = stmt.%Execute(\"Boston\")\nwhile rs.%Next() {\n    write rs.%Get(\"Name\"), \" - \", rs.%Get(\"DOB\"), !\n}\n\nThe DOB column is a %Date property. When using the default SelectMode, what format will DOB be displayed in?",
+                "options": [
+                    "ODBC format (e.g., 2025-01-15)",
+                    "Display format (e.g., 01/15/2025)",
+                    "Logical format (e.g., 67339 - integer days since 12/31/1840)",
+                    "ISO 8601 format (e.g., 2025-01-15T00:00:00Z)"
+                ],
+                "correct": [2],
+                "explanation": "The default SelectMode for Dynamic SQL (%SQL.Statement) is Logical mode (mode 0). In Logical mode, %Date properties are returned as their internal integer representation (days since December 31, 1840). To get ODBC format, pass 1 to %New(): ##class(%SQL.Statement).%New(1). To get Display format, pass 2. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RSQL_selectmode)"
+            },
+            {
+                "id": 9,
+                "type": "single",
+                "question": "Consider the following class:\n\nClass MyApp.Order Extends %Persistent\n{\nProperty OrderDate As %Date;\nProperty Total As %Numeric;\nProperty Status As %String;\n}\n\nWhat SQL table and column names are generated by default?",
+                "options": [
+                    "Table: MyApp.Order, Columns: ID, OrderDate, Total, Status",
+                    "Table: MyApp_Order, Columns: OrderDate, Total, Status",
+                    "Table: MyApp.Order, Columns: order_date, total, status",
+                    "Table: MYAPP_ORDER, Columns: ORDERDATE, TOTAL, STATUS"
+                ],
+                "correct": [0],
+                "explanation": "InterSystems IRIS projects persistent classes to SQL using the package name as the SQL schema and the class name as the table name. For Class MyApp.Order, the schema is MyApp and the table is Order, giving a fully qualified name of MyApp.Order (dot notation). The underscore convention (e.g., MyApp_Data) only applies when the package itself contains dots (e.g., MyApp.Data). Property names become column names preserving their original case, and every persistent table also has an implicit ID column. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_projections)"
+            },
+            {
+                "id": 10,
+                "type": "single",
+                "question": "A developer executes the following code:\n\n&sql(INSERT INTO Sample.Person (Name, City) VALUES ('Jane Doe', 'Boston'))\nwrite \"SQLCODE: \", SQLCODE, !\nwrite \"ROWCOUNT: \", %ROWCOUNT, !\nwrite \"ROWID: \", %ROWID, !\n\nThe insert succeeds. Which output is correct?",
+                "options": [
+                    "SQLCODE: 0, ROWCOUNT: 0, ROWID: (empty)",
+                    "SQLCODE: 0, ROWCOUNT: 1, ROWID: (the new row's ID)",
+                    "SQLCODE: 1, ROWCOUNT: 1, ROWID: (the new row's ID)",
+                    "SQLCODE: 100, ROWCOUNT: 1, ROWID: (the new row's ID)"
+                ],
+                "correct": [1],
+                "explanation": "After a successful INSERT: SQLCODE = 0 (success), %ROWCOUNT = 1 (one row inserted), and %ROWID contains the RowID of the newly inserted row. SQLCODE = 100 means no data found (used for SELECT). SQLCODE = 1 is not a standard value. %ROWID is particularly useful for retrieving the auto-assigned ID of a new row. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RSQL_variables)"
+            },
+            {
+                "id": 11,
+                "type": "single",
+                "question": "What is the result of the following ObjectScript expressions?\n\nset a = \"3.14abc\" + 1\nset b = \"abc3.14\" + 1\nset c = \"\" + 1\nwrite a, \" \", b, \" \", c",
+                "options": [
+                    "4.14 4.14 1",
+                    "4.14 1 1",
+                    "An error on the second expression",
+                    "4.14 1 0"
+                ],
+                "correct": [1],
+                "explanation": "ObjectScript extracts the leading numeric portion of a string for arithmetic. \"3.14abc\" has numeric value 3.14, so a = 4.14. \"abc3.14\" starts with a non-digit, so its numeric value is 0, making b = 1. The empty string \"\" has numeric value 0, so c = 1. No errors are thrown - weak typing silently coerces all values. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_operators#GCOS_operators_arith)"
+            },
+            {
+                "id": 12,
+                "type": "single",
+                "question": "Consider the following macro definitions and usage:\n\nInclude MyApp.Constants\n\nClass MyApp.Tax Extends %RegisteredObject\n{\n\nClassMethod GetTax(amount As %Numeric) As %Numeric\n{\n    return amount * $$$TaxRate\n}\n\n}\n\nThe include file MyApp.Constants.inc contains:\n\n#Define TaxRate 0.07\n#Define MaxAmount 10000\n\nWhat does GetTax(100) return?",
+                "options": [
+                    "An error because macros cannot be used in arithmetic expressions",
+                    "7",
+                    "0.07",
+                    "\"0.07\" (as a string)"
+                ],
+                "correct": [1],
+                "explanation": "Macros are resolved at compile time by simple text substitution. $$$TaxRate is replaced with 0.07 before compilation, so the method body becomes: return amount * 0.07. At runtime, 100 * 0.07 = 7. Macros are compile-time constants and work seamlessly in any expression where their replacement text is valid. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_macros)"
+            },
+            {
+                "id": 13,
+                "type": "single",
+                "question": "A developer needs to run a SQL query whose text is constructed from user input. They write:\n\nset tableName = userInput\nset sql = \"SELECT * FROM \" _ tableName _ \" WHERE Status = ?\"\nset stmt = ##class(%SQL.Statement).%New()\nset sc = stmt.%Prepare(sql)\nset rs = stmt.%Execute(\"Active\")\n\nWhich type of SQL is this, and what is a key concern?",
+                "options": [
+                    "Embedded SQL; the concern is that it requires class recompilation when the query changes",
+                    "Dynamic SQL; the concern is SQL injection risk because tableName is concatenated directly",
+                    "Dynamic SQL; there is no concern because the ? parameter protects against SQL injection",
+                    "Embedded SQL; the concern is that userInput may contain invalid characters"
+                ],
+                "correct": [1],
+                "explanation": "This is Dynamic SQL using %SQL.Statement. While the Status value is safely parameterized with ?, the tableName is directly concatenated into the SQL string, creating a SQL injection vulnerability. Parameters (?) only work for values in WHERE clauses, not for table or column names. The table name should be validated against a whitelist before use. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_dynsql)"
+            },
+            {
+                "id": 14,
+                "type": "single",
+                "question": "A developer writes a cursor-based query:\n\n&sql(DECLARE personCursor CURSOR FOR\n     SELECT Name, City FROM Sample.Person WHERE Status = 'Active')\n&sql(OPEN personCursor)\nset count = 0\nfor {\n    &sql(FETCH personCursor INTO :name, :city)\n    quit:SQLCODE'=0\n    set count = count + 1\n}\n&sql(CLOSE personCursor)\nwrite \"Processed: \", count, \" rows. ROWCOUNT: \", %ROWCOUNT\n\nIf 5 rows match, what does %ROWCOUNT contain after the loop?",
+                "options": [
+                    "0",
+                    "5",
+                    "6 (5 successful fetches plus 1 failed fetch)",
+                    "1 (only the last fetch counts)"
+                ],
+                "correct": [1],
+                "explanation": "After a cursor FETCH loop, %ROWCOUNT contains the number of rows successfully fetched. The final FETCH that sets SQLCODE = 100 (no more data) does not increment %ROWCOUNT. So %ROWCOUNT = 5, matching the count variable. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RSQL_variables#RSQL_variables_rowcount)"
+            },
+            {
+                "id": 15,
+                "type": "single",
+                "question": "Consider the following code:\n\nset x = \"5 apples\"\nset y = \"3 oranges\"\nwrite x + y, \" \", x _ y",
+                "options": [
+                    "8 5 apples3 oranges",
+                    "\"5 apples3 oranges\" \"5 apples3 oranges\"",
+                    "An error because you cannot add strings containing spaces",
+                    "8 53"
+                ],
+                "correct": [0],
+                "explanation": "The + operator performs arithmetic: \"5 apples\" has numeric value 5 and \"3 oranges\" has numeric value 3, so 5 + 3 = 8. The _ operator performs string concatenation: \"5 apples\" _ \"3 oranges\" = \"5 apples3 oranges\". This demonstrates the fundamental difference between + (arithmetic) and _ (concatenation) in ObjectScript's weak typing system. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_operators)"
+            },
+            {
+                "id": 16,
+                "type": "single",
+                "question": "A developer writes the following embedded SQL:\n\n&sql(UPDATE Sample.Person SET Status = 'Inactive' WHERE City = 'Boston')\nwrite \"Rows updated: \", %ROWCOUNT, !\nwrite \"SQLCODE: \", SQLCODE, !\n\nIf 50 rows have City = 'Boston', what output is produced?",
+                "options": [
+                    "Rows updated: 1, SQLCODE: 0",
+                    "Rows updated: 50, SQLCODE: 0",
+                    "Rows updated: 50, SQLCODE: 100",
+                    "Rows updated: 0, SQLCODE: 50"
+                ],
+                "correct": [1],
+                "explanation": "After a successful UPDATE, SQLCODE = 0 indicates success and %ROWCOUNT contains the number of rows affected (50). SQLCODE = 100 is for 'no data found' in SELECT queries, not for UPDATE. %ROWCOUNT always reflects the actual count of modified rows, not just 0 or 1. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RSQL_variables)"
+            },
+            {
+                "id": 17,
+                "type": "single",
+                "question": "Consider the following class definition:\n\nClass MyApp.Employee Extends %Persistent\n{\nProperty Name As %String;\nProperty HireDate As %Date;\nProperty Salary As %Numeric;\nClassMethod GetTopEarners(minSalary As %Numeric) As %SQL.StatementResult [ SqlProc, SqlName = GetTopEarners ]\n{\n    set sql = \"SELECT Name, Salary FROM MyApp.Employee WHERE Salary >= ?\"\n    set stmt = ##class(%SQL.Statement).%New()\n    set sc = stmt.%Prepare(sql)\n    quit stmt.%Execute(minSalary)\n}\n}\n\nWhich statements about the SQL projection of this class are true?",
+                "options": [
+                    "The table is MyApp.Employee with columns Name, HireDate, Salary; GetTopEarners is NOT available as a SQL procedure",
+                    "The table is MyApp.Employee with columns Name, HireDate, Salary; GetTopEarners is available as a SQL stored procedure",
+                    "The table is Employee with columns Name, HireDate, Salary; GetTopEarners is available as a SQL function",
+                    "The class cannot have both properties and SqlProc methods"
+                ],
+                "correct": [1],
+                "explanation": "The %Persistent class projects as table MyApp.Employee (schema MyApp, table Employee) with properties as columns. The GetTopEarners ClassMethod is explicitly marked with the SqlProc keyword and SqlName, so it projects as a SQL stored procedure callable via CALL MyApp.GetTopEarners(50000). Without the SqlProc keyword, ClassMethods are NOT projected to SQL. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_projections)"
+            }
+        ]
+    }
+}

@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Study guide for T3.5: Ensures Scalability and Performance - part of the InterSystems ObjectScript Specialist certification. Learn key concepts, best practices, and exam preparation tips.">
+    <meta name="keywords" content="InterSystems certification, ObjectScript Specialist, T3.5: Ensures Scalability and Performance, exam preparation, practice quiz">
+    <meta name="author" content="exam-prep.es">
+    <meta name="robots" content="index, follow">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://exam-prep.es/exams/objectscript/knowledge/T3.5.html">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://exam-prep.es/exams/objectscript/knowledge/T3.5.html">
+    <meta property="og:title" content="T3.5: Ensures Scalability and Performance - InterSystems ObjectScript Specialist Study Guide">
+    <meta property="og:description" content="Study guide for T3.5: Ensures Scalability and Performance - part of the InterSystems ObjectScript Specialist certification. Learn key concepts, best practices, and exam preparation tips.">
+    <meta property="og:image" content="https://exam-prep.es/images/og-image.png">
+    <meta property="og:site_name" content="InterSystems Certification Prep">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://exam-prep.es/exams/objectscript/knowledge/T3.5.html">
+    <meta name="twitter:title" content="T3.5: Ensures Scalability and Performance - InterSystems ObjectScript Specialist Study Guide">
+    <meta name="twitter:description" content="Study guide for T3.5: Ensures Scalability and Performance - part of the InterSystems ObjectScript Specialist certification. Learn key concepts, best practices, and exam preparation tips.">
+    <meta name="twitter:image" content="https://exam-prep.es/images/og-image.png">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+    <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+
+    <!-- hreflang Tags -->
+    <link rel="alternate" hreflang="en" href="https://exam-prep.es/exams/objectscript/knowledge/T3.5.html" />
+    <link rel="alternate" hreflang="es" href="https://exam-prep.es/exams/objectscript/knowledge/es/T3.5.html" />
+    <link rel="alternate" hreflang="x-default" href="https://exam-prep.es/exams/objectscript/knowledge/T3.5.html" />
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../colors.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+    <link rel="stylesheet" href="../../../css/consent.css">
+
+    <title>T3.5: Ensures Scalability and Performance - InterSystems ObjectScript Specialist Study Guide | exam-prep.es</title>
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "T3.5: Ensures Scalability and Performance - InterSystems ObjectScript Specialist Study Guide",
+    "description": "Study guide for T3.5: Ensures Scalability and Performance - part of the InterSystems ObjectScript Specialist certification. Learn key concepts, best practices, and exam preparation tips.",
+    "author": {
+        "@type": "Organization",
+        "name": "exam-prep.es"
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "InterSystems Certification Prep",
+        "url": "https://exam-prep.es"
+    },
+    "inLanguage": "en",
+    "about": {
+        "@type": "Course",
+        "name": "InterSystems ObjectScript Specialist"
+    }
+}
+    </script>
+</head>
+<body>
+    <div class="container">
+        <nav class="nav-bar">
+            <a href="../index.html" class="back-link">&#8592; Back to Topics</a>
+            <div class="lang-toggle">
+                <a href="T3.5.html" class="lang-btn active">EN</a>
+                <a href="es/T3.5.html" class="lang-btn">ES</a>
+            </div>
+            <a href="../quiz.html?file=quizzes/T3.5-quiz.json" class="quiz-link">Take Quiz &#8594;</a>
+            <div class="auth-bar">
+                <button id="loginBtn" class="auth-btn login-btn" onclick="Auth.login()">Sign In</button>
+                <div id="userInfo" class="user-info">
+                    <div id="userAvatar" class="user-avatar">?</div>
+                    <span id="userName" class="user-name">User</span>
+                </div>
+                <button id="logoutBtn" class="auth-btn logout-btn" onclick="Auth.logout()">Sign Out</button>
+            </div>
+        </nav>
+
+        <header class="header">
+            <h1>T3.5: Ensures Scalability and Performance</h1>
+            <p>Knowledge Review - InterSystems ObjectScript Specialist</p>
+        </header>
+
+        <nav class="toc">
+            <h3>Contents</h3>
+            <ol>
+                <li><a href="#section-1">TUNE TABLE for gathering table statistics</a></li>
+                <li><a href="#section-2">Interpreting basic query plans</a></li>
+                <li><a href="#section-3">Testing code correctness and performance</a></li>
+            </ol>
+        </nav>
+
+        <main class="content">
+            <section id="section-1" class="knowledge-item">
+                <h2>1. TUNE TABLE for gathering table statistics <button class="subsection-report-btn" onclick="openReportModal('section-1', 'Section 1')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>Purpose</strong>: Collects table statistics (selectivity, size, outlier values) used by the SQL query optimizer</li>
+                        <li><strong>$SYSTEM.SQL.TuneTable()</strong>: Programmatic method to tune a specific table</li>
+                        <li><strong>TUNE TABLE SQL command</strong>: SQL DDL alternative for gathering statistics</li>
+                        <li><strong>Selectivity</strong>: Percentage of rows a given value selects; lower selectivity = more selective index</li>
+                        <li><strong>Outlier values</strong>: Frequently occurring values that skew selectivity (e.g., "USA" in Country column)</li>
+                        <li><strong>When to re-tune</strong>: After significant data changes (bulk loads, deletions, data distribution shifts)</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Overview</h4>
+                        <p>The InterSystems IRIS SQL query optimizer uses table statistics to generate efficient query plans. Without accurate statistics, the optimizer may choose suboptimal access strategies (e.g., full table scan instead of using an available index). TUNE TABLE gathers these statistics by sampling the data and computing selectivity, average field size, and extent size.</p>
+                        <h4>Running TUNE TABLE</h4>
+                        <pre><code class="language-objectscript">// Programmatic approach
+DO $SYSTEM.SQL.TuneTable(&quot;MyApp.Patient&quot;)
+
+// With verbose output
+DO $SYSTEM.SQL.TuneTable(&quot;MyApp.Patient&quot;, 1)
+
+// Tune all tables in the namespace
+DO $SYSTEM.SQL.TuneAllTables()</code></pre>
+                        <pre><code class="language-sql">-- SQL approach
+TUNE TABLE MyApp.Patient
+
+-- Tune and update the class definition with statistics
+TUNE TABLE MyApp.Patient %SAVE_VALUES</code></pre>
+                        <h4>What TUNE TABLE Computes</h4>
+                        <p>1. <strong>Extent Size</strong>: Total number of rows in the table. The optimizer uses this to estimate query result sizes and choose between index access and table scan.</p>
+                        <p>2. <strong>Selectivity</strong>: For each property/column, the percentage of rows that a single value typically selects. Calculated as <code>1/number_of_distinct_values * 100</code>:</p>
+                        <pre><code>// Example: Patient table with 10,000 rows
+// State column has 50 distinct values
+// Selectivity = 1/50 * 100 = 2%
+// This means any single state value selects ~2% of rows
+
+// SSN column has 10,000 distinct values (unique)
+// Selectivity = 1/10000 * 100 = 0.01%
+// Very selective - ideal for index-based access</code></pre>
+                        <p>3. <strong>Outlier Values</strong>: Values that appear significantly more often than the average selectivity suggests. The optimizer uses outlier information to generate different plans depending on the parameter value:</p>
+                        <pre><code>// Country column: 90% of rows have &quot;USA&quot;, 10% have other countries
+// Average selectivity suggests each country selects ~10% of rows
+// But &quot;USA&quot; actually selects 90% - it&#x27;s an outlier
+// For &quot;USA&quot;, a table scan is better; for &quot;France&quot;, an index is better</code></pre>
+                        <h4>Interpreting Statistics in the Class Definition</h4>
+                        <p>After TUNE TABLE with <code>%SAVE_VALUES</code>, statistics are stored in the class definition:</p>
+                        <pre><code class="language-objectscript">// View as class parameter or storage metadata
+// Selectivity stored per property:
+Property State As %String [ SqlSelectivity = &quot;2%&quot; ];
+Property SSN As %String [ SqlSelectivity = &quot;0.01%&quot; ];
+Property Country As %String [ SqlSelectivity = &quot;10%&quot;,
+    SqlOutlierSelectivity = &quot;90%&quot;,
+    SqlOutlierValue = &quot;USA&quot; ];</code></pre>
+                        <h4>When to Re-Tune</h4>
+                        <ul>
+                            <li>After bulk data imports that significantly change row count</li>
+                            <li>After large-scale DELETE operations</li>
+                            <li>When data distribution changes (e.g., new geographic regions added)</li>
+                            <li>After initial data load (production data vs development data)</li>
+                            <li>When query performance degrades unexpectedly</li>
+                            <li><strong>Best practice</strong>: Purge cached queries after tuning so the optimizer uses new statistics</li>
+                        </ul>
+                        <pre><code class="language-objectscript">// Full optimization workflow
+DO $SYSTEM.SQL.TuneTable(&quot;MyApp.Patient&quot;, 1)
+DO $SYSTEM.SQL.PurgeForTable(&quot;MyApp.Patient&quot;)</code></pre>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RSQL_tunetable" target="_blank">TUNE TABLE</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQLOPT" target="_blank">Table Statistics and Selectivity</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQLOPT" target="_blank">$SYSTEM.SQL.TuneTable</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="section-2" class="knowledge-item">
+                <h2>2. Interpreting basic query plans <button class="subsection-report-btn" onclick="openReportModal('section-2', 'Section 2')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>Show Plan</strong>: Displays the query execution strategy chosen by the optimizer</li>
+                        <li><strong>Access methods</strong>: Table scan (read all rows) vs index scan (read index then data) vs index-only access</li>
+                        <li><strong>Cost estimates</strong>: Relative cost numbers help compare alternative query formulations</li>
+                        <li><strong>Full table scan indicators</strong>: "Read master map" or sequential scan of the data global</li>
+                        <li><strong>Index usage indicators</strong>: "Read index map" followed by data map lookup</li>
+                        <li><strong>Join strategies</strong>: Nested loop join, merge join, hash join - chosen based on table sizes and indexes</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Overview</h4>
+                        <p>The query plan (also called the execution plan or Show Plan) reveals how the SQL optimizer intends to execute a query. Reading query plans is essential for diagnosing slow queries, validating that indexes are being used, and understanding query performance characteristics.</p>
+                        <h4>Accessing the Query Plan</h4>
+                        <p><strong>Via Management Portal:</strong> Navigate to <strong>System Explorer > SQL</strong>, enter a query, and click <strong>Show Plan</strong> (without executing).</p>
+                        <p><strong>Via SQL EXPLAIN:</strong></p>
+                        <pre><code class="language-sql">EXPLAIN SELECT Name, City FROM MyApp.Patient WHERE City = &#x27;Boston&#x27;</code></pre>
+                        <p>The <code>EXPLAIN</code> statement returns the query plan without executing the query. It shows the access strategy, index usage, and optimization decisions made by the SQL engine.</p>
+                        <p><strong>Via Dynamic SQL</strong> (<code>%Display()</code> and <code>%GetImplementationDetails()</code> show only the implementation class name and statement text, <strong>not</strong> the query plan):</p>
+                        <pre><code class="language-objectscript">SET stmt = ##class(%SQL.Statement).%New()
+SET sc = stmt.%Prepare(&quot;SELECT Name, City FROM MyApp.Patient WHERE City = ?&quot;)
+
+// Shows implementation class and statement text (NOT the query plan)
+DO stmt.%Display()
+
+// Gets class name and SQL text programmatically (NOT the query plan)
+SET ok = stmt.%GetImplementationDetails(.className, .text)</code></pre>
+                        <p>To see the actual query plan programmatically, use <code>EXPLAIN</code> via Dynamic SQL:</p>
+                        <pre><code class="language-objectscript">SET stmt = ##class(%SQL.Statement).%New()
+SET sc = stmt.%Prepare(&quot;EXPLAIN SELECT Name, City FROM MyApp.Patient WHERE City = ?&quot;)
+SET rs = stmt.%Execute()
+WHILE rs.%Next() {
+    WRITE rs.%GetData(1), !
+}</code></pre>
+                        <h4>Reading a Query Plan</h4>
+                        <p>A typical query plan shows the steps the engine will take:</p>
+                        <pre><code> Read index map MyApp.Patient.CityIdx,
+   looping on City = ?,
+   using the given %SQLUPPER value.
+ For each row:
+   Read master map MyApp.Patient.Default,
+     using the ID found in the index map.
+   Output the row.</code></pre>
+                        <p><strong>Key elements to identify:</strong></p>
+                        <p>1. <strong>Index scan</strong> ("Read index map"): The query uses an index to find matching row IDs. This is efficient for selective queries.</p>
+                        <p>2. <strong>Master map read</strong> ("Read master map"): After finding IDs from the index, the engine reads the actual data. This is a lookup by ID, which is fast.</p>
+                        <p>3. <strong>Full table scan</strong> ("Read master map ... looping on ID"): If you see a sequential loop on the master map without an index reference, it means the optimizer chose a table scan.</p>
+                        <pre><code> // Full table scan - no index used
+ Read master map MyApp.Patient.Default,
+   looping on ID.
+ For each row:
+   Check WHERE condition: City = ?.
+   If true, output the row.</code></pre>
+                        <p>4. <strong>Index-only access</strong>: When all needed columns are in the index, no master map read is needed:</p>
+                        <pre><code> // Index-only - very efficient
+ Read index map MyApp.Patient.NameCityIdx,
+   looping on Name, City.
+ Output Name and City directly from the index.</code></pre>
+                        <h4>Comparing Plans for Optimization</h4>
+                        <pre><code class="language-objectscript">// Query without index on City - full table scan
+// SELECT * FROM MyApp.Patient WHERE City = &#x27;Boston&#x27;
+// Plan shows: Read master map, looping on ID, check City = &#x27;Boston&#x27;
+// Cost: proportional to total rows in table
+
+// After adding index on City:
+// Plan shows: Read index map CityIdx WHERE City = &#x27;Boston&#x27;, then read master map by ID
+// Cost: proportional to rows in Boston only
+
+// After adding compound index on (City, Name):
+// SELECT City, Name FROM MyApp.Patient WHERE City = &#x27;Boston&#x27;
+// Plan shows: Read index map CityNameIdx - index-only access
+// Cost: lowest - no master map access needed</code></pre>
+                        <h4>Cost Estimates</h4>
+                        <p>The optimizer assigns relative cost values to different plan alternatives:</p>
+                        <ul>
+                            <li><strong>Lower cost = expected to be faster</strong></li>
+                            <li>Costs are estimates based on table statistics (from TUNE TABLE)</li>
+                            <li>Without statistics, the optimizer may make poor choices</li>
+                            <li><strong>Important:</strong> Cost values are relative and can only be meaningfully compared between different plans <strong>for the same query on the same tables</strong>. Comparing costs across different queries or different tables is not meaningful</li>
+                        </ul>
+                        <h4>Common Performance Red Flags in Plans</h4>
+                        <ul>
+                            <li>Full table scan on a large table when an index exists (missing index or stale statistics)</li>
+                            <li>Temporary file creation for sorting (consider adding an index on the ORDER BY column)</li>
+                            <li>Nested loop join with a large inner table (may need an index on the join column)</li>
+                            <li><code>%SQLUPPER</code> function preventing index use (case-sensitivity mismatch)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQLOPT" target="_blank">Show Plan</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQLOPT" target="_blank">Query Plan Interpretation</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQLOPT" target="_blank">SQL Performance Optimization</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="section-3" class="knowledge-item">
+                <h2>3. Testing code correctness and performance <button class="subsection-report-btn" onclick="openReportModal('section-3', 'Section 3')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>%UnitTest framework</strong>: Built-in xUnit-style testing framework for ObjectScript</li>
+                        <li><strong>$ZH (or $ZHOROLOG)</strong>: High-precision timestamp for measuring execution time</li>
+                        <li><strong>Test class structure</strong>: Extend `%UnitTest.TestCase`, methods prefixed with `Test`</li>
+                        <li><strong>Assertions</strong>: `$$$AssertEquals`, `$$$AssertTrue`, `$$$AssertStatusOK`, `$$$AssertNotEquals`</li>
+                        <li><strong>Performance testing</strong>: Use `$ZH` before and after code blocks to measure elapsed time</li>
+                        <li><strong>Non-functional testing</strong>: Load testing, stress testing, response time benchmarks</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Overview</h4>
+                        <p>Testing in InterSystems IRIS encompasses both functional testing (does the code produce correct results?) and non-functional testing (does it perform adequately?). The %UnitTest framework provides structured functional testing, while <code>$ZH</code> and related tools enable performance measurement.</p>
+                        <h4>%UnitTest Framework</h4>
+                        <p>The <code>%UnitTest.TestCase</code> class provides a structured testing framework. Test classes extend <code>%UnitTest.TestCase</code>, and test methods are prefixed with <code>Test</code>:</p>
+                        <pre><code class="language-objectscript">Class MyApp.Tests.PatientTest Extends %UnitTest.TestCase
+{
+
+Method TestCreatePatient()
+{
+    SET patient = ##class(MyApp.Patient).%New()
+    SET patient.Name = &quot;Test Patient&quot;
+    SET patient.SSN = &quot;999-99-9999&quot;
+
+    // Assert the object was created
+    DO $$$AssertNotEquals(patient, &quot;&quot;, &quot;Patient object created&quot;)
+
+    // Save and assert success
+    SET sc = patient.%Save()
+    DO $$$AssertStatusOK(sc, &quot;Patient saved successfully&quot;)
+
+    // Verify ID was assigned
+    SET id = patient.%Id()
+    DO $$$AssertTrue(id &gt; 0, &quot;Patient ID assigned&quot;)
+
+    // Verify retrieval
+    SET loaded = ##class(MyApp.Patient).%OpenId(id)
+    DO $$$AssertEquals(loaded.Name, &quot;Test Patient&quot;, &quot;Name matches&quot;)
+    DO $$$AssertEquals(loaded.SSN, &quot;999-99-9999&quot;, &quot;SSN matches&quot;)
+
+    // Cleanup
+    SET sc = ##class(MyApp.Patient).%DeleteId(id)
+    DO $$$AssertStatusOK(sc, &quot;Patient deleted&quot;)
+}
+
+Method TestSSNUniqueness()
+{
+    SET p1 = ##class(MyApp.Patient).%New()
+    SET p1.Name = &quot;Patient 1&quot;
+    SET p1.SSN = &quot;111-11-1111&quot;
+    SET sc = p1.%Save()
+    DO $$$AssertStatusOK(sc, &quot;First patient saved&quot;)
+
+    SET p2 = ##class(MyApp.Patient).%New()
+    SET p2.Name = &quot;Patient 2&quot;
+    SET p2.SSN = &quot;111-11-1111&quot;  // Duplicate SSN
+    SET sc = p2.%Save()
+    DO $$$AssertStatusNotOK(sc, &quot;Duplicate SSN rejected&quot;)
+
+    // Cleanup
+    DO ##class(MyApp.Patient).%DeleteId(p1.%Id())
+}
+
+/// Setup runs before each test method
+Method OnBeforeOneTest(testname As %String) As %Status
+{
+    // Initialize test data
+    RETURN $$$OK
+}
+
+/// Teardown runs after each test method
+Method OnAfterOneTest(testname As %String) As %Status
+{
+    // Clean up test data
+    RETURN $$$OK
+}
+
+}</code></pre>
+                        <h4>Running Unit Tests</h4>
+                        <pre><code class="language-objectscript">// Run all tests in a directory
+DO ##class(%UnitTest.Manager).RunTest(&quot;MyApp/Tests&quot;)
+
+// Run a specific test class
+DO ##class(%UnitTest.Manager).RunTest(&quot;MyApp/Tests&quot;, &quot;/run:MyApp.Tests.PatientTest&quot;)
+
+// Run with debug output
+DO ##class(%UnitTest.Manager).DebugRunTestCase(&quot;&quot;, &quot;MyApp.Tests.PatientTest&quot;)</code></pre>
+                        <h4>Key Assertion Macros</h4>
+                        <table class="detail-table">
+                            <thead><tr><th>Macro</th><th>Purpose</th><th>Example</th></tr></thead>
+                            <tbody>
+                            <tr><td><code>$$$AssertTrue(expr, desc)</code></td><td>Expression evaluates to true</td><td><code>$$$AssertTrue(x&gt;0, &quot;Positive&quot;)</code></td></tr>
+                            <tr><td><code>$$$AssertEquals(val1, val2, desc)</code></td><td>Two values are equal</td><td><code>$$$AssertEquals(name, &quot;John&quot;, &quot;Name check&quot;)</code></td></tr>
+                            <tr><td><code>$$$AssertNotEquals(val1, val2, desc)</code></td><td>Two values differ</td><td><code>$$$AssertNotEquals(id, &quot;&quot;, &quot;ID assigned&quot;)</code></td></tr>
+                            <tr><td><code>$$$AssertStatusOK(sc, desc)</code></td><td>%Status is success</td><td><code>$$$AssertStatusOK(sc, &quot;Save OK&quot;)</code></td></tr>
+                            <tr><td><code>$$$AssertStatusNotOK(sc, desc)</code></td><td>%Status is error</td><td><code>$$$AssertStatusNotOK(sc, &quot;Expected failure&quot;)</code></td></tr>
+                            </tbody>
+                        </table>
+                        <h4>Performance Testing with $ZH</h4>
+                        <p><code>$ZH</code> (or <code>$ZHOROLOG</code>) returns a high-precision timestamp in seconds (with fractional seconds) since system startup. It is ideal for measuring elapsed time:</p>
+                        <pre><code class="language-objectscript">// Basic timing
+SET start = $ZH
+// ... code to measure ...
+SET elapsed = $ZH - start
+WRITE &quot;Elapsed time: &quot;, elapsed, &quot; seconds&quot;, !
+
+// Timing a query
+SET start = $ZH
+&amp;sql(SELECT COUNT(*) INTO :cnt FROM MyApp.Patient WHERE City = &#x27;Boston&#x27;)
+SET queryTime = $ZH - start
+WRITE &quot;Query time: &quot;, queryTime, &quot; seconds&quot;, !
+WRITE &quot;Rows: &quot;, cnt, !
+
+// Comparative performance testing
+SET start1 = $ZH
+FOR i = 1:1:10000 {
+    SET x = $PIECE(&quot;A^B^C^D^E&quot;, &quot;^&quot;, 3)
+}
+SET time1 = $ZH - start1
+
+SET start2 = $ZH
+FOR i = 1:1:10000 {
+    SET x = $LISTGET($LISTBUILD(&quot;A&quot;,&quot;B&quot;,&quot;C&quot;,&quot;D&quot;,&quot;E&quot;), 3)
+}
+SET time2 = $ZH - start2
+
+WRITE &quot;$PIECE: &quot;, time1, &quot; seconds&quot;, !
+WRITE &quot;$LIST:  &quot;, time2, &quot; seconds&quot;, !
+WRITE &quot;Ratio: &quot;, $FN(time1/time2, &quot;&quot;, 2), !</code></pre>
+                        <h4>Non-Functional Testing Patterns</h4>
+                        <pre><code class="language-objectscript">// Load testing: measure throughput
+SET start = $ZH
+SET operations = 0
+FOR i = 1:1:1000 {
+    SET patient = ##class(MyApp.Patient).%New()
+    SET patient.Name = &quot;Load Test &quot; _ i
+    SET sc = patient.%Save()
+    IF $$$ISOK(sc) SET operations = operations + 1
+}
+SET elapsed = $ZH - start
+WRITE &quot;Throughput: &quot;, $FN(operations/elapsed, &quot;&quot;, 0), &quot; operations/second&quot;, !
+
+// Response time benchmarking
+SET iterations = 100
+SET totalTime = 0
+FOR i = 1:1:iterations {
+    SET start = $ZH
+    SET obj = ##class(MyApp.Patient).%OpenId(1)
+    SET totalTime = totalTime + ($ZH - start)
+}
+WRITE &quot;Average open time: &quot;, $FN(totalTime/iterations*1000, &quot;&quot;, 3), &quot; ms&quot;, !</code></pre>
+                        <h4>$ZH vs $HOROLOG</h4>
+                        <ul>
+                            <li><strong>$HOROLOG ($H)</strong>: Returns date and time in <code>days,seconds</code> format; only second-level precision</li>
+                            <li><strong>$ZHOROLOG ($ZH)</strong>: Returns high-precision elapsed seconds since system start; ideal for performance timing</li>
+                            <li><strong>For timing</strong>: Always use <code>$ZH</code> - it provides sub-millisecond precision</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GUNITTEST" target="_blank">%UnitTest Framework</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GUNITTEST_about" target="_blank">%UnitTest.TestCase</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_vzhorolog" target="_blank">$ZHOROLOG Special Variable</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GUNITTEST_execute" target="_blank">Running Unit Tests</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <div class="exam-prep">
+                <h2>Exam Preparation Summary</h2>
+                <h3>Critical Concepts to Master:</h3>
+                <ol>
+                    <li><strong>TUNE TABLE purpose</strong>: Gathers selectivity and extent size statistics for the query optimizer</li>
+                    <li><strong>Selectivity</strong>: Lower percentage = more selective = better candidate for index-based access</li>
+                    <li><strong>Outlier values</strong>: Commonly occurring values that require special handling by the optimizer</li>
+                    <li><strong>Query plan reading</strong>: Distinguish between full table scan, index scan, and index-only access</li>
+                    <li><strong>$ZH for timing</strong>: High-precision timing variable; always use for performance measurement, not $H</li>
+                    <li><strong>%UnitTest basics</strong>: Test class structure, assertion macros, setup/teardown lifecycle</li>
+                    <li><strong>TUNE TABLE + Purge workflow</strong>: Always purge cached queries after tuning so new statistics take effect</li>
+                </ol>
+                <h3>Common Exam Scenarios:</h3>
+                <ul>
+                    <li>Explaining why a query is slow (missing statistics, need TUNE TABLE)</li>
+                    <li>Reading a query plan and identifying whether an index is being used</li>
+                    <li>Choosing between $ZH and $H for performance timing (always $ZH)</li>
+                    <li>Writing a unit test with appropriate assertions for a given scenario</li>
+                    <li>Identifying when to re-tune tables (after bulk loads, data distribution changes)</li>
+                    <li>Interpreting selectivity values to predict index effectiveness</li>
+                    <li>Recognizing full table scan indicators in a query plan</li>
+                </ul>
+                <h3>Hands-On Practice Recommendations:</h3>
+                <ul>
+                    <li>Run TUNE TABLE on a table and inspect the stored selectivity values in the class definition</li>
+                    <li>Compare query plans before and after adding an index - observe the change from table scan to index scan</li>
+                    <li>Use $ZH to time various operations: object access, SQL queries, string operations</li>
+                    <li>Write unit tests using all major assertion macros</li>
+                    <li>Create a table with outlier data (e.g., 90% one value) and observe how TUNE TABLE reports it</li>
+                    <li>Execute Show Plan in the Management Portal for various query types (SELECT, JOIN, subquery)</li>
+                    <li>Compare query plans before and after TUNE TABLE to see how statistics affect optimizer decisions</li>
+                    <li>Measure the performance impact of purging cached queries (first execution vs subsequent)</li>
+                </ul>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <a href="../quiz.html?file=quizzes/T3.5-quiz.json" class="take-quiz-btn">Take the Quiz</a>
+        </footer>
+    </div>
+
+    <div id="reportModal" class="report-modal">
+        <div class="report-content">
+            <h3>Report an Issue</h3>
+            <label for="issueType">Issue Type</label>
+            <select id="issueType">
+                <option value="confusing">Confusing Content</option>
+                <option value="wrong_answer">Incorrect Information</option>
+                <option value="outdated">Outdated Content</option>
+                <option value="formatting">Formatting Issue</option>
+                <option value="typo">Typo</option>
+                <option value="other">Other</option>
+            </select>
+            <label for="issueDescription">Description</label>
+            <textarea id="issueDescription" placeholder="Please describe the issue..."></textarea>
+            <div style="display: flex; align-items: center; gap: 10px; margin: 15px 0;">
+                <input type="checkbox" id="wantEmailNotification" style="width: 18px; height: 18px;">
+                <label for="wantEmailNotification" style="margin: 0; cursor: pointer;">
+                    Notify me by email when resolved
+                </label>
+            </div>
+            <div class="report-actions">
+                <button class="report-cancel" onclick="closeReportModal()">Cancel</button>
+                <button class="report-submit" onclick="submitReport()">Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../../js/config.js"></script>
+    <script src="../../../js/auth.js"></script>
+    <script src="../../../js/api.js"></script>
+    <script>
+        const CERTIFICATION_NAME = 'ObjectScript-Specialist';
+        const TOPIC_REF = 'T3.5';
+
+        document.addEventListener('DOMContentLoaded', function() {
+            updateAuthUI();
+            trackKnowledgeView();
+        });
+
+        function updateAuthUI() {
+            const loginBtn = document.getElementById('loginBtn');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const userInfo = document.getElementById('userInfo');
+            const userAvatar = document.getElementById('userAvatar');
+            const userName = document.getElementById('userName');
+
+            if (typeof Auth !== 'undefined' && Auth.isAuthenticated()) {
+                const user = Auth.getUser();
+                loginBtn.style.display = 'none';
+                logoutBtn.style.display = 'inline-block';
+                userInfo.style.display = 'flex';
+                if (user) {
+                    const initial = (user.name || user.email || '?')[0].toUpperCase();
+                    userAvatar.textContent = initial;
+                    userName.textContent = user.name || user.email || 'User';
+                }
+            } else {
+                loginBtn.style.display = 'inline-block';
+                logoutBtn.style.display = 'none';
+                userInfo.style.display = 'none';
+            }
+        }
+
+        async function trackKnowledgeView() {
+            if (typeof Auth === 'undefined' || !Auth.isAuthenticated()) {
+                return;
+            }
+
+            try {
+                await Api.trackKnowledge(CERTIFICATION_NAME, TOPIC_REF);
+                console.log('Knowledge view tracked:', TOPIC_REF);
+            } catch (error) {
+                console.log('View tracking skipped:', error.message);
+            }
+        }
+
+        function openReportModal(sectionId, sectionTitle) {
+            if (typeof Auth === 'undefined' || !Auth.isAuthenticated()) {
+                alert('Please sign in to report issues.');
+                return;
+            }
+            // Store section context
+            window.currentReportSection = {
+                id: sectionId || 'general',
+                title: sectionTitle || 'General'
+            };
+            // Update modal header to show section
+            const modalHeader = document.querySelector('#reportModal h3');
+            if (modalHeader && sectionTitle) {
+                modalHeader.textContent = 'Report Issue: ' + sectionTitle;
+            } else if (modalHeader) {
+                modalHeader.textContent = 'Report an Issue';
+            }
+            document.getElementById('wantEmailNotification').checked = false;
+            document.getElementById('reportModal').classList.add('active');
+        }
+
+        function closeReportModal() {
+            document.getElementById('reportModal').classList.remove('active');
+            document.getElementById('issueType').value = 'confusing';
+            document.getElementById('issueDescription').value = '';
+        }
+
+        async function submitReport() {
+            const issueType = document.getElementById('issueType').value;
+            const description = document.getElementById('issueDescription').value.trim();
+            const wantEmailNotification = document.getElementById('wantEmailNotification').checked;
+            const sectionContext = window.currentReportSection || { id: 'general', title: 'General' };
+
+            if (!description) {
+                alert('Please provide a description of the issue.');
+                return;
+            }
+
+            // Build content reference with section context
+            const contentRef = sectionContext.id !== 'general'
+                ? `${TOPIC_REF} (${sectionContext.title})`
+                : TOPIC_REF;
+
+            try {
+                await Api.reportProblem({
+                    certificationName: CERTIFICATION_NAME,
+                    contentType: 'knowledge',
+                    contentReference: contentRef,
+                    issueType: issueType,
+                    description: description,
+                    wantEmailNotification: wantEmailNotification
+                });
+                alert('Thank you! Your report has been submitted.');
+                closeReportModal();
+            } catch (error) {
+                if (error.status === 429) {
+                    const retryMinutes = Math.ceil((error.data?.retryAfter || 3600) / 60);
+                    alert(`You've submitted too many reports recently. Please wait ${retryMinutes} minutes before submitting another report.`);
+                } else {
+                    alert('Failed to submit report: ' + error.message);
+                }
+            }
+        }
+
+        document.querySelectorAll('.detailed-notes h3').forEach(h3 => {
+            h3.style.cursor = 'pointer';
+        });
+    </script>
+    <script src="../../../js/consent.js"></script>
+    <script src="../../../js/analytics.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            CookieConsent.init();
+            Analytics.init();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,212 @@
+{
+  "quiz": {
+    "title": "T4.5: Uses Post-Conditionals and Control Flow",
+    "description": "Scenario-based questions on post-conditionals (command:condition), QUIT vs RETURN, Boolean evaluation rules (any nonzero/nonempty = true), for/while loops, $SELECT, and CONTINUE in ObjectScript.",
+    "version": "2.1",
+    "publishedDate": "2026-04-09",
+    "questions": [
+      {
+        "id": 1,
+        "type": "single",
+        "question": "While reviewing code you notice the following statement:\n\nset:$GET(person)=\"\" phone = \"Unknown\"\n\nWhich of the following best describes what this line does?",
+        "options": [
+          "The assignment executes only when person is undefined or holds an empty string; in that case phone is set to \"Unknown\". Otherwise the line is skipped.",
+          "The line always sets both person and phone to \"Unknown\" in a single statement, regardless of their previous values.",
+          "Because $GET(person) returns \"\" only when person is undefined, this line always raises an error before phone can be assigned.",
+          "The statement checks whether phone already equals \"Unknown\"; if so, it clears the variable person by setting it to the empty string."
+        ],
+        "correct": [0],
+        "explanation": "The post-conditional Set:condition executes the SET command only when the condition is true. $GET(person) returns \"\" if person is undefined OR if it explicitly holds \"\". So $GET(person)=\"\" is true in both cases, and phone gets set to \"Unknown\". If person has any non-empty value, the entire SET is skipped. (Reference: InterSystems Practice Q18; https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_commands#GCOS_commands_postconditional)"
+      },
+      {
+        "id": 2,
+        "type": "single",
+        "question": "A developer is confused about Boolean evaluation. Which of the following values is considered TRUE (non-zero) in an ObjectScript Boolean context?",
+        "options": [
+          "\"\" (empty string)",
+          "0",
+          "\"abc\"",
+          "\"1abc\""
+        ],
+        "correct": [3],
+        "explanation": "ObjectScript evaluates Boolean values by converting to numeric. Empty string converts to 0 (false). 0 is false. \"abc\" has no leading numeric portion and converts to 0 (false). \"1abc\" starts with 1, so it converts to 1 (true). Any non-zero numeric value is considered true. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_operators#GCOS_operators_boolean)"
+      },
+      {
+        "id": 3,
+        "type": "multiple",
+        "question": "You are auditing code for Boolean logic bugs. Which of the following ObjectScript values evaluate to FALSE (0)? (Select all that apply)",
+        "options": [
+          "\"\" (empty string)",
+          "0",
+          "\"0\"",
+          "\"abc\"",
+          "\"0.0\"",
+          "1"
+        ],
+        "correct": [0, 1, 2, 3, 4],
+        "explanation": "All are false except 1. Empty string, 0, \"0\", and \"0.0\" are all numerically zero. \"abc\" has no leading digits, so it converts to 0 (false). Only non-zero numeric values (like 1, -5, 3.14, \"2dogs\") are true. This is a critical concept for post-conditionals. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_operators#GCOS_operators_boolean)"
+      },
+      {
+        "id": 4,
+        "type": "single",
+        "question": "You are categorizing values using post-conditionals. Consider:\n\nset x = 10\nset:x>5 result = \"big\"\nset:x<5 result = \"small\"\nwrite result\n\nWhat is the output?",
+        "options": [
+          "big",
+          "small",
+          "bigsmall",
+          "An <UNDEFINED> error"
+        ],
+        "correct": [0],
+        "explanation": "x=10. The first post-conditional x>5 is true, so result is set to \"big\". The second post-conditional x<5 is false (10 is not less than 5), so that SET is skipped. Write outputs \"big\". (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_commands#GCOS_commands_postconditional)"
+      },
+      {
+        "id": 5,
+        "type": "single",
+        "question": "You need to understand the difference between QUIT and RETURN. Consider:\n\nClassMethod Process() As %String\n{\n  for i = 1:1:3 {\n    if i = 2 return \"found\"\n  }\n  return \"not found\"\n}\n\nWhat does ..Process() return?",
+        "options": [
+          "\"found\"",
+          "\"not found\"",
+          "An empty string",
+          "An <UNDEFINED> error"
+        ],
+        "correct": [0],
+        "explanation": "RETURN exits the entire method immediately, regardless of how many nested loops or blocks surround it. When i=2, RETURN \"found\" exits the method and returns \"found\". If QUIT were used instead, it would only exit the for loop, and execution would continue to RETURN \"not found\". (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_creturn)"
+      },
+      {
+        "id": 6,
+        "type": "single",
+        "question": "You are tracing the execution of a loop with a post-conditional quit. Consider:\n\nfor i = 1:1:5 {\n  quit:i=3\n  write i, \" \"\n}\nwrite \"done\"\n\nWhat is the output?",
+        "options": [
+          "1 2 done",
+          "1 2 3 done",
+          "1 2 3 4 5 done",
+          "done"
+        ],
+        "correct": [0],
+        "explanation": "The loop writes 1 (i=1), then writes 2 (i=2). When i=3, the post-conditional Quit:i=3 is true, so QUIT exits the For loop before the Write. Execution continues after the loop with Write \"done\". Output: \"1 2 done\". (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_cquit)"
+      },
+      {
+        "id": 7,
+        "type": "single",
+        "question": "You are using post-conditionals with the Write command. Consider:\n\nset status = \"active\"\nwrite:status=\"active\" \"Online\"\nwrite:status=\"inactive\" \"Offline\"\n\nWhat is the output?",
+        "options": [
+          "Online",
+          "Offline",
+          "OnlineOffline",
+          "A <SYNTAX> error"
+        ],
+        "correct": [0],
+        "explanation": "Post-conditionals work with Write and most other commands. Write:status=\"active\" executes because the condition is true. Write:status=\"inactive\" is skipped because the condition is false. Only \"Online\" is output. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_commands#GCOS_commands_postconditional)"
+      },
+      {
+        "id": 8,
+        "type": "multiple",
+        "question": "Which ObjectScript commands support post-conditionals (command:condition)? (Select all that apply)",
+        "options": [
+          "SET",
+          "DO",
+          "QUIT",
+          "WRITE",
+          "FOR",
+          "IF"
+        ],
+        "correct": [0, 1, 2, 3],
+        "explanation": "Most ObjectScript commands support post-conditionals: SET, DO, QUIT, WRITE, KILL, NEW, CONTINUE, and many others. However, FOR and IF do NOT support post-conditionals because they already have their own conditional logic built in. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_commands#GCOS_commands_postconditional)"
+      },
+      {
+        "id": 9,
+        "type": "single",
+        "question": "You are counting odd numbers using Continue with a post-conditional. Consider:\n\nset count = 0\nfor i = 1:1:10 {\n  continue:i#2=0\n  set count = count + 1\n}\nwrite count\n\nWhat is the output?",
+        "options": [
+          "5",
+          "10",
+          "4",
+          "6"
+        ],
+        "correct": [0],
+        "explanation": "Continue:i#2=0 skips the rest of the loop body when i is even (i modulo 2 equals 0). So count is incremented only for odd values of i: 1, 3, 5, 7, 9 = 5 times. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_ccontinue)"
+      },
+      {
+        "id": 10,
+        "type": "single",
+        "question": "You encounter a value with mixed numeric and string content in a Boolean context. Consider:\n\nset val = \"3.5abc\"\nif val {\n  write \"TRUE\"\n} else {\n  write \"FALSE\"\n}\n\nWhat is the output?",
+        "options": [
+          "TRUE",
+          "FALSE",
+          "An <ILLEGAL VALUE> error",
+          "A <SYNTAX> error"
+        ],
+        "correct": [0],
+        "explanation": "ObjectScript converts \"3.5abc\" to numeric by extracting the leading numeric portion: 3.5. Since 3.5 is non-zero, the Boolean evaluation is true. This is consistent with the weak typing rules used everywhere in ObjectScript. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_operators#GCOS_operators_boolean)"
+      },
+      {
+        "id": 11,
+        "type": "single",
+        "question": "You are testing whether a Do post-conditional skips execution. Consider:\n\nset x = \"\"\ndo:x ..MyMethod()\nwrite \"End\"\n\nClassMethod MyMethod()\n{\n  write \"Called \"\n}\n\nWhat is the output?",
+        "options": [
+          "Called End",
+          "End",
+          "An <UNDEFINED> error",
+          "A <SYNTAX> error"
+        ],
+        "correct": [1],
+        "explanation": "Do:x evaluates x as a Boolean condition. Since x=\"\" which converts to 0 (false), the DO is not executed and MyMethod is never called. Only \"End\" is written. An empty string is always false in ObjectScript. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_commands#GCOS_commands_postconditional)"
+      },
+      {
+        "id": 12,
+        "type": "single",
+        "question": "You are using $SELECT for a compact conditional. Consider:\n\nset x = \"cat\"\nwrite $SELECT(x=\"dog\":\"Woof\", x=\"cat\":\"Meow\", 1:\"Unknown\")\n\nWhat is the output?",
+        "options": [
+          "Woof",
+          "Meow",
+          "Unknown",
+          "A <SYNTAX> error"
+        ],
+        "correct": [1],
+        "explanation": "$SELECT evaluates conditions left to right and returns the value associated with the first true condition. x=\"dog\" is false, x=\"cat\" is true, so it returns \"Meow\". The 1:\"Unknown\" acts as a default case (1 is always true). (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fselect)"
+      },
+      {
+        "id": 13,
+        "type": "single",
+        "question": "A developer forgot the default case in $SELECT. Consider:\n\nwrite $SELECT(0:\"A\", 0:\"B\")\n\nWhat happens?",
+        "options": [
+          "Returns \"\" (empty string)",
+          "Returns 0",
+          "Throws a <SELECT> error",
+          "Returns the last value \"B\""
+        ],
+        "correct": [2],
+        "explanation": "If no condition in $SELECT evaluates to true, ObjectScript throws a <SELECT> error. Always include a default case using 1:defaultValue as the last condition to prevent this error. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fselect)"
+      },
+      {
+        "id": 14,
+        "type": "multiple",
+        "question": "Which of the following values evaluate to TRUE in an ObjectScript Boolean context? (Select all that apply)",
+        "options": [
+          "1",
+          "-5",
+          "\"2dogs\"",
+          "\" 3\"",
+          "\"00\"",
+          "\".5test\""
+        ],
+        "correct": [0, 1, 2, 5],
+        "explanation": "In ObjectScript, a value is TRUE if its numeric interpretation is nonzero. 1 is true. -5 is true (nonzero). \"2dogs\" interprets as 2 (true). \" 3\" with a leading space interprets as 0 (false) because ObjectScript's numeric conversion stops at the first non-numeric character, and a leading space is non-numeric in this context. \"00\" converts to 0 (false). \".5test\" converts to 0.5 (true, nonzero). (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_operators)",
+        "revised": true
+      },
+      {
+        "id": 15,
+        "type": "single",
+        "question": "You are debugging a loop that uses QUIT incorrectly. Consider:\n\nClassMethod FindItem(list As %ListOfDataTypes, target As %String) As %Integer\n{\n  for i = 1:1:list.Count() {\n    if list.GetAt(i) = target {\n      quit i\n    }\n  }\n  return -1\n}\n\nAssuming the target is found at position 2, what does this method return?",
+        "options": [
+          "2",
+          "-1",
+          "An <UNDEFINED> error",
+          "A <COMMAND> error"
+        ],
+        "correct": [3],
+        "explanation": "QUIT with an argument (QUIT i) is not allowed inside a FOR block -- it produces a <COMMAND> error. Inside a FOR loop, QUIT (without an argument) exits the loop, while QUIT expr is only valid for exiting a method with a return value. To return from the method, use RETURN i instead of QUIT i. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_cquit)"
+      }
+    ]
+  }
+}

@@ -1,0 +1,200 @@
+[
+  {
+    "topic": "T1.1",
+    "title": "T1.1: Uses Classes",
+    "folder": "T1 - Manages Data Model/T1.1: Uses Classes",
+    "source": "https://exam-prep.es/exams/objectscript/knowledge/T1.1.html",
+    "sections": 6,
+    "questions": 18,
+    "source_sha256": "6334bd6e9c12853f6b63e91e7ec98c8ad2302d7e9c8bf7c9cc0497bc6d7b20f6"
+  },
+  {
+    "topic": "T1.2",
+    "title": "T1.2: Creates Properties and Indexes",
+    "folder": "T1 - Manages Data Model/T1.2: Creates Properties and Indexes",
+    "source": "https://exam-prep.es/exams/objectscript/knowledge/T1.2.html",
+    "sections": 7,
+    "questions": 18,
+    "source_sha256": "d3696f7951dd9c5ef15087ee77db8bd8245b9714382ffbff95eb5e4fdc922d19"
+  },
+  {
+    "topic": "T1.3",
+    "title": "T1.3: Creates ObjectScript Methods",
+    "folder": "T1 - Manages Data Model/T1.3: Creates ObjectScript Methods",
+    "source": "https://exam-prep.es/exams/objectscript/knowledge/T1.3.html",
+    "sections": 8,
+    "questions": 18,
+    "source_sha256": "5dd7097c0842550f6cbcfa95afa64fa6edfa0783d8367d4d9347a7f4195821ef"
+  },
+  {
+    "topic": "T1.4",
+    "title": "T1.4: Uses Complex Structures",
+    "folder": "T1 - Manages Data Model/T1.4: Uses Complex Structures",
+    "source": "https://exam-prep.es/exams/objectscript/knowledge/T1.4.html",
+    "sections": 2,
+    "questions": 15,
+    "source_sha256": "a5a0cfe510401c7c09544384482ce4a8e6d075db4d23c8b70bfd4ed7a537a50b"
+  },
+  {
+    "topic": "T2.1",
+    "title": "T2.1: Ensures Data Integrity",
+    "folder": "T2 - Basic Programming/T2.1: Ensures Data Integrity",
+    "source": "https://exam-prep.es/exams/objectscript/knowledge/T2.1.html",
+    "sections": 6,
+    "questions": 18,
+    "source_sha256": "4544884775a25e6ad47627b80da575871d1231fd958820a3b3092b6976242b5a"
+  },
+  {
+    "topic": "T2.2",
+    "title": "T2.2: Tracks Application Data",
+    "folder": "T2 - Basic Programming/T2.2: Tracks Application Data",
+    "source": "https://exam-prep.es/exams/objectscript/knowledge/T2.2.html",
+    "sections": 3,
+    "questions": 15,
+    "source_sha256": "4790a80c2c0c8547b846728b198506ff2ab951e11b0fa7b91a11986a08b42ee4"
+  },
+  {
+    "topic": "T2.3",
+    "title": "T2.3: Implements Security Features",
+    "folder": "T2 - Basic Programming/T2.3: Implements Security Features",
+    "source": "https://exam-prep.es/exams/objectscript/knowledge/T2.3.html",
+    "sections": 4,
+    "questions": 15,
+    "source_sha256": "36a3ffc704c551abacf0de9ca86d8c431d78ccaa55277986e8b4c6fe43efb465"
+  },
+  {
+    "topic": "T3.1",
+    "title": "T3.1: Differentiates Storage Media",
+    "folder": "T3 - IRIS Features/T3.1: Differentiates Storage Media",
+    "source": "https://exam-prep.es/exams/objectscript/knowledge/T3.1.html",
+    "sections": 1,
+    "questions": 15,
+    "source_sha256": "ff5a295e9bfab8a48795360e1441ec68bc163929a2316b54b2bef83a028c3d09"
+  },
+  {
+    "topic": "T3.2",
+    "title": "T3.2: Leverages ObjectScript/SQL Features",
+    "folder": "T3 - IRIS Features/T3.2: Leverages ObjectScript - SQL Features",
+    "source": "https://exam-prep.es/exams/objectscript/knowledge/T3.2.html",
+    "sections": 6,
+    "questions": 17,
+    "source_sha256": "c495e8a834fd21a64887ad8e7f8f8a6d5ce9f1b1f77107f6119f4010a516d791"
+  },
+  {
+    "topic": "T3.3",
+    "title": "T3.3: Handles Nulls",
+    "folder": "T3 - IRIS Features/T3.3: Handles Nulls",
+    "source": "https://exam-prep.es/exams/objectscript/knowledge/T3.3.html",
+    "sections": 1,
+    "questions": 15,
+    "source_sha256": "fed1e4c6df351ecaf3741f78bec26db447df15a5582ec7d311034ff35cf82e67"
+  },
+  {
+    "topic": "T3.4",
+    "title": "T3.4: Handles Schema Evolution",
+    "folder": "T3 - IRIS Features/T3.4: Handles Schema Evolution",
+    "source": "https://exam-prep.es/exams/objectscript/knowledge/T3.4.html",
+    "sections": 3,
+    "questions": 17,
+    "source_sha256": "7b10ec30d763b69c1f5c60ef2bb0c9562e562bb44151fda13f89f2414f327c81"
+  },
+  {
+    "topic": "T3.5",
+    "title": "T3.5: Ensures Scalability and Performance",
+    "folder": "T3 - IRIS Features/T3.5: Ensures Scalability and Performance",
+    "source": "https://exam-prep.es/exams/objectscript/knowledge/T3.5.html",
+    "sections": 3,
+    "questions": 15,
+    "source_sha256": "a0f671f26f4f558a7c8cd191a18080b74c068d13495ac7d2f940ec9049622aa3"
+  },
+  {
+    "topic": "T4.1",
+    "title": "T4.1: Traverses and Sorts Arrays",
+    "folder": "T4 - Functions & APIs/T4.1: Traverses and Sorts Arrays",
+    "source": "https://exam-prep.es/exams/objectscript/knowledge/T4.1.html",
+    "sections": 4,
+    "questions": 18,
+    "source_sha256": "0b692da37a7bcab0df8788da971381ec6d5f46fcca8325f414e99e6002593484"
+  },
+  {
+    "topic": "T4.2",
+    "title": "T4.2: Manipulates Lists",
+    "folder": "T4 - Functions & APIs/T4.2: Manipulates Lists",
+    "source": "https://exam-prep.es/exams/objectscript/knowledge/T4.2.html",
+    "sections": 3,
+    "questions": 15,
+    "source_sha256": "f9b950693fd79a65005326c4b18082d0c38395b58d7b751f5e98ba86279403a7"
+  },
+  {
+    "topic": "T4.3",
+    "title": "T4.3: Manipulates Strings",
+    "folder": "T4 - Functions & APIs/T4.3: Manipulates Strings",
+    "source": "https://exam-prep.es/exams/objectscript/knowledge/T4.3.html",
+    "sections": 7,
+    "questions": 18,
+    "source_sha256": "17555c4625c595ce2b8233f4b1e633641626e43584d52554cda5cc708b75e755"
+  },
+  {
+    "topic": "T4.4",
+    "title": "T4.4: Mathematical, Logical, and Date/Time Operations",
+    "folder": "T4 - Functions & APIs/T4.4: Mathematical, Logical, and Date - Time Operations",
+    "source": "https://exam-prep.es/exams/objectscript/knowledge/T4.4.html",
+    "sections": 4,
+    "questions": 15,
+    "source_sha256": "e024fbeb202ce6e911c399edeb65d7c319bac1e94a929dcc741dce5205c4cff4"
+  },
+  {
+    "topic": "T4.5",
+    "title": "T4.5: Decision and Control Structures",
+    "folder": "T4 - Functions & APIs/T4.5: Decision and Control Structures",
+    "source": "https://exam-prep.es/exams/objectscript/knowledge/T4.5.html",
+    "sections": 3,
+    "questions": 15,
+    "source_sha256": "78e85f9ee5922c9e9070f2b5277db6ce30a80ec1a8793ef4ea726ec9aa157d8b"
+  },
+  {
+    "topic": "T4.6",
+    "title": "T4.6: Executes Methods and Queries Objects",
+    "folder": "T4 - Functions & APIs/T4.6: Executes Methods and Queries Objects",
+    "source": "https://exam-prep.es/exams/objectscript/knowledge/T4.6.html",
+    "sections": 3,
+    "questions": 15,
+    "source_sha256": "897db46acb4629781def0c38ef534c5b264e44d92d70a24075c51eeb60dcae05"
+  },
+  {
+    "topic": "T4.7",
+    "title": "T4.7: Uses APIs for Common Operations",
+    "folder": "T4 - Functions & APIs/T4.7: Uses APIs for Common Operations",
+    "source": "https://exam-prep.es/exams/objectscript/knowledge/T4.7.html",
+    "sections": 2,
+    "questions": 15,
+    "source_sha256": "71daf324a56453d643c4f2c69c81d0e5bd823da8e703659ccee8feebaa3bcd5c"
+  },
+  {
+    "topic": "T5.1",
+    "title": "T5.1: Uses Troubleshooting Tools",
+    "folder": "T5 - Error Handling/T5.1: Uses Troubleshooting Tools",
+    "source": "https://exam-prep.es/exams/objectscript/knowledge/T5.1.html",
+    "sections": 2,
+    "questions": 15,
+    "source_sha256": "2dd50d5892df1c080e2444f0d2c500301871438c9135115b6c02610e3217647c"
+  },
+  {
+    "topic": "T5.2",
+    "title": "T5.2: Handles and Logs Runtime Errors",
+    "folder": "T5 - Error Handling/T5.2: Handles and Logs Runtime Errors",
+    "source": "https://exam-prep.es/exams/objectscript/knowledge/T5.2.html",
+    "sections": 6,
+    "questions": 18,
+    "source_sha256": "ca654805c230fa225de89723fcea86020131f3f93c911f3baa8853020c79c182"
+  },
+  {
+    "topic": "T5.3",
+    "title": "T5.3: Diagnoses Common Errors",
+    "folder": "T5 - Error Handling/T5.3: Diagnoses Common Errors",
+    "source": "https://exam-prep.es/exams/objectscript/knowledge/T5.3.html",
+    "sections": 9,
+    "questions": 18,
+    "source_sha256": "bd297ace8c2fe6fd10371bf4cfd1e65651e9ddc355c31764c9b83826b995c59b"
+  }
+]

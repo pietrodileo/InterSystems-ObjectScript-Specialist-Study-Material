@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Study guide for T2.2: Tracks Application Data - part of the InterSystems ObjectScript Specialist certification. Learn key concepts, best practices, and exam preparation tips.">
+    <meta name="keywords" content="InterSystems certification, ObjectScript Specialist, T2.2: Tracks Application Data, exam preparation, practice quiz">
+    <meta name="author" content="exam-prep.es">
+    <meta name="robots" content="index, follow">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://exam-prep.es/exams/objectscript/knowledge/T2.2.html">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://exam-prep.es/exams/objectscript/knowledge/T2.2.html">
+    <meta property="og:title" content="T2.2: Tracks Application Data - InterSystems ObjectScript Specialist Study Guide">
+    <meta property="og:description" content="Study guide for T2.2: Tracks Application Data - part of the InterSystems ObjectScript Specialist certification. Learn key concepts, best practices, and exam preparation tips.">
+    <meta property="og:image" content="https://exam-prep.es/images/og-image.png">
+    <meta property="og:site_name" content="InterSystems Certification Prep">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://exam-prep.es/exams/objectscript/knowledge/T2.2.html">
+    <meta name="twitter:title" content="T2.2: Tracks Application Data - InterSystems ObjectScript Specialist Study Guide">
+    <meta name="twitter:description" content="Study guide for T2.2: Tracks Application Data - part of the InterSystems ObjectScript Specialist certification. Learn key concepts, best practices, and exam preparation tips.">
+    <meta name="twitter:image" content="https://exam-prep.es/images/og-image.png">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+    <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+
+    <!-- hreflang Tags -->
+    <link rel="alternate" hreflang="en" href="https://exam-prep.es/exams/objectscript/knowledge/T2.2.html" />
+    <link rel="alternate" hreflang="es" href="https://exam-prep.es/exams/objectscript/knowledge/es/T2.2.html" />
+    <link rel="alternate" hreflang="x-default" href="https://exam-prep.es/exams/objectscript/knowledge/T2.2.html" />
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../colors.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+    <link rel="stylesheet" href="../../../css/consent.css">
+
+    <title>T2.2: Tracks Application Data - InterSystems ObjectScript Specialist Study Guide | exam-prep.es</title>
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "T2.2: Tracks Application Data - InterSystems ObjectScript Specialist Study Guide",
+    "description": "Study guide for T2.2: Tracks Application Data - part of the InterSystems ObjectScript Specialist certification. Learn key concepts, best practices, and exam preparation tips.",
+    "author": {
+        "@type": "Organization",
+        "name": "exam-prep.es"
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "InterSystems Certification Prep",
+        "url": "https://exam-prep.es"
+    },
+    "inLanguage": "en",
+    "about": {
+        "@type": "Course",
+        "name": "InterSystems ObjectScript Specialist"
+    }
+}
+    </script>
+</head>
+<body>
+    <div class="container">
+        <nav class="nav-bar">
+            <a href="../index.html" class="back-link">&#8592; Back to Topics</a>
+            <div class="lang-toggle">
+                <a href="T2.2.html" class="lang-btn active">EN</a>
+                <a href="es/T2.2.html" class="lang-btn">ES</a>
+            </div>
+            <a href="../quiz.html?file=quizzes/T2.2-quiz.json" class="quiz-link">Take Quiz &#8594;</a>
+            <div class="auth-bar">
+                <button id="loginBtn" class="auth-btn login-btn" onclick="Auth.login()">Sign In</button>
+                <div id="userInfo" class="user-info">
+                    <div id="userAvatar" class="user-avatar">?</div>
+                    <span id="userName" class="user-name">User</span>
+                </div>
+                <button id="logoutBtn" class="auth-btn logout-btn" onclick="Auth.logout()">Sign Out</button>
+            </div>
+        </nav>
+
+        <header class="header">
+            <h1>T2.2: Tracks Application Data</h1>
+            <p>Knowledge Review - InterSystems ObjectScript Specialist</p>
+        </header>
+
+        <nav class="toc">
+            <h3>Contents</h3>
+            <ol>
+                <li><a href="#section-1">Locates and accesses application globals</a></li>
+                <li><a href="#section-2">Uses logging to track application data</a></li>
+                <li><a href="#section-3">Adds and tracks metrics for performance monitoring</a></li>
+            </ol>
+        </nav>
+
+        <main class="content">
+            <section id="section-1" class="knowledge-item">
+                <h2>1. Locates and accesses application globals <button class="subsection-report-btn" onclick="openReportModal('section-1', 'Section 1')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>Globals (^name)</strong>: Persistent multidimensional arrays stored in databases; the fundamental storage mechanism in InterSystems IRIS</li>
+                        <li><strong>ZWRITE</strong>: Displays the contents of a global or subtree in a readable format</li>
+                        <li><strong>$DATA</strong>: Tests whether a global node exists and whether it has descendants</li>
+                        <li><strong>$ORDER</strong>: Iterates through global subscripts at a given level</li>
+                        <li><strong>$GET</strong>: Safely retrieves a global node value, returning a default if the node does not exist</li>
+                        <li><strong>Management Portal</strong>: System Explorer > Globals provides a visual global viewer and editor</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Understanding Global Structure</h4>
+                        <p>Globals are sparse, hierarchical, multidimensional arrays stored on disk. They persist across process boundaries and system restarts. Every persistent class stores its data in globals -- understanding the underlying global structure is essential for debugging and performance analysis.</p>
+                        <pre><code class="language-objectscript"> // Setting global nodes
+ SET ^Customer(1, &quot;Name&quot;) = &quot;John Smith&quot;
+ SET ^Customer(1, &quot;Email&quot;) = &quot;john@example.com&quot;
+ SET ^Customer(2, &quot;Name&quot;) = &quot;Jane Doe&quot;
+ SET ^Customer(2, &quot;Email&quot;) = &quot;jane@example.com&quot;
+
+ // Display entire global tree
+ ZWRITE ^Customer
+ // Output:
+ // ^Customer(1,&quot;Email&quot;)=&quot;john@example.com&quot;
+ // ^Customer(1,&quot;Name&quot;)=&quot;John Smith&quot;
+ // ^Customer(2,&quot;Email&quot;)=&quot;jane@example.com&quot;
+ // ^Customer(2,&quot;Name&quot;)=&quot;Jane Doe&quot;</code></pre>
+                        <h4>Navigating Globals with $ORDER</h4>
+                        <p>$ORDER returns the next subscript at a given level, enabling traversal of global nodes:</p>
+                        <pre><code class="language-objectscript"> // Iterate through all customer IDs
+ SET id = &quot;&quot;
+ FOR {
+     SET id = $ORDER(^Customer(id))
+     QUIT:id=&quot;&quot;
+     WRITE &quot;Customer &quot;, id, &quot;: &quot;, ^Customer(id, &quot;Name&quot;), !
+ }</code></pre>
+                        <h4>Using $DATA to Check Node Existence</h4>
+                        <p>$DATA returns a value indicating whether a node exists and/or has children:</p>
+                        <ul>
+                            <li>0 = node does not exist and has no descendants</li>
+                            <li>1 = node exists but has no descendants</li>
+                            <li>10 = node does not exist but has descendants</li>
+                            <li>11 = node exists AND has descendants</li>
+                        </ul>
+                        <pre><code class="language-objectscript"> IF $DATA(^Customer(1)) {
+     WRITE &quot;Customer 1 exists&quot;, !
+ }
+ // Use $DATA to check before accessing
+ IF $DATA(^Config(&quot;settings&quot;, &quot;timeout&quot;))#2 {
+     SET timeout = ^Config(&quot;settings&quot;, &quot;timeout&quot;)
+ }</code></pre>
+                        <h4>Management Portal Global Viewer</h4>
+                        <p>Navigate to System Explorer > Globals to browse, search, and edit globals. You can:</p>
+                        <ul>
+                            <li>View globals across all namespaces</li>
+                            <li>Filter by global name prefix</li>
+                            <li>Drill into subscript levels</li>
+                            <li>Export and import global data</li>
+                            <li>Delete globals or individual nodes</li>
+                        </ul>
+                        <h4>Locating Class Data Globals</h4>
+                        <p>Persistent classes store data in globals named after the class. Use the storage definition in Studio/VS Code to find the exact global name:</p>
+                        <pre><code class="language-objectscript"> // For class MyApp.Customer, data is typically in:
+ // ^MyApp.CustomerD (data global)
+ // ^MyApp.CustomerI (index global)
+ // ^MyApp.CustomerS (sequence counter)
+ ZWRITE ^MyApp.CustomerD</code></pre>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GGBL_intro" target="_blank">Introduction to Globals</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GGBL_structure" target="_blank">Global Structure</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_forder" target="_blank">$ORDER Function</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fdata" target="_blank">$DATA Function</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="section-2" class="knowledge-item">
+                <h2>2. Uses logging to track application data <button class="subsection-report-btn" onclick="openReportModal('section-2', 'Section 2')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>^%ISCLOG</strong>: Built-in diagnostic logging used by InterSystems framework code (CSP gateway, web services, productions); controlled by the ^%ISCLOG global, entries stored in ^ISCLOG in %SYS namespace</li>
+                        <li><strong>Custom logging globals</strong>: Application-defined globals (e.g., ^MyApp.Log) for structured application-level logging</li>
+                        <li><strong>%Library.File</strong>: Write log data to external files for integration with external log management systems</li>
+                        <li><strong>$HOROLOG / $ZTIMESTAMP</strong>: Timestamps for log entries; $ZTIMESTAMP includes UTC time with fractional seconds</li>
+                        <li><strong>Log levels</strong>: Implement severity levels (ERROR, WARN, INFO, DEBUG) for filtering and analysis</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>^%ISCLOG: Built-In Diagnostic Logging</h4>
+                        <p>^%ISCLOG is a diagnostic logging facility used by <strong>InterSystems framework code</strong> — CSP gateway, web services, Interoperability productions, and other system components. It is not typically called directly by application code; instead, system code calls the <code>$$$ISCLOG</code> and <code>$$$SysLog</code> macros (defined in <code>%occDiagnostics.inc</code>) to generate log entries.</p>
+                        <p><strong>How it works:</strong></p>
+                        <ul>
+                            <li>The <strong>^%ISCLOG</strong> global (top-level value) controls the logging level: 0=disabled, 1=errors only, 2=warnings and errors, 3=all messages (most verbose)</li>
+                            <li>Log entries are written to the <strong>^ISCLOG</strong> global (without the % prefix) in the <strong>%SYS namespace</strong></li>
+                            <li>Entries can be viewed using the <strong>%Library.SysLog</strong> class or by doing <code>ZWRITE ^ISCLOG</code> in the %SYS namespace</li>
+                        </ul>
+                        <pre><code class="language-objectscript"> // Enable diagnostic logging at maximum verbosity
+ SET ^%ISCLOG = 3
+
+ // Optionally limit the log size (default is unlimited)
+ SET ^%ISCLOG(&quot;MaxLogEntries&quot;) = 10000
+
+ // After troubleshooting, disable logging (impacts performance when enabled)
+ SET ^%ISCLOG = 0</code></pre>
+                        <pre><code class="language-objectscript"> // View log entries — switch to %SYS namespace first
+ ZN &quot;%SYS&quot;
+ ZWRITE ^ISCLOG
+
+ // Or use the %Library.SysLog class to query entries programmatically
+ SET rs = ##class(%Library.SysLog).FindAll()
+ WHILE rs.%Next() {
+     WRITE rs.%Get(&quot;TimeStamp&quot;), &quot; &quot;, rs.%Get(&quot;Message&quot;), !
+ }</code></pre>
+                        <p><strong>Important:</strong> Remember to set ^%ISCLOG back to 0 after troubleshooting, as verbose logging consumes disk space and impacts performance.</p>
+                        <h4>Building Custom Application Logs</h4>
+                        <p>For application-specific logging, create structured globals with timestamps, severity, and context. Unlike ^%ISCLOG (which is for system/framework diagnostics), custom logging globals give you full control over what your application records:</p>
+                        <pre><code class="language-objectscript">ClassMethod Log(level As %String, message As %String, context As %String = &quot;&quot;)
+{
+    SET seq = $INCREMENT(^MyApp.Log)
+    SET ^MyApp.Log(seq) = $LISTBUILD(
+        $ZTIMESTAMP,
+        level,
+        $USERNAME,
+        $JOB,
+        context,
+        message
+    )
+    // Also maintain a date-based index for efficient retrieval
+    SET date = +$HOROLOG
+    SET ^MyApp.Log(&quot;date&quot;, date, seq) = &quot;&quot;
+}</code></pre>
+                        <pre><code class="language-objectscript"> // Usage
+ DO ##class(MyApp.Logger).Log(&quot;INFO&quot;, &quot;Order created&quot;, &quot;OrderId=1234&quot;)
+ DO ##class(MyApp.Logger).Log(&quot;ERROR&quot;, &quot;Payment failed: timeout&quot;, &quot;OrderId=1234&quot;)</code></pre>
+                        <h4>Retrieving and Analyzing Log Data</h4>
+                        <pre><code class="language-objectscript"> // Iterate through recent log entries
+ SET id = &quot;&quot;
+ FOR {
+     SET id = $ORDER(^MyApp.Log(id), -1)  // Reverse order (newest first)
+     QUIT:id=&quot;&quot;
+     SET entry = ^MyApp.Log(id)
+     SET timestamp = $LISTGET(entry, 1)
+     SET level = $LISTGET(entry, 2)
+     SET message = $LISTGET(entry, 6)
+     WRITE id, &quot; [&quot;, level, &quot;] &quot;, message, !
+ }</code></pre>
+                        <h4>File-Based Logging</h4>
+                        <p>For integration with external log management systems, write to files:</p>
+                        <pre><code class="language-objectscript"> SET file = ##class(%Library.File).%New(&quot;/var/log/myapp/application.log&quot;)
+ DO file.Open(&quot;WSA&quot;)   // Write, Stream, Append
+ DO file.WriteLine($ZDATETIME($ZTIMESTAMP, 3, 1) _ &quot; [INFO] Application started&quot;)
+ DO file.Close()</code></pre>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCM_monitor" target="_blank">Using ^%ISCLOG</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_vztimestamp" target="_blank">$ZTIMESTAMP Special Variable</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_file" target="_blank">%Library.File</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="section-3" class="knowledge-item">
+                <h2>3. Adds and tracks metrics for performance monitoring <button class="subsection-report-btn" onclick="openReportModal('section-3', 'Section 3')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>$SYSTEM.Process</strong>: Provides per-process performance counters (global references, lines executed, etc.)</li>
+                        <li><strong>^IRIS.Temp globals</strong>: Temporary globals for storing transient metrics without journaling overhead</li>
+                        <li><strong>$SYSTEM.SQL.Stats</strong>: SQL query statistics and performance data</li>
+                        <li><strong>^%SYS.MONLBL</strong>: Line-by-line monitoring data for code profiling</li>
+                        <li><strong>%SYSTEM.Process.GetMetric()</strong>: Retrieve specific process-level metrics programmatically</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Process-Level Metrics with $SYSTEM.Process</h4>
+                        <p>$SYSTEM.Process provides access to detailed process performance counters:</p>
+                        <pre><code class="language-objectscript"> // Get global references count for current process
+ WRITE $SYSTEM.Process.GlobalReferences(), !
+
+ // Get lines of ObjectScript executed
+ WRITE $SYSTEM.Process.LinesExecuted(), !
+
+ // Get disk read count
+ WRITE $SYSTEM.Process.DiskReadCount(), !
+
+ // Measure performance of a code block
+ SET startGref = $SYSTEM.Process.GlobalReferences()
+ SET startLines = $SYSTEM.Process.LinesExecuted()
+ SET startTime = $ZHOROLOG  // High-precision timestamp
+
+ // ... code being measured ...
+ DO ##class(MyApp.DataLoader).ProcessBatch()
+
+ SET elapsedTime = $ZHOROLOG - startTime
+ SET globalRefs = $SYSTEM.Process.GlobalReferences() - startGref
+ SET linesExec = $SYSTEM.Process.LinesExecuted() - startLines
+
+ WRITE &quot;Time: &quot;, elapsedTime, &quot; seconds&quot;, !
+ WRITE &quot;Global refs: &quot;, globalRefs, !
+ WRITE &quot;Lines executed: &quot;, linesExec, !</code></pre>
+                        <h4>Using ^IRIS.Temp for Transient Metrics</h4>
+                        <p>^IRIS.Temp globals reside in the IRISTEMP database, which is never journaled. This makes them ideal for storing performance counters and temporary metrics without impacting transaction performance or journal volume:</p>
+                        <pre><code class="language-objectscript"> // Track API call counts by endpoint
+ SET ^IRIS.Temp.Metrics(&quot;API&quot;, endpoint, $PIECE($HOROLOG, &quot;,&quot;, 1)) =
+     $INCREMENT(^IRIS.Temp.Metrics(&quot;API&quot;, endpoint, $PIECE($HOROLOG, &quot;,&quot;, 1)))
+
+ // Track method execution times
+ SET startTime = $ZHOROLOG
+ // ... method execution ...
+ SET elapsed = $ZHOROLOG - startTime
+ SET ^IRIS.Temp.Metrics(&quot;Timing&quot;, methodName, $JOB) = elapsed</code></pre>
+                        <h4>SQL Performance Statistics</h4>
+                        <p>Use $SYSTEM.SQL.Stats to analyze SQL query performance:</p>
+                        <pre><code class="language-objectscript"> // Get SQL statistics
+ DO $SYSTEM.SQL.Stats.DisplayStats()
+
+ // For a specific query, examine the query plan
+ SET stmt = ##class(%SQL.Statement).%New()
+ SET sc = stmt.%Prepare(&quot;SELECT * FROM MyApp.Customer WHERE State = ?&quot;)
+ DO stmt.%ShowPlan()</code></pre>
+                        <h4>Line-by-Line Monitoring</h4>
+                        <p>Enable line-by-line monitoring to profile code execution:</p>
+                        <pre><code class="language-objectscript"> // Enable monitoring for a routine
+ DO $SYSTEM.Monitor.LineLevelMonStart(&quot;MyApp.DataLoader&quot;)
+
+ // Run the code
+ DO ##class(MyApp.DataLoader).ProcessBatch()
+
+ // Stop monitoring and view results
+ DO $SYSTEM.Monitor.LineLevelMonStop()
+
+ // Results stored in ^%SYS.MONLBL
+ ZWRITE ^%SYS.MONLBL</code></pre>
+                        <h4>Building a Performance Dashboard</h4>
+                        <p>Combine metrics for a comprehensive view:</p>
+                        <pre><code class="language-objectscript">ClassMethod CollectMetrics() As %Status
+{
+    SET timestamp = $ZTIMESTAMP
+    SET metrics = $LISTBUILD(
+        $SYSTEM.Process.GlobalReferences(),
+        $SYSTEM.Process.LinesExecuted(),
+        $SYSTEM.Process.DiskReadCount(),
+        $SYSTEM.Process.JournalEntryCount()
+    )
+    SET ^IRIS.Temp.PerfLog($INCREMENT(^IRIS.Temp.PerfLog)) =
+        $LISTBUILD(timestamp) _ metrics
+    RETURN $$$OK
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_vsystem_process" target="_blank">$SYSTEM.Process</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCM_monitor" target="_blank">Monitoring Performance</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQLOPT" target="_blank">SQL Performance Analysis</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <div class="exam-prep">
+                <h2>Exam Preparation Summary</h2>
+                <h3>Critical Concepts to Master:</h3>
+                <ol>
+                    <li><strong>Global navigation</strong>: Fluency with $ORDER, $DATA, $GET, and ZWRITE for examining and traversing globals</li>
+                    <li><strong>$DATA return values</strong>: Know what 0, 1, 10, and 11 mean and how to use modular arithmetic (#2, #10) to test specific conditions</li>
+                    <li><strong>Logging strategies</strong>: Understand ^%ISCLOG for system/framework diagnostics vs custom logging globals for application data vs file-based logging for external integration</li>
+                    <li><strong>Performance counters</strong>: Know how to use $SYSTEM.Process methods to measure global references, lines executed, and timing</li>
+                    <li><strong>^IRIS.Temp</strong>: Understand that IRISTEMP globals are not journaled, making them ideal for transient data and metrics</li>
+                </ol>
+                <h3>Common Exam Scenarios:</h3>
+                <ul>
+                    <li>Writing $ORDER loops to iterate through a global structure</li>
+                    <li>Interpreting $DATA return values for various global node configurations</li>
+                    <li>Choosing appropriate logging mechanisms for different scenarios</li>
+                    <li>Measuring code performance using $SYSTEM.Process counters and $ZHOROLOG</li>
+                    <li>Identifying the correct global name for a persistent class's data storage</li>
+                    <li>Using ZWRITE to debug global contents</li>
+                </ul>
+                <h3>Hands-On Practice Recommendations:</h3>
+                <ul>
+                    <li>Create globals with various structures and practice navigating them with $ORDER at different subscript levels</li>
+                    <li>Build a simple logging class and test it with different log levels</li>
+                    <li>Use $SYSTEM.Process.GlobalReferences() to compare performance of different data access patterns</li>
+                    <li>Explore the Management Portal's global viewer (System Explorer > Globals) across different namespaces</li>
+                    <li>Enable ^%ISCLOG at different levels, then switch to %SYS namespace to examine ^ISCLOG entries</li>
+                    <li>Write code that stores metrics in ^IRIS.Temp and verify that the data is not journaled</li>
+                </ul>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <a href="../quiz.html?file=quizzes/T2.2-quiz.json" class="take-quiz-btn">Take the Quiz</a>
+        </footer>
+    </div>
+
+    <div id="reportModal" class="report-modal">
+        <div class="report-content">
+            <h3>Report an Issue</h3>
+            <label for="issueType">Issue Type</label>
+            <select id="issueType">
+                <option value="confusing">Confusing Content</option>
+                <option value="wrong_answer">Incorrect Information</option>
+                <option value="outdated">Outdated Content</option>
+                <option value="formatting">Formatting Issue</option>
+                <option value="typo">Typo</option>
+                <option value="other">Other</option>
+            </select>
+            <label for="issueDescription">Description</label>
+            <textarea id="issueDescription" placeholder="Please describe the issue..."></textarea>
+            <div style="display: flex; align-items: center; gap: 10px; margin: 15px 0;">
+                <input type="checkbox" id="wantEmailNotification" style="width: 18px; height: 18px;">
+                <label for="wantEmailNotification" style="margin: 0; cursor: pointer;">
+                    Notify me by email when resolved
+                </label>
+            </div>
+            <div class="report-actions">
+                <button class="report-cancel" onclick="closeReportModal()">Cancel</button>
+                <button class="report-submit" onclick="submitReport()">Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../../js/config.js"></script>
+    <script src="../../../js/auth.js"></script>
+    <script src="../../../js/api.js"></script>
+    <script>
+        const CERTIFICATION_NAME = 'ObjectScript-Specialist';
+        const TOPIC_REF = 'T2.2';
+
+        document.addEventListener('DOMContentLoaded', function() {
+            updateAuthUI();
+            trackKnowledgeView();
+        });
+
+        function updateAuthUI() {
+            const loginBtn = document.getElementById('loginBtn');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const userInfo = document.getElementById('userInfo');
+            const userAvatar = document.getElementById('userAvatar');
+            const userName = document.getElementById('userName');
+
+            if (typeof Auth !== 'undefined' && Auth.isAuthenticated()) {
+                const user = Auth.getUser();
+                loginBtn.style.display = 'none';
+                logoutBtn.style.display = 'inline-block';
+                userInfo.style.display = 'flex';
+                if (user) {
+                    const initial = (user.name || user.email || '?')[0].toUpperCase();
+                    userAvatar.textContent = initial;
+                    userName.textContent = user.name || user.email || 'User';
+                }
+            } else {
+                loginBtn.style.display = 'inline-block';
+                logoutBtn.style.display = 'none';
+                userInfo.style.display = 'none';
+            }
+        }
+
+        async function trackKnowledgeView() {
+            if (typeof Auth === 'undefined' || !Auth.isAuthenticated()) {
+                return;
+            }
+
+            try {
+                await Api.trackKnowledge(CERTIFICATION_NAME, TOPIC_REF);
+                console.log('Knowledge view tracked:', TOPIC_REF);
+            } catch (error) {
+                console.log('View tracking skipped:', error.message);
+            }
+        }
+
+        function openReportModal(sectionId, sectionTitle) {
+            if (typeof Auth === 'undefined' || !Auth.isAuthenticated()) {
+                alert('Please sign in to report issues.');
+                return;
+            }
+            // Store section context
+            window.currentReportSection = {
+                id: sectionId || 'general',
+                title: sectionTitle || 'General'
+            };
+            // Update modal header to show section
+            const modalHeader = document.querySelector('#reportModal h3');
+            if (modalHeader && sectionTitle) {
+                modalHeader.textContent = 'Report Issue: ' + sectionTitle;
+            } else if (modalHeader) {
+                modalHeader.textContent = 'Report an Issue';
+            }
+            document.getElementById('wantEmailNotification').checked = false;
+            document.getElementById('reportModal').classList.add('active');
+        }
+
+        function closeReportModal() {
+            document.getElementById('reportModal').classList.remove('active');
+            document.getElementById('issueType').value = 'confusing';
+            document.getElementById('issueDescription').value = '';
+        }
+
+        async function submitReport() {
+            const issueType = document.getElementById('issueType').value;
+            const description = document.getElementById('issueDescription').value.trim();
+            const wantEmailNotification = document.getElementById('wantEmailNotification').checked;
+            const sectionContext = window.currentReportSection || { id: 'general', title: 'General' };
+
+            if (!description) {
+                alert('Please provide a description of the issue.');
+                return;
+            }
+
+            // Build content reference with section context
+            const contentRef = sectionContext.id !== 'general'
+                ? `${TOPIC_REF} (${sectionContext.title})`
+                : TOPIC_REF;
+
+            try {
+                await Api.reportProblem({
+                    certificationName: CERTIFICATION_NAME,
+                    contentType: 'knowledge',
+                    contentReference: contentRef,
+                    issueType: issueType,
+                    description: description,
+                    wantEmailNotification: wantEmailNotification
+                });
+                alert('Thank you! Your report has been submitted.');
+                closeReportModal();
+            } catch (error) {
+                if (error.status === 429) {
+                    const retryMinutes = Math.ceil((error.data?.retryAfter || 3600) / 60);
+                    alert(`You've submitted too many reports recently. Please wait ${retryMinutes} minutes before submitting another report.`);
+                } else {
+                    alert('Failed to submit report: ' + error.message);
+                }
+            }
+        }
+
+        document.querySelectorAll('.detailed-notes h3').forEach(h3 => {
+            h3.style.cursor = 'pointer';
+        });
+    </script>
+    <script src="../../../js/consent.js"></script>
+    <script src="../../../js/analytics.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            CookieConsent.init();
+            Analytics.init();
+        });
+    </script>
+</body>
+</html>

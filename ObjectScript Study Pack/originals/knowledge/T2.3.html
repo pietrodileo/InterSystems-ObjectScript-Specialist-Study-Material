@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Study guide for T2.3: Implements Security Features - part of the InterSystems ObjectScript Specialist certification. Learn key concepts, best practices, and exam preparation tips.">
+    <meta name="keywords" content="InterSystems certification, ObjectScript Specialist, T2.3: Implements Security Features, exam preparation, practice quiz">
+    <meta name="author" content="exam-prep.es">
+    <meta name="robots" content="index, follow">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://exam-prep.es/exams/objectscript/knowledge/T2.3.html">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://exam-prep.es/exams/objectscript/knowledge/T2.3.html">
+    <meta property="og:title" content="T2.3: Implements Security Features - InterSystems ObjectScript Specialist Study Guide">
+    <meta property="og:description" content="Study guide for T2.3: Implements Security Features - part of the InterSystems ObjectScript Specialist certification. Learn key concepts, best practices, and exam preparation tips.">
+    <meta property="og:image" content="https://exam-prep.es/images/og-image.png">
+    <meta property="og:site_name" content="InterSystems Certification Prep">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://exam-prep.es/exams/objectscript/knowledge/T2.3.html">
+    <meta name="twitter:title" content="T2.3: Implements Security Features - InterSystems ObjectScript Specialist Study Guide">
+    <meta name="twitter:description" content="Study guide for T2.3: Implements Security Features - part of the InterSystems ObjectScript Specialist certification. Learn key concepts, best practices, and exam preparation tips.">
+    <meta name="twitter:image" content="https://exam-prep.es/images/og-image.png">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+    <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+
+    <!-- hreflang Tags -->
+    <link rel="alternate" hreflang="en" href="https://exam-prep.es/exams/objectscript/knowledge/T2.3.html" />
+    <link rel="alternate" hreflang="es" href="https://exam-prep.es/exams/objectscript/knowledge/es/T2.3.html" />
+    <link rel="alternate" hreflang="x-default" href="https://exam-prep.es/exams/objectscript/knowledge/T2.3.html" />
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../colors.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+    <link rel="stylesheet" href="../../../css/consent.css">
+
+    <title>T2.3: Implements Security Features - InterSystems ObjectScript Specialist Study Guide | exam-prep.es</title>
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "T2.3: Implements Security Features - InterSystems ObjectScript Specialist Study Guide",
+    "description": "Study guide for T2.3: Implements Security Features - part of the InterSystems ObjectScript Specialist certification. Learn key concepts, best practices, and exam preparation tips.",
+    "author": {
+        "@type": "Organization",
+        "name": "exam-prep.es"
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "InterSystems Certification Prep",
+        "url": "https://exam-prep.es"
+    },
+    "inLanguage": "en",
+    "about": {
+        "@type": "Course",
+        "name": "InterSystems ObjectScript Specialist"
+    }
+}
+    </script>
+</head>
+<body>
+    <div class="container">
+        <nav class="nav-bar">
+            <a href="../index.html" class="back-link">&#8592; Back to Topics</a>
+            <div class="lang-toggle">
+                <a href="T2.3.html" class="lang-btn active">EN</a>
+                <a href="es/T2.3.html" class="lang-btn">ES</a>
+            </div>
+            <a href="../quiz.html?file=quizzes/T2.3-quiz.json" class="quiz-link">Take Quiz &#8594;</a>
+            <div class="auth-bar">
+                <button id="loginBtn" class="auth-btn login-btn" onclick="Auth.login()">Sign In</button>
+                <div id="userInfo" class="user-info">
+                    <div id="userAvatar" class="user-avatar">?</div>
+                    <span id="userName" class="user-name">User</span>
+                </div>
+                <button id="logoutBtn" class="auth-btn logout-btn" onclick="Auth.logout()">Sign Out</button>
+            </div>
+        </nav>
+
+        <header class="header">
+            <h1>T2.3: Implements Security Features</h1>
+            <p>Knowledge Review - InterSystems ObjectScript Specialist</p>
+        </header>
+
+        <nav class="toc">
+            <h3>Contents</h3>
+            <ol>
+                <li><a href="#section-1">Ensures appropriate variable and global use to avoid security leaks</a></li>
+                <li><a href="#section-2">Checks roles for permission control</a></li>
+                <li><a href="#section-3">Prevents SQL injection attacks</a></li>
+                <li><a href="#section-4">Implements embedded SQL permission checks</a></li>
+            </ol>
+        </nav>
+
+        <main class="content">
+            <section id="section-1" class="knowledge-item">
+                <h2>1. Ensures appropriate variable and global use to avoid security leaks <button class="subsection-report-btn" onclick="openReportModal('section-1', 'Section 1')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>Process-private globals (^||name)</strong>: Visible only to the current process; use for sensitive temporary data</li>
+                        <li><strong>Local variables</strong>: Exist only in the current process memory; never persisted or journaled</li>
+                        <li><strong>Avoid exposing globals directly</strong>: Never pass global names to client-side code or expose them in URLs</li>
+                        <li><strong>IRISTEMP for transient data</strong>: Use ^IRIS.Temp.* globals for temporary data that should not be journaled or backed up</li>
+                        <li><strong>Namespace security</strong>: Sensitive globals should reside in databases with restricted access</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Process-Private Globals for Sensitive Data</h4>
+                        <p>Process-private globals (PPGs) are visible only to the process that creates them. They are ideal for holding sensitive intermediate data such as authentication tokens, decrypted values, or temporary patient data during processing:</p>
+                        <pre><code class="language-objectscript"> // Store sensitive data in a process-private global
+ SET ^||Session(&quot;authToken&quot;) = token
+ SET ^||Session(&quot;decryptedSSN&quot;) = ssn
+
+ // Process the data
+ DO ..ProcessPatientData()
+
+ // Clean up -- though PPGs are automatically cleaned when the process ends
+ KILL ^||Session</code></pre>
+                        <p>PPGs are NOT journaled, NOT backed up, and NOT accessible from other processes. This makes them significantly more secure than regular globals for temporary sensitive data.</p>
+                        <h4>Dangerous Patterns to Avoid</h4>
+                        <pre><code class="language-objectscript"> // DANGEROUS: Storing credentials in a regular global
+ SET ^Config(&quot;dbPassword&quot;) = &quot;secret123&quot;    // Persisted, journaled, backed up, visible to all processes
+
+ // DANGEROUS: Exposing global structure to client
+ SET %response.ContentType = &quot;application/json&quot;
+ WRITE &quot;{&quot;&quot;global&quot;&quot;: &quot;&quot;^Patient.Data&quot;&quot;}&quot;    // Reveals internal storage structure
+
+ // DANGEROUS: Using global name from user input
+ SET globalName = %request.Get(&quot;global&quot;)
+ SET value = @globalName@(id)               // Indirection with user input = security risk
+
+ // SAFE: Use an abstraction layer
+ SET value = ##class(MyApp.DataService).GetPatient(id)</code></pre>
+                        <h4>Protecting Global Data with Database Security</h4>
+                        <p>Configure database-level security to restrict which roles can read/write specific globals:</p>
+                        <ul>
+                            <li>Map sensitive globals to dedicated databases</li>
+                            <li>Apply resource-based permissions to those databases</li>
+                            <li>Use application roles to control access at the namespace level</li>
+                        </ul>
+                        <pre><code class="language-objectscript"> // Check if current user has access before proceeding
+ IF &#x27;$SYSTEM.Security.Check(&quot;%DB_SENSITIVE&quot;, &quot;READ&quot;) {
+     SET sc = $$$ERROR($$$AccessDenied)
+     QUIT sc
+ }
+ SET data = ^SensitiveData(patientId)</code></pre>
+                        <h4>Local Variables vs Globals for Security</h4>
+                        <p>Local variables exist only in process memory and are never visible to other processes, never persisted to disk, and never journaled. Use them for:</p>
+                        <ul>
+                            <li>Passwords and credentials during authentication</li>
+                            <li>Decrypted data during processing</li>
+                            <li>Temporary computation results with sensitive content</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GGBL_structure#GGBL_structure_ppg" target="_blank">Process-Private Globals</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCAS_dbsrv" target="_blank">Database Security</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCAS_bestpract" target="_blank">Security Best Practices</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="section-2" class="knowledge-item">
+                <h2>2. Checks roles for permission control <button class="subsection-report-btn" onclick="openReportModal('section-2', 'Section 2')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>$ROLES</strong>: Special variable containing a comma-delimited list of roles held by the current process</li>
+                        <li><strong>$SYSTEM.Security.Check()</strong>: Programmatically checks if the current user holds a specific privilege on a resource</li>
+                        <li><strong>Requires keyword</strong>: Method-level annotation that restricts execution to users with specific resources/privileges</li>
+                        <li><strong>%Admin_Manage, %DB_*, %Development</strong>: Common system resources used in permission checks</li>
+                        <li><strong>Application roles</strong>: Custom roles that group privileges for application-specific access control</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Checking Roles with $ROLES</h4>
+                        <p>$ROLES contains all roles assigned to the current user, including assigned roles and their cascading sub-roles:</p>
+                        <pre><code class="language-objectscript"> // Display current user&#x27;s roles
+ WRITE &quot;$ROLES = &quot;, $ROLES, !
+ // Output example: %All,%Developer,MyApp.Admin,MyApp.User
+
+ // Check for a specific role
+ IF $LISTFIND($LISTFROMSTRING($ROLES), &quot;MyApp.Admin&quot;) {
+     WRITE &quot;User is an administrator&quot;, !
+ }
+
+ // Alternative: simple string check (less precise due to substring matching)
+ IF $ROLES [ &quot;MyApp.Admin&quot; {
+     WRITE &quot;User has admin role&quot;, !
+ }</code></pre>
+                        <h4>Using $SYSTEM.Security.Check()</h4>
+                        <p>$SYSTEM.Security.Check() verifies whether the current user has a specific permission on a named resource. This is the recommended approach for programmatic authorization checks:</p>
+                        <pre><code class="language-objectscript"> // Check if user has WRITE permission on a resource
+ IF $SYSTEM.Security.Check(&quot;MyApp.PatientData&quot;, &quot;WRITE&quot;) {
+     // User is authorized to modify patient data
+     SET ^Patient(id, &quot;Name&quot;) = newName
+ }
+ ELSE {
+     SET sc = $$$ERROR($$$AccessDenied)
+     QUIT sc
+ }
+
+ // Check READ permission
+ IF &#x27;$SYSTEM.Security.Check(&quot;MyApp.Reports&quot;, &quot;READ&quot;) {
+     WRITE &quot;Access denied: insufficient privileges&quot;, !
+     QUIT
+ }</code></pre>
+                        <p>The permission argument can be: "READ", "WRITE", or "USE".</p>
+                        <h4>Method-Level Security with Requires</h4>
+                        <p>The Requires keyword on class methods restricts execution to users who hold the specified resource privilege:</p>
+                        <pre><code class="language-objectscript">/// Delete a patient record (admin only)
+ClassMethod DeletePatient(id As %Integer) As %Status [ Requires = &quot;MyApp.Admin:WRITE&quot; ]
+{
+    SET sc = ##class(MyApp.Patient).%DeleteId(id)
+    RETURN sc
+}
+
+/// View audit log (requires USE on the audit resource)
+ClassMethod ViewAuditLog() As %Status [ Requires = &quot;%Admin_Manage:USE&quot; ]
+{
+    // Only users with %Admin_Manage:USE can execute this method
+    // A &lt;PROTECT&gt; error is thrown if the user lacks the required privilege
+    DO ..DisplayLog()
+    RETURN $$$OK
+}</code></pre>
+                        <p>If a user without the required privilege calls a method with Requires, a <PROTECT> error is generated.</p>
+                        <h4>Practical Authorization Pattern</h4>
+                        <pre><code class="language-objectscript">ClassMethod ProcessOrder(orderId As %Integer) As %Status
+{
+    // Verify user has appropriate role
+    IF &#x27;$SYSTEM.Security.Check(&quot;MyApp.Orders&quot;, &quot;WRITE&quot;) {
+        $$$ThrowStatus($$$ERROR($$$AccessDenied))
+    }
+
+    // Additional business-level role check
+    IF $ROLES &#x27;[ &quot;MyApp.OrderProcessor&quot; {
+        RETURN $$$ERROR($$$GeneralError, &quot;Role MyApp.OrderProcessor required&quot;)
+    }
+
+    // Proceed with order processing
+    TSTART
+    TRY {
+        // ... processing logic ...
+        TCOMMIT
+    }
+    CATCH ex {
+        TROLLBACK
+        RETURN ex.AsStatus()
+    }
+    RETURN $$$OK
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_vroles" target="_blank">$ROLES Special Variable</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_vsystem_security" target="_blank">$SYSTEM.Security.Check</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=ROBJ_method_requires" target="_blank">Method Keywords - Requires</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="section-3" class="knowledge-item">
+                <h2>3. Prevents SQL injection attacks <button class="subsection-report-btn" onclick="openReportModal('section-3', 'Section 3')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>Parameterized queries</strong>: Use ? placeholders with %SQL.Statement to prevent injection</li>
+                        <li><strong>Host variables in embedded SQL</strong>: Use :variable syntax; values are bound safely, not concatenated</li>
+                        <li><strong>Never concatenate user input</strong>: String concatenation in SQL queries is the primary injection vector</li>
+                        <li><strong>%SQL.Statement</strong>: The recommended dynamic SQL interface with built-in parameterization</li>
+                        <li><strong>Input validation</strong>: Defense-in-depth -- validate and sanitize input even when using parameters</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>The SQL Injection Problem</h4>
+                        <p>SQL injection occurs when user-provided input is directly concatenated into a SQL string, allowing an attacker to alter the query logic:</p>
+                        <pre><code class="language-objectscript"> // VULNERABLE: Direct string concatenation
+ SET sql = &quot;SELECT * FROM Patient WHERE Name = &#x27;&quot; _ userInput _ &quot;&#x27;&quot;
+ // If userInput = &quot;&#x27; OR 1=1 --&quot;, the query becomes:
+ // SELECT * FROM Patient WHERE Name = &#x27;&#x27; OR 1=1 --&#x27;
+ // This returns ALL patients!</code></pre>
+                        <h4>Prevention with %SQL.Statement and ? Parameters</h4>
+                        <p>The correct approach uses parameterized queries where user input is bound as parameters, never interpolated into the SQL string:</p>
+                        <pre><code class="language-objectscript"> SET stmt = ##class(%SQL.Statement).%New()
+ SET sc = stmt.%Prepare(&quot;SELECT Name, DOB FROM Patient WHERE PatientId = ?&quot;)
+ IF $$$ISERR(sc) {
+     WRITE &quot;Prepare error: &quot;, $SYSTEM.Status.GetErrorText(sc), !
+     QUIT
+ }
+
+ // Execute with parameter -- safely bound regardless of content
+ SET rs = stmt.%Execute(userInput)
+ WHILE rs.%Next() {
+     WRITE rs.Name, &quot; - &quot;, rs.DOB, !
+ }</code></pre>
+                        <p>Multiple parameters:</p>
+                        <pre><code class="language-objectscript"> SET sc = stmt.%Prepare(&quot;SELECT * FROM Patient WHERE State = ? AND Age &gt; ?&quot;)
+ SET rs = stmt.%Execute(stateInput, ageInput)</code></pre>
+                        <h4>Safe Embedded SQL with Host Variables</h4>
+                        <p>Embedded SQL automatically uses safe binding through host variables (prefixed with colon):</p>
+                        <pre><code class="language-objectscript"> // SAFE: Host variables are bound, not concatenated
+ SET patientName = userInput
+ &amp;sql(SELECT DOB, Phone INTO :dob, :phone
+      FROM Patient
+      WHERE Name = :patientName)
+ IF SQLCODE = 0 {
+     WRITE &quot;DOB: &quot;, dob, !
+ }</code></pre>
+                        <p>The colon-prefixed variables (:patientName, :dob, :phone) are treated as bound parameters by the SQL engine, making injection impossible through these values.</p>
+                        <h4>Dynamic Table/Column Names</h4>
+                        <p>When table or column names must be dynamic (which parameters cannot handle), use a whitelist approach:</p>
+                        <pre><code class="language-objectscript"> // Validate against a known whitelist
+ SET allowedTables = $LISTBUILD(&quot;Patient&quot;, &quot;Appointment&quot;, &quot;Provider&quot;)
+ IF &#x27;$LISTFIND(allowedTables, tableName) {
+     WRITE &quot;Invalid table name&quot;, !
+     QUIT
+ }
+ // Now safe to use in query construction
+ SET sql = &quot;SELECT * FROM &quot; _ tableName _ &quot; WHERE Id = ?&quot;
+ SET sc = stmt.%Prepare(sql)
+ SET rs = stmt.%Execute(idValue)  // idValue still parameterized</code></pre>
+                        <h4>Defense in Depth: Input Validation</h4>
+                        <p>Even with parameterized queries, validate input as an additional layer:</p>
+                        <pre><code class="language-objectscript"> // Validate expected format
+ IF patientId &#x27;?1.N {
+     // Not a valid numeric ID
+     WRITE &quot;Invalid patient ID format&quot;, !
+     QUIT
+ }
+ SET rs = stmt.%Execute(patientId)</code></pre>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_dynsql" target="_blank">Using Dynamic SQL</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_dynsql#GSQL_dynsql_statement" target="_blank">%SQL.Statement</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_esql" target="_blank">Embedded SQL</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="section-4" class="knowledge-item">
+                <h2>4. Implements embedded SQL permission checks <button class="subsection-report-btn" onclick="openReportModal('section-4', 'Section 4')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>Embedded SQL does NOT check SQL privileges</strong>: Embedded SQL bypasses SQL privilege enforcement — applications must check privileges explicitly</li>
+                        <li><strong>%CHECKPRIV</strong>: SQL command to verify if the current user has a specific SQL privilege (use before embedded SQL operations)</li>
+                        <li><strong>GRANT/REVOKE</strong>: SQL commands to assign or remove privileges on tables, views, and procedures</li>
+                        <li><strong>SQL privileges</strong>: %ALTER, SELECT, INSERT, UPDATE, DELETE, EXECUTE, and REFERENCES on specific objects</li>
+                        <li><strong>SQLCODE -99</strong>: Error code returned when a Dynamic SQL operation fails due to insufficient privileges</li>
+                        <li><strong>Privilege inheritance</strong>: Roles can be granted SQL privileges, and users inherit privileges from their roles</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Embedded SQL and Privilege Checking</h4>
+                        <p><strong>Important:</strong> Embedded SQL does NOT perform SQL privilege checking. The InterSystems documentation states: *"Embedded SQL statements do not perform privilege checking; it is assumed that applications using Embedded SQL will check for privileges before using Embedded SQL statements."*</p>
+                        <p>SQL privilege enforcement applies to:</p>
+                        <ul>
+                            <li>Dynamic SQL (%SQL.Statement)</li>
+                            <li>ODBC connections</li>
+                            <li>JDBC connections</li>
+                            <li>SQL Shell</li>
+                        </ul>
+                        <p>Embedded SQL can access all tables, views, and columns and perform any operation regardless of privilege assignments. Use %CHECKPRIV explicitly if you need to verify privileges in embedded SQL code.</p>
+                        <h4>Checking SQL Privileges with %CHECKPRIV</h4>
+                        <p>Use %CHECKPRIV in embedded SQL to verify a user's privileges before attempting an operation:</p>
+                        <pre><code class="language-objectscript"> // Check if current user has SELECT privilege on Patient table
+ &amp;sql(%CHECKPRIV SELECT ON MyApp.Patient)
+ IF SQLCODE = 0 {
+     WRITE &quot;User has SELECT privilege on Patient&quot;, !
+ }
+ ELSE {
+     WRITE &quot;Access denied to Patient table&quot;, !
+     QUIT
+ }
+
+ // Check INSERT privilege
+ &amp;sql(%CHECKPRIV INSERT ON MyApp.Patient)
+ IF SQLCODE &#x27;= 0 {
+     WRITE &quot;Cannot insert: &quot;, %msg, !
+     QUIT
+ }</code></pre>
+                        <h4>Handling Privilege Failures (SQLCODE -99)</h4>
+                        <p>When a Dynamic SQL operation fails due to missing privileges, SQLCODE is set to -99 (this does NOT apply to Embedded SQL, which bypasses privilege checks):</p>
+                        <pre><code class="language-objectscript"> &amp;sql(INSERT INTO MyApp.AuditLog (Action, Username, Timestamp)
+      VALUES (&#x27;LOGIN&#x27;, :username, CURRENT_TIMESTAMP))
+ IF SQLCODE = -99 {
+     // Privilege error -- handle gracefully
+     WRITE &quot;Insufficient SQL privileges for audit logging&quot;, !
+     // Log through alternative mechanism
+     DO ##class(MyApp.Logger).Log(&quot;WARN&quot;, &quot;SQL privilege denied for &quot; _ $USERNAME)
+ }
+ ELSEIF SQLCODE &lt; 0 {
+     WRITE &quot;SQL error: &quot;, SQLCODE, &quot; - &quot;, %msg, !
+ }</code></pre>
+                        <h4>GRANT and REVOKE in Embedded SQL</h4>
+                        <p>Manage SQL privileges programmatically using GRANT and REVOKE:</p>
+                        <pre><code class="language-objectscript"> // Grant SELECT on a table to a role
+ &amp;sql(GRANT SELECT ON MyApp.Patient TO MyAppReadOnly)
+ IF SQLCODE &#x27;= 0 {
+     WRITE &quot;Grant failed: &quot;, %msg, !
+ }
+
+ // Grant multiple privileges
+ &amp;sql(GRANT SELECT, INSERT, UPDATE ON MyApp.Patient TO MyAppDataEntry)
+
+ // Grant EXECUTE on a stored procedure
+ &amp;sql(GRANT EXECUTE ON MyApp.CalculateRisk TO MyAppClinician)
+
+ // Revoke a privilege
+ &amp;sql(REVOKE DELETE ON MyApp.Patient FROM MyAppDataEntry)
+
+ // Grant with GRANT OPTION (allows the grantee to grant the same privilege to others)
+ &amp;sql(GRANT SELECT ON MyApp.Patient TO MyAppAdmin WITH GRANT OPTION)</code></pre>
+                        <h4>Combining Role Checks with SQL Privilege Checks</h4>
+                        <p>For defense in depth, combine ObjectScript role checks with SQL privilege verification:</p>
+                        <pre><code class="language-objectscript">ClassMethod UpdatePatientRecord(patientId As %Integer, data As %String) As %Status
+{
+    // Layer 1: ObjectScript role check
+    IF &#x27;$SYSTEM.Security.Check(&quot;MyApp.PatientData&quot;, &quot;WRITE&quot;) {
+        RETURN $$$ERROR($$$AccessDenied)
+    }
+
+    // Layer 2: SQL privilege check
+    &amp;sql(%CHECKPRIV UPDATE ON MyApp.Patient)
+    IF SQLCODE &#x27;= 0 {
+        RETURN $$$ERROR($$$GeneralError, &quot;SQL UPDATE privilege required&quot;)
+    }
+
+    // Layer 3: Execute the update with proper error handling
+    &amp;sql(UPDATE MyApp.Patient SET Data = :data WHERE PatientId = :patientId)
+    IF SQLCODE &lt; 0 {
+        RETURN $$$ERROR($$$GeneralError, &quot;Update failed: &quot; _ %msg)
+    }
+    IF SQLCODE = 100 {
+        RETURN $$$ERROR($$$GeneralError, &quot;Patient not found&quot;)
+    }
+
+    RETURN $$$OK
+}</code></pre>
+                        <h4>Column-Level Privileges</h4>
+                        <p>SQL privileges can be granted at the column level for fine-grained control:</p>
+                        <pre><code class="language-objectscript"> // Grant SELECT only on non-sensitive columns
+ &amp;sql(GRANT SELECT (Name, DOB, Phone) ON MyApp.Patient TO MyAppReceptionist)
+
+ // Deny access to sensitive columns
+ &amp;sql(REVOKE SELECT (SSN, DiagnosisCode) ON MyApp.Patient FROM MyAppReceptionist)</code></pre>
+                        <h4>Viewing Current Privileges</h4>
+                        <p>Query the SQL security metadata to see what privileges exist:</p>
+                        <pre><code class="language-objectscript"> &amp;sql(SELECT Grantee, Privilege, TableName
+      INTO :grantee, :priv, :tbl
+      FROM INFORMATION_SCHEMA.TABLE_PRIVILEGES
+      WHERE TableName = &#x27;MyApp.Patient&#x27;)
+ WHILE SQLCODE = 0 {
+     WRITE grantee, &quot; has &quot;, priv, &quot; on &quot;, tbl, !
+     &amp;sql(FETCH INTO :grantee, :priv, :tbl)
+ }</code></pre>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_privileges" target="_blank">SQL Privileges</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RSQL_grant" target="_blank">GRANT Command</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RSQL_revoke" target="_blank">REVOKE Command</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RSQL_checkpriv" target="_blank">%CHECKPRIV</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <div class="exam-prep">
+                <h2>Exam Preparation Summary</h2>
+                <h3>Critical Concepts to Master:</h3>
+                <ol>
+                    <li><strong>PPGs for sensitive data</strong>: Process-private globals (^||name) are isolated per-process, not journaled, not backed up -- ideal for temporary sensitive data</li>
+                    <li><strong>$SYSTEM.Security.Check()</strong>: The primary programmatic method for checking resource-level permissions; accepts resource name and permission type (READ/WRITE/USE)</li>
+                    <li><strong>$ROLES</strong>: Contains comma-delimited list of current user's roles; use $LISTFIND for precise checking rather than the contains operator ([)</li>
+                    <li><strong>Parameterized queries</strong>: Always use ? with %SQL.Statement or :variable with embedded SQL; never concatenate user input into SQL strings</li>
+                    <li><strong>%CHECKPRIV</strong>: Embedded SQL command to verify SQL privileges before executing operations</li>
+                    <li><strong>SQLCODE -99</strong>: The specific error code for privilege violations in SQL operations</li>
+                </ol>
+                <h3>Common Exam Scenarios:</h3>
+                <ul>
+                    <li>Identifying vulnerable code that concatenates user input into SQL queries</li>
+                    <li>Choosing between local variables, PPGs, and regular globals for storing sensitive data</li>
+                    <li>Writing $SYSTEM.Security.Check() calls with correct resource name and permission type</li>
+                    <li>Fixing insecure code patterns (global indirection with user input, exposed global names)</li>
+                    <li>Implementing GRANT/REVOKE statements for role-based SQL access</li>
+                    <li>Determining the correct location for authorization checks (method level with Requires vs programmatic)</li>
+                    <li>Recognizing SQLCODE -99 and implementing appropriate error handling</li>
+                </ul>
+                <h3>Hands-On Practice Recommendations:</h3>
+                <ul>
+                    <li>Create a test class with methods using the Requires keyword and test with different user roles</li>
+                    <li>Write both vulnerable and secure versions of dynamic SQL queries to understand the difference</li>
+                    <li>Use $ROLES and $SYSTEM.Security.Check() in Terminal with different user accounts</li>
+                    <li>Set up SQL privileges with GRANT and test access with %CHECKPRIV</li>
+                    <li>Create process-private globals and verify they are invisible from other processes using a second Terminal session</li>
+                    <li>Attempt SQL operations without proper privileges to observe SQLCODE -99 behavior</li>
+                    <li>Practice column-level GRANT to restrict access to sensitive fields (SSN, diagnosis codes)</li>
+                </ul>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <a href="../quiz.html?file=quizzes/T2.3-quiz.json" class="take-quiz-btn">Take the Quiz</a>
+        </footer>
+    </div>
+
+    <div id="reportModal" class="report-modal">
+        <div class="report-content">
+            <h3>Report an Issue</h3>
+            <label for="issueType">Issue Type</label>
+            <select id="issueType">
+                <option value="confusing">Confusing Content</option>
+                <option value="wrong_answer">Incorrect Information</option>
+                <option value="outdated">Outdated Content</option>
+                <option value="formatting">Formatting Issue</option>
+                <option value="typo">Typo</option>
+                <option value="other">Other</option>
+            </select>
+            <label for="issueDescription">Description</label>
+            <textarea id="issueDescription" placeholder="Please describe the issue..."></textarea>
+            <div style="display: flex; align-items: center; gap: 10px; margin: 15px 0;">
+                <input type="checkbox" id="wantEmailNotification" style="width: 18px; height: 18px;">
+                <label for="wantEmailNotification" style="margin: 0; cursor: pointer;">
+                    Notify me by email when resolved
+                </label>
+            </div>
+            <div class="report-actions">
+                <button class="report-cancel" onclick="closeReportModal()">Cancel</button>
+                <button class="report-submit" onclick="submitReport()">Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../../js/config.js"></script>
+    <script src="../../../js/auth.js"></script>
+    <script src="../../../js/api.js"></script>
+    <script>
+        const CERTIFICATION_NAME = 'ObjectScript-Specialist';
+        const TOPIC_REF = 'T2.3';
+
+        document.addEventListener('DOMContentLoaded', function() {
+            updateAuthUI();
+            trackKnowledgeView();
+        });
+
+        function updateAuthUI() {
+            const loginBtn = document.getElementById('loginBtn');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const userInfo = document.getElementById('userInfo');
+            const userAvatar = document.getElementById('userAvatar');
+            const userName = document.getElementById('userName');
+
+            if (typeof Auth !== 'undefined' && Auth.isAuthenticated()) {
+                const user = Auth.getUser();
+                loginBtn.style.display = 'none';
+                logoutBtn.style.display = 'inline-block';
+                userInfo.style.display = 'flex';
+                if (user) {
+                    const initial = (user.name || user.email || '?')[0].toUpperCase();
+                    userAvatar.textContent = initial;
+                    userName.textContent = user.name || user.email || 'User';
+                }
+            } else {
+                loginBtn.style.display = 'inline-block';
+                logoutBtn.style.display = 'none';
+                userInfo.style.display = 'none';
+            }
+        }
+
+        async function trackKnowledgeView() {
+            if (typeof Auth === 'undefined' || !Auth.isAuthenticated()) {
+                return;
+            }
+
+            try {
+                await Api.trackKnowledge(CERTIFICATION_NAME, TOPIC_REF);
+                console.log('Knowledge view tracked:', TOPIC_REF);
+            } catch (error) {
+                console.log('View tracking skipped:', error.message);
+            }
+        }
+
+        function openReportModal(sectionId, sectionTitle) {
+            if (typeof Auth === 'undefined' || !Auth.isAuthenticated()) {
+                alert('Please sign in to report issues.');
+                return;
+            }
+            // Store section context
+            window.currentReportSection = {
+                id: sectionId || 'general',
+                title: sectionTitle || 'General'
+            };
+            // Update modal header to show section
+            const modalHeader = document.querySelector('#reportModal h3');
+            if (modalHeader && sectionTitle) {
+                modalHeader.textContent = 'Report Issue: ' + sectionTitle;
+            } else if (modalHeader) {
+                modalHeader.textContent = 'Report an Issue';
+            }
+            document.getElementById('wantEmailNotification').checked = false;
+            document.getElementById('reportModal').classList.add('active');
+        }
+
+        function closeReportModal() {
+            document.getElementById('reportModal').classList.remove('active');
+            document.getElementById('issueType').value = 'confusing';
+            document.getElementById('issueDescription').value = '';
+        }
+
+        async function submitReport() {
+            const issueType = document.getElementById('issueType').value;
+            const description = document.getElementById('issueDescription').value.trim();
+            const wantEmailNotification = document.getElementById('wantEmailNotification').checked;
+            const sectionContext = window.currentReportSection || { id: 'general', title: 'General' };
+
+            if (!description) {
+                alert('Please provide a description of the issue.');
+                return;
+            }
+
+            // Build content reference with section context
+            const contentRef = sectionContext.id !== 'general'
+                ? `${TOPIC_REF} (${sectionContext.title})`
+                : TOPIC_REF;
+
+            try {
+                await Api.reportProblem({
+                    certificationName: CERTIFICATION_NAME,
+                    contentType: 'knowledge',
+                    contentReference: contentRef,
+                    issueType: issueType,
+                    description: description,
+                    wantEmailNotification: wantEmailNotification
+                });
+                alert('Thank you! Your report has been submitted.');
+                closeReportModal();
+            } catch (error) {
+                if (error.status === 429) {
+                    const retryMinutes = Math.ceil((error.data?.retryAfter || 3600) / 60);
+                    alert(`You've submitted too many reports recently. Please wait ${retryMinutes} minutes before submitting another report.`);
+                } else {
+                    alert('Failed to submit report: ' + error.message);
+                }
+            }
+        }
+
+        document.querySelectorAll('.detailed-notes h3').forEach(h3 => {
+            h3.style.cursor = 'pointer';
+        });
+    </script>
+    <script src="../../../js/consent.js"></script>
+    <script src="../../../js/analytics.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            CookieConsent.init();
+            Analytics.init();
+        });
+    </script>
+</body>
+</html>

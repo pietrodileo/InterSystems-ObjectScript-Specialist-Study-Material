@@ -1,0 +1,253 @@
+{
+  "quiz": {
+    "title": "T5.2: Runtime Error Handling",
+    "description": "Test your knowledge of TRY-CATCH blocks, exception classes, $STACK for call stack analysis, %Status error handling, and throwing exceptions in InterSystems IRIS ObjectScript",
+    "version": "2.2",
+    "publishedDate": "2026-09-17",
+    "questions": [
+      {
+        "id": 1,
+        "type": "single",
+        "question": "Your application logs the following runtime error at random:\n\nHandleOrder+4^Sample.Service.1 *orderId\n\nYou suspect that one of several upstream helper methods is passing an empty orderId. You want to modify HandleOrder() so that whenever an error occurs, it prints the full call stack.\n\nWhich technique lets you capture and display that call-stack information?",
+        "options": [
+          "Call %SYS.Trace::StartPID() inside HandleOrder() to begin tracing",
+          "Print the $ZERROR special variable inside a CATCH block",
+          "Use zwrite $METHOD to reveal which method is currently running",
+          "Invoke the $STACK function in a loop to iterate and print upstream methods"
+        ],
+        "correct": [3],
+        "explanation": "$STACK(-1) returns the current call stack depth, and $STACK(level, \"PLACE\") returns the location at each level. By looping from 0 to $STACK(-1), you can print every method in the call chain that led to the error. $ZERROR only gives the most recent error string, not the full call stack. This matches InterSystems practice question Q22. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fstack)"
+      },
+      {
+        "id": 2,
+        "type": "single",
+        "question": "A developer writes the following error handler:\n\nClassMethod ProcessBatch() As %Status\n{\n  TRY {\n    Do ..LoadData()\n    Do ..TransformData()\n    Do ..SaveResults()\n    Return $$$OK\n  } CATCH ex {\n    Write \"Error: \", ex.Name, \" at \", ex.Location, !\n    Return ex.AsStatus()\n  }\n}\n\nWhat does ex.AsStatus() return in the CATCH block?",
+        "options": [
+          "A human-readable error message string",
+          "A %Status error value representing the caught exception",
+          "The numeric error code from the exception",
+          "A boolean indicating whether the exception was handled"
+        ],
+        "correct": [1],
+        "explanation": "The AsStatus() method of %Exception.AbstractException converts the exception object back into a %Status error value. This allows seamless integration between exception-based error handling (TRY-CATCH) and %Status-based error handling (returning status codes to callers). (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_ctrycatch)"
+      },
+      {
+        "id": 3,
+        "type": "single",
+        "question": "A developer writes:\n\nTRY {\n  Set obj = ##class(App.Order).%OpenId(999)\n  Do obj.Process()\n} CATCH ex {\n  Write ex.Name, !\n}\n\nIf ID 999 does not exist in the database, what error will be caught?",
+        "options": [
+          "<NOTFOUND> because the ID does not exist",
+          "<UNDEFINED> because %OpenId returns empty string and obj has no value",
+          "<INVALID OREF> because obj is an empty string, not an object reference",
+          "No error -- %OpenId returns a %Status and execution continues normally"
+        ],
+        "correct": [2],
+        "explanation": "When %OpenId cannot find the requested ID, it returns an empty string (\"\"). The next line attempts to call obj.Process() on an empty string rather than an object reference, producing an <INVALID OREF> error. The safe pattern is to check 'If obj = \"\"' after %OpenId, or use the %Status output parameter: Set obj = ##class(App.Order).%OpenId(999, , .sc). (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_errors)"
+      },
+      {
+        "id": 4,
+        "type": "single",
+        "question": "Consider this code that uses $$$ThrowOnError:\n\nClassMethod ProcessData() As %Status\n{\n  TRY {\n    Set sc = ..ValidateInput()\n    $$$ThrowOnError(sc)\n    Set sc = ..TransformData()\n    $$$ThrowOnError(sc)\n    Set sc = ..SaveResults()\n    $$$ThrowOnError(sc)\n    Return $$$OK\n  } CATCH ex {\n    Return ex.AsStatus()\n  }\n}\n\nWhat does $$$ThrowOnError(sc) do?",
+        "options": [
+          "Writes the error text to the current device and continues",
+          "Logs the error to ^ERRORS and continues execution",
+          "Throws a %Exception.StatusException if sc is an error status; otherwise continues",
+          "Converts sc to a string and assigns it to $ZERROR"
+        ],
+        "correct": [2],
+        "explanation": "$$$ThrowOnError(sc) checks whether sc is an error %Status. If it is, it throws a %Exception.StatusException that will be caught by the surrounding TRY-CATCH block. If sc indicates success ($$$OK), execution continues to the next line. This macro bridges %Status-based and exception-based error handling patterns. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_ctrycatch)"
+      },
+      {
+        "id": 5,
+        "type": "single",
+        "question": "A method needs to display the full call stack when an error occurs:\n\nCATCH ex {\n  Write \"Error: \", ex.Name, !\n  For level = 0:1:$STACK(-1) {\n    Write \"  Level \", level, \": \", $STACK(level, \"PLACE\"), !\n  }\n}\n\nWhat does $STACK(-1) return?",
+        "options": [
+          "The name of the method at the bottom of the stack",
+          "The current depth (number of levels) of the call stack",
+          "The error message from the most recent error",
+          "The process ID of the current process"
+        ],
+        "correct": [1],
+        "explanation": "$STACK(-1) returns the current depth of the call stack as an integer. By looping from 0 to $STACK(-1) and calling $STACK(level, \"PLACE\") for each level, you can print the complete chain of method calls that led to the current execution point. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fstack)"
+      },
+      {
+        "id": 6,
+        "type": "multiple",
+        "question": "Which of the following are valid ways to throw an exception in ObjectScript? (Select two)",
+        "options": [
+          "throw ##class(%Exception.General).%New(\"CustomError\", 5001, , \"Details\")",
+          "raise ##class(%Exception.General).%New(\"CustomError\")",
+          "$$$ThrowStatus($$$ERROR($$$GeneralError, \"Something failed\"))",
+          "signal \"CustomError\"",
+          "do $SYSTEM.Error.Throw(\"CustomError\")"
+        ],
+        "correct": [0, 2],
+        "explanation": "Exceptions are thrown with the throw command and an exception object, or with the $$$ThrowStatus macro, which wraps a %Status in a %Exception.StatusException and throws it. raise and signal are not ObjectScript commands -- they come from other languages -- and there is no $SYSTEM.Error.Throw() method: calling it raises <METHOD DOES NOT EXIST>.",
+        "revised": true
+      },
+      {
+        "id": 7,
+        "type": "single",
+        "question": "What is the difference between %Exception.StatusException and %Exception.General?",
+        "options": [
+          "%Exception.StatusException wraps a %Status value; %Exception.General is for arbitrary named errors",
+          "%Exception.General is the superclass; %Exception.StatusException is deprecated",
+          "%Exception.StatusException is for SQL errors only; %Exception.General is for all others",
+          "There is no difference; they are aliases for the same class"
+        ],
+        "correct": [0],
+        "explanation": "%Exception.StatusException wraps a %Status value, making it useful when converting from %Status-based to exception-based error handling (e.g., via $$$ThrowOnError). %Exception.General is used for creating custom exceptions with a Name, Code, and Data. Both extend %Exception.AbstractException. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_ctrycatch)"
+      },
+      {
+        "id": 8,
+        "type": "single",
+        "question": "A developer has this code:\n\nSet sc = ##class(App.Patient).%Save()\nIf $$$ISERR(sc) {\n    Write $SYSTEM.Status.GetErrorText(sc), !\n}\n\nWhat does $SYSTEM.Status.GetErrorText(sc) return?",
+        "options": [
+          "A %Status object with more detail about the error",
+          "A human-readable error message string",
+          "An integer error code",
+          "A %Exception.StatusException object"
+        ],
+        "correct": [1],
+        "explanation": "$SYSTEM.Status.GetErrorText() converts an encoded %Status value into a human-readable error message string. Since %Status values are internally encoded and not directly readable, this method is essential for logging and displaying error information to users or in log files. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_status)"
+      },
+      {
+        "id": 9,
+        "type": "multiple",
+        "question": "Which of the following macros are used to check whether a %Status value indicates success or failure? (Select two)",
+        "options": [
+          "$$$ISOK(sc)",
+          "$$$ISERR(sc)",
+          "$$$ISGOOD(sc)",
+          "$$$STATUS(sc)",
+          "$$$CHECK(sc)"
+        ],
+        "correct": [0, 1],
+        "explanation": "$$$ISOK(sc) returns 1 if the status indicates success, and $$$ISERR(sc) returns 1 if the status indicates an error. These are the standard macros from %occStatus.inc for testing %Status values. $$$ISGOOD, $$$STATUS, and $$$CHECK are not valid InterSystems macros. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_status)"
+      },
+      {
+        "id": 10,
+        "type": "single",
+        "question": "A developer needs to catch only specific errors and re-throw others:\n\nTRY {\n    Do ..RiskyOperation()\n} CATCH ex {\n    If ex.Name = \"<STORE>\" {\n        // handle storage error\n        Set sc = ..HandleStorageError(ex)\n    } Else {\n        // What goes here to re-throw the exception?\n    }\n}",
+        "options": [
+          "Quit ex",
+          "throw ex",
+          "raise ex",
+          "return ex"
+        ],
+        "correct": [1],
+        "explanation": "The 'throw' command re-throws an exception object, allowing it to propagate to an outer TRY-CATCH block. This is the standard pattern for selectively catching certain exceptions while letting others propagate up the call stack. 'Quit' would exit the CATCH block, 'return' would return from the method, and 'raise' is not an ObjectScript command. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_cthrow)"
+      },
+      {
+        "id": 11,
+        "type": "multiple",
+        "question": "A developer wants to create and throw a %Status-based exception. Which code is correct? (Select all that apply)",
+        "options": [
+          "throw $$$ERROR($$$GeneralError, \"Invalid input\")",
+          "Set sc = $$$ERROR($$$GeneralError, \"Invalid input\")\n$$$ThrowStatus(sc)",
+          "throw ##class(%Exception.StatusException).CreateFromStatus($$$ERROR($$$GeneralError, \"Invalid input\"))",
+          "Set sc = $$$ERROR($$$GeneralError, \"Invalid input\")\nthrow sc",
+          "do ##class(%Exception.StatusException).ThrowIfError($$$ERROR($$$GeneralError, \"Invalid input\"))"
+        ],
+        "correct": [1, 2],
+        "explanation": "Both working forms go through a %Exception object: $$$ThrowStatus(sc) is the idiomatic macro, and CreateFromStatus() builds the same exception explicitly so it can be thrown. What you cannot do is throw a %Status directly -- throw requires an object, so both options that pass sc or $$$ERROR(...) straight to throw fail. %Exception.StatusException has no ThrowIfError() method either; the macro $$$ThrowOnError(sc) is the shortcut people are reaching for there.",
+        "revised": true
+      },
+      {
+        "id": 12,
+        "type": "single",
+        "question": "What information does the Location property of a %Exception.AbstractException contain?\n\nFor example, if ex.Location returns: \"ProcessOrder+7^App.OrderService.1\"",
+        "options": [
+          "The namespace where the error occurred",
+          "The label+offset^routine reference where the error was thrown",
+          "The server hostname and port number",
+          "The source file path on disk"
+        ],
+        "correct": [1],
+        "explanation": "The Location property contains the execution location in the format label+offset^routine. In this example, 'ProcessOrder+7^App.OrderService.1' means the error occurred 7 lines into the ProcessOrder label of the compiled routine App.OrderService.1. This helps pinpoint exactly where the error was thrown. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_ctrycatch)"
+      },
+      {
+        "id": 13,
+        "type": "multiple",
+        "question": "Which of the following are properties of a %Exception.AbstractException object? (Select three)",
+        "options": [
+          "Name -- the error name (e.g., \"<UNDEFINED>\")",
+          "Code -- a numeric error code",
+          "Location -- where the error occurred (e.g., label+offset^routine)",
+          "Timestamp -- when the error occurred",
+          "Severity -- the error severity level (Warning, Error, Fatal)"
+        ],
+        "correct": [0, 1, 2],
+        "explanation": "%Exception.AbstractException provides the properties Name (error name like <UNDEFINED>), Code (numeric error code), Data (additional context), and Location (where the error occurred). There is no Timestamp or Severity property on the exception object. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_ctrycatch)"
+      },
+      {
+        "id": 14,
+        "type": "single",
+        "question": "A developer writes a method that wraps multiple %Status-returning calls:\n\nClassMethod ImportAll() As %Status\n{\n    Set sc = $$$OK\n    Set sc = $$$ADDSC(sc, ..ImportCustomers())\n    Set sc = $$$ADDSC(sc, ..ImportOrders())\n    Set sc = $$$ADDSC(sc, ..ImportProducts())\n    Quit sc\n}\n\nWhat does $$$ADDSC do?",
+        "options": [
+          "Replaces sc with the new status, discarding the previous one",
+          "Appends the new status to sc, combining multiple errors into a single %Status",
+          "Throws an exception if the new status is an error",
+          "Logs the status to ^ERRORS and returns $$$OK"
+        ],
+        "correct": [1],
+        "explanation": "$$$ADDSC (Add Status Code) appends a new %Status to an existing one, combining multiple errors into a single compound %Status value. This allows the method to attempt all three imports and report all failures together rather than stopping at the first error. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_status)"
+      },
+      {
+        "id": 15,
+        "type": "single",
+        "question": "Consider this error-handling pattern:\n\nClassMethod Save(obj As App.Record) As %Status\n{\n    Set sc = obj.%Save()\n    If $$$ISERR(sc) {\n        Do $SYSTEM.Status.DecomposeStatus(sc, .errors)\n        For i=1:1:errors {\n            Write \"Error \", i, \": \", errors(i), !\n        }\n    }\n    Quit sc\n}\n\nWhat does $SYSTEM.Status.DecomposeStatus() do?",
+        "options": [
+          "Converts a %Status into a single error string",
+          "Breaks a compound %Status into an array of individual error messages",
+          "Throws an exception for each error in the status",
+          "Writes all errors directly to the current output device"
+        ],
+        "correct": [1],
+        "explanation": "$SYSTEM.Status.DecomposeStatus(sc, .errors) breaks a compound %Status (which may contain multiple errors) into an array where errors contains the count and errors(1), errors(2), etc. contain individual error message strings. This is useful for detailed error reporting when multiple validations fail. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_status)"
+      },
+      {
+        "id": 16,
+        "type": "single",
+        "question": "A developer writes:\n\nClassMethod RunJob() As %Status\n{\n    TRY {\n        Set sc = ..Step1()\n        If $$$ISERR(sc) Return sc\n        Set sc = ..Step2()\n        If $$$ISERR(sc) Return sc\n        Return $$$OK\n    } CATCH ex {\n        Return ex.AsStatus()\n    }\n}\n\nWhat happens if Step1() returns an error %Status?",
+        "options": [
+          "The CATCH block catches the error and returns ex.AsStatus()",
+          "The method returns the error %Status from Step1() -- the CATCH block is not entered",
+          "A <THROW> error occurs because the status is not thrown",
+          "The method continues to Step2() because Return inside TRY is ignored"
+        ],
+        "correct": [1],
+        "explanation": "The 'If $$$ISERR(sc) Return sc' pattern returns the error status directly from the method via Return. Since no exception is thrown, the CATCH block is never entered. The CATCH block only activates when an actual exception (throw or runtime error) occurs, not when a %Status error is returned via Return. Note: RETURN (not QUIT) must be used inside TRY/CATCH blocks, as QUIT with an argument inside TRY produces compile error #1043. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_ctrycatch)",
+        "revised": true
+      },
+      {
+        "id": 17,
+        "type": "multiple",
+        "question": "Which of the following statements about $STACK are correct? (Select two)",
+        "options": [
+          "$STACK(-1) returns the current call stack depth",
+          "$STACK(level, \"MCODE\") returns the source code line at that stack level",
+          "$STACK(level, \"PLACE\") returns the timestamp when that frame was entered",
+          "$STACK always returns 0 inside a CATCH block",
+          "$STACK(level, \"CALLER\") returns the name of the calling routine"
+        ],
+        "correct": [0, 1],
+        "explanation": "$STACK(-1) returns the current call stack depth, and $STACK(level, \"MCODE\") returns the source line at that level. \"PLACE\" returns the LOCATION of the frame (routine and line offset), not a timestamp, and $STACK keeps working normally inside a CATCH block -- that is precisely where it earns its keep. \"CALLER\" is not a valid keyword: the three accepted are \"PLACE\", \"MCODE\" and \"ECODE\", and anything else raises <FUNCTION>.",
+        "revised": true
+      },
+      {
+        "id": 18,
+        "type": "single",
+        "question": "A developer writes a generic error logger:\n\nClassMethod LogError(ex As %Exception.AbstractException)\n{\n    Set entry = $ZDT($H, 3) _ \" | \"\n    Set entry = entry _ ex.Name _ \" | \"\n    Set entry = entry _ ex.Code _ \" | \"\n    Set entry = entry _ ex.Location _ \" | \"\n    Set entry = entry _ ex.Data\n    Set ^AppLog($I(^AppLog)) = entry\n    // Also log the call stack\n    For level = 0:1:$STACK(-1) {\n        Set ^AppLog($I(^AppLog)) = \"  Stack \" _ level _ \": \" _ $STACK(level, \"PLACE\")\n    }\n}\n\nWhich of the following correctly describes what this method stores in ^AppLog?",
+        "options": [
+          "Only the exception name and location -- Code and Data are always empty",
+          "A formatted error entry followed by each level of the call stack at the time of logging",
+          "The complete source code of the method that caused the error",
+          "A binary representation of the exception object"
+        ],
+        "correct": [1],
+        "explanation": "The method first stores a formatted string containing the timestamp, exception Name, Code, Location, and Data. Then it iterates through the call stack using $STACK and stores each level's location. This provides a complete diagnostic record: what went wrong (the exception properties) and how execution arrived there (the call stack). (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fstack)"
+      }
+    ]
+  }
+}

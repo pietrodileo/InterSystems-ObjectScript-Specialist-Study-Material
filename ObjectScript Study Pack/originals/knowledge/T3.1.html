@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Study guide for T3.1: Differentiates Storage Media - part of the InterSystems ObjectScript Specialist certification. Learn key concepts, best practices, and exam preparation tips.">
+    <meta name="keywords" content="InterSystems certification, ObjectScript Specialist, T3.1: Differentiates Storage Media, exam preparation, practice quiz">
+    <meta name="author" content="exam-prep.es">
+    <meta name="robots" content="index, follow">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://exam-prep.es/exams/objectscript/knowledge/T3.1.html">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://exam-prep.es/exams/objectscript/knowledge/T3.1.html">
+    <meta property="og:title" content="T3.1: Differentiates Storage Media - InterSystems ObjectScript Specialist Study Guide">
+    <meta property="og:description" content="Study guide for T3.1: Differentiates Storage Media - part of the InterSystems ObjectScript Specialist certification. Learn key concepts, best practices, and exam preparation tips.">
+    <meta property="og:image" content="https://exam-prep.es/images/og-image.png">
+    <meta property="og:site_name" content="InterSystems Certification Prep">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://exam-prep.es/exams/objectscript/knowledge/T3.1.html">
+    <meta name="twitter:title" content="T3.1: Differentiates Storage Media - InterSystems ObjectScript Specialist Study Guide">
+    <meta name="twitter:description" content="Study guide for T3.1: Differentiates Storage Media - part of the InterSystems ObjectScript Specialist certification. Learn key concepts, best practices, and exam preparation tips.">
+    <meta name="twitter:image" content="https://exam-prep.es/images/og-image.png">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+    <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+
+    <!-- hreflang Tags -->
+    <link rel="alternate" hreflang="en" href="https://exam-prep.es/exams/objectscript/knowledge/T3.1.html" />
+    <link rel="alternate" hreflang="es" href="https://exam-prep.es/exams/objectscript/knowledge/es/T3.1.html" />
+    <link rel="alternate" hreflang="x-default" href="https://exam-prep.es/exams/objectscript/knowledge/T3.1.html" />
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../colors.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+    <link rel="stylesheet" href="../../../css/consent.css">
+
+    <title>T3.1: Differentiates Storage Media - InterSystems ObjectScript Specialist Study Guide | exam-prep.es</title>
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "T3.1: Differentiates Storage Media - InterSystems ObjectScript Specialist Study Guide",
+    "description": "Study guide for T3.1: Differentiates Storage Media - part of the InterSystems ObjectScript Specialist certification. Learn key concepts, best practices, and exam preparation tips.",
+    "author": {
+        "@type": "Organization",
+        "name": "exam-prep.es"
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "InterSystems Certification Prep",
+        "url": "https://exam-prep.es"
+    },
+    "inLanguage": "en",
+    "about": {
+        "@type": "Course",
+        "name": "InterSystems ObjectScript Specialist"
+    }
+}
+    </script>
+</head>
+<body>
+    <div class="container">
+        <nav class="nav-bar">
+            <a href="../index.html" class="back-link">&#8592; Back to Topics</a>
+            <div class="lang-toggle">
+                <a href="T3.1.html" class="lang-btn active">EN</a>
+                <a href="es/T3.1.html" class="lang-btn">ES</a>
+            </div>
+            <a href="../quiz.html?file=quizzes/T3.1-quiz.json" class="quiz-link">Take Quiz &#8594;</a>
+            <div class="auth-bar">
+                <button id="loginBtn" class="auth-btn login-btn" onclick="Auth.login()">Sign In</button>
+                <div id="userInfo" class="user-info">
+                    <div id="userAvatar" class="user-avatar">?</div>
+                    <span id="userName" class="user-name">User</span>
+                </div>
+                <button id="logoutBtn" class="auth-btn logout-btn" onclick="Auth.logout()">Sign Out</button>
+            </div>
+        </nav>
+
+        <header class="header">
+            <h1>T3.1: Differentiates Storage Media</h1>
+            <p>Knowledge Review - InterSystems ObjectScript Specialist</p>
+        </header>
+
+        <nav class="toc">
+            <h3>Contents</h3>
+            <ol>
+                <li><a href="#section-1">Differentiates between PPGs, variables, temporary globals, and globals</a></li>
+            </ol>
+        </nav>
+
+        <main class="content">
+            <section id="section-1" class="knowledge-item">
+                <h2>1. Differentiates between PPGs, variables, temporary globals, and globals <button class="subsection-report-btn" onclick="openReportModal('section-1', 'Section 1')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>Local variables</strong>: Process-scoped, lost when the process ends or QUIT is issued from the stack level</li>
+                        <li><strong>Process-Private Globals (PPGs)</strong>: `^||name` syntax, visible only to the owning process, automatically cleaned up on process termination</li>
+                        <li><strong>Temporary globals</strong>: `^CacheTempXxx` or `^IRIS.Temp*` globals stored in IRISTEMP database, visible to all processes, cleared on system restart</li>
+                        <li><strong>Globals</strong>: `^name` syntax, persistent data stored in databases, journaled, replicated, survive restarts</li>
+                        <li><strong>Key distinction</strong>: Journaling and replication only apply to persistent globals in journaled databases</li>
+                        <li><strong>Performance</strong>: PPGs and temporary globals avoid journaling overhead; local variables are fastest (in-memory only)</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Overview</h4>
+                        <p>InterSystems IRIS provides four distinct categories of data storage, each with different scope, lifetime, and visibility characteristics. Choosing the right storage medium is critical for application performance, correctness, and data integrity. The exam expects you to know when to use each type and understand their behavioral differences.</p>
+                        <h4>Local Variables</h4>
+                        <p>Local variables exist only within the current process memory (symbol table). They are the fastest form of storage because they never touch disk. Variables created with <code>SET</code> in a routine or method are local by default. They persist for the lifetime of the process unless explicitly killed or scoped with the <code>NEW</code> command. When <code>NEW</code> is used, the variable is stacked and restored when the execution level returns. Local variables are ideal for intermediate calculations, loop counters, and temporary data that does not need to survive beyond the current execution context.</p>
+                        <pre><code class="language-objectscript">SET name = &quot;John&quot;
+SET count = 42
+// These exist only in this process&#x27;s symbol table
+KILL name  // explicitly remove</code></pre>
+                        <h4>Process-Private Globals (PPGs)</h4>
+                        <p>Process-Private Globals use the <code>^||</code> prefix (two pipes) and behave like globals in terms of subscript structure, but are visible only to the process that created them. They are stored in a process-private area and are automatically cleaned up when the process terminates. PPGs are <strong>not journaled</strong>, <strong>not replicated</strong>, and <strong>not visible</strong> to other processes. They are ideal for storing large intermediate result sets that exceed what local variables can comfortably hold, particularly when you need subscripted array structures.</p>
+                        <pre><code class="language-objectscript">// Process-Private Global - only this process can see it
+SET ^||tempResults(1) = &quot;First result&quot;
+SET ^||tempResults(2) = &quot;Second result&quot;
+// Automatically cleaned up when process ends
+
+// Can also use extended syntax with a database reference
+SET ^|&quot;^&quot;|myPPG(1) = &quot;value&quot;</code></pre>
+                        <p>PPGs are particularly useful in SQL query processing, custom sort operations, and any scenario requiring large temporary data structures that should not interfere with other processes or persist beyond the current session.</p>
+                        <h4>Temporary Globals</h4>
+                        <p>Temporary globals are stored in the IRISTEMP database and use naming conventions like <code>^CacheTempXxxxx</code> or <code>^IRIS.Temp.*</code>. Unlike PPGs, temporary globals are <strong>visible to all processes</strong>, making them suitable for inter-process communication of transient data. They are <strong>not journaled</strong> and are <strong>cleared when the system restarts</strong>. The IRISTEMP database is specifically optimized for temporary storage with no journaling overhead.</p>
+                        <pre><code class="language-objectscript">// Temporary global - visible to all processes, cleared on restart
+SET ^CacheTempMyApp($JOB, &quot;key&quot;) = &quot;shared temp value&quot;
+
+// Common pattern: use $JOB to partition by process
+SET ^IRIS.Temp.MyApp($JOB, 1) = &quot;process-specific temp data&quot;
+
+// Clean up when done (good practice even though restart clears them)
+KILL ^CacheTempMyApp($JOB)</code></pre>
+                        <p>Because temporary globals are visible to all processes, the common practice is to include <code>$JOB</code> (process ID) as a top-level subscript to prevent collisions between processes.</p>
+                        <h4>Persistent Globals</h4>
+                        <p>Persistent globals (regular globals with <code>^</code> prefix) are the fundamental storage mechanism in InterSystems IRIS. They are stored in databases on disk, survive system restarts, and can be journaled and replicated. When stored in a journaled database, all changes are recorded in the journal for recovery purposes. In mirrored environments, journaled global changes are replicated to mirror members.</p>
+                        <pre><code class="language-objectscript">// Persistent global - survives restarts, journaled, replicated
+SET ^Patient(12345, &quot;Name&quot;) = &quot;Smith, John&quot;
+SET ^Patient(12345, &quot;DOB&quot;) = &quot;1985-03-15&quot;
+// This data persists until explicitly removed</code></pre>
+                        <h4>Comparison Summary</h4>
+                        <table class="detail-table">
+                            <thead><tr><th>Feature</th><th>Local Variables</th><th>PPGs (^||)</th><th>Temp Globals (^CacheTemp*)</th><th>Globals (^name)</th></tr></thead>
+                            <tbody>
+                            <tr><td>Scope</td><td>Process only</td><td>Process only</td><td>All processes</td><td>All processes</td></tr>
+                            <tr><td>Lifetime</td><td>Process/stack level</td><td>Process</td><td>Until restart</td><td>Permanent</td></tr>
+                            <tr><td>Journaled</td><td>No</td><td>No</td><td>No</td><td>Yes (if DB is journaled)</td></tr>
+                            <tr><td>Replicated</td><td>No</td><td>No</td><td>No</td><td>Yes (if mirrored)</td></tr>
+                            <tr><td>Storage</td><td>Memory (symbol table)</td><td>Memory/IRISTEMP</td><td>IRISTEMP database</td><td>Named database</td></tr>
+                            <tr><td>Performance</td><td>Fastest</td><td>Fast</td><td>Fast</td><td>Standard</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GGBL_structure" target="_blank">Global Structure</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GGBL_structure" target="_blank">Process-Private Globals</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_variables" target="_blank">Variables in ObjectScript</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GGBL_structure" target="_blank">Temporary Globals and IRISTEMP</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <div class="exam-prep">
+                <h2>Exam Preparation Summary</h2>
+                <h3>Critical Concepts to Master:</h3>
+                <ol>
+                    <li><strong>PPG syntax</strong>: `^||name` prefix distinguishes process-private globals from regular globals</li>
+                    <li><strong>Visibility</strong>: Local variables and PPGs are process-scoped; temporary and persistent globals are visible to all processes</li>
+                    <li><strong>Journaling</strong>: Only persistent globals in journaled databases are journaled; PPGs and temp globals are never journaled</li>
+                    <li><strong>Lifetime</strong>: Local variables die with the stack level or process; PPGs die with the process; temp globals die on restart; globals persist forever</li>
+                    <li><strong>IRISTEMP database</strong>: Special non-journaled database used for both temporary globals and PPGs</li>
+                    <li><strong>Performance implications</strong>: Avoiding journaling overhead with PPGs and temp globals for transient data</li>
+                </ol>
+                <h3>Common Exam Scenarios:</h3>
+                <ul>
+                    <li>Choosing the right storage medium for a given use case (e.g., large intermediate result set visible only to one process = PPG)</li>
+                    <li>Identifying which storage types survive a system restart (only persistent globals)</li>
+                    <li>Determining which storage types are journaled and replicated (only persistent globals in journaled databases)</li>
+                    <li>Recognizing the `^||` syntax as process-private globals vs `^CacheTemp` as temporary globals</li>
+                    <li>Understanding why `$JOB` is used as a subscript in temporary globals (process isolation)</li>
+                </ul>
+                <h3>Hands-On Practice Recommendations:</h3>
+                <ul>
+                    <li>Create local variables, PPGs, temporary globals, and persistent globals in a Terminal session</li>
+                    <li>Open two Terminal sessions and verify that PPGs are invisible across processes while temporary globals are shared</li>
+                    <li>Restart the system and verify which data survives</li>
+                    <li>Examine the IRISTEMP database in the Management Portal to understand its role</li>
+                    <li>Practice KILL commands to clean up each storage type</li>
+                    <li>Use `$ORDER` to iterate over PPGs and temporary globals to understand their subscript structure</li>
+                </ul>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <a href="../quiz.html?file=quizzes/T3.1-quiz.json" class="take-quiz-btn">Take the Quiz</a>
+        </footer>
+    </div>
+
+    <div id="reportModal" class="report-modal">
+        <div class="report-content">
+            <h3>Report an Issue</h3>
+            <label for="issueType">Issue Type</label>
+            <select id="issueType">
+                <option value="confusing">Confusing Content</option>
+                <option value="wrong_answer">Incorrect Information</option>
+                <option value="outdated">Outdated Content</option>
+                <option value="formatting">Formatting Issue</option>
+                <option value="typo">Typo</option>
+                <option value="other">Other</option>
+            </select>
+            <label for="issueDescription">Description</label>
+            <textarea id="issueDescription" placeholder="Please describe the issue..."></textarea>
+            <div style="display: flex; align-items: center; gap: 10px; margin: 15px 0;">
+                <input type="checkbox" id="wantEmailNotification" style="width: 18px; height: 18px;">
+                <label for="wantEmailNotification" style="margin: 0; cursor: pointer;">
+                    Notify me by email when resolved
+                </label>
+            </div>
+            <div class="report-actions">
+                <button class="report-cancel" onclick="closeReportModal()">Cancel</button>
+                <button class="report-submit" onclick="submitReport()">Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../../js/config.js"></script>
+    <script src="../../../js/auth.js"></script>
+    <script src="../../../js/api.js"></script>
+    <script>
+        const CERTIFICATION_NAME = 'ObjectScript-Specialist';
+        const TOPIC_REF = 'T3.1';
+
+        document.addEventListener('DOMContentLoaded', function() {
+            updateAuthUI();
+            trackKnowledgeView();
+        });
+
+        function updateAuthUI() {
+            const loginBtn = document.getElementById('loginBtn');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const userInfo = document.getElementById('userInfo');
+            const userAvatar = document.getElementById('userAvatar');
+            const userName = document.getElementById('userName');
+
+            if (typeof Auth !== 'undefined' && Auth.isAuthenticated()) {
+                const user = Auth.getUser();
+                loginBtn.style.display = 'none';
+                logoutBtn.style.display = 'inline-block';
+                userInfo.style.display = 'flex';
+                if (user) {
+                    const initial = (user.name || user.email || '?')[0].toUpperCase();
+                    userAvatar.textContent = initial;
+                    userName.textContent = user.name || user.email || 'User';
+                }
+            } else {
+                loginBtn.style.display = 'inline-block';
+                logoutBtn.style.display = 'none';
+                userInfo.style.display = 'none';
+            }
+        }
+
+        async function trackKnowledgeView() {
+            if (typeof Auth === 'undefined' || !Auth.isAuthenticated()) {
+                return;
+            }
+
+            try {
+                await Api.trackKnowledge(CERTIFICATION_NAME, TOPIC_REF);
+                console.log('Knowledge view tracked:', TOPIC_REF);
+            } catch (error) {
+                console.log('View tracking skipped:', error.message);
+            }
+        }
+
+        function openReportModal(sectionId, sectionTitle) {
+            if (typeof Auth === 'undefined' || !Auth.isAuthenticated()) {
+                alert('Please sign in to report issues.');
+                return;
+            }
+            // Store section context
+            window.currentReportSection = {
+                id: sectionId || 'general',
+                title: sectionTitle || 'General'
+            };
+            // Update modal header to show section
+            const modalHeader = document.querySelector('#reportModal h3');
+            if (modalHeader && sectionTitle) {
+                modalHeader.textContent = 'Report Issue: ' + sectionTitle;
+            } else if (modalHeader) {
+                modalHeader.textContent = 'Report an Issue';
+            }
+            document.getElementById('wantEmailNotification').checked = false;
+            document.getElementById('reportModal').classList.add('active');
+        }
+
+        function closeReportModal() {
+            document.getElementById('reportModal').classList.remove('active');
+            document.getElementById('issueType').value = 'confusing';
+            document.getElementById('issueDescription').value = '';
+        }
+
+        async function submitReport() {
+            const issueType = document.getElementById('issueType').value;
+            const description = document.getElementById('issueDescription').value.trim();
+            const wantEmailNotification = document.getElementById('wantEmailNotification').checked;
+            const sectionContext = window.currentReportSection || { id: 'general', title: 'General' };
+
+            if (!description) {
+                alert('Please provide a description of the issue.');
+                return;
+            }
+
+            // Build content reference with section context
+            const contentRef = sectionContext.id !== 'general'
+                ? `${TOPIC_REF} (${sectionContext.title})`
+                : TOPIC_REF;
+
+            try {
+                await Api.reportProblem({
+                    certificationName: CERTIFICATION_NAME,
+                    contentType: 'knowledge',
+                    contentReference: contentRef,
+                    issueType: issueType,
+                    description: description,
+                    wantEmailNotification: wantEmailNotification
+                });
+                alert('Thank you! Your report has been submitted.');
+                closeReportModal();
+            } catch (error) {
+                if (error.status === 429) {
+                    const retryMinutes = Math.ceil((error.data?.retryAfter || 3600) / 60);
+                    alert(`You've submitted too many reports recently. Please wait ${retryMinutes} minutes before submitting another report.`);
+                } else {
+                    alert('Failed to submit report: ' + error.message);
+                }
+            }
+        }
+
+        document.querySelectorAll('.detailed-notes h3').forEach(h3 => {
+            h3.style.cursor = 'pointer';
+        });
+    </script>
+    <script src="../../../js/consent.js"></script>
+    <script src="../../../js/analytics.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            CookieConsent.init();
+            Analytics.init();
+        });
+    </script>
+</body>
+</html>

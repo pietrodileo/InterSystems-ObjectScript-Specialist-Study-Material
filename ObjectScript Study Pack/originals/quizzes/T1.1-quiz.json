@@ -1,0 +1,250 @@
+{
+  "quiz": {
+    "title": "T1.1: Uses Classes",
+    "description": "Scenario-based questions on persistent vs registered classes, %New/%Save/%OpenId/%DeleteId, storage definitions (DataLocation, IndexLocation, IdLocation, USEEXTENTSET), multiple inheritance, and class documentation in InterSystems IRIS ObjectScript.",
+    "version": "2.1",
+    "publishedDate": "2026-04-08",
+    "questions": [
+      {
+        "id": 1,
+        "type": "single",
+        "question": "Consider the following class and storage definitions.\n\nClass Sample.Patient Extends %Persistent\n{\nParameter USEEXTENTSET = 1;\nProperty Name As %String;\nProperty AgeGroup As %String;\nIndex NameIdx On Name [ Unique ];\nIndex AgeGroupIdx On AgeGroup [ Type = bitmap ];\nIndex BME [ Extent, Type = bitmap ];\nStorage Default\n{\n<Data name=\"PatientDefaultData\">\n<Value name=\"1\">\n<Value>%%CLASSNAME</Value>\n</Value>\n<Value name=\"2\">\n<Value>Name</Value>\n</Value>\n<Value name=\"3\">\n<Value>AgeGroup</Value>\n</Value>\n</Data>\n<DataLocation>^EW3K.DuIo.1</DataLocation>\n<DefaultData>PatientDefaultData</DefaultData>\n<ExtentLocation>^EW3K.DuIo</ExtentLocation>\n<IdLocation>^EW3K.DuIo.1</IdLocation>\n<Index name=\"AgeGroupIdx\">\n<Location>^EW3K.DuIo.2</Location>\n</Index>\n<Index name=\"BME\">\n<Location>^EW3K.DuIo.3</Location>\n</Index>\n<Index name=\"IDKEY\">\n<Location>^EW3K.DuIo.1</Location>\n</Index>\n<Index name=\"NameIdx\">\n<Location>^EW3K.DuIo.4</Location>\n</Index>\n<IndexLocation>^EW3K.DuIo.I</IndexLocation>\n<StreamLocation>^EW3K.DuIo.S</StreamLocation>\n<Type>%Storage.Persistent</Type>\n}\n}\n\nWhich of the following globals stores data for the bitmap extent index?",
+        "options": [
+          "^Sample.PatientI",
+          "^Sample.PatientD",
+          "^EW3K.DuIo.1",
+          "^EW3K.DuIo.2",
+          "^EW3K.DuIo.3",
+          "^EW3K.DuIo.4"
+        ],
+        "correct": [4],
+        "explanation": "The bitmap extent index is named BME in the class definition. Looking at the storage definition, the Index named \"BME\" has its <Location> set to ^EW3K.DuIo.3. Because USEEXTENTSET = 1, each index gets its own hashed global rather than sharing the generic ^IndexLocation global. The bitmap extent index tracks which IDs exist and is used to optimize COUNT(*) and bitmap index operations. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_tables)"
+      },
+      {
+        "id": 2,
+        "type": "single",
+        "question": "Consider the following class definition.\n\nClass Sample.EmailMessage Extends %Persistent\n{\nProperty MessageId As %String;\nProperty MessageDate As %Date;\nProperty Sender As %String;\nProperty EmailType As %String;\nIndex MIIdx On MessageId [ Unique ];\nIndex ETIdx On EmailType [ Type = bitmap ];\n}\n\nOne of the stored MessageId values is \"JTE810\".\n\nWhich of the following code deletes the record associated with \"JTE810\"?",
+        "options": [
+          "set sc = ##class(Sample.EmailMessage).%DeleteId(\"JTE810\")",
+          "do ##class(Sample.EmailMessage).%Delete(\"JTE810\")",
+          "do ##class(Sample.EmailMessage).DeleteData(\"JTE810\")",
+          "set sc = ##class(Sample.EmailMessage).MIIdxDelete(\"JTE810\")"
+        ],
+        "correct": [3],
+        "explanation": "Since \"JTE810\" is a value of the MessageId property (not the object ID), you cannot use %DeleteId() or %Delete() which expect the object's internal row ID. The unique index MIIdx on MessageId generates a class method named MIIdxDelete() that deletes the record by looking up the unique index value and then deleting the corresponding object. This is a key feature of unique indexes in InterSystems IRIS. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_persobj)"
+      },
+      {
+        "id": 3,
+        "type": "single",
+        "question": "A developer writes the following code to create and save a new patient record.\n\nset patient = ##class(Clinic.Patient).%New()\nset patient.Name = \"Sarah Connor\"\nset patient.DOB = $ZDATEH(\"1965-02-28\", 3)\nset sc = patient.%Save()\nif $$$ISERR(sc) {\n  do $SYSTEM.Status.DisplayError(sc)\n  quit\n}\nwrite \"Saved with ID: \", patient.%Id()\n\nWhich of the following best describes what happens when %Save() succeeds?",
+        "options": [
+          "The object data is written to a temporary in-memory cache and flushed to disk on process exit",
+          "The object properties are serialized into the data global, an ID is assigned if new, indexes are updated, and %Save() returns $$$OK",
+          "The object is converted to JSON and stored in a stream global",
+          "The object is saved but the ID is not assigned until the transaction commits"
+        ],
+        "correct": [1],
+        "explanation": "When %Save() succeeds on a new persistent object, the system serializes the property values into the data global (e.g., ^Clinic.PatientD), assigns a new integer ID using $Increment on the IdLocation global, updates all defined indexes, and returns $$$OK. The ID is immediately available via %Id() after the save. Data goes directly to the database global, not a temporary cache. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_persobj)"
+      },
+      {
+        "id": 4,
+        "type": "single",
+        "question": "Consider the following two class definitions.\n\nClass App.Vehicle Extends %RegisteredObject\n{\nProperty Make As %String;\nProperty Model As %String;\nMethod Describe() As %String\n{\n  return ..Make _ \" \" _ ..Model\n}\n}\n\nClass App.Truck Extends %Persistent\n{\nProperty TowCapacity As %Integer;\n}\n\nA developer creates a new class:\n\nClass App.PickupTruck Extends (App.Truck, App.Vehicle)\n{\n}\n\nWhich of the following is true about App.PickupTruck?",
+        "options": [
+          "The class will not compile because you cannot combine %Persistent and %RegisteredObject superclasses",
+          "The class inherits persistence from App.Truck (leftmost), so instances can be saved to disk, and it also inherits the Make, Model properties and Describe() method from App.Vehicle",
+          "The class will compile but %Save() will only persist the TowCapacity property, ignoring inherited %RegisteredObject properties",
+          "The class inherits from App.Vehicle first because it is alphabetically first"
+        ],
+        "correct": [1],
+        "explanation": "InterSystems IRIS supports multiple inheritance. The order in the Extends clause matters: App.Truck is leftmost so its %Persistent behavior takes precedence. Since %Persistent already extends %RegisteredObject, there is no conflict. App.PickupTruck inherits all properties (TowCapacity from Truck, Make and Model from Vehicle) and the Describe() method, and all properties are persisted to disk when %Save() is called. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_classes_inheritance)"
+      },
+      {
+        "id": 5,
+        "type": "single",
+        "question": "Consider the following storage definition for a class that does NOT use USEEXTENTSET.\n\nClass HR.Employee Extends %Persistent\n{\nProperty Name As %String;\nProperty Department As %String;\nIndex DeptIdx On Department [ Type = bitmap ];\n\nStorage Default\n{\n<DataLocation>^HR.EmployeeD</DataLocation>\n<IdLocation>^HR.EmployeeD</IdLocation>\n<IndexLocation>^HR.EmployeeI</IndexLocation>\n<StreamLocation>^HR.EmployeeS</StreamLocation>\n}\n}\n\nThe developer runs the following command:\n\nzwrite ^HR.EmployeeD\n\nThe output shows:\n\n^HR.EmployeeD=5\n^HR.EmployeeD(1)=$lb(\"\",\"Alice\",\"Sales\")\n^HR.EmployeeD(2)=$lb(\"\",\"Bob\",\"Engineering\")\n\nWhat does the value 5 at the top node ^HR.EmployeeD represent?",
+        "options": [
+          "The total count of records currently in the table",
+          "The next available ID counter (the next new record will get ID 6)",
+          "The number of properties defined in the class",
+          "The maximum number of records the global can hold"
+        ],
+        "correct": [1],
+        "explanation": "In standard persistent storage, the top node of the DataLocation global (which is also the IdLocation) stores the ID counter. The value 5 means the last assigned ID was 5, and the next $Increment will return 6. Note that the counter value may be higher than the actual number of records if some records were deleted -- here only IDs 1 and 2 exist but the counter is 5, indicating IDs 3, 4, and 5 were previously assigned and then deleted. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_storage)"
+      },
+      {
+        "id": 6,
+        "type": "single",
+        "question": "A developer writes the following code:\n\nset emp = ##class(HR.Employee).%OpenId(42)\nif emp = \"\" {\n  write \"Employee not found\",!\n  quit\n}\nset emp.Salary = 75000\nset sc = emp.%Save()\n\nWhich of the following is true about %OpenId()?",
+        "options": [
+          "%OpenId() returns a %Status value indicating success or failure",
+          "%OpenId() returns an object reference (oref) on success, or an empty string if the ID does not exist",
+          "%OpenId() throws a <THROW> exception if the ID does not exist",
+          "%OpenId() always returns an oref, even for non-existent IDs, with properties set to empty strings"
+        ],
+        "correct": [1],
+        "explanation": "%OpenId() is a class method that loads a persistent object from disk by its integer ID. It returns an oref (object reference) if the ID exists, or an empty string (\"\") if not found. It does not throw exceptions or return %Status by default. The developer must check for an empty return before accessing properties to avoid <INVALID OREF> errors. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_persobj)"
+      },
+      {
+        "id": 7,
+        "type": "single",
+        "question": "Consider the following class.\n\nClass Lab.Experiment Extends %Persistent\n{\nProperty Title As %String;\nProperty Researcher As %String;\n}\n\nA developer wants to delete all experiment records. Which of the following approaches deletes all records AND properly fires any %OnDelete callbacks?",
+        "options": [
+          "do ##class(Lab.Experiment).%KillExtent()",
+          "set sc = ##class(Lab.Experiment).%DeleteExtent()",
+          "do $SYSTEM.OBJ.DeleteExtent(\"Lab.Experiment\")",
+          "&sql(DROP TABLE Lab.Experiment)"
+        ],
+        "correct": [1],
+        "explanation": "%DeleteExtent() iterates through all instances and deletes each one individually, which ensures that %OnDelete callbacks are fired for every record. %KillExtent() is faster but simply kills the globals directly without firing callbacks. DROP TABLE removes the table definition entirely, not just the data. %DeleteExtent() returns a %Status value indicating overall success or failure. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_persobj)"
+      },
+      {
+        "id": 8,
+        "type": "single",
+        "question": "Consider the following class definitions.\n\n/// Base class for all identifiable entities\nClass Core.Identifiable Extends %RegisteredObject\n{\n/// The unique external identifier\nProperty ExternalId As %String;\n}\n\n/// Represents an auditable record with timestamps\nClass Core.Auditable Extends %RegisteredObject\n{\nProperty CreatedDate As %TimeStamp;\nProperty ModifiedDate As %TimeStamp;\n}\n\n/// Customer record combining persistence, identity, and audit\nClass App.Customer Extends (%Persistent, Core.Identifiable, Core.Auditable)\n{\nProperty Name As %String;\n}\n\nWhich of the following statements about the /// comments is accurate?",
+        "options": [
+          "The /// comments are regular comments that are ignored by the compiler",
+          "The /// comments become class and property documentation that is stored in the class dictionary and visible in the Class Reference",
+          "The /// comments are only visible in the IDE and not stored anywhere",
+          "The /// comments generate XML documentation files on disk"
+        ],
+        "correct": [1],
+        "explanation": "Triple-slash (///) comments placed immediately before a class keyword, property, method, or other class member become that member's description. This documentation is stored in the class definition in the %Dictionary package and is accessible via the Class Reference in the Management Portal, Studio, or VS Code. It serves the same purpose as Javadoc or docstrings in other languages. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_classdoc)"
+      },
+      {
+        "id": 9,
+        "type": "single",
+        "question": "A developer writes the following code to create a Patient object.\n\nClass Clinic.Patient Extends %Persistent\n{\nProperty Name As %String [ Required ];\nProperty MRN As %String;\n\nMethod %OnNew(name As %String) As %Status\n{\n  set ..Name = name\n  set ..MRN = \"MRN-\" _ $Increment(^Clinic.MRNCounter)\n  return $$$OK\n}\n}\n\n// Caller code:\nset pt = ##class(Clinic.Patient).%New(\"John Smith\")\nwrite pt.Name, \" - \", pt.MRN\n\nWhat happens when %New(\"John Smith\") is called?",
+        "options": [
+          "A compile error occurs because %OnNew cannot accept arguments",
+          "%New() creates the object, then calls %OnNew(\"John Smith\") which sets Name to \"John Smith\" and generates a unique MRN. The oref is returned to the caller.",
+          "%New() ignores the argument because %Persistent objects do not support constructor arguments",
+          "%OnNew() is called before %New(), so the object does not exist yet and setting ..Name causes an error"
+        ],
+        "correct": [1],
+        "explanation": "%OnNew() is a callback method automatically invoked by %New(). Arguments passed to %New() are forwarded to %OnNew(). The system first creates the object in memory, then calls %OnNew() where the developer can set initial property values. If %OnNew() returns an error status, %New() returns empty string. The Name and MRN properties are set during construction. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_objapi)"
+      },
+      {
+        "id": 10,
+        "type": "single",
+        "question": "Consider the following storage definition with USEEXTENTSET enabled.\n\nClass Inventory.Product Extends %Persistent\n{\nParameter USEEXTENTSET = 1;\nProperty SKU As %String;\nProperty Description As %String;\nProperty Price As %Numeric;\nIndex SKUIdx On SKU [ Unique ];\nIndex PriceIdx On Price [ Type = bitmap ];\n\nStorage Default\n{\n<DataLocation>^A1B2.C3D4.1</DataLocation>\n<IdLocation>^A1B2.C3D4.1</IdLocation>\n<Index name=\"PriceIdx\">\n<Location>^A1B2.C3D4.2</Location>\n</Index>\n<Index name=\"SKUIdx\">\n<Location>^A1B2.C3D4.3</Location>\n</Index>\n<IndexLocation>^A1B2.C3D4.I</IndexLocation>\n<StreamLocation>^A1B2.C3D4.S</StreamLocation>\n}\n}\n\nWhich global contains the unique index on SKU?",
+        "options": [
+          "^A1B2.C3D4.1",
+          "^A1B2.C3D4.2",
+          "^A1B2.C3D4.3",
+          "^A1B2.C3D4.I",
+          "^Inventory.ProductI"
+        ],
+        "correct": [2],
+        "explanation": "With USEEXTENTSET = 1, each index is assigned its own hashed global name. The storage definition explicitly maps the SKUIdx index to ^A1B2.C3D4.3. The <IndexLocation> global (^A1B2.C3D4.I) is the fallback location for indexes that do not have explicit <Location> entries, but since SKUIdx has its own mapping, ^A1B2.C3D4.3 is the correct answer. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_storage)"
+      },
+      {
+        "id": 11,
+        "type": "single",
+        "question": "A developer is troubleshooting a data issue and wants to find the physical database where the data for class Sales.Order is stored. The storage definition shows:\n\n<DataLocation>^Sales.OrderD</DataLocation>\n\nWhich of the following is true about determining the physical location?",
+        "options": [
+          "The data is always in the namespace's default global database, which is the same as the database's physical file location",
+          "The data global needs to be identified from the storage definition and its identity used in a call to ##class(%SYS.Namespace).GetGlobalDest() to find the target database",
+          "Querying the Description column in INFORMATION_SCHEMA.TABLES with the class name returns the physical file path",
+          "The physical location is always the same as the IRIS installation directory plus the namespace name"
+        ],
+        "correct": [1],
+        "explanation": "To determine the physical storage location, first identify the data global from the class storage definition (^Sales.OrderD), then use ##class(%SYS.Namespace).GetGlobalDest() to resolve which database that global is mapped to. Global mappings can redirect globals to different databases or even remote systems, so you cannot assume the default database. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_csysnamespace)"
+      },
+      {
+        "id": 12,
+        "type": "single",
+        "question": "Consider the following class.\n\nClass App.Counter Extends %RegisteredObject\n{\nProperty Count As %Integer [ InitialExpression = 0 ];\n\nMethod Increment() As %Integer\n{\n  set ..Count = ..Count + 1\n  return ..Count\n}\n}\n\nA developer runs:\n\nset c = ##class(App.Counter).%New()\nwrite c.Increment(), \" \"\nwrite c.Increment(), \" \"\nset sc = c.%Save()\n\nWhat happens when c.%Save() is called?",
+        "options": [
+          "The counter value of 2 is saved to the database",
+          "A runtime error occurs because %RegisteredObject does not have a %Save() method",
+          "The save succeeds but stores nothing because %RegisteredObject data is transient",
+          "A compile error prevents the class from compiling"
+        ],
+        "correct": [1],
+        "explanation": "%RegisteredObject does not define a %Save() method. Only %Persistent classes (and %SerialObject for embedded serialization) provide %Save(). Attempting to call %Save() on a %RegisteredObject instance results in a <METHOD DOES NOT EXIST> error at runtime. The object exists only in process memory and cannot be persisted. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_objapi)"
+      },
+      {
+        "id": 13,
+        "revised": true,
+        "type": "single",
+        "question": "Consider the following class hierarchy.\n\nClass App.Shape Extends %Persistent\n{\nProperty Color As %String;\n}\n\nClass App.Rectangle Extends App.Shape\n{\nProperty Width As %Numeric;\nProperty Height As %Numeric;\n}\n\nWith default storage (no USEEXTENTSET), where are the Width and Height properties stored for an App.Rectangle instance?",
+        "options": [
+          "All in ^App.ShapeD, with Color in the main node and Width/Height in a \"Rectangle\" subnode",
+          "Width and Height in ^App.RectangleD, while Color is in ^App.ShapeD",
+          "All properties in ^App.RectangleD only",
+          "All properties in a combined global ^App.Shape.RectangleD"
+        ],
+        "correct": [0],
+        "explanation": "With default storage (no USEEXTENTSET), a subclass does NOT get its own separate data global. Instead, all data is stored within the parent's data global (^App.ShapeD). The parent's properties (%%CLASSNAME and Color) go in the main node: ^App.ShapeD(1)=$lb(\"~App.Rectangle~\",\"blue\"). The subclass's own properties (Width, Height) go in a subscript subnode named after the subclass: ^App.ShapeD(1,\"Rectangle\")=$lb(10,5). There is no ^App.RectangleD global at all. The subclass storage definition uses a <Subscript> element to define this subnode structure. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_storage)"
+      },
+      {
+        "id": 14,
+        "type": "single",
+        "question": "A developer examines the following code that another team member wrote.\n\nset order = ##class(Store.Order).%OpenId(100, , .sc)\nif $$$ISERR(sc) {\n  write \"Error opening order: \"\n  do $SYSTEM.Status.DisplayError(sc)\n  quit\n}\nif order = \"\" {\n  write \"Order 100 not found\"\n  quit\n}\n\nWhat is the purpose of the third argument (.sc) passed to %OpenId()?",
+        "options": [
+          "It passes a %Status variable by reference that receives detailed error information if the open fails for reasons other than \"not found\"",
+          "It provides a default value to return if the object is not found",
+          "It specifies the concurrency lock level for the opened object",
+          "It is the timeout in seconds for the open operation"
+        ],
+        "correct": [0],
+        "explanation": "The third argument to %OpenId() is an Output parameter that receives a %Status value. When %OpenId() returns \"\" (empty string), it could be because the ID simply does not exist (sc = $$$OK) or because an error occurred during loading (sc = error status). By checking sc, the developer can distinguish between \"not found\" and actual errors. The second argument (skipped with an extra comma) is the concurrency level. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_persobj)"
+      },
+      {
+        "id": 15,
+        "type": "single",
+        "question": "Consider the following two classes.\n\nClass App.Logger Extends %RegisteredObject\n{\nMethod Log(msg As %String)\n{\n  write $ZDT($H, 3), \": \", msg, !\n}\n}\n\nClass App.AuditLogger Extends (%Persistent, App.Logger)\n{\nProperty LogEntry As %String(MAXLEN = 500);\n\nMethod Log(msg As %String)\n{\n  set ..LogEntry = $ZDT($H, 3) _ \": \" _ msg\n  do ..%Save()\n}\n}\n\nA developer writes:\n\nset logger = ##class(App.AuditLogger).%New()\ndo logger.Log(\"System started\")\n\nWhat happens when Log() is called?",
+        "options": [
+          "The Log() method from App.Logger executes, writing to the current device",
+          "The Log() method from App.AuditLogger executes, saving the message to the database",
+          "Both Log() methods execute in sequence",
+          "A runtime error occurs because of conflicting method definitions"
+        ],
+        "correct": [1],
+        "explanation": "When a subclass defines a method with the same name as a parent class method, the subclass method overrides the parent. Since the object is an instance of App.AuditLogger, its own Log() method is called, which sets the LogEntry property and saves the object to the database. If the developer wanted to also call the parent's Log(), they would use ##super(msg) inside the overriding method. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_methods_override)"
+      },
+      {
+        "id": 16,
+        "type": "multiple",
+        "question": "Consider the following storage definition.\n\nStorage Default\n{\n<DataLocation>^App.CustomerD</DataLocation>\n<DefaultData>CustomerDefaultData</DefaultData>\n<IdLocation>^App.CustomerD</IdLocation>\n<IndexLocation>^App.CustomerI</IndexLocation>\n<StreamLocation>^App.CustomerS</StreamLocation>\n<Type>%Storage.Persistent</Type>\n}\n\nWhich of the following are correctly described elements of this storage definition? (Select all that apply)",
+        "options": [
+          "<DataLocation> specifies the global where object property values are stored",
+          "<IndexLocation> specifies the global where all index data is stored by default",
+          "<StreamLocation> specifies where stream property data is stored",
+          "<IdLocation> specifies the global node used for the ID counter ($Increment)",
+          "<DefaultData> specifies the default database for data storage"
+        ],
+        "correct": [0, 1, 2, 3],
+        "explanation": "<DataLocation> is where serialized property data lives. <IndexLocation> is the default global for all indexes. <StreamLocation> is for stream data. <IdLocation> is the global whose top node holds the ID counter used by $Increment. <DefaultData> does NOT refer to a database -- it is the name of the <Data> definition that maps property positions, in this case \"CustomerDefaultData\". (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_storage)"
+      },
+      {
+        "id": 17,
+        "type": "single",
+        "question": "A developer needs to implement a utility class that provides shared helper methods for date formatting. No state needs to be maintained between calls.\n\nWhich of the following class definitions is the most appropriate approach?",
+        "options": [
+          "Class Utils.DateHelper Extends %Persistent\n{\nClassMethod FormatDate(d As %Date) As %String\n{\n  return $ZDate(d, 3)\n}\n}",
+          "Class Utils.DateHelper Extends %RegisteredObject\n{\nClassMethod FormatDate(d As %Date) As %String\n{\n  return $ZDate(d, 3)\n}\n}",
+          "Class Utils.DateHelper [ Abstract ]\n{\nClassMethod FormatDate(d As %Date) As %String\n{\n  return $ZDate(d, 3)\n}\n}",
+          "Class Utils.DateHelper Extends %SerialObject\n{\nClassMethod FormatDate(d As %Date) As %String\n{\n  return $ZDate(d, 3)\n}\n}"
+        ],
+        "correct": [2],
+        "explanation": "For a stateless utility class that only contains ClassMethods and no properties that need persistence, the most appropriate approach is an Abstract class that does not extend any superclass. Abstract utility classes cannot be instantiated (which is correct since no state is needed) and avoid the overhead of %RegisteredObject or %Persistent. Extending %Persistent would create unnecessary storage definitions and globals. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_classes)"
+      },
+      {
+        "id": 18,
+        "revised": true,
+        "type": "single",
+        "question": "Consider the following code that a developer uses to manage a batch process.\n\nset sc = $$$OK\nfor id = 1:1:1000 {\n  set obj = ##class(Batch.Record).%OpenId(id)\n  if obj '= \"\" {\n    set obj.Processed = 1\n    set sc = obj.%Save()\n    if $$$ISERR(sc) quit\n  }\n}\nif $$$ISERR(sc) {\n  do $SYSTEM.Status.DisplayError(sc)\n}\n\nThe developer notices that only 500 records have Processed = 1, despite the loop iterating over IDs 1 through 1000. There was no error displayed.\n\nWhich of the following best explains this behavior?",
+        "options": [
+          "The %OpenId() call returns empty string for IDs above 500, and the if obj '= \"\" check skips them silently",
+          "%Save() has a maximum of 500 saves per process",
+          "The for loop syntax 1:1:1000 only iterates up to 500",
+          "Object references from earlier iterations are blocking the save of later objects"
+        ],
+        "correct": [0],
+        "explanation": "If %OpenId() returns empty string for IDs 501-1000, the if obj '= \"\" check causes those iterations to be silently skipped with no error. This could happen if IDs 501-1000 were deleted previously (remember, the ID counter can go higher than existing records). The developer should add logging for the case when obj is empty to detect missing records. There is no limit on the number of %Save() calls per process. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_persobj)"
+      }
+    ]
+  }
+}

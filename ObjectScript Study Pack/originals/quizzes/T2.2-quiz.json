@@ -1,0 +1,243 @@
+{
+  "quiz": {
+    "title": "T2.2: Tracks Application Data",
+    "description": "Scenario-based questions on locating and accessing globals (^globalName), process-private globals (^||), temporary globals, logging with globals, ^%ISCLOG diagnostic logging, performance metrics, and monitoring in InterSystems IRIS ObjectScript",
+    "version": "2.3",
+    "publishedDate": "2026-09-17",
+    "questions": [
+      {
+        "id": 1,
+        "type": "single",
+        "question": "While reviewing an application's code, you come across the following line:\n\nset ^||queryLog = $ZTS_\" Update Successful, Row Count \"_%ROWCOUNT\n\nWhich of the following is true about the queryLog variable?",
+        "options": [
+          "queryLog is a temporary global. It is only visible to the process that instantiates it and it gets cleaned up when the IRIS instance is restarted.",
+          "queryLog is a process private global. It is only visible to the process that instantiates it and it gets cleaned up when the IRIS instance is restarted.",
+          "queryLog is a temporary global. It is only visible to the process that instantiates it and it gets cleaned up when the process ends.",
+          "queryLog is a process private global. It is only visible to the process that instantiates it and it gets cleaned up when the process ends."
+        ],
+        "correct": [
+          3
+        ],
+        "explanation": "The ^|| prefix designates a process-private global (PPG). ^||queryLog is visible only to the process that created it, cannot be accessed by other processes, and is automatically deleted when the owning process terminates (not when the IRIS instance restarts). PPGs are ideal for temporary working data that should not leak between processes. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_globals#GCOS_globals_ppg)"
+      },
+      {
+        "id": 2,
+        "type": "single",
+        "question": "A developer needs to determine the physical location of data stored for a %Persistent class. The class uses the following storage definition:\n\nStorage Default\n{\n<DataLocation>^EW3K.DuIo.1</DataLocation>\n<IdLocation>^EW3K.DuIo.1</IdLocation>\n<IndexLocation>^EW3K.DuIo.I</IndexLocation>\n}\n\nWhich of the following is true about determining the physical file location?",
+        "options": [
+          "The data global needs to be identified from the class storage definitions and its identity used in a call to %SYS.Namespace::GetGlobalDest()",
+          "The data global needs to be identified from the class name and its identity used in a call to %SYS.Namespace::GetNSInfo()",
+          "All data is written to the namespace's default global database and is in the same location as the database's physical file",
+          "Querying the Description column in INFORMATION_SCHEMA.TABLES using the class name returns the location at the OS level"
+        ],
+        "correct": [
+          0
+        ],
+        "explanation": "To determine the physical location of persistent class data, you must first identify the data global from the class storage definitions (in this case ^EW3K.DuIo.1), then use %SYS.Namespace::GetGlobalDest() to find which database that global maps to and where it resides physically. The global may be mapped to a different database than the namespace default. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_defpersobj)"
+      },
+      {
+        "id": 3,
+        "type": "single",
+        "question": "Given the following global structure:\n\n^Patient(1) = \"Smith\"\n^Patient(1,\"DOB\") = \"1990-01-15\"\n^Patient(1,\"Phone\",1) = \"555-0100\"\n^Patient(1,\"Phone\",2) = \"555-0200\"\n\nWhat is the result of executing:\n\nWRITE $DATA(^Patient(1,\"Phone\"))",
+        "options": [
+          "0 - the node does not exist",
+          "1 - the node exists and has data",
+          "10 - the node has descendants but no data at this level",
+          "11 - the node has both data and descendants"
+        ],
+        "correct": [
+          2
+        ],
+        "explanation": "$DATA returns information about whether a node exists, has data, and/or has descendants. A return value of 10 means the node has descendant nodes (subscripts below it) but no value at that exact level. ^Patient(1,\"Phone\") has no direct value, but it has children at subscripts 1 and 2. Values: 0=doesn't exist, 1=has data only, 10=has descendants only, 11=has both. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fdata)"
+      },
+      {
+        "id": 4,
+        "type": "single",
+        "question": "A developer writes the following code to log debug messages:\n\nSET ^Debug($INCREMENT(^Debug)) = $HOROLOG_\" - \"_message\n\nAnother developer suggests using this approach instead:\n\nSET ^Debug($RANDOM(1000)) = message\n\nWhat is the key advantage of the $INCREMENT approach?",
+        "options": [
+          "$INCREMENT is faster than $RANDOM for generating keys",
+          "$INCREMENT generates unique, sequential integer subscripts, preventing overwrites; $RANDOM can produce duplicates that overwrite earlier entries",
+          "$INCREMENT automatically adds timestamps while $RANDOM does not",
+          "$INCREMENT creates a process-private global while $RANDOM creates a regular global"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "$INCREMENT(^Debug) atomically increments the top-level value of ^Debug and returns the new value, guaranteeing a unique sequential subscript for each log entry. $RANDOM(1000) generates a random number between 0 and 999, which can produce duplicates that silently overwrite earlier log entries. The timestamp ($HOROLOG) is added explicitly in the value, not by $INCREMENT. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fincrement)"
+      },
+      {
+        "id": 5,
+        "type": "single",
+        "question": "A production support engineer needs to enable diagnostic logging for troubleshooting a web service integration. They execute:\n\nSET ^%ISCLOG = 3\n\nWhat effect does this have?",
+        "options": [
+          "Enables SQL query logging at maximum verbosity",
+          "Enables the built-in diagnostic logging facility at the most verbose level, recording all diagnostic events with timestamps",
+          "Creates a log file at /var/log/iris/isclog.txt with level 3 detail",
+          "Enables user authentication logging for the next 3 hours"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "^%ISCLOG is a built-in diagnostic logging global used by InterSystems components (Interoperability productions, web services, etc.). Level 3 is the most verbose: 0=disabled, 1=errors only, 2=warnings and errors, 3=all messages. Remember to set it back to 0 after troubleshooting, as verbose logging impacts performance and consumes disk space. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCM_perfmon)"
+      },
+      {
+        "id": 6,
+        "type": "single",
+        "question": "A developer writes a method that stores temporary calculation results:\n\nClassMethod CalculateReport(patientId As %Integer)\n{\n  SET ^||calc(\"sum\") = 0\n  SET ^||calc(\"count\") = 0\n  SET key = \"\"\n  FOR {\n    SET key = $ORDER(^Visits(patientId, key), 1, data)\n    QUIT:key=\"\"\n    SET ^||calc(\"sum\") = ^||calc(\"sum\") + $PIECE(data, \"|\", 3)\n    SET ^||calc(\"count\") = ^||calc(\"count\") + 1\n  }\n  ; ... use results ...\n}\n\nWhy does the developer use ^||calc instead of ^calc?",
+        "options": [
+          "^||calc is faster because it is stored in memory only, never on disk",
+          "^||calc is isolated to the current process and automatically cleaned up when the process ends, preventing data collisions with other processes running the same method",
+          "^||calc allows the data to persist across process restarts for later review",
+          "^||calc is automatically encrypted, protecting the calculation data"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "Process-private globals (^||) are visible only to the creating process. If multiple processes run CalculateReport concurrently, each has its own isolated ^||calc. With a regular global ^calc, concurrent processes would overwrite each other's data. PPGs are also automatically cleaned up when the process ends. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_globals#GCOS_globals_ppg)"
+      },
+      {
+        "id": 7,
+        "type": "single",
+        "question": "A developer wants to iterate through all top-level subscripts of a global and print each value. They write:\n\nSET key = \"\"\nFOR {\n  SET key = $ORDER(^Log(key))\n  QUIT:key=\"\"\n  WRITE key, \": \", ^Log(key), !\n}\n\nThe global contains:\n^Log(1) = \"Started\"\n^Log(2) = \"Processing\"\n^Log(10) = \"Complete\"\n\nIn what order are the entries printed?",
+        "options": [
+          "1, 10, 2 (alphabetical order of string keys)",
+          "1, 2, 10 (numeric/canonical order)",
+          "10, 2, 1 (reverse order)",
+          "The order is unpredictable and depends on storage layout"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "$ORDER traverses subscripts in canonical (collation) order. For numeric subscripts, this is numeric order: 1, 2, 10. Canonical order sorts numbers before strings, and numbers are sorted by numeric value (not lexicographically). This is why 10 comes after 2, not between 1 and 2. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_forder)"
+      },
+      {
+        "id": 8,
+        "type": "single",
+        "question": "A developer needs to display the contents of a complex local variable for debugging:\n\nSET data = \"test\"\nSET data(\"A\") = 1\nSET data(\"B\",1) = \"hello\"\nSET data(\"B\",2) = \"world\"\n\nWhich command shows ALL values including subscripted nodes?",
+        "options": [
+          "WRITE data",
+          "ZWRITE data",
+          "DISPLAY data",
+          "WRITE $DATA(data)"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "ZWRITE displays a variable and all of its subscripts with their values in a structured, human-readable format. WRITE data would only output \"test\" (the top-level value). ZWRITE shows: data=\"test\", data(\"A\")=1, data(\"B\",1)=\"hello\", data(\"B\",2)=\"world\". There is no DISPLAY command in ObjectScript. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_czwrite)"
+      },
+      {
+        "id": 9,
+        "type": "single",
+        "question": "A developer writes the following code:\n\nSET x = $LISTBUILD(\"Alpha\",\"Beta\",\"Gamma\")\nZWRITE x\n\nWhat output is displayed?",
+        "options": [
+          "Alpha Beta Gamma",
+          "x=$LB(\"Alpha\",\"Beta\",\"Gamma\")",
+          "(\"Alpha\",\"Beta\",\"Gamma\")",
+          "x=AlphaBetaGamma"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "ZWRITE displays $LIST values in $LB() notation, showing the internal list representation. This is one of ZWRITE's key debugging benefits: it reveals the actual data type and structure of variables, including $LIST-encoded data that would be unreadable with a simple WRITE command (WRITE would show garbled binary data for $LIST values). (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_czwrite)"
+      },
+      {
+        "id": 10,
+        "type": "single",
+        "question": "A developer wants to measure the execution time of a critical section of code:\n\nSET start = $ZHOROLOG\n; ... critical code section ...\nSET elapsed = $ZHOROLOG - start\nWRITE \"Elapsed: \", elapsed, \" seconds\", !\n\nWhy is $ZHOROLOG preferred over $HOROLOG for this purpose?",
+        "options": [
+          "$ZHOROLOG returns the time in milliseconds while $HOROLOG returns seconds",
+          "$ZHOROLOG provides high-resolution timestamps (including fractional seconds) suitable for precise profiling, while $HOROLOG only has whole-second precision",
+          "$ZHOROLOG is not affected by timezone changes while $HOROLOG is",
+          "$ZHOROLOG automatically logs the measurement to ^PERFMON while $HOROLOG does not"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "$ZHOROLOG provides a high-resolution timestamp with fractional seconds, making it suitable for measuring elapsed time of code sections that may complete in sub-second intervals. $HOROLOG's second component has only whole-second precision, which is insufficient for profiling fast code. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_vzhorolog)"
+      },
+      {
+        "id": 11,
+        "type": "multiple",
+        "question": "A developer needs to inspect the contents of a global from the IRIS Terminal. Which of the following are valid approaches?",
+        "options": [
+          "ZWRITE ^MyGlobal to display the entire global with all subscripts and values",
+          "DO $SYSTEM.OBJ.ShowGlobal(\"MyGlobal\") to display a formatted view",
+          "Using the Globals page in the Management Portal to browse the global visually",
+          "Using $ORDER(^MyGlobal(\"\")) in a loop to iterate through top-level subscripts",
+          "SELECT * FROM %Global.MyGlobal to query the global via SQL"
+        ],
+        "correct": [
+          0,
+          3
+        ],
+        "explanation": "The question asks specifically about inspecting a global from the IRIS Terminal, so only the Terminal-based approaches count: ZWRITE ^MyGlobal displays the whole global, and $ORDER can walk the subscripts programmatically. The Management Portal's Globals page is a valid way to browse a global, but it is not the Terminal, so it does not answer this question. There is no $SYSTEM.OBJ.ShowGlobal method, and a global is not queryable with SELECT * FROM %Global.MyGlobal. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_czwrite)"
+      },
+      {
+        "id": 12,
+        "type": "single",
+        "question": "A developer creates a custom error logging global:\n\nClassMethod LogError(method As %String, msg As %String)\n{\n  SET id = $INCREMENT(^AppErrors)\n  SET ^AppErrors(id) = $LISTBUILD($ZDATETIME($HOROLOG,3), method, msg, $USERNAME)\n}\n\nLater, they need to find all errors from today. Which approach correctly iterates and filters the log?",
+        "options": [
+          "ZWRITE ^AppErrors WHERE $LISTGET(^AppErrors,1) = today",
+          "A $ORDER loop that checks $LISTGET(^AppErrors(key),1) against today's date for each entry",
+          "SELECT * FROM ^AppErrors WHERE timestamp = today",
+          "$QUERY(^AppErrors) with a filter callback function"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "There is no WHERE clause for ZWRITE, no SQL access to globals with that syntax, and no filter callbacks for $QUERY. The correct approach is to iterate through the global using $ORDER, retrieving each node and using $LISTGET to extract the timestamp (position 1) for comparison against today's date. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_forder)"
+      },
+      {
+        "id": 13,
+        "type": "multiple",
+        "question": "You want to monitor how many global references a specific process is making during a performance investigation. Which of the following are valid approaches?",
+        "options": [
+          "Check ^%SYS(\"GlobalRefs\") filtered by the process ID",
+          "Use the Processes page in the Management Portal, which shows global references for each process",
+          "Run SELECT GlobalReferences FROM %SYS.ProcessQuery WHERE PID = :pid via the SQL Shell or Dynamic SQL",
+          "Global references cannot be monitored at the individual process level",
+          "Call $SYSTEM.Process.GlobalRefs() with the target process ID"
+        ],
+        "correct": [
+          1,
+          2
+        ],
+        "explanation": "Two approaches work: System Operation > Processes in the Management Portal shows global references per process in real time, and %SYS.ProcessQuery exposes the same counter to SQL, so SELECT GlobalReferences FROM %SYS.ProcessQuery WHERE PID = :pid works from the SQL Shell or Dynamic SQL. ^%SYS(\"GlobalRefs\") is not a real structure, there is no $SYSTEM.Process.GlobalRefs() method (calling it raises <METHOD DOES NOT EXIST>), and per-process global references are very much measurable, which rules the last option out.",
+        "revised": true
+      },
+      {
+        "id": 14,
+        "type": "multiple",
+        "question": "A performance analyst wants to identify where time is being spent in a slow method. Which of the following are valid profiling approaches?",
+        "options": [
+          "Use $ZHOROLOG to capture high-resolution timestamps before and after code sections",
+          "Use ^%SYS.MONLBL to enable line-by-line monitoring of routine execution",
+          "Check the ^ERRORS global which automatically tracks execution times for all methods",
+          "Use the Management Portal SQL Performance page if the slow code involves SQL queries",
+          "Run the method with the /PERFORMANCE flag to enable automatic profiling"
+        ],
+        "correct": [
+          0,
+          1,
+          3
+        ],
+        "explanation": "$ZHOROLOG provides high-resolution timestamps for manual profiling of code sections. ^%SYS.MONLBL (Monitor by Line) provides line-by-line execution metrics for routines. The Management Portal's SQL Performance tools help analyze slow SQL queries. There is no ^ERRORS global for performance data and no /PERFORMANCE flag for methods. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_vzhorolog)"
+      },
+      {
+        "id": 15,
+        "type": "single",
+        "question": "A developer needs to collect system-level performance metrics including global references per second and disk read/write rates. Which utility should they use?",
+        "options": [
+          "^%ISCLOG with level 3 for verbose performance data",
+          "^PERFMON to collect and display system performance counters",
+          "$SYSTEM.Process.GetMetrics() for system-wide statistics",
+          "The ^ERRORS global which records performance baselines"
+        ],
+        "correct": [
+          1
+        ],
+        "explanation": "^PERFMON (Performance Monitor) collects system-level performance counters including global references per second, routine commands per second, disk reads/writes, journal writes, and other metrics. ^%ISCLOG is for diagnostic event logging, not performance metrics. There is no GetMetrics method or ^ERRORS performance global. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCM_perfmon)"
+      }
+    ]
+  }
+}

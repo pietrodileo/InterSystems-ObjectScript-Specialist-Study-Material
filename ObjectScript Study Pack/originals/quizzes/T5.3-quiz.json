@@ -1,0 +1,252 @@
+{
+  "quiz": {
+    "title": "T5.3: Common Runtime Errors",
+    "description": "Diagnose and fix common ObjectScript runtime errors: <SUBSCRIPT>, <PROTECT>, <FRAMESTACK>, <UNDEFINED>, and related errors",
+    "version": "2.3",
+    "publishedDate": "2026-09-17",
+    "questions": [
+      {
+        "id": 1,
+        "type": "single",
+        "question": "A background task running using the BackgroundDev role calls:\n\nzn \"STORE-BASE\"\nset obj = ##class(Sample.Customer).%OpenId(123)\nset obj.City = \"Ulaanbaatar\"\nset sc = obj.%Save()\n\nThe code terminates with a <PROTECT> error:\n\nZN \"STORE-BASE\"\n^\n */db/iris/mgr/STOREBASE-DATA/\n\nWhich explanation best describes why?",
+        "options": [
+          "The global backing Sample.Customer resides in a database mounted read-only",
+          "The current user holds no UPDATE privilege on table Sample.Customer via SQL grants",
+          "Another process has a LOCK on the specific row, causing a lock conflict",
+          "The value \"Ulaanbaatar\" exceeds the defined column length",
+          "BackgroundDev does not have permission to access the database underpinning the STORE-BASE namespace"
+        ],
+        "correct": [4],
+        "explanation": "The <PROTECT> error with the database path shown indicates a security protection violation at the database level. The BackgroundDev role lacks the required resource permission (Read/Write) on the STOREBASE-DATA database. SQL UPDATE privileges are separate from database-level resource permissions. Lock conflicts produce <LOCKTAB>, not <PROTECT>. This matches InterSystems practice question Q23. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_errors)"
+      },
+      {
+        "id": 2,
+        "type": "single",
+        "question": "A class method copies order data from one global to another:\n\nClassMethod LoadOrders() As %Status\n{\n    set key = \"\"\n    for {\n        set key = $ORDER(^StgOrder(key))  quit:key=\"\"\n        set ^FinalOrder(ordKey, \"Total\") = ^StgOrder(key, \"Total\")\n    }\n    quit $$$OK\n}\n\nThe method terminates with:\n<Undefined> LoadOrders+4^Sample.Q5342.1 *ordKey\n\nWhich of the following is true about this error?",
+        "options": [
+          "Line 4 uses a variable (ordKey) that was never set -- the developer likely meant to use 'key'",
+          "Line 3 contains invalid syntax for the quit command",
+          "$ORDER sets ordKey to an empty string which cannot be used as a subscript",
+          "Line 3 improperly contains two commands on one line"
+        ],
+        "correct": [0],
+        "explanation": "The variable 'ordKey' on line 4 was never assigned a value anywhere in the method. The developer most likely meant to write 'key' (which is set by $ORDER on line 3) instead of 'ordKey'. The <UNDEFINED> error with *ordKey confirms the exact variable that is undefined. The postconditional quit:key=\"\" syntax on line 3 is valid ObjectScript. This matches InterSystems practice question Q24. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_errors)"
+      },
+      {
+        "id": 3,
+        "type": "single",
+        "question": "A developer runs the following code and gets a <SUBSCRIPT> error:\n\nSet data(1) = \"Alpha\"\nSet data(2) = \"Beta\"\nSet data(3) = \"Gamma\"\nSet key = \"\"\nFor {\n    Set key = $Order(data(key))\n    Quit:key=\"\"\n    Write data(key), !\n}\n\nAnother developer modifies it to:\n\nSet key = \"\"\nFor {\n    Set key = $Order(data(key))\n    Write data(key), !\n    Quit:key=\"\"\n}\n\nThe modified version produces a <SUBSCRIPT> error. Why?",
+        "options": [
+          "$Order does not work with local arrays, only globals",
+          "The Quit:key=\"\" check moved AFTER Write data(key), so when $Order returns \"\" at the end, data(\"\") is accessed before the loop exits",
+          "The For loop syntax is invalid without start:step:end",
+          "data(key) requires a numeric subscript, and $Order returns strings"
+        ],
+        "correct": [1],
+        "explanation": "In the modified code, when $Order returns \"\" after the last node, the Write data(\"\") executes BEFORE the Quit:key=\"\" check. Accessing data(\"\") with an empty string subscript produces a <SUBSCRIPT> error. The original code correctly places Quit:key=\"\" before the Write, so the loop exits before attempting to read data(\"\"). (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_errors)"
+      },
+      {
+        "id": 4,
+        "type": "single",
+        "question": "Consider this recursive method:\n\nClassMethod Factorial(n As %Integer) As %Integer\n{\n    return n * ..Factorial(n - 1)\n}\n\nCalling ##class(App.Math).Factorial(5) produces a <FRAMESTACK> error. How should it be fixed?",
+        "options": [
+          "Change 'return' to 'quit'",
+          "Add a base case: If n <= 1 { return 1 }",
+          "Use a larger stack size with $SYSTEM.Process.SetStackSize()",
+          "Replace recursion with: set result = n!"
+        ],
+        "correct": [1],
+        "explanation": "The method recurses infinitely because there is no base case to stop the recursion. When n reaches 0, it continues with -1, -2, etc., never stopping. Adding 'If n <= 1 { return 1 }' at the beginning provides the stopping condition that prevents infinite recursion and the resulting <FRAMESTACK> error. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_errors)"
+      },
+      {
+        "id": 5,
+        "type": "single",
+        "question": "What error does this code produce?\n\nSet name = \"John\"\nSet age = 30\nWrite \"Name: \" _ name _ \", Age: \" _ agee",
+        "options": [
+          "<SYNTAX> because of the concatenation operator",
+          "<UNDEFINED> *agee because 'agee' is a typo for 'age'",
+          "<ILLEGAL VALUE> because you cannot concatenate strings and numbers",
+          "No error -- 'agee' evaluates to empty string"
+        ],
+        "correct": [1],
+        "explanation": "The variable 'agee' (with double 'e') was never defined. ObjectScript variable names are case-sensitive and must match exactly, so 'agee' is a different variable from 'age'. This is one of the most common causes of <UNDEFINED> errors: simple typos in variable names. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_errors)"
+      },
+      {
+        "id": 6,
+        "type": "single",
+        "question": "A developer sees this error in production:\n\n<UNDEFINED> zProcess+15^App.Engine.1 *config\n\nWhat does this error message tell us?",
+        "options": [
+          "The class App.Engine does not exist",
+          "The variable 'config' was not defined at line offset 15 in the zProcess label of App.Engine.1",
+          "The process with PID 15 crashed in App.Engine",
+          "The global ^config is not defined in the current namespace"
+        ],
+        "correct": [1],
+        "explanation": "The error format is: <ErrorType> label+offset^routine *variablename. So <UNDEFINED> zProcess+15^App.Engine.1 *config means the variable 'config' was undefined at offset 15 from the label zProcess in the compiled routine App.Engine.1. The asterisk (*) prefix indicates the specific undefined variable. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_errors)"
+      },
+      {
+        "id": 7,
+        "type": "multiple",
+        "question": "Which of the following can cause a <PROTECT> error? (Select three)",
+        "options": [
+          "Writing to a database that is mounted read-only",
+          "Accessing a namespace without the required role/resource permission",
+          "Trying to modify a global node that another process has locked",
+          "The user's roles lack Write permission on the database resource",
+          "Using SET on a variable that already has a value"
+        ],
+        "correct": [0, 1, 3],
+        "explanation": "<PROTECT> errors are security-related: (1) writing to a read-only database, (2) accessing a namespace/database without the required security role, (3) the user's roles lacking Write permission on the database resource. Lock conflicts produce <LOCKTAB>, not <PROTECT>. SET on an existing variable simply overwrites it. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_errors)"
+      },
+      {
+        "id": 8,
+        "type": "single",
+        "question": "A developer wants to prevent <UNDEFINED> errors when accessing a variable that might not be set. Which approach is correct?\n\nOption A: If $Data(timeout) { Set val = timeout }\nOption B: Set val = $Get(timeout, 30)\nOption C: Set val = $Find(timeout)\nOption D: Set val = $Length(timeout)",
+        "options": [
+          "Only option A works -- $Data checks if a variable is defined",
+          "Option B is the most direct approach -- $Get returns the default value if undefined",
+          "Option C -- $Find safely returns the variable's value",
+          "Both $Data and $Length work equally well"
+        ],
+        "correct": [1],
+        "explanation": "$Get(variable, default) returns the value of the variable if defined, or the specified default if undefined, all without raising an <UNDEFINED> error. In option B, if 'timeout' is not defined, $Get returns 30. While $Data (option A) also works, it requires an extra If statement. $Find and $Length would themselves cause <UNDEFINED> if the variable is not set. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fget)"
+      },
+      {
+        "id": 9,
+        "type": "single",
+        "question": "A method processes a list but crashes:\n\nClassMethod ProcessList(list As %List)\n{\n    Set total = 0\n    For i = 1:1:$ListLength(list) {\n        Set item = $List(list, i)\n        Set total = total + item\n    }\n    Write \"Total: \", total, !\n}\n\nCalling this method with $LB(10, 20, , 40) — note: element 3 is null/missing (double comma), not empty string — produces an error. Which error and on which iteration?",
+        "options": [
+          "<UNDEFINED> on iteration 3 because $List returns undefined for null elements",
+          "No error — null is treated as 0 in arithmetic",
+          "<NULL VALUE> on iteration 3 because $List on a null list element raises this error",
+          "<SUBSCRIPT> on iteration 3 because the list element is null"
+        ],
+        "correct": [2],
+        "explanation": "In $ListBuild, a missing element (double comma: $LB(10,20,,40)) creates a null entry — distinct from an empty string \"\". Calling $List() on a null element raises a <NULL VALUE> error. This is a common trap: $LB(10,20,\"\",40) with an explicit empty string would NOT error (\"\" coerces to 0 in arithmetic), but $LB(10,20,,40) with a null element does. Use $ListGet(list, i, default) instead of $List() to safely handle null elements. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_errors)"
+      },
+      {
+        "id": 10,
+        "revised": true,
+        "type": "single",
+        "question": "Consider this code:\n\nClassMethod BuildTree(node, depth)\n{\n    Set ^Tree(node) = depth\n    Do ..BuildTree(node _ \".L\", depth + 1)\n    Do ..BuildTree(node _ \".R\", depth + 1)\n}\n\nWhat error will occur first and why?",
+        "options": [
+          "<SUBSCRIPT> because the node subscript eventually exceeds the maximum key length (511 bytes)",
+          "<FRAMESTACK> because there is no base case to stop the recursion",
+          "<MAXSTRING> because the node string concatenation exceeds the maximum string length",
+          "<STORE> because the ^Tree global fills the database"
+        ],
+        "correct": [0],
+        "explanation": "Although there is no base case (which would eventually cause <FRAMESTACK>), the <SUBSCRIPT> error occurs first IN THIS CODE. Each recursive call appends 2 characters (\".L\" or \".R\") to the node string used as a global subscript, and the maximum global reference length is 511 bytes - reached after roughly 250 levels. The call-stack limit is thousands of frames deep, so it is nowhere near exhausted by then: <SUBSCRIPT> occurs after 251 entries with a 501-character key. This ordering is not a general rule about the two errors - it follows from this code growing the subscript on every call. Unbounded recursion that does NOT build a longer global reference each time (a method that simply calls itself, say) never approaches the subscript limit and does terminate with <FRAMESTACK>. Whichever limit the code reaches first is the error you get. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RERR_gen)"
+      },
+      {
+        "id": 11,
+        "type": "multiple",
+        "question": "Which of the following can cause a <SUBSCRIPT> error? (Select two)",
+        "options": [
+          "Setting a global node with an empty string subscript: Set ^Data(\"\") = 1",
+          "Using $Order with an empty string starting value: Set key = $Order(^Data(\"\"))",
+          "Using a subscript that exceeds the maximum key length (511 bytes)",
+          "Using a negative number as a subscript: Set ^Data(-5) = 1",
+          "Using a subscript longer than 31 characters"
+        ],
+        "correct": [0, 2],
+        "explanation": "<SUBSCRIPT> means the subscript itself was invalid: an empty string subscript in a SET, or a key that pushes past the maximum length. $ORDER(^Data(\"\")) is legal and is in fact the standard way to start an iteration, and negative numbers are perfectly valid subscripts. The 31-character figure is invented -- the real constraint is the total key length (511 bytes), not a per-subscript character count.",
+        "revised": true
+      },
+      {
+        "id": 12,
+        "type": "single",
+        "question": "A developer tries to write to a global in the IRISSYS database:\n\nSet ^[\"IRISSYS\"]MyGlobal(\"key\") = \"value\"\n\nThis produces a <PROTECT> error. What is the most likely reason?",
+        "options": [
+          "The extended global reference syntax ^[\"namespace\"]global is incorrect",
+          "IRISSYS is a system database and the application user lacks Write permission on it",
+          "Global names stored in IRISSYS must start with %",
+          "The ^[] syntax requires three parameters: namespace, directory, and global name"
+        ],
+        "correct": [1],
+        "explanation": "The IRISSYS database contains system data and is protected. Application users typically do not have Write permission to IRISSYS -- only users with %All or specific system administration roles can write to it. This is a database-level <PROTECT> error. The extended global reference syntax is correct. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_errors)"
+      },
+      {
+        "id": 13,
+        "type": "single",
+        "question": "A developer writes:\n\nClassMethod ProcessFile(filename As %String) As %Status\n{\n    Set stream = ##class(%Stream.FileCharacter).%New()\n    Set sc = stream.LinkToFile(filename)\n    While 'stream.AtEnd {\n        Set line = stream.ReadLine()\n        Set parts = $Length(line, \",\")\n        Set orderId = $Piece(line, \",\", 1)\n        Set total = total + $Piece(line, \",\", 3)\n    }\n    Write \"Grand total: \", total, !\n    Quit $$$OK\n}\n\nOn the first iteration, the method fails with <UNDEFINED> *total. What is the fix?",
+        "options": [
+          "Declare total as a parameter: ClassMethod ProcessFile(filename, total = 0)",
+          "Add 'Set total = 0' before the While loop",
+          "Change the + operator to _ (concatenation) which handles undefined variables",
+          "Use 'New total' before the loop to initialize it"
+        ],
+        "correct": [1],
+        "explanation": "The variable 'total' is used in the expression 'total + $Piece(line, \",\", 3)' before it has been assigned any value. On the first iteration, 'total' is undefined, causing <UNDEFINED>. The fix is to initialize it: 'Set total = 0' before the While loop. The 'New' command creates a new scope for a variable but does not assign it a value. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_errors)"
+      },
+      {
+        "id": 14,
+        "type": "single",
+        "question": "A developer writes code that processes patient records:\n\nClassMethod UpdatePatients() As %Status\n{\n    Set key = \"\"\n    For {\n        Set key = $Order(^Patient(key))\n        Quit:key=\"\"\n        Set name = ^Patient(key, \"Name\")\n        Set city = ^Patient(key, \"City\")\n        Set ^Report(name, City) = key\n    }\n    Quit $$$OK\n}\n\nThe method produces: <UNDEFINED> *City\nWhich line has the bug?",
+        "options": [
+          "The $Order line -- it should use $Order(^Patient(key), 1, data)",
+          "The 'Set ^Report(name, City)' line -- 'City' (capital C) is a different variable than 'city' (lowercase c)",
+          "The 'Set city' line -- ^Patient(key, \"City\") does not exist for some records",
+          "The For loop is missing start:step:end arguments"
+        ],
+        "correct": [1],
+        "explanation": "ObjectScript variables are case-sensitive. The code sets 'city' (lowercase c) but references 'City' (capital C) in the ^Report subscript. These are two different variables, and 'City' was never assigned. The fix is to use consistent casing: Set ^Report(name, city) = key. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_errors)"
+      },
+      {
+        "id": 15,
+        "type": "multiple",
+        "question": "Which of the following runtime errors are correctly matched with their descriptions? (Select two)",
+        "options": [
+          "<SUBSCRIPT> -- an invalid subscript value was used in a global or local array reference",
+          "<PROTECT> -- a memory protection fault occurred in the operating system kernel",
+          "<FRAMESTACK> -- the call stack exceeded its maximum depth, usually from infinite recursion",
+          "<UNDEFINED> -- a class definition could not be found in the database",
+          "<STORE> -- the database ran out of disk space while writing a global"
+        ],
+        "correct": [0, 2],
+        "explanation": "<SUBSCRIPT> is an invalid subscript in a global or local reference, and <FRAMESTACK> is the call stack exceeding its depth, usually through runaway recursion. <PROTECT> is a database PROTECTION error -- access denied to a global or database -- not an OS kernel fault, and <UNDEFINED> is a reference to an unset variable or global node, nothing to do with missing classes (that is <CLASS DOES NOT EXIST>). <STORE> is likewise about memory, not disk: the process exhausted its partition, which is why it is fixed by raising the process memory limit rather than by freeing disk.",
+        "revised": true
+      },
+      {
+        "id": 16,
+        "revised": true,
+        "type": "single",
+        "question": "A developer debugs this code:\n\nClassMethod ComputeAverage(scores...) As %Numeric\n{\n    Set sum = 0\n    For i = 1:1:scores {\n        Set sum = sum + scores(i)\n    }\n    return sum / scores\n}\n\nCalling ##class(App.Math).ComputeAverage() with no arguments produces an error. Which error and why?",
+        "options": [
+          "<DIVIDE> because scores is 0 (no arguments) and the final line divides by zero",
+          "<UNDEFINED> *scores because the variadic array is not defined with zero arguments",
+          "<FUNCTION> because the ... syntax is invalid in ObjectScript",
+          "<PARAMETER> because at least one argument is required for variadic methods"
+        ],
+        "correct": [1],
+        "explanation": "When a variadic method (scores...) is called with no arguments, the 'scores' variable is NOT set at all — it is undefined. The very first reference to 'scores' in the For loop (For i = 1:1:scores) produces an <UNDEFINED> *scores error. The variable is not automatically initialized to 0. The fix is to check '$GET(scores, 0)' or '$DATA(scores)' before using it. When called with arguments, 'scores' is set to the argument count and scores(1), scores(2), etc. hold the values. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_methods)"
+      },
+      {
+        "id": 17,
+        "type": "single",
+        "question": "A developer writes a method that traverses a linked list stored in globals:\n\nClassMethod TraverseList(startId As %Integer)\n{\n    Set current = startId\n    While current '= \"\" {\n        Write ^LinkedList(current, \"Value\"), !\n        Set current = ^LinkedList(current, \"Next\")\n    }\n}\n\nThe data has a circular reference: node 3's \"Next\" points back to node 1. What error occurs?",
+        "options": [
+          "<FRAMESTACK> because of infinite recursion",
+          "No error terminates the code, but it runs in an infinite loop because the While condition is never false",
+          "<SUBSCRIPT> because the subscripts cycle repeatedly",
+          "<UNDEFINED> because ^LinkedList eventually references a non-existent node"
+        ],
+        "correct": [1],
+        "explanation": "This is not recursive (no method calls itself), so <FRAMESTACK> does not apply. The While loop follows the \"Next\" pointers endlessly since the circular reference means current never becomes \"\". The code runs in an infinite loop. The fix is to track visited nodes or set a maximum iteration count. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_errors)"
+      },
+      {
+        "id": 18,
+        "type": "single",
+        "question": "A method receives an object reference and processes it:\n\nClassMethod ProcessOrder(order As App.Order) As %Status\n{\n    Set customerId = order.CustomerId\n    Set customer = ##class(App.Customer).%OpenId(customerId)\n    Set email = customer.Email\n    Do ..SendConfirmation(email, order.OrderNumber)\n    Quit $$$OK\n}\n\nIf customerId is valid but the customer record was deleted between the time the order was created and now, which error occurs on the third line?",
+        "options": [
+          "<UNDEFINED> *customer because %OpenId returns \"\" for a deleted record",
+          "<INVALID OREF> because customer is \"\" (not an object) and .Email is called on it",
+          "<PROTECT> because the customer record is locked by the deletion process",
+          "<SUBSCRIPT> because the customer ID subscript no longer exists in the global"
+        ],
+        "correct": [1],
+        "explanation": "When %OpenId cannot find the record (because it was deleted), it returns an empty string \"\". The next line attempts customer.Email on this empty string, which is not a valid object reference, producing <INVALID OREF>. The safe pattern is: Set customer = ##class(App.Customer).%OpenId(customerId)  If customer = \"\" { Quit $$$ERROR(...) }. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_errors)"
+      }
+    ]
+  }
+}

@@ -1,0 +1,247 @@
+{
+  "quiz": {
+    "title": "T1.2: Properties, Indexes, and Class Members",
+    "description": "Scenario-based questions on MAXLEN for strings, stream properties for large data, calculated/triggered properties, class parameters, bitmap vs standard indexes, unique index methods, and foreign keys in InterSystems IRIS ObjectScript.",
+    "version": "2.1",
+    "publishedDate": "2026-04-09",
+    "questions": [
+      {
+        "id": 1,
+        "type": "single",
+        "question": "A developer defines the following class.\n\nClass App.Contact Extends %Persistent\n{\nProperty FirstName As %String;\nProperty LastName As %String;\nProperty Bio As %String;\n}\n\nAfter deploying, users report that bios longer than 50 characters are being silently truncated. Which of the following explains the issue and provides the correct fix?",
+        "options": [
+          "The %String type has no length limit; the issue is in the application code",
+          "The default MAXLEN for %String is 50. The fix is: Property Bio As %String(MAXLEN = 2000);",
+          "The default MAXLEN for %String is 128. The fix is to use %LongString instead",
+          "Truncation only occurs in SQL, not when setting properties via ObjectScript"
+        ],
+        "correct": [1],
+        "explanation": "The default MAXLEN for %String properties in InterSystems IRIS is 50 characters. When data exceeds MAXLEN, it may be truncated during validation or storage. The fix is to explicitly set MAXLEN to a value that accommodates the expected data size. For very large text (megabytes), a stream type should be used instead. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_datatypes)"
+      },
+      {
+        "id": 2,
+        "type": "single",
+        "question": "You are working on an application that needs to store text-based reports. Each report can take up to 5 megabytes of storage, and should be automatically compressed by IRIS if possible.\n\nWhich of the following property definitions is most appropriate?",
+        "options": [
+          "Property Reports As %String;",
+          "Property Reports As %RawString;",
+          "Property Reports As %Stream.FileCharacter;",
+          "Property Reports As %Stream.FileBinary;",
+          "Property Reports As %Stream.GlobalCharacter;"
+        ],
+        "correct": [4],
+        "explanation": "%Stream.GlobalCharacter is the correct choice for large text data that should be stored in the database with automatic compression. It stores character data in globals, supports automatic compression, and handles multi-megabyte content. %Stream.FileCharacter stores data on the filesystem rather than in the database. %Stream.FileBinary is for binary files on the filesystem. %String and %RawString cannot handle 5 MB of data efficiently. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_propstream)"
+      },
+      {
+        "id": 3,
+        "type": "single",
+        "question": "Consider the following class definition.\n\nClass Store.Product Extends %Persistent\n{\nProperty Name As %String(MAXLEN = 200) [ Required ];\nProperty Category As %String(VALUELIST = \",Electronics,Books,Clothing,Food\");\nProperty Price As %Numeric(MINVAL = 0, MAXVAL = 99999.99);\nProperty Weight As %Numeric(SCALE = 2);\n}\n\nA developer runs:\n\nset prod = ##class(Store.Product).%New()\nset prod.Category = \"Toys\"\nset prod.Price = 29.99\nset sc = prod.%Save()\n\nHow many validation errors will %Save() encounter?",
+        "options": [
+          "One error: Name is Required but was not set",
+          "Two errors: Name is Required, and Category \"Toys\" is not in the VALUELIST",
+          "Three errors: Name is Required, Category invalid, and Weight was not set",
+          "No errors: validation only runs if explicitly called"
+        ],
+        "correct": [1],
+        "explanation": "%Save() triggers property validation. Name is marked Required but was not set, which is one error. Category is set to \"Toys\" which is not in the VALUELIST (\",Electronics,Books,Clothing,Food\"), which is a second error. Price = 29.99 satisfies MINVAL = 0 and MAXVAL = 99999.99. Weight is not Required, so leaving it unset is valid. The validation returns a %Status containing both errors. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_datatypes)"
+      },
+      {
+        "id": 4,
+        "type": "single",
+        "question": "Consider the following class with a computed property.\n\nClass App.Invoice Extends %Persistent\n{\nProperty Subtotal As %Numeric;\nProperty TaxRate As %Numeric [ InitialExpression = 0.08 ];\nProperty TotalAmount As %Numeric [ SqlComputeCode = {Set {*} = {Subtotal} * (1 + {TaxRate})}, SqlComputed, SqlComputeOnChange = (Subtotal, TaxRate) ];\n}\n\nA developer runs:\n\nset inv = ##class(App.Invoice).%New()\nset inv.Subtotal = 100.00\nset sc = inv.%Save()\nwrite inv.TotalAmount\n\nWhat value is written?",
+        "options": [
+          "An empty string because TotalAmount is computed only in SQL queries",
+          "108 because TotalAmount is computed when Subtotal or TaxRate changes and the object is saved",
+          "100 because TaxRate is not explicitly set",
+          "An error because computed properties cannot be read via ObjectScript"
+        ],
+        "correct": [1],
+        "explanation": "SqlComputeOnChange = (Subtotal, TaxRate) means TotalAmount is recomputed and stored whenever Subtotal or TaxRate changes during %Save(). TaxRate has InitialExpression = 0.08, so it defaults to 0.08. The computation is: 100.00 * (1 + 0.08) = 108. The computed value is persisted to disk, making it accessible in both SQL and ObjectScript after save. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_propmethods)"
+      },
+      {
+        "id": 5,
+        "type": "single",
+        "question": "Consider the following class.\n\nClass App.Person Extends %Persistent\n{\nProperty FirstName As %String(MAXLEN = 100);\nProperty LastName As %String(MAXLEN = 100);\nProperty FullName As %String [ Calculated ];\n}\n\nA developer writes:\n\nset p = ##class(App.Person).%OpenId(1)\nwrite p.FullName\n\nThe output is empty. What is the most likely reason?",
+        "options": [
+          "The class is missing an Include directive",
+          "The Calculated keyword means the value is never stored; a custom Get accessor method (FullNameGet) must be defined for ObjectScript access",
+          "FullName needs to be included in the storage definition manually",
+          "%OpenId does not load computed properties"
+        ],
+        "correct": [1],
+        "explanation": "The Calculated keyword means the property value is never stored on disk. When reading a Calculated property in ObjectScript, it invokes the Get accessor method (FullNameGet). If no FullNameGet() method is defined, the property returns empty string. The fix is to add: Method FullNameGet() As %String { return ..FirstName _ \" \" _ ..LastName }. Note: if SqlComputeCode is also defined alongside Calculated, IRIS auto-generates a Get method from it — but without SqlComputeCode, you must provide your own. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_propmethods)",
+        "revised": true
+      },
+      {
+        "id": 6,
+        "type": "single",
+        "question": "Consider the following class with various index types.\n\nClass Hospital.Patient Extends %Persistent\n{\nProperty MRN As %String;\nProperty Name As %String;\nProperty Gender As %String;\nProperty Age As %Integer;\nProperty TotalCharges As %Numeric;\n\nIndex MRNIdx On MRN [ Unique ];\nIndex GenderIdx On Gender [ Type = bitmap ];\nIndex ChargesIdx On TotalCharges [ Type = bitslice ];\nIndex NameIdx On Name;\n}\n\nWhich index would the SQL optimizer use to efficiently calculate SELECT SUM(TotalCharges) FROM Hospital.Patient?",
+        "options": [
+          "MRNIdx - because it is the unique index",
+          "GenderIdx - because bitmap indexes are fastest for aggregation",
+          "ChargesIdx - because bitslice indexes are specifically designed for SUM, COUNT, and AVG operations on numeric data",
+          "NameIdx - because it is a standard index that can scan all rows"
+        ],
+        "correct": [2],
+        "explanation": "A bitslice index decomposes numeric values into their binary representation across bit slices. This allows the SQL optimizer to compute SUM directly from the index using bitwise operations, without scanning the data global at all. Bitslice indexes are specifically designed for aggregate calculations (SUM, COUNT, AVG) on numeric properties and are far more efficient than any other index type for these operations. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_tables)"
+      },
+      {
+        "id": 7,
+        "type": "single",
+        "question": "Consider the following class.\n\nClass App.Account Extends %Persistent\n{\nProperty Email As %String(MAXLEN = 250);\nIndex EmailIdx On Email [ Unique ];\n}\n\nThe following records exist:\n  ID 1: Email = \"alice@example.com\"\n  ID 2: Email = \"bob@example.com\"\n\nA developer runs:\n\nset sc = ##class(App.Account).EmailIdxOpen(\"alice@example.com\", , .sc2)\n\nWhat does EmailIdxOpen() return?",
+        "options": [
+          "The integer ID value 1",
+          "An oref pointing to the App.Account object with Email = \"alice@example.com\"",
+          "The string \"alice@example.com\"",
+          "A %Status value indicating whether the email exists"
+        ],
+        "correct": [1],
+        "explanation": "When a unique index is defined, the system generates helper methods including <IndexName>Open() which opens the object by the unique index value instead of the ID. EmailIdxOpen(\"alice@example.com\") looks up the unique index, finds the corresponding ID (1), and returns the fully loaded oref. Other generated methods include EmailIdxExists() to check existence and EmailIdxDelete() to delete by the indexed value. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_defpersobj)"
+      },
+      {
+        "id": 8,
+        "type": "single",
+        "question": "Consider the following class.\n\nClass App.Order Extends %Persistent\n{\nProperty OrderNumber As %String;\nProperty Status As %String(VALUELIST = \",Pending,Shipped,Delivered,Cancelled\");\nProperty Region As %String(VALUELIST = \",North,South,East,West\");\n\nIndex StatusIdx On Status [ Type = bitmap ];\nIndex RegionIdx On Region [ Type = bitmap ];\n}\n\nA query runs:\n\nSELECT COUNT(*) FROM App.\"Order\" WHERE Status = 'Shipped' AND Region = 'North'\n\nHow do bitmap indexes help with this query?",
+        "options": [
+          "Each bitmap index is scanned independently and results are merged in memory",
+          "The SQL engine performs a bitwise AND on the bitmap for Status='Shipped' and the bitmap for Region='North', directly producing the matching row set without touching the data global",
+          "Bitmap indexes are converted to standard indexes at runtime for AND operations",
+          "Bitmap indexes do not help with AND conditions; only OR conditions benefit"
+        ],
+        "correct": [1],
+        "explanation": "Bitmap indexes excel at combining multiple conditions using bitwise operations. Each distinct value in a bitmap index has a bit string where each bit represents a row ID. For Status='Shipped', there is one bit string; for Region='North', another. The SQL engine performs a bitwise AND operation on these two bit strings, and the resulting bits indicate exactly which rows match both conditions -- all without reading the data global. This is extremely fast for low-cardinality columns. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_tables)"
+      },
+      {
+        "id": 9,
+        "type": "single",
+        "question": "Consider the following class definitions.\n\nClass App.Department Extends %Persistent\n{\nProperty Name As %String;\nProperty Code As %String;\nIndex CodeIdx On Code [ Unique ];\n}\n\nClass App.Employee Extends %Persistent\n{\nProperty Name As %String;\nProperty DeptCode As %String;\nForeignKey DeptFK(DeptCode) References App.Department(CodeIdx);\n}\n\nWhat happens if a developer tries to save an Employee with DeptCode = \"HR\" but no Department exists with Code = \"HR\"?",
+        "options": [
+          "The save succeeds because foreign keys are only enforced in SQL, not ObjectScript",
+          "The save fails with a foreign key violation error returned in the %Status",
+          "The save succeeds but a warning is logged to the audit log",
+          "A new Department record with Code = \"HR\" is automatically created"
+        ],
+        "correct": [1],
+        "explanation": "Foreign key constraints in InterSystems IRIS are enforced during %Save() regardless of whether the save is triggered via ObjectScript or SQL. If the referenced record does not exist, the foreign key check fails and %Save() returns an error %Status with a foreign key violation message. No automatic record creation occurs. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_relationships)"
+      },
+      {
+        "id": 10,
+        "type": "single",
+        "question": "Consider the following class.\n\nClass App.Config Extends %Persistent\n{\nParameter DEFAULTMAXLEN = 200;\nParameter APPVERSION = \"3.2.1\";\n\nProperty Setting As %String;\nProperty Value As %String;\n}\n\nA developer writes:\n\nwrite ##class(App.Config).#APPVERSION\n\nWhat is the output?",
+        "options": [
+          "An error because parameters cannot be accessed outside the class",
+          "3.2.1",
+          "\"3.2.1\" (including the quotes)",
+          "An error because class parameters can only be accessed with ..#ParamName syntax"
+        ],
+        "correct": [1],
+        "explanation": "Class parameters can be accessed from outside the class using the ##class(ClassName).#ParameterName syntax. From inside the class, both ..#ParameterName and ##class(ClassName).#ParameterName work. Parameters are compile-time constants that are accessible from both instance methods and class methods. The output is the string 3.2.1 without quotes. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_parameters)"
+      },
+      {
+        "id": 11,
+        "type": "single",
+        "question": "Consider the following class.\n\nClass App.Sensor Extends %Persistent\n{\nProperty SensorId As %String;\nProperty Temperature As %Numeric;\nProperty Humidity As %Numeric;\nProperty ReadingTime As %TimeStamp;\n\nIndex SensorTimeIdx On (SensorId, ReadingTime);\n}\n\nWhich of the following queries would best benefit from the compound index SensorTimeIdx?",
+        "options": [
+          "SELECT * FROM App.Sensor WHERE Temperature > 30",
+          "SELECT * FROM App.Sensor WHERE ReadingTime > '2026-01-01'",
+          "SELECT * FROM App.Sensor WHERE SensorId = 'S100' AND ReadingTime > '2026-01-01'",
+          "SELECT * FROM App.Sensor WHERE Humidity < 50"
+        ],
+        "correct": [2],
+        "explanation": "A compound index on (SensorId, ReadingTime) is organized first by SensorId, then by ReadingTime within each SensorId. This makes it optimal for queries that filter on SensorId (the leading key) and then range-scan on ReadingTime. The query in option C filters on both fields in the correct order. A query on only ReadingTime (option B) cannot efficiently use this index because ReadingTime is not the leading key. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_tables)"
+      },
+      {
+        "id": 12,
+        "type": "single",
+        "question": "A developer defines the following property with a triggered computed value.\n\nClass App.AuditRecord Extends %Persistent\n{\nProperty Data As %String(MAXLEN = 1000);\nProperty DataLength As %Integer [ SqlComputeCode = {Set {*} = $Length({Data})}, SqlComputed, SqlComputeOnChange = Data ];\n}\n\nThe developer saves a record:\n\nset rec = ##class(App.AuditRecord).%New()\nset rec.Data = \"Hello World\"\nset sc = rec.%Save()\n\nThen later, another process runs:\n\n&sql(UPDATE App.AuditRecord SET Data = 'Updated content' WHERE ID = 1)\n\nAfter the SQL UPDATE, what is the value of DataLength for this record?",
+        "options": [
+          "11 (the length of \"Hello World\", unchanged)",
+          "15 (the length of \"Updated content\", recomputed by the trigger)",
+          "0 because SQL updates do not trigger SqlComputeOnChange",
+          "NULL because the UPDATE did not explicitly set DataLength"
+        ],
+        "correct": [1],
+        "explanation": "SqlComputeOnChange = Data means the DataLength value is automatically recomputed whenever the Data property changes, whether the change occurs via ObjectScript %Save() or SQL UPDATE. When the SQL UPDATE sets Data to 'Updated content' (15 characters), the compute code runs and sets DataLength to $Length(\"Updated content\") = 15. This is the \"triggered\" behavior of SqlComputeOnChange. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_propmethods)"
+      },
+      {
+        "id": 13,
+        "type": "single",
+        "question": "Consider the following class.\n\nClass App.User Extends %Persistent\n{\nProperty Username As %String(MAXLEN = 50) [ Required ];\nProperty Email As %String(MAXLEN = 250) [ Required ];\nProperty Role As %String(VALUELIST = \",Admin,Editor,Viewer\") [ InitialExpression = \"Viewer\" ];\nProperty LoginCount As %Integer [ InitialExpression = 0 ];\n}\n\nA developer creates a new user:\n\nset user = ##class(App.User).%New()\nset user.Username = \"jdoe\"\nset user.Email = \"jdoe@example.com\"\nset sc = user.%Save()\n\nAfter saving, what are the values of Role and LoginCount?",
+        "options": [
+          "Role = \"\" and LoginCount = \"\" because they were not explicitly set",
+          "Role = \"Viewer\" and LoginCount = 0 because InitialExpression provides defaults at %New() time",
+          "Role = \"Viewer\" and LoginCount = \"\" because InitialExpression only works for strings",
+          "A validation error occurs because Role and LoginCount are not explicitly set"
+        ],
+        "correct": [1],
+        "explanation": "InitialExpression defines default values that are assigned to properties when %New() creates the object instance. Role defaults to \"Viewer\" and LoginCount defaults to 0. These values are set automatically during object creation and are saved along with the explicitly set properties. Since the properties are not marked Required (only Username and Email are), not setting them explicitly is fine. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_datatypes)"
+      },
+      {
+        "id": 14,
+        "type": "single",
+        "question": "Consider the following class with a stream property.\n\nClass Doc.Report Extends %Persistent\n{\nProperty Title As %String(MAXLEN = 200);\nProperty Content As %Stream.GlobalCharacter;\n}\n\nA developer writes the following code to store a report.\n\nset rpt = ##class(Doc.Report).%New()\nset rpt.Title = \"Annual Review\"\ndo rpt.Content.Write(\"Section 1: Introduction\")\ndo rpt.Content.WriteLine(\"\")\ndo rpt.Content.Write(\"Section 2: Results\")\nset sc = rpt.%Save()\n\n// Later, reading it back:\nset rpt2 = ##class(Doc.Report).%OpenId(rpt.%Id())\nset text = \"\"\nwhile 'rpt2.Content.AtEnd {\n  set text = text _ rpt2.Content.Read()\n}\nwrite text\n\nWhat does the Write command output?",
+        "options": [
+          "Only \"Section 2: Results\" because each Write overwrites the previous content",
+          "\"Section 1: Introduction\" followed by a newline, then \"Section 2: Results\" -- all content is concatenated in the stream",
+          "An empty string because Rewind() was not called before reading",
+          "An error because you cannot use Read() and Write() on the same stream"
+        ],
+        "correct": [1],
+        "explanation": "Stream Write() appends data to the stream -- it does not overwrite. WriteLine() appends data plus a line terminator. When the object is saved and later reopened with %OpenId(), the stream's read position is at the beginning (Rewind is not needed after opening). The Read() method reads chunks of data in a loop until AtEnd is true. The result is all three writes concatenated. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_propstream)"
+      },
+      {
+        "id": 15,
+        "type": "multiple",
+        "question": "Consider the following class.\n\nClass App.Article Extends %Persistent\n{\nProperty Title As %String(MAXLEN = 300);\nProperty Author As %String(MAXLEN = 100);\nProperty Status As %String(VALUELIST = \",Draft,Published,Archived\");\nProperty ViewCount As %Integer;\n\nIndex TitleIdx On Title [ Unique ];\nIndex StatusIdx On Status [ Type = bitmap ];\nIndex ViewIdx On ViewCount [ Type = bitslice ];\n}\n\nWhich of the following statements are true about the indexes defined in this class? (Select all that apply)",
+        "options": [
+          "TitleIdx generates helper methods TitleIdxOpen(), TitleIdxExists(), and TitleIdxDelete()",
+          "StatusIdx is appropriate because Status has low cardinality (only 3 possible values)",
+          "ViewIdx allows the SQL optimizer to compute SUM(ViewCount) directly from the index without scanning data",
+          "StatusIdx and ViewIdx can be combined with bitwise AND operations in a single query",
+          "TitleIdx is a bitmap index because it has the Unique keyword"
+        ],
+        "correct": [0, 1, 2, 3],
+        "explanation": "TitleIdx as a unique index generates Open/Exists/Delete helper methods. StatusIdx is bitmap which is ideal for low-cardinality fields like Status. ViewIdx as bitslice enables efficient aggregate computation of SUM/COUNT/AVG. Bitmap and bitslice indexes can be combined with bitwise operations. TitleIdx is a standard unique index, not a bitmap -- the Unique keyword does not make it bitmap. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_tables)"
+      },
+      {
+        "id": 16,
+        "type": "single",
+        "question": "Consider the following class that uses a property parameter constraint.\n\nClass App.Employee Extends %Persistent\n{\nProperty Name As %String(MAXLEN = 100);\nProperty Salary As %Numeric(MINVAL = 30000, MAXVAL = 500000, SCALE = 2);\nProperty Department As %String(MAXLEN = 50);\n}\n\nA developer runs:\n\nset emp = ##class(App.Employee).%New()\nset emp.Name = \"Jane Doe\"\nset emp.Salary = 25000\nset emp.Department = \"Engineering\"\nset sc = emp.%Save()\nwrite $$$ISOK(sc)\n\nWhat is the output?",
+        "options": [
+          "1 -- the save succeeds because MINVAL is only a hint to the SQL optimizer",
+          "0 -- the save fails because Salary = 25000 violates the MINVAL = 30000 constraint",
+          "1 -- the save succeeds because MINVAL is only enforced in SQL INSERT statements",
+          "An exception is thrown rather than returning a %Status error"
+        ],
+        "correct": [1],
+        "explanation": "MINVAL and MAXVAL are validation constraints that are enforced during %Save(). When Salary is set to 25000, which is below the MINVAL of 30000, the validation check fails and %Save() returns an error %Status. $$$ISOK(sc) returns 0 (false) because the status indicates failure. These constraints are enforced in both ObjectScript and SQL contexts. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_datatypes)"
+      },
+      {
+        "id": 17,
+        "type": "single",
+        "question": "Consider the following class.\n\nClass App.Task Extends %Persistent\n{\nProperty Title As %String(MAXLEN = 200);\nProperty AssignedTo As %String(MAXLEN = 100);\nProperty Priority As %Integer;\nProperty CreatedAt As %TimeStamp [ InitialExpression = {$ZDT($H, 3)} ];\n}\n\nWhat is special about the InitialExpression for CreatedAt?",
+        "options": [
+          "It is invalid syntax because InitialExpression cannot contain function calls",
+          "The curly braces indicate the expression is evaluated at compile time, so all objects will have the same timestamp",
+          "The curly braces indicate the expression is evaluated at runtime when %New() is called, so each new object gets the current timestamp",
+          "The expression is evaluated once when the class is loaded into memory"
+        ],
+        "correct": [2],
+        "explanation": "When an InitialExpression is enclosed in curly braces { }, it is treated as an ObjectScript expression that is evaluated at runtime each time %New() is called. Without curly braces, the value would be a static literal. So {$ZDT($H, 3)} evaluates $ZDT($H, 3) at object creation time, giving each new Task its own unique timestamp reflecting when it was created. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_datatypes)"
+      },
+      {
+        "id": 18,
+        "type": "single",
+        "question": "Consider the following class.\n\nClass App.Metric Extends %Persistent\n{\nProperty Name As %String(MAXLEN = \"\");\nProperty Value As %Numeric;\n}\n\nWhat does MAXLEN = \"\" mean for the Name property?",
+        "options": [
+          "It sets MAXLEN to zero, meaning the property cannot hold any data",
+          "It removes the length limit entirely, allowing the property to hold a string of any length up to the maximum string size",
+          "It is invalid syntax and causes a compile error",
+          "It sets MAXLEN to the default value of 50"
+        ],
+        "correct": [1],
+        "explanation": "Setting MAXLEN to an empty string (MAXLEN = \"\") removes the length validation constraint entirely, allowing the property to hold any string up to the maximum string size supported by the system (approximately 3.6 million characters). This is useful when you need strings larger than the default 50 characters but do not want to pick an arbitrary limit. However, for very large text content, streams are still recommended. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_datatypes)"
+      }
+    ]
+  }
+}

@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Study guide for T3.2: Leverages ObjectScript/SQL Features - part of the InterSystems ObjectScript Specialist certification. Learn key concepts, best practices, and exam preparation tips.">
+    <meta name="keywords" content="InterSystems certification, ObjectScript Specialist, T3.2: Leverages ObjectScript/SQL Features, exam preparation, practice quiz">
+    <meta name="author" content="exam-prep.es">
+    <meta name="robots" content="index, follow">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://exam-prep.es/exams/objectscript/knowledge/T3.2.html">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://exam-prep.es/exams/objectscript/knowledge/T3.2.html">
+    <meta property="og:title" content="T3.2: Leverages ObjectScript/SQL Features - InterSystems ObjectScript Specialist Study Guide">
+    <meta property="og:description" content="Study guide for T3.2: Leverages ObjectScript/SQL Features - part of the InterSystems ObjectScript Specialist certification. Learn key concepts, best practices, and exam preparation tips.">
+    <meta property="og:image" content="https://exam-prep.es/images/og-image.png">
+    <meta property="og:site_name" content="InterSystems Certification Prep">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://exam-prep.es/exams/objectscript/knowledge/T3.2.html">
+    <meta name="twitter:title" content="T3.2: Leverages ObjectScript/SQL Features - InterSystems ObjectScript Specialist Study Guide">
+    <meta name="twitter:description" content="Study guide for T3.2: Leverages ObjectScript/SQL Features - part of the InterSystems ObjectScript Specialist certification. Learn key concepts, best practices, and exam preparation tips.">
+    <meta name="twitter:image" content="https://exam-prep.es/images/og-image.png">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+    <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+
+    <!-- hreflang Tags -->
+    <link rel="alternate" hreflang="en" href="https://exam-prep.es/exams/objectscript/knowledge/T3.2.html" />
+    <link rel="alternate" hreflang="es" href="https://exam-prep.es/exams/objectscript/knowledge/es/T3.2.html" />
+    <link rel="alternate" hreflang="x-default" href="https://exam-prep.es/exams/objectscript/knowledge/T3.2.html" />
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../colors.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+    <link rel="stylesheet" href="../../../css/consent.css">
+
+    <title>T3.2: Leverages ObjectScript/SQL Features - InterSystems ObjectScript Specialist Study Guide | exam-prep.es</title>
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "T3.2: Leverages ObjectScript/SQL Features - InterSystems ObjectScript Specialist Study Guide",
+    "description": "Study guide for T3.2: Leverages ObjectScript/SQL Features - part of the InterSystems ObjectScript Specialist certification. Learn key concepts, best practices, and exam preparation tips.",
+    "author": {
+        "@type": "Organization",
+        "name": "exam-prep.es"
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "InterSystems Certification Prep",
+        "url": "https://exam-prep.es"
+    },
+    "inLanguage": "en",
+    "about": {
+        "@type": "Course",
+        "name": "InterSystems ObjectScript Specialist"
+    }
+}
+    </script>
+</head>
+<body>
+    <div class="container">
+        <nav class="nav-bar">
+            <a href="../index.html" class="back-link">&#8592; Back to Topics</a>
+            <div class="lang-toggle">
+                <a href="T3.2.html" class="lang-btn active">EN</a>
+                <a href="es/T3.2.html" class="lang-btn">ES</a>
+            </div>
+            <a href="../quiz.html?file=quizzes/T3.2-quiz.json" class="quiz-link">Take Quiz &#8594;</a>
+            <div class="auth-bar">
+                <button id="loginBtn" class="auth-btn login-btn" onclick="Auth.login()">Sign In</button>
+                <div id="userInfo" class="user-info">
+                    <div id="userAvatar" class="user-avatar">?</div>
+                    <span id="userName" class="user-name">User</span>
+                </div>
+                <button id="logoutBtn" class="auth-btn logout-btn" onclick="Auth.logout()">Sign Out</button>
+            </div>
+        </nav>
+
+        <header class="header">
+            <h1>T3.2: Leverages ObjectScript/SQL Features</h1>
+            <p>Knowledge Review - InterSystems ObjectScript Specialist</p>
+        </header>
+
+        <nav class="toc">
+            <h3>Contents</h3>
+            <ol>
+                <li><a href="#section-1">ObjectScript as a weakly typed language</a></li>
+                <li><a href="#section-2">System macros and include files</a></li>
+                <li><a href="#section-3">Object-to-SQL projection</a></li>
+                <li><a href="#section-4">Embedded SQL vs Dynamic SQL</a></li>
+                <li><a href="#section-5">Runtime mode and select modes (Logical/ODBC/Display)</a></li>
+                <li><a href="#section-6">SQL variables: SQLCODE, %ROWCOUNT, %ROWID</a></li>
+            </ol>
+        </nav>
+
+        <main class="content">
+            <section id="section-1" class="knowledge-item">
+                <h2>1. ObjectScript as a weakly typed language <button class="subsection-report-btn" onclick="openReportModal('section-1', 'Section 1')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>Weakly typed</strong>: Variables have no declared type; the same variable can hold a string, number, or object reference</li>
+                        <li><strong>Automatic coercion</strong>: ObjectScript converts between strings and numbers based on the operator used</li>
+                        <li><strong>String-to-number rule</strong>: Leading numeric portion is extracted; non-numeric strings evaluate to 0</li>
+                        <li><strong>Arithmetic coercion</strong>: `"3" + 2` evaluates to `5`; `"abc" + 1` evaluates to `1`; `"7dwarfs" + 3` evaluates to `10`</li>
+                        <li><strong>String concatenation</strong>: Use `_` operator to concatenate; `3 _ 2` yields `"32"`</li>
+                        <li><strong>Boolean evaluation</strong>: Empty string `""` and `0` are false; any non-zero numeric or non-empty string with leading non-zero numeric is true</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Overview</h4>
+                        <p>ObjectScript is a weakly (or loosely) typed language, meaning variables do not have fixed types. A variable that holds a number can later hold a string or an object reference without any declaration or casting. Type coercion happens automatically based on the context in which a value is used, particularly the operator being applied.</p>
+                        <h4>Numeric Coercion Rules</h4>
+                        <p>When ObjectScript encounters an arithmetic operator (<code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, <code>\</code>, <code>#</code>, <code>**</code>), it attempts to interpret operands as numbers. The conversion rule extracts the leading numeric portion of a string:</p>
+                        <pre><code class="language-objectscript">WRITE &quot;3&quot; + 2        // 5 (string &quot;3&quot; coerced to number 3)
+WRITE &quot;abc&quot; + 1      // 1 (&quot;abc&quot; has no leading number, coerced to 0)
+WRITE &quot;7dwarfs&quot; + 3  // 10 (&quot;7dwarfs&quot; leading numeric = 7)
+WRITE &quot;3.14xyz&quot; + 0  // 3.14 (leading numeric portion extracted)
+WRITE &quot;&quot; + 5         // 5 (empty string coerced to 0)
+WRITE &quot;  42&quot; + 0     // 0 (leading space is NOT a digit, so numeric value is 0)
+WRITE &quot;1E2&quot; + 0      // 100 (scientific notation is recognized)
+WRITE &quot;--5&quot; + 0      // 0 (double negative not valid leading numeric)</code></pre>
+                        <h4>String Concatenation</h4>
+                        <p>The concatenation operator <code>_</code> forces string context. Numbers are converted to their string representation:</p>
+                        <pre><code class="language-objectscript">WRITE 3 _ 2          // &quot;32&quot;
+WRITE &quot;Hello&quot; _ &quot; &quot; _ &quot;World&quot;  // &quot;Hello World&quot;
+WRITE 3.14 _ &quot; pi&quot;   // &quot;3.14 pi&quot;</code></pre>
+                        <h4>Comparison Operators</h4>
+                        <p>ObjectScript provides separate operators for string and numeric comparison:</p>
+                        <ul>
+                            <li><strong>Numeric comparison</strong>: <code>=</code>, <code>&lt;</code>, <code>&gt;</code>, <code>&#x27;=</code>, <code>&#x27;&lt;</code>, <code>&#x27;&gt;</code>. The <code>=</code> operator performs a NUMERIC comparison only when <strong>both</strong> operands are <strong>canonical numbers</strong> (i.e. their string forms already look like a number: no leading zeros, no leading <code>+</code>, no trailing <code>.0</code>, etc.). Otherwise it performs a STRING comparison.</li>
+                            <li><strong>String operators</strong>: <code>[</code> (contains), <code>]</code> (follows/sorts after), <code>]]</code> (sorts after in collation)</li>
+                            <li>A string with a leading zero, a sign, or any non-digit prefix is NOT canonical, so comparing it to a number does a string compare: <code>&quot;03&quot; = 3</code> is FALSE because the strings "03" and "3" are not equal. To force numeric comparison, coerce with <code>+</code>: <code>+&quot;03&quot; = 3</code> is TRUE.</li>
+                        </ul>
+                        <pre><code class="language-objectscript">WRITE (&quot;3&quot;   = 3)    // 1 (true — both canonical numbers, numeric comparison)
+WRITE (&quot;03&quot;  = 3)    // 0 (false — &quot;03&quot; is not canonical, string compare: &quot;03&quot; ≠ &quot;3&quot;)
+WRITE (+&quot;03&quot; = 3)    // 1 (true — + forces numeric interpretation, 3 = 3)
+WRITE (&quot;abc&quot; = 0)    // 0 (false — &quot;abc&quot; is not canonical, string compare: &quot;abc&quot; ≠ &quot;0&quot;)
+WRITE (&quot;abc&quot; = &quot;&quot;)   // 0 (false — string compare, &quot;abc&quot; ≠ &quot;&quot;)
+WRITE (0    = &quot;&quot;)    // 0 (false — &quot;&quot; is not canonical, string compare: &quot;0&quot; ≠ &quot;&quot;)</code></pre>
+                        <h4>Boolean Context</h4>
+                        <p>In boolean context (IF, WHILE, etc.), ObjectScript evaluates values as: <code>0</code> and <code>&quot;&quot;</code> are false; everything else that evaluates to non-zero is true:</p>
+                        <pre><code class="language-objectscript">IF &quot;abc&quot; { WRITE &quot;truthy&quot; }  // &quot;abc&quot; coerced to 0, so this is FALSE
+IF &quot;1abc&quot; { WRITE &quot;truthy&quot; } // &quot;1abc&quot; coerced to 1, so this is TRUE
+IF &quot; &quot; { WRITE &quot;truthy&quot; }   // &quot; &quot; coerced to 0, so this is FALSE</code></pre>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_variables" target="_blank">Variables in ObjectScript</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_operators" target="_blank">Operators and Expressions</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_operators#GCOS_operators_string_relational" target="_blank">String Relational Operators</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="section-2" class="knowledge-item">
+                <h2>2. System macros and include files <button class="subsection-report-btn" onclick="openReportModal('section-2', 'Section 2')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>#Include directive</strong>: Includes macro definitions from `.inc` files at compile time</li>
+                        <li><strong>Macro syntax</strong>: `$$$macroName` for expression macros, `$$$macroName(args)` for parameterized macros</li>
+                        <li><strong>Common macros</strong>: `$$$OK`, `$$$ISERR(sc)`, `$$$ThrowOnError(sc)`, `$$$ThrowStatus(sc)`, `$$$ISOK(sc)`</li>
+                        <li><strong>%Status pattern</strong>: Methods return `%Status` values; check with `$$$ISERR` / `$$$ISOK` macros</li>
+                        <li><strong>#Define directive</strong>: Creates custom macros within classes or include files</li>
+                        <li><strong>Include files location</strong>: Stored as routines with `.inc` extension, typically in `%occStatus.inc`, `%occErrors.inc`</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Overview</h4>
+                        <p>ObjectScript uses a C-style preprocessor that processes directives at compile time. Macros provide reusable code fragments, constants, and standardized patterns. The include file mechanism allows sharing macro definitions across multiple classes and routines.</p>
+                        <h4>Include Files and #Include Directive</h4>
+                        <p>Include files have the <code>.inc</code> extension and contain macro definitions. They are included at compile time using the <code>#Include</code> directive, which must appear before the class definition or at the top of a routine:</p>
+                        <pre><code class="language-objectscript">#Include %occStatus
+#Include %occErrors
+
+Class MyApp.Service Extends %RegisteredObject
+{
+    // $$$OK, $$$ISERR, etc. are now available
+}</code></pre>
+                        <p>Multiple include files can be included, and include files can themselves include other files. The <code>#IncludeGenerator</code> directive is used for macros needed in method generators.</p>
+                        <h4>Defining Macros</h4>
+                        <p>Use <code>#Define</code> to create macros. Expression macros return values; code macros expand to statements:</p>
+                        <pre><code class="language-objectscript">#Define AppName &quot;MyApplication&quot;
+#Define MaxRetries 3
+#Define Log(%msg) DO ##class(%SYS.System).WriteToConsoleLog(%msg)
+#Define ThrowIfError(%sc) IF $$$ISERR(%sc) { THROW ##class(%Exception.StatusException).CreateFromStatus(%sc) }</code></pre>
+                        <h4>Essential %Status Macros</h4>
+                        <p>The <code>%Status</code> system is central to InterSystems IRIS error handling. Most system methods return a <code>%Status</code> value:</p>
+                        <pre><code class="language-objectscript">#Include %occStatus
+
+// Check status values
+SET sc = obj.%Save()
+
+// Using $$$ISOK / $$$ISERR
+IF $$$ISERR(sc) {
+    // Handle error
+    SET errorText = $SYSTEM.Status.GetErrorText(sc)
+    WRITE &quot;Error: &quot;, errorText, !
+}
+
+// $$$ThrowOnError - throws exception if status is error
+SET sc = obj.%Save()
+$$$ThrowOnError(sc)
+
+// $$$OK - represents a successful status
+RETURN $$$OK
+
+// Creating error status
+SET sc = $$$ERROR($$$GeneralError, &quot;Something went wrong&quot;)
+
+// Combining statuses
+SET combinedSc = $SYSTEM.Status.AppendStatus(sc1, sc2)</code></pre>
+                        <h4>Common Macro Reference</h4>
+                        <table class="detail-table">
+                            <thead><tr><th>Macro</th><th>Source</th><th>Purpose</th></tr></thead>
+                            <tbody>
+                            <tr><td><code>$$$OK</code></td><td>%occStatus.inc</td><td>Successful %Status value (literal <code>1</code>)</td></tr>
+                            <tr><td><code>$$$ISOK(sc)</code></td><td>%occStatus.inc</td><td>Returns true if status is success</td></tr>
+                            <tr><td><code>$$$ISERR(sc)</code></td><td>%occStatus.inc</td><td>Returns true if status is error</td></tr>
+                            <tr><td><code>$$$ThrowOnError(sc)</code></td><td>%occStatus.inc</td><td>Throws exception if status is error</td></tr>
+                            <tr><td><code>$$$ThrowStatus(sc)</code></td><td>%occStatus.inc</td><td>Throws a %Status as an exception unconditionally</td></tr>
+                            <tr><td><code>$$$ERROR(code,args...)</code></td><td>%occErrors.inc</td><td>Creates an error %Status</td></tr>
+                            <tr><td><code>$$$GeneralError</code></td><td>%occErrors.inc</td><td>Generic error code constant</td></tr>
+                            <tr><td><code>$$$NULLOREF</code></td><td>%occStatus.inc</td><td>Empty object reference (<code>&quot;&quot;</code>)</td></tr>
+                            </tbody>
+                        </table>
+                        <h4>Preprocessor Conditionals</h4>
+                        <p>The preprocessor also supports conditional compilation:</p>
+                        <pre><code class="language-objectscript">#IfDef DEBUG
+    WRITE &quot;Debug mode: variable = &quot;, var, !
+#Else
+    // Production code - no debug output
+#EndIf</code></pre>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_macros" target="_blank">ObjectScript Macros and the Preprocessor</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_pinclude" target="_blank">#Include Directive</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_pdefine" target="_blank">#Define Directive</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_errors#GCOS_errors_status" target="_blank">%Status Values</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="section-3" class="knowledge-item">
+                <h2>3. Object-to-SQL projection <button class="subsection-report-btn" onclick="openReportModal('section-3', 'Section 3')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>Class maps to table</strong>: A `%Persistent` class automatically projects as a SQL table</li>
+                        <li><strong>Property maps to column</strong>: Each property becomes a column in the projected table</li>
+                        <li><strong>Package maps to schema</strong>: The package name becomes the SQL schema name (`.` replaced with `_`)</li>
+                        <li><strong>%Persistent required</strong>: Only classes extending `%Persistent` get SQL table projection</li>
+                        <li><strong>ID column</strong>: Every table has an implicit `ID` column from the object's `%ID()` (OID)</li>
+                        <li><strong>Naming</strong>: `Package.ClassName` projects as `Package.ClassName` in SQL (with `_` for subpackages)</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Overview</h4>
+                        <p>InterSystems IRIS implements a unified data architecture where the same data is simultaneously accessible through object and relational (SQL) interfaces. When you define a persistent class, the system automatically generates a SQL table projection without any additional configuration. This dual access model is a fundamental differentiator of InterSystems IRIS.</p>
+                        <h4>Class-to-Table Mapping</h4>
+                        <p>Every class that extends <code>%Persistent</code> (directly or indirectly) is projected as a SQL table. The class definition serves as the single source of truth for both the object model and the relational schema:</p>
+                        <pre><code class="language-objectscript">Class MyApp.Data.Patient Extends %Persistent
+{
+    Property Name As %String(MAXLEN = 100);
+    Property DOB As %Date;
+    Property SSN As %String(MAXLEN = 11);
+    Property Active As %Boolean;
+
+    Index SSNIdx On SSN [ Unique ];
+}</code></pre>
+                        <p>This class automatically projects as:</p>
+                        <ul>
+                            <li><strong>SQL Table</strong>: <code>MyApp_Data.Patient</code></li>
+                            <li><strong>Columns</strong>: <code>ID</code>, <code>Name</code>, <code>DOB</code>, <code>SSN</code>, <code>Active</code></li>
+                            <li><strong>Unique Index</strong>: <code>SSNIdx</code> on <code>SSN</code> column</li>
+                        </ul>
+                        <h4>Naming Convention Mapping</h4>
+                        <table class="detail-table">
+                            <thead><tr><th>Object Concept</th><th>SQL Concept</th><th>Example</th></tr></thead>
+                            <tbody>
+                            <tr><td>Package</td><td>Schema</td><td><code>MyApp.Data</code> → <code>MyApp_Data</code></td></tr>
+                            <tr><td>Class</td><td>Table</td><td><code>Patient</code> → <code>Patient</code></td></tr>
+                            <tr><td>Property</td><td>Column</td><td><code>Name</code> → <code>Name</code></td></tr>
+                            <tr><td>%Persistent class</td><td>Table with storage</td><td>Full projection</td></tr>
+                            <tr><td>%RegisteredObject class</td><td>No table</td><td>Not projected</td></tr>
+                            <tr><td>Relationship</td><td>Foreign key</td><td>Auto-generated</td></tr>
+                            <tr><td>Index</td><td>SQL Index</td><td>Same name</td></tr>
+                            <tr><td>Class method (SqlProc)</td><td>Stored Procedure</td><td>Callable from SQL</td></tr>
+                            </tbody>
+                        </table>
+                        <h4>Object vs SQL Access to Same Data</h4>
+                        <pre><code class="language-objectscript">// Object access - create and save
+SET patient = ##class(MyApp.Data.Patient).%New()
+SET patient.Name = &quot;Smith, John&quot;
+SET patient.DOB = $HOROLOG
+SET patient.Active = 1
+SET sc = patient.%Save()
+
+// The saved data is immediately accessible via SQL
+&amp;sql(SELECT Name, DOB INTO :name, :dob
+     FROM MyApp_Data.Patient
+     WHERE ID = 1)
+
+// SQL access - same underlying data
+&amp;sql(INSERT INTO MyApp_Data.Patient (Name, DOB, Active)
+     VALUES (&#x27;Jones, Mary&#x27;, CURRENT_DATE, 1))
+// The inserted row is accessible as an object
+SET patient2 = ##class(MyApp.Data.Patient).%OpenId(2)
+WRITE patient2.Name  // &quot;Jones, Mary&quot;</code></pre>
+                        <h4>The ID Column</h4>
+                        <p>Every projected table has an implicit <code>ID</code> column that corresponds to the object's internal ID. This is the value returned by <code>%Id()</code> and used by <code>%OpenId()</code>. By default, the system assigns auto-incrementing integer IDs, but this can be customized with <code>IdKey</code> index definitions.</p>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_intro#GOBJ_intro_unified" target="_blank">Object and SQL Unified Data Model</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_tables" target="_blank">Tables and Classes</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_tables" target="_blank">Class Definitions and SQL Projections</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="section-4" class="knowledge-item">
+                <h2>4. Embedded SQL vs Dynamic SQL <button class="subsection-report-btn" onclick="openReportModal('section-4', 'Section 4')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>Embedded SQL</strong>: `&sql()` syntax, <strong>deferred compilation</strong> (compiled on first execution, not at class compile time), fixed query structure</li>
+                        <li><strong>Dynamic SQL</strong>: `%SQL.Statement` class, prepared and executed at <strong>runtime</strong>, flexible query building</li>
+                        <li><strong>Host variables</strong>: Embedded SQL uses `:variable` for input/output; Dynamic SQL uses `?` parameters</li>
+                        <li><strong>Performance</strong>: Both use deferred/runtime compilation; Embedded SQL has simpler invocation syntax</li>
+                        <li><strong>Flexibility</strong>: Dynamic SQL allows building queries from user input or configuration at runtime</li>
+                        <li><strong>SQLCODE</strong>: Both set SQLCODE; Embedded SQL sets it directly, Dynamic SQL via result set methods</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Overview</h4>
+                        <p>InterSystems IRIS supports two primary methods of executing SQL from within ObjectScript: Embedded SQL and Dynamic SQL. Both use deferred compilation (SQL is compiled on first execution, not at class compile time). Understanding their differences, advantages, and appropriate use cases is essential for the exam.</p>
+                        <h4>Embedded SQL (&sql)</h4>
+                        <p>Embedded SQL is written directly in ObjectScript code using the <code>&amp;sql()</code> syntax. The SQL statement uses <strong>deferred compilation</strong>: it is not compiled when the class/routine is compiled. Instead, the SQL is compiled upon its first execution at runtime. This means SQL syntax errors are only discovered at runtime, not during class compilation.</p>
+                        <pre><code class="language-objectscript">// Simple SELECT with host variables
+SET patientId = 12345
+&amp;sql(SELECT Name, DOB INTO :name, :dob
+     FROM MyApp_Data.Patient
+     WHERE ID = :patientId)
+
+IF SQLCODE = 0 {
+    WRITE &quot;Name: &quot;, name, !
+    WRITE &quot;DOB: &quot;, dob, !
+} ELSEIF SQLCODE = 100 {
+    WRITE &quot;Patient not found&quot;, !
+} ELSE {
+    WRITE &quot;SQL Error: &quot;, SQLCODE, &quot; - &quot;, %msg, !
+}
+
+// Cursor-based query for multiple rows
+&amp;sql(DECLARE PatCursor CURSOR FOR
+     SELECT Name, DOB FROM MyApp_Data.Patient
+     WHERE Active = 1)
+&amp;sql(OPEN PatCursor)
+FOR {
+    &amp;sql(FETCH PatCursor INTO :name, :dob)
+    QUIT:SQLCODE&#x27;=0
+    WRITE name, &quot; - &quot;, dob, !
+}
+&amp;sql(CLOSE PatCursor)</code></pre>
+                        <p><strong>Advantages of Embedded SQL:</strong></p>
+                        <ul>
+                            <li>Simpler, more concise syntax for straightforward queries</li>
+                            <li>Query structure is fixed and clear in the code</li>
+                            <li>Host variables (<code>:var</code>) provide direct access to ObjectScript variables</li>
+                        </ul>
+                        <p><strong>Limitations of Embedded SQL:</strong></p>
+                        <ul>
+                            <li>Query structure must be known at compile time</li>
+                            <li>Cannot dynamically change table names, column lists, or WHERE conditions</li>
+                            <li>Changes require recompilation</li>
+                        </ul>
+                        <h4>Dynamic SQL (%SQL.Statement)</h4>
+                        <p>Dynamic SQL uses the <code>%SQL.Statement</code> class to prepare and execute SQL statements at runtime. This provides maximum flexibility for building queries dynamically.</p>
+                        <pre><code class="language-objectscript">// Basic Dynamic SQL
+SET stmt = ##class(%SQL.Statement).%New()
+SET sc = stmt.%Prepare(&quot;SELECT Name, DOB FROM MyApp_Data.Patient WHERE ID = ?&quot;)
+IF $$$ISERR(sc) {
+    WRITE &quot;Prepare error: &quot;, $SYSTEM.Status.GetErrorText(sc), !
+    QUIT
+}
+
+SET rs = stmt.%Execute(12345)
+WHILE rs.%Next() {
+    WRITE &quot;Name: &quot;, rs.%Get(&quot;Name&quot;), !
+    WRITE &quot;DOB: &quot;, rs.%Get(&quot;DOB&quot;), !
+}
+IF rs.%SQLCODE &lt; 0 {
+    WRITE &quot;SQL Error: &quot;, rs.%SQLCODE, &quot; - &quot;, rs.%Message, !
+}
+
+// Dynamic query building
+SET sql = &quot;SELECT Name, DOB FROM MyApp_Data.Patient WHERE 1=1&quot;
+SET params = 0
+IF activeOnly {
+    SET sql = sql _ &quot; AND Active = ?&quot;
+    SET params = params + 1
+    SET params(params) = 1
+}
+IF nameFilter &#x27;= &quot;&quot; {
+    SET sql = sql _ &quot; AND Name LIKE ?&quot;
+    SET params = params + 1
+    SET params(params) = nameFilter _ &quot;%&quot;
+}
+
+SET sc = stmt.%Prepare(sql)
+// Execute with variable number of parameters
+SET rs = stmt.%Execute(params...)</code></pre>
+                        <p><strong>Advantages of Dynamic SQL:</strong></p>
+                        <ul>
+                            <li>Query structure determined at runtime</li>
+                            <li>Can build queries dynamically based on user input</li>
+                            <li>No recompilation needed when query logic changes</li>
+                            <li>Better for ad-hoc reporting and search interfaces</li>
+                        </ul>
+                        <p><strong>Limitations of Dynamic SQL:</strong></p>
+                        <ul>
+                            <li>Runtime preparation adds overhead</li>
+                            <li>SQL errors only discovered at runtime</li>
+                            <li>More verbose syntax</li>
+                        </ul>
+                        <h4>Comparison Table</h4>
+                        <table class="detail-table">
+                            <thead><tr><th>Feature</th><th>Embedded SQL</th><th>Dynamic SQL</th></tr></thead>
+                            <tbody>
+                            <tr><td>Syntax</td><td><code>&amp;sql(...)</code></td><td><code>%SQL.Statement</code></td></tr>
+                            <tr><td>Validation</td><td>Runtime (first execution)</td><td>Runtime (%Prepare)</td></tr>
+                            <tr><td>Compilation</td><td>Deferred (first execution)</td><td>Runtime (%Prepare, cached)</td></tr>
+                            <tr><td>Host variables</td><td><code>:varName</code></td><td><code>?</code> placeholders</td></tr>
+                            <tr><td>Flexibility</td><td>Fixed structure</td><td>Dynamic structure</td></tr>
+                            <tr><td>Performance</td><td>Slightly faster</td><td>Preparation overhead</td></tr>
+                            <tr><td>Error detection</td><td>Early (compile)</td><td>Late (runtime)</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_esql" target="_blank">Embedded SQL</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_dynsql" target="_blank">Dynamic SQL with %SQL.Statement</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_esql#GSQL_esql_hostvars" target="_blank">Using Host Variables</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="section-5" class="knowledge-item">
+                <h2>5. Runtime mode and select modes (Logical/ODBC/Display) <button class="subsection-report-btn" onclick="openReportModal('section-5', 'Section 5')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>Three modes</strong>: Logical (internal storage), ODBC (standard interchange), Display (human-readable)</li>
+                        <li><strong>Logical mode</strong>: Default for Embedded SQL and for Dynamic SQL (`%SQL.Statement`); values as stored internally (e.g., `%Date` as `$HOROLOG` integer)</li>
+                        <li><strong>ODBC mode</strong>: Converts to standard formats (e.g., dates as `YYYY-MM-DD`); default for ODBC/JDBC connections</li>
+                        <li><strong>Display mode</strong>: Converts to locale-specific display format (e.g., `MM/DD/YYYY`)</li>
+                        <li><strong>%SQL.Statement.%New(selectMode)</strong>: Set mode at creation: 0=Logical, 1=ODBC, 2=Display</li>
+                        <li><strong>Conversion functions</strong>: `%EXTERNAL()` (Display), `%ODBCOUT()` (ODBC), `%INTERNAL()` (Logical) for inline conversion</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Overview</h4>
+                        <p>InterSystems IRIS stores data internally in <strong>logical</strong> format for efficiency and processes it in one of three select modes depending on the consumer of the data. Understanding these modes is critical because returning data in the wrong mode can cause display errors, data misinterpretation, or application failures.</p>
+                        <h4>The Three Modes</h4>
+                        <p><strong>Logical Mode (Mode 0)</strong>: Data as stored internally. Dates are <code>$HOROLOG</code> integers, booleans are <code>0</code>/<code>1</code>, and custom datatypes use their internal representation. This is the default mode for Embedded SQL and for Dynamic SQL alike: <code>%SelectMode</code> is 0 unless the process default has been changed with <code>$SYSTEM.SQL.Util.SetOption(&quot;SelectMode&quot;, n)</code>.</p>
+                        <p><strong>ODBC Mode (Mode 1)</strong>: Data converted to standard interchange format. Dates become <code>YYYY-MM-DD</code>, times become <code>HH:MM:SS</code>, and %List values become comma-separated strings. This is the default mode for ODBC/JDBC connections. Note that Dynamic SQL run from ObjectScript (<code>%SQL.Statement.%New()</code>) does NOT default to ODBC: you have to ask for it with <code>%New(1)</code> or by setting <code>%SelectMode</code> to 1.</p>
+                        <p><strong>Display Mode (Mode 2)</strong>: Data converted to human-readable, locale-specific format. Dates might become <code>03/05/2026</code> depending on locale settings.</p>
+                        <pre><code class="language-objectscript">// Embedded SQL defaults to Logical mode
+&amp;sql(SELECT DOB INTO :dob FROM MyApp_Data.Patient WHERE ID = 1)
+WRITE dob  // 66841 ($HOROLOG integer)
+
+// Dynamic SQL also defaults to Logical mode (mode 0)
+SET stmt = ##class(%SQL.Statement).%New()
+SET sc = stmt.%Prepare(&quot;SELECT DOB FROM MyApp_Data.Patient WHERE ID = 1&quot;)
+SET rs = stmt.%Execute()
+IF rs.%Next() {
+    WRITE rs.%Get(&quot;DOB&quot;)  // 66841 (Logical format, $HOROLOG integer)
+}
+
+// Explicitly set mode to ODBC (1)
+SET stmt = ##class(%SQL.Statement).%New(1)
+SET sc = stmt.%Prepare(&quot;SELECT DOB FROM MyApp_Data.Patient WHERE ID = 1&quot;)
+SET rs = stmt.%Execute()
+IF rs.%Next() {
+    WRITE rs.%Get(&quot;DOB&quot;)  // 2026-03-05 (ODBC format)
+}
+
+// Explicitly set mode to Display (2)
+SET stmt = ##class(%SQL.Statement).%New(2)
+SET sc = stmt.%Prepare(&quot;SELECT DOB FROM MyApp_Data.Patient WHERE ID = 1&quot;)
+SET rs = stmt.%Execute()
+IF rs.%Next() {
+    WRITE rs.%Get(&quot;DOB&quot;)  // 03/05/2026 (Display format)
+}</code></pre>
+                        <h4>Inline Conversion Functions</h4>
+                        <p>You can convert individual columns within a query regardless of the select mode:</p>
+                        <pre><code class="language-objectscript">// In any mode, force specific conversion for one column
+&amp;sql(SELECT Name, %EXTERNAL(DOB), %ODBCOUT(DOB), DOB
+     INTO :name, :dobDisplay, :dobODBC, :dobLogical
+     FROM MyApp_Data.Patient WHERE ID = 1)
+
+WRITE &quot;Display: &quot;, dobDisplay, !    // 03/05/2026
+WRITE &quot;ODBC: &quot;, dobODBC, !          // 2026-03-05
+WRITE &quot;Logical: &quot;, dobLogical, !    // 66841</code></pre>
+                        <table class="detail-table">
+                            <thead><tr><th>Function</th><th>Output Mode</th><th>Description</th></tr></thead>
+                            <tbody>
+                            <tr><td><code>%EXTERNAL(col)</code></td><td>Display</td><td>Locale-specific display format</td></tr>
+                            <tr><td><code>%ODBCOUT(col)</code></td><td>ODBC</td><td>Standard interchange format</td></tr>
+                            <tr><td><code>%INTERNAL(col)</code></td><td>Logical</td><td>Internal storage format</td></tr>
+                            </tbody>
+                        </table>
+                        <h4>Common Pitfalls</h4>
+                        <ul>
+                            <li>Forgetting that Embedded SQL defaults to Logical mode and trying to display raw <code>$HOROLOG</code> values to users</li>
+                            <li>Assuming that Dynamic SQL defaults to ODBC mode: <code>%SQL.Statement</code> defaults to Logical (0), so <code>rs.%Get(&quot;DOB&quot;)</code> returns a <code>$HOROLOG</code> integer unless you pass 1 (ODBC) or 2 (Display) to <code>%New()</code> or set <code>%SelectMode</code></li>
+                            <li>Using the wrong mode when comparing date values across Embedded and Dynamic SQL results</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_dynsql#GSQL_dynsql_selectmode" target="_blank">Select Mode</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RSQL_external" target="_blank">%EXTERNAL, %INTERNAL, %ODBCOUT Functions</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_datatypes" target="_blank">Data Display Options</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="section-6" class="knowledge-item">
+                <h2>6. SQL variables: SQLCODE, %ROWCOUNT, %ROWID <button class="subsection-report-btn" onclick="openReportModal('section-6', 'Section 6')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>SQLCODE = 0</strong>: Successful execution with data returned</li>
+                        <li><strong>SQLCODE = 100</strong>: No more data (end of cursor, no matching row for SELECT INTO, successful INSERT/UPDATE/DELETE)</li>
+                        <li><strong>SQLCODE < 0</strong>: Error occurred; check `%msg` or `%Message` for details</li>
+                        <li><strong>%ROWCOUNT</strong>: Number of rows affected by the last INSERT, UPDATE, DELETE, or FETCH operations</li>
+                        <li><strong>%ROWID</strong>: Row ID of the last row affected by INSERT, UPDATE, or DELETE</li>
+                        <li><strong>Embedded vs Dynamic</strong>: Embedded SQL sets `SQLCODE` and `%ROWCOUNT` as local variables; Dynamic SQL uses `rs.%SQLCODE` and `rs.%ROWCOUNT`</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Overview</h4>
+                        <p>After executing any SQL statement in InterSystems IRIS, several status variables are set to indicate the result. Understanding these variables and their values is critical for writing correct SQL-consuming code.</p>
+                        <h4>SQLCODE Values</h4>
+                        <pre><code class="language-objectscript">// SQLCODE = 0: Success with data
+&amp;sql(SELECT Name INTO :name FROM MyApp_Data.Patient WHERE ID = 1)
+IF SQLCODE = 0 {
+    WRITE &quot;Found: &quot;, name, !
+}
+
+// SQLCODE = 100: No data found (SELECT INTO)
+&amp;sql(SELECT Name INTO :name FROM MyApp_Data.Patient WHERE ID = 99999)
+IF SQLCODE = 100 {
+    WRITE &quot;Patient not found&quot;, !
+}
+
+// SQLCODE = 100 with cursors: No more rows to fetch
+&amp;sql(DECLARE C1 CURSOR FOR SELECT Name FROM MyApp_Data.Patient)
+&amp;sql(OPEN C1)
+FOR {
+    &amp;sql(FETCH C1 INTO :name)
+    QUIT:SQLCODE&#x27;=0    // SQLCODE=100 means no more rows
+    WRITE name, !
+}
+&amp;sql(CLOSE C1)
+
+// SQLCODE &lt; 0: Error
+&amp;sql(SELECT BadColumn INTO :x FROM MyApp_Data.Patient)
+IF SQLCODE &lt; 0 {
+    WRITE &quot;Error &quot;, SQLCODE, &quot;: &quot;, %msg, !
+}</code></pre>
+                        <h4>SQLCODE for DML Statements</h4>
+                        <p>For INSERT, UPDATE, and DELETE statements:</p>
+                        <ul>
+                            <li><strong>SQLCODE = 0</strong>: Statement executed successfully, rows were affected</li>
+                            <li><strong>SQLCODE = 100</strong>: Statement executed successfully, but no rows were affected (e.g., UPDATE with no matching WHERE clause)</li>
+                            <li><strong>SQLCODE < 0</strong>: Error occurred</li>
+                        </ul>
+                        <pre><code class="language-objectscript">// %ROWCOUNT after DML
+&amp;sql(UPDATE MyApp_Data.Patient SET Active = 1 WHERE DOB &gt; 50000)
+WRITE &quot;Rows updated: &quot;, %ROWCOUNT, !
+WRITE &quot;SQLCODE: &quot;, SQLCODE, !  // 0 if rows updated, 100 if no matches
+
+// %ROWID after INSERT
+&amp;sql(INSERT INTO MyApp_Data.Patient (Name, Active) VALUES (&#x27;New Patient&#x27;, 1))
+IF SQLCODE = 0 {
+    WRITE &quot;New patient ID: &quot;, %ROWID, !
+    WRITE &quot;Rows inserted: &quot;, %ROWCOUNT, !  // 1
+}</code></pre>
+                        <h4>Dynamic SQL Status Variables</h4>
+                        <pre><code class="language-objectscript">SET stmt = ##class(%SQL.Statement).%New()
+SET sc = stmt.%Prepare(&quot;SELECT Name FROM MyApp_Data.Patient WHERE Active = ?&quot;)
+SET rs = stmt.%Execute(1)
+
+WHILE rs.%Next() {
+    WRITE rs.%Get(&quot;Name&quot;), !
+}
+
+// After iteration completes
+WRITE &quot;SQLCODE: &quot;, rs.%SQLCODE, !      // 100 (no more rows)
+WRITE &quot;Rows: &quot;, rs.%ROWCOUNT, !        // number of rows fetched
+
+// For DML via Dynamic SQL
+SET sc = stmt.%Prepare(&quot;UPDATE MyApp_Data.Patient SET Active = 0 WHERE ID = ?&quot;)
+SET rs = stmt.%Execute(12345)
+WRITE &quot;SQLCODE: &quot;, rs.%SQLCODE, !
+WRITE &quot;Rows affected: &quot;, rs.%ROWCOUNT, !</code></pre>
+                        <h4>Summary Table</h4>
+                        <table class="detail-table">
+                            <thead><tr><th>Variable</th><th>Context</th><th>Values</th><th>Purpose</th></tr></thead>
+                            <tbody>
+                            <tr><td><code>SQLCODE</code></td><td>Embedded SQL</td><td>0=success, 100=no data, <0=error</td><td>Execution status</td></tr>
+                            <tr><td><code>rs.%SQLCODE</code></td><td>Dynamic SQL</td><td>Same as above</td><td>Execution status</td></tr>
+                            <tr><td><code>%ROWCOUNT</code></td><td>Embedded SQL</td><td>Integer >= 0</td><td>Rows affected/fetched</td></tr>
+                            <tr><td><code>rs.%ROWCOUNT</code></td><td>Dynamic SQL</td><td>Integer >= 0</td><td>Rows affected/fetched</td></tr>
+                            <tr><td><code>%ROWID</code></td><td>Embedded SQL</td><td>Row ID value</td><td>Last affected row ID</td></tr>
+                            <tr><td><code>%msg</code></td><td>Embedded SQL</td><td>Error text</td><td>Error description</td></tr>
+                            <tr><td><code>rs.%Message</code></td><td>Dynamic SQL</td><td>Error text</td><td>Error description</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RSQL_sqlcode" target="_blank">SQLCODE</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RSQL_rowcount" target="_blank">%ROWCOUNT</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RSQL_rowid" target="_blank">%ROWID</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_esql#GSQL_esql_errors" target="_blank">Embedded SQL Error Handling</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <div class="exam-prep">
+                <h2>Exam Preparation Summary</h2>
+                <h3>Critical Concepts to Master:</h3>
+                <ol>
+                    <li><strong>Weak typing coercion rules</strong>: Know exactly what `"7abc" + 3` evaluates to (10) and why</li>
+                    <li><strong>Macro essentials</strong>: `$$$OK`, `$$$ISERR`, `$$$ThrowOnError`, `$$$ERROR` - know each one's purpose and syntax</li>
+                    <li><strong>Object-SQL mapping</strong>: Package→Schema, Class→Table, Property→Column, `%Persistent`→SQL table</li>
+                    <li><strong>Embedded vs Dynamic SQL</strong>: Compile-time vs runtime, `:var` vs `?`, performance vs flexibility trade-offs</li>
+                    <li><strong>Select modes</strong>: Logical (0), ODBC (1), Display (2); Embedded and Dynamic SQL both default to Logical; ODBC is the default only for ODBC/JDBC connections</li>
+                    <li><strong>SQLCODE values</strong>: 0=success, 100=no data, negative=error - this appears on almost every exam</li>
+                    <li><strong>%ROWCOUNT and %ROWID</strong>: Know when each is set and what it contains</li>
+                </ol>
+                <h3>Common Exam Scenarios:</h3>
+                <ul>
+                    <li>Predicting the output of arithmetic operations involving string-to-number coercion</li>
+                    <li>Choosing between Embedded and Dynamic SQL for a given use case</li>
+                    <li>Identifying the correct select mode for a particular consumer (UI, ODBC client, internal logic)</li>
+                    <li>Interpreting SQLCODE values after SELECT, INSERT, UPDATE, DELETE operations</li>
+                    <li>Using macros correctly for %Status error handling patterns</li>
+                    <li>Mapping class/property definitions to their SQL table/column projections</li>
+                </ul>
+                <h3>Hands-On Practice Recommendations:</h3>
+                <ul>
+                    <li>Experiment with type coercion: try various string+number combinations in the Terminal</li>
+                    <li>Write classes extending %Persistent and verify the SQL projection in the Management Portal SQL tab</li>
+                    <li>Execute the same query using both Embedded and Dynamic SQL and compare results</li>
+                    <li>Test all three select modes with date and boolean properties to see format differences</li>
+                    <li>Practice SQLCODE checking patterns for both single-row and cursor-based queries</li>
+                    <li>Create and use custom macros in include files</li>
+                    <li>Write code using `$$$ThrowOnError` and `$$$ISERR` patterns with %Status returns</li>
+                </ul>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <a href="../quiz.html?file=quizzes/T3.2-quiz.json" class="take-quiz-btn">Take the Quiz</a>
+        </footer>
+    </div>
+
+    <div id="reportModal" class="report-modal">
+        <div class="report-content">
+            <h3>Report an Issue</h3>
+            <label for="issueType">Issue Type</label>
+            <select id="issueType">
+                <option value="confusing">Confusing Content</option>
+                <option value="wrong_answer">Incorrect Information</option>
+                <option value="outdated">Outdated Content</option>
+                <option value="formatting">Formatting Issue</option>
+                <option value="typo">Typo</option>
+                <option value="other">Other</option>
+            </select>
+            <label for="issueDescription">Description</label>
+            <textarea id="issueDescription" placeholder="Please describe the issue..."></textarea>
+            <div style="display: flex; align-items: center; gap: 10px; margin: 15px 0;">
+                <input type="checkbox" id="wantEmailNotification" style="width: 18px; height: 18px;">
+                <label for="wantEmailNotification" style="margin: 0; cursor: pointer;">
+                    Notify me by email when resolved
+                </label>
+            </div>
+            <div class="report-actions">
+                <button class="report-cancel" onclick="closeReportModal()">Cancel</button>
+                <button class="report-submit" onclick="submitReport()">Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../../js/config.js"></script>
+    <script src="../../../js/auth.js"></script>
+    <script src="../../../js/api.js"></script>
+    <script>
+        const CERTIFICATION_NAME = 'ObjectScript-Specialist';
+        const TOPIC_REF = 'T3.2';
+
+        document.addEventListener('DOMContentLoaded', function() {
+            updateAuthUI();
+            trackKnowledgeView();
+        });
+
+        function updateAuthUI() {
+            const loginBtn = document.getElementById('loginBtn');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const userInfo = document.getElementById('userInfo');
+            const userAvatar = document.getElementById('userAvatar');
+            const userName = document.getElementById('userName');
+
+            if (typeof Auth !== 'undefined' && Auth.isAuthenticated()) {
+                const user = Auth.getUser();
+                loginBtn.style.display = 'none';
+                logoutBtn.style.display = 'inline-block';
+                userInfo.style.display = 'flex';
+                if (user) {
+                    const initial = (user.name || user.email || '?')[0].toUpperCase();
+                    userAvatar.textContent = initial;
+                    userName.textContent = user.name || user.email || 'User';
+                }
+            } else {
+                loginBtn.style.display = 'inline-block';
+                logoutBtn.style.display = 'none';
+                userInfo.style.display = 'none';
+            }
+        }
+
+        async function trackKnowledgeView() {
+            if (typeof Auth === 'undefined' || !Auth.isAuthenticated()) {
+                return;
+            }
+
+            try {
+                await Api.trackKnowledge(CERTIFICATION_NAME, TOPIC_REF);
+                console.log('Knowledge view tracked:', TOPIC_REF);
+            } catch (error) {
+                console.log('View tracking skipped:', error.message);
+            }
+        }
+
+        function openReportModal(sectionId, sectionTitle) {
+            if (typeof Auth === 'undefined' || !Auth.isAuthenticated()) {
+                alert('Please sign in to report issues.');
+                return;
+            }
+            // Store section context
+            window.currentReportSection = {
+                id: sectionId || 'general',
+                title: sectionTitle || 'General'
+            };
+            // Update modal header to show section
+            const modalHeader = document.querySelector('#reportModal h3');
+            if (modalHeader && sectionTitle) {
+                modalHeader.textContent = 'Report Issue: ' + sectionTitle;
+            } else if (modalHeader) {
+                modalHeader.textContent = 'Report an Issue';
+            }
+            document.getElementById('wantEmailNotification').checked = false;
+            document.getElementById('reportModal').classList.add('active');
+        }
+
+        function closeReportModal() {
+            document.getElementById('reportModal').classList.remove('active');
+            document.getElementById('issueType').value = 'confusing';
+            document.getElementById('issueDescription').value = '';
+        }
+
+        async function submitReport() {
+            const issueType = document.getElementById('issueType').value;
+            const description = document.getElementById('issueDescription').value.trim();
+            const wantEmailNotification = document.getElementById('wantEmailNotification').checked;
+            const sectionContext = window.currentReportSection || { id: 'general', title: 'General' };
+
+            if (!description) {
+                alert('Please provide a description of the issue.');
+                return;
+            }
+
+            // Build content reference with section context
+            const contentRef = sectionContext.id !== 'general'
+                ? `${TOPIC_REF} (${sectionContext.title})`
+                : TOPIC_REF;
+
+            try {
+                await Api.reportProblem({
+                    certificationName: CERTIFICATION_NAME,
+                    contentType: 'knowledge',
+                    contentReference: contentRef,
+                    issueType: issueType,
+                    description: description,
+                    wantEmailNotification: wantEmailNotification
+                });
+                alert('Thank you! Your report has been submitted.');
+                closeReportModal();
+            } catch (error) {
+                if (error.status === 429) {
+                    const retryMinutes = Math.ceil((error.data?.retryAfter || 3600) / 60);
+                    alert(`You've submitted too many reports recently. Please wait ${retryMinutes} minutes before submitting another report.`);
+                } else {
+                    alert('Failed to submit report: ' + error.message);
+                }
+            }
+        }
+
+        document.querySelectorAll('.detailed-notes h3').forEach(h3 => {
+            h3.style.cursor = 'pointer';
+        });
+    </script>
+    <script src="../../../js/consent.js"></script>
+    <script src="../../../js/analytics.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            CookieConsent.init();
+            Analytics.init();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1860 @@
+[
+  {
+    "id": "T1.1",
+    "notes": "Q5: il contatore indica l’ultimo ID allocato nello scenario, non il numero di righe; non dimostra da solo che gli ID mancanti siano stati cancellati. Q13: il layout di una sottoclasse va letto nello storage effettivo, senza generalizzare il nome del sottonodo. Q3: assegnazione ID e persistenza non implicano che una transazione esterna sia già confermata.",
+    "cases": [
+      {
+        "title": "Dal nome dell’indice al global reale",
+        "qs": [
+          1,
+          10,
+          11,
+          16
+        ],
+        "scenario": "Nel quiz BME è l’indice bitmap di estensione. La sua posizione è dichiarata nello storage: un nome intuitivo non sostituisce quella mappa.",
+        "code": "<Index name=\"BME\">\n  <Location>^EW3K.DuIo.3</Location>\n</Index>",
+        "reason": "Segui tre passaggi: identifica BME nella classe; cerca lo stesso nome nello storage; leggi Location. Solo dopo risolvi il mapping del global dal namespace al database. La risposta è ^EW3K.DuIo.3 nello scenario, indipendentemente dal suffisso normalmente usato dalle classi di esempio.",
+        "trap": "Scegliere ^Sample.PatientI perché termina con I, oppure confondere DefaultData con un database. DefaultData nomina una definizione di dati.",
+        "lesson": "Il modello logico, il global e il database sono tre livelli distinti. Una diagnosi fisica richiede tutti e tre.",
+        "challenge": "Se SKUIdx ha Location ^A1B2.C3D4.3 ma IndexLocation termina con .I, dove cerchi SKUIdx?",
+        "solution": "Nella Location specifica ^A1B2.C3D4.3; il valore generico non scavalca il mapping esplicito.",
+        "visual": "Diagramma tre livelli: indice BME -> Location ^EW3K.DuIo.3 -> mapping namespace -> database. Evidenziare: leggere la mappa, non indovinare il suffisso.",
+        "file": "01 - Dal nome dell’indice al global reale.md"
+      },
+      {
+        "title": "Chiave applicativa, ID e conteggio",
+        "qs": [
+          2,
+          5,
+          18
+        ],
+        "scenario": "MessageId=\"JTE810\" è una chiave applicativa univoca. Non è automaticamente l’ID interno del record. In un altro esempio il contatore ID vale 5 ma sono mostrate solo due righe.",
+        "code": "set sc = ##class(Sample.EmailMessage).MIIdxDelete(\"JTE810\")",
+        "reason": "MIIdxDelete usa il valore dell’indice univoco per identificare il record. %DeleteId richiede invece un ID. Un contatore a 5 può portare alla prossima allocazione 6 nello schema mostrato, senza significare cinque righe presenti. Scorrere 1..contatore incontra quindi possibili buchi.",
+        "trap": "Passare una chiave di business a un metodo che accetta l’ID; interpretare il massimo ID come COUNT(*).",
+        "lesson": "Chiediti sempre quale identità richiede l’API: chiave, ID o riferimento in memoria. Non sono intercambiabili.",
+        "challenge": "Sono presenti gli ID 1, 2 e 8. Quante righe ci sono? Puoi assumere che l’ID 3 esista?",
+        "solution": "Tre righe; no. Gli ID non sono un intervallo garantito privo di buchi.",
+        "visual": "Tre cartellini distinti: MessageId JTE810 -> indice univoco -> ID 42 -> record. Mini insieme ID {1,2,8}: 3 righe, massimo 8.",
+        "file": "02 - Chiave applicativa, ID e conteggio.md"
+      },
+      {
+        "title": "Creare, salvare e controllare il risultato",
+        "qs": [
+          3,
+          6,
+          9,
+          12,
+          14
+        ],
+        "scenario": "Il quiz alterna API che restituiscono un oggetto e API che restituiscono %Status. Sono due canali di risultato diversi.",
+        "code": "set obj = ##class(Clinic.Patient).%New(\"John Smith\")\nif $ISOBJECT(obj) {\n  set sc = obj.%Save()\n  do $SYSTEM.Status.DisplayError(sc)\n}",
+        "reason": "%New crea l’istanza e richiama %OnNew con gli argomenti; restituisce un riferimento se la costruzione riesce. %Save valida e salva un oggetto persistente, restituendo %Status. Un ID disponibile dopo il save non sostituisce il controllo dello status. Per %OpenId usa anche lo status di uscita quando serve distinguere un fallimento di caricamento.",
+        "trap": "Controllare %New come se fosse %Status, chiamare proprietà su \"\", oppure chiamare %Save su una classe che estende soltanto %RegisteredObject.",
+        "lesson": "Separa esistenza dell’oggetto, esito dell’operazione e confine della transazione.",
+        "challenge": "Un oggetto è stato creato con %New ma non è stato salvato. Ha già una riga persistente per il solo fatto di esistere?",
+        "solution": "No. La costruzione in memoria e la scrittura persistente sono operazioni separate.",
+        "visual": "Flusso: %New -> oref in memoria -> %Save -> %Status -> verifica. Due uscite diverse: oref versus stato. Nota: %New non equivale a riga salvata.",
+        "file": "03 - Creare, salvare e controllare il risultato.md"
+      }
+    ],
+    "folder": "T1 - Manages Data Model/T1.1: Uses Classes/Approfondimenti esercizi",
+    "image": "schema-esercizi.png",
+    "references": [
+      {
+        "title": "Storage delle classi",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_storage"
+      },
+      {
+        "title": "Oggetti persistenti",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_persobj"
+      },
+      {
+        "title": "API degli oggetti",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_objapi"
+      }
+    ],
+    "question_analyses": "Domanda per domanda/README.md",
+    "visual_guide": "tavole-esercizi.md",
+    "additional_image": "schema-esercizi-extra.png",
+    "image_language": "en"
+  },
+  {
+    "id": "T1.2",
+    "notes": "Q1 e Q16: non fare affidamento sul troncamento; controllare lo status di validazione/salvataggio. Q2: la scelta di uno stream globale non autorizza una promessa universale sulla compressione. Q4–5: computed e calculated richiedono di distinguere proiezione SQL, accessor ObjectScript e keyword di memorizzazione.",
+    "cases": [
+      {
+        "title": "La validazione è parte del contratto",
+        "qs": [
+          1,
+          3,
+          13,
+          16,
+          17,
+          18
+        ],
+        "scenario": "Nel prodotto del quiz manca Name e Category vale Toys, escluso dalla VALUELIST; Price invece è nel range. Nell’impiegato Salary=25000 viola MINVAL=30000.",
+        "code": "Property Name As %String(MAXLEN = 200) [ Required ];\nProperty Salary As %Numeric(MINVAL = 30000);",
+        "reason": "Valuta ogni proprietà separatamente. Required controlla un requisito diverso dal range numerico e dall’elenco dei valori. Il fatto che l’assegnazione in memoria sia avvenuta non prova che %Save avrà successo. InitialExpression agisce sulla nuova istanza, non corregge dati già persistiti.",
+        "trap": "Pensare che l’assenza di un’eccezione nell’assegnazione garantisca un salvataggio valido o che un default sia una migrazione.",
+        "lesson": "Il risultato da osservare è lo status dell’operazione; i vincoli vanno controllati tutti, senza fermarsi al primo campo apparentemente plausibile.",
+        "challenge": "Name è presente, Category è valida, Salary=29999. Il solo fatto che Salary sia un numero rende valido il record?",
+        "solution": "No: il tipo numerico e il vincolo MINVAL sono requisiti distinti.",
+        "visual": "Tre checkpoint: Required, VALUELIST, MINVAL. Esempio Salary 25000 < 30000 -> save fallisce; assegnazione in memoria non prova validità.",
+        "file": "01 - La validazione è parte del contratto.md"
+      },
+      {
+        "title": "Un indice risponde a una domanda specifica",
+        "qs": [
+          6,
+          7,
+          8,
+          11,
+          15
+        ],
+        "scenario": "Due bitmap rappresentano gli ID con Status=Shipped e Region=North. L’intersezione individua i candidati; un indice composto serve invece un diverso tipo di ricerca.",
+        "code": "",
+        "reason": "Usa insiemi concreti: Shipped={1,3,5}, North={3,4,5}; AND={3,5}. Un indice composto (SensorId,ReadingTime) può essere utile per SensorId uguale a un valore e intervallo temporale sul secondo campo. L’ordine dei campi conta. La lettura finale della riga dipende dalle colonne richieste e dalla copertura del piano.",
+        "trap": "Dire che qualunque bitmap evita sempre ogni lettura dei dati, o che l’ordine delle colonne di un indice composto non cambia nulla.",
+        "lesson": "Parti da filtro, cardinalità e colonne restituite; poi scegli la struttura di accesso.",
+        "challenge": "Con Shipped={2,4,6} e North={1,4,6}, quali ID soddisfano entrambe le condizioni?",
+        "solution": "{4,6}. Per ottenere proprietà non coperte dal piano possono servire letture delle righe.",
+        "visual": "Due insiemi bitmap Shipped {1,3,5} e North {3,4,5}; intersezione {3,5}. A lato indice (SensorId, ReadingTime): uguaglianza sul primo, intervallo sul secondo.",
+        "file": "02 - Un indice risponde a una domanda specifica.md"
+      },
+      {
+        "title": "Stringa, stream e valore derivato",
+        "qs": [
+          2,
+          4,
+          5,
+          12,
+          14
+        ],
+        "scenario": "Un report di megabyte e un FullName ricavato da due nomi pongono due problemi distinti: volume del dato e origine del valore.",
+        "code": "do report.Write(\"Introduzione\")\ndo report.Write($CHAR(10))\ndo report.Write(\"Risultati\")\ndo report.Rewind()\nset first = report.Read(12)",
+        "reason": "Per contenuti grandi usa l’API stream, leggendo e scrivendo a blocchi. Per un valore derivato chiediti chi lo calcola, quando viene aggiornato e se viene memorizzato: una formula SQL non è automaticamente un getter ObjectScript. Il codice è un frammento che presuppone report già inizializzato come stream.",
+        "trap": "Usare %String come se avesse capacità illimitata o assumere che tutti i computed siano memorizzati e aggiornati nello stesso modo.",
+        "lesson": "Dimensione, posizione di lettura e politica di calcolo sono tre decisioni indipendenti.",
+        "challenge": "Aggiungi un campo derivato a una tabella esistente. La sua formula dimostra che tutti i vecchi record sono già materializzati?",
+        "solution": "No: occorre verificare le keyword e il meccanismo di aggiornamento, ed eventualmente ricostruire i dati.",
+        "visual": "Confronto: testo breve -> %String; report grande -> stream a blocchi; valore derivato -> formula e politica di aggiornamento. Freccia Rewind verso inizio prima di Read.",
+        "file": "03 - Stringa, stream e valore derivato.md"
+      }
+    ],
+    "folder": "T1 - Manages Data Model/T1.2: Creates Properties and Indexes/Approfondimenti esercizi",
+    "image": "schema-esercizi.png",
+    "references": [
+      {
+        "title": "Tipi di dato e vincoli",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_datatypes"
+      },
+      {
+        "title": "Tabelle e indici",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_tables"
+      },
+      {
+        "title": "Proprietà stream",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_propstream"
+      }
+    ],
+    "question_analyses": "Domanda per domanda/README.md",
+    "visual_guide": "tavole-esercizi.md",
+    "additional_image": "schema-esercizi-extra.png",
+    "image_language": "en"
+  },
+  {
+    "id": "T1.3",
+    "notes": "ByRef e Output nella firma documentano l’intenzione ma non forzano il passaggio per riferimento: il punto nel chiamante è determinante. Un ClassMethod può usare .. per altri ClassMethod e parametri di classe; gli manca l’istanza implicita per le proprietà.",
+    "cases": [
+      {
+        "title": "Valore, riferimento e alias di un oggetto",
+        "qs": [
+          4,
+          6,
+          15
+        ],
+        "scenario": "Il quiz confronta parametri scalari, un array passato con .myCount e due variabili che contengono lo stesso oref.",
+        "code": "set myCount = 0\nset myCount(\"extra\") = 999\nset sc = ##class(App.Reports).GetStats(.myCount)",
+        "reason": "Nell’esempio GetStats scrive counts(\"total\")=100 ma non tocca il valore al nodo radice né extra: restano 0 e 999. Per un oggetto, copiare l’oref crea un alias dello stesso oggetto: cambiare una proprietà attraverso un alias è osservabile dall’altro. Questo non equivale a sostituire la variabile del chiamante.",
+        "trap": "Confondere una copia dell’oref con una copia profonda dell’oggetto o credere che scrivere un figlio elimini gli altri nodi dell’array.",
+        "lesson": "Disegna separatamente la variabile, il riferimento e l’oggetto; per gli array indica esattamente i nodi modificati.",
+        "challenge": "a e b puntano allo stesso oggetto. b.Status=\"Active\". Cosa legge a.Status? Se invece b viene riassegnata a un altro oref, a cambia bersaglio?",
+        "solution": "a.Status legge Active; riassegnare b non cambia il riferimento contenuto in a.",
+        "visual": "Due variabili a e b puntano allo stesso oggetto Status. Modifica via b -> visibile via a. Separare riassegnazione di b da modifica dell’oggetto.",
+        "file": "01 - Valore, riferimento e alias di un oggetto.md"
+      },
+      {
+        "title": "Lo stato spiega la sequenza delle risposte",
+        "qs": [
+          1,
+          2,
+          10,
+          14,
+          17
+        ],
+        "scenario": "Counter.Value parte da 0 e Increment ha amount=1 come valore predefinito. Le chiamate sono Increment(), Increment(5), Increment().",
+        "code": "set c = ##class(App.Counter).%New()\nwrite c.Increment(), \" \"\nwrite c.Increment(5), \" \"\nwrite c.Increment()",
+        "reason": "Traccia la proprietà dopo ogni chiamata: 0+1=1; 1+5=6; 6+1=7. Il default riguarda l’argomento omesso, non il reset dello stato. Un metodo d’istanza opera sul proprio oggetto; un ClassMethod non riceve automaticamente quell’istanza.",
+        "trap": "Ricominciare da zero a ogni chiamata o pensare che un metodo di classe abbia accesso implicito alla proprietà dell’oggetto creato altrove.",
+        "lesson": "Per prevedere un output, costruisci una tabella prima/dopo di ogni effetto sullo stato.",
+        "challenge": "Un secondo oggetto d parte da 0. Dopo le tre chiamate su c, d.Increment() cosa restituisce?",
+        "solution": "1: le due istanze hanno stato separato.",
+        "visual": "Timeline Counter.Value: 0 -> +1 -> 1 -> +5 -> 6 -> +1 -> 7. Seconda istanza separata Value 0.",
+        "file": "02 - Lo stato spiega la sequenza delle risposte.md"
+      },
+      {
+        "title": "Override e validazione non cancellano il contratto",
+        "qs": [
+          7,
+          9,
+          12,
+          18
+        ],
+        "scenario": "Una sottoclasse ridefinisce una validazione: il controllo ereditato e quello specifico devono entrambi essere rispettati.",
+        "code": "",
+        "reason": "Nel quiz il metodo chiama prima ##super(). Se lo status ereditato segnala errore, lo propaga; altrimenti verifica Email. Email non vuota ma senza @ fallisce il controllo specifico. L’override sceglie il corpo eseguito, ma non rende irrilevanti le precondizioni del padre. Un metodo Final non è ridefinibile.",
+        "trap": "Ignorare lo status restituito dal padre, oppure trattare override e overload come sinonimi.",
+        "lesson": "Una specializzazione valida aggiunge regole mantenendo il contratto necessario del comportamento ereditato.",
+        "challenge": "Il controllo del padre fallisce e il controllo email sarebbe valido. È corretto restituire successo?",
+        "solution": "No: il fallimento precedente deve essere propagato o gestito esplicitamente.",
+        "visual": "Pipeline: controllo padre -> errore? propaga; OK -> controllo Email -> contiene @? -> esito. Riquadro Final: override vietato.",
+        "file": "03 - Override e validazione non cancellano il contratto.md"
+      }
+    ],
+    "folder": "T1 - Manages Data Model/T1.3: Creates ObjectScript Methods/Approfondimenti esercizi",
+    "image": "schema-esercizi.png",
+    "references": [
+      {
+        "title": "Definizione e chiamata dei metodi",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_methods"
+      },
+      {
+        "title": "Invocazione e argomenti",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_invoking"
+      },
+      {
+        "title": "Passaggio per riferimento",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=TOS_PassByRef"
+      }
+    ],
+    "question_analyses": "Domanda per domanda/README.md",
+    "visual_guide": "tavole-esercizi.md",
+    "additional_image": "schema-esercizi-extra.png",
+    "image_language": "en"
+  },
+  {
+    "id": "T1.4",
+    "notes": "Q10: la dimensione riportata, 65, è coerente con le stringhe mostrate. Per isolare il tema del cursore, negli esempi qui viene usato Rewind esplicito. I literal JSON true/null non sono variabili ObjectScript predefinite.",
+    "cases": [
+      {
+        "title": "Il parser JSON e ObjectScript parlano linguaggi diversi",
+        "qs": [
+          1,
+          3,
+          7
+        ],
+        "scenario": "patient.active=true è un’assegnazione ObjectScript: true viene interpretato come nome di variabile. In un literal JSON è invece un booleano.",
+        "code": "set patient = {\"active\":true,\"address\":null}\nwrite patient.%IsDefined(\"address\")\nwrite patient.%IsDefined(\"phone\")\nwrite patient.%GetTypeOf(\"address\")",
+        "reason": "Il primo controllo vale 1, il secondo 0, il tipo di address è null. Una proprietà presente con null non è una proprietà assente. Per impostare esplicitamente il tipo booleano tramite API usa %Set con tipo boolean.",
+        "trap": "Scrivere true fuori dal literal come se fosse una costante ObjectScript; usare il valore null come prova che la chiave non esiste.",
+        "lesson": "Distingui il linguaggio del codice, il formato serializzato e il tipo JSON della singola proprietà.",
+        "challenge": "address:null e nessuna proprietà phone: %IsDefined restituisce lo stesso risultato per entrambe?",
+        "solution": "No: address esiste, phone no.",
+        "visual": "Due contesti separati: literal JSON {active:true} valido; ObjectScript active=true legge variabile true. Tabella address:null -> presente 1; phone assente -> 0.",
+        "file": "01 - Il parser JSON e ObjectScript parlano linguaggi diversi.md"
+      },
+      {
+        "title": "Gli array JSON partono da zero e sono condivisi per riferimento",
+        "qs": [
+          2,
+          5,
+          6,
+          12,
+          14
+        ],
+        "scenario": "obj.values è [10,20,30]. Assegnarlo ad arr non clona l’array. %Set(1,99) modifica il secondo elemento.",
+        "code": "set obj = {\"values\":[10,20,30]}\nset arr = obj.values\ndo arr.%Set(1,99)\nwrite obj.%ToJSON()",
+        "reason": "Gli indici sono 0,1,2. arr e obj.values identificano la stessa struttura; dopo la scrittura entrambi mostrano [10,99,30]. La serializzazione JSON descrive lo stato corrente, non una fotografia precedente all’assegnazione.",
+        "trap": "Usare la numerazione uno-based delle liste $LIST per un %DynamicArray o presumere una copia profonda.",
+        "lesson": "Tipo di contenitore e semantica del riferimento determinano l’effetto della mutazione.",
+        "challenge": "Con [10,20,30], quale elemento cambia con %Set(0,7)?",
+        "solution": "Il primo; il risultato è [7,20,30].",
+        "visual": "Array con celle indice 0:10, 1:20, 2:30; freccia %Set(1,99) -> [10,99,30]. Due riferimenti obj.values e arr allo stesso array.",
+        "file": "02 - Gli array JSON partono da zero e sono condivisi per riferimento.md"
+      },
+      {
+        "title": "Uno stream si legge dalla posizione corrente",
+        "qs": [
+          8,
+          9,
+          10,
+          11,
+          13,
+          15
+        ],
+        "scenario": "Più Write producono una sequenza di caratteri. Per leggere dall’inizio, il punto chiave è rendere esplicito il riavvolgimento.",
+        "code": "set s = ##class(%Stream.GlobalCharacter).%New()\ndo s.Write(\"ABC\")\ndo s.Write(\"DEF\")\ndo s.Rewind()\nwrite s.Read(3)\nwrite s.Read(3)",
+        "reason": "Dopo Rewind, la prima lettura restituisce ABC e la seconda DEF. Size descrive la dimensione complessiva, non i caratteri rimasti. AtEnd riguarda la posizione. Una riga include inoltre una convenzione di terminazione diversa da una lettura a numero di caratteri.",
+        "trap": "Confondere dimensione con cursore, oppure aspettarsi che ogni Read riparta dall’inizio.",
+        "lesson": "Disegna il cursore come parte dello stato del contenitore, esattamente come per un iteratore.",
+        "challenge": "Dopo aver letto ABC, Rewind e poi Read(2): che cosa ottieni?",
+        "solution": "AB: Rewind riporta la lettura all’inizio.",
+        "visual": "Nastro ABCDEF e cursore: Rewind -> posizione iniziale; Read(3) ABC -> Read(3) DEF. Size 6 invariato.",
+        "file": "03 - Uno stream si legge dalla posizione corrente.md"
+      }
+    ],
+    "folder": "T1 - Manages Data Model/T1.4: Uses Complex Structures/Approfondimenti esercizi",
+    "image": "schema-esercizi.png",
+    "references": [
+      {
+        "title": "Creazione JSON dinamico",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GJSON_create"
+      },
+      {
+        "title": "Proprietà stream",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_propstream"
+      }
+    ],
+    "question_analyses": "Domanda per domanda/README.md",
+    "visual_guide": "tavole-esercizi.md",
+    "additional_image": "schema-esercizi-extra.png",
+    "image_language": "en"
+  },
+  {
+    "id": "T2.1",
+    "notes": "Q8: la soglia di escalation è configurabile e un lock ampio non equivale a bloccare ogni tipo di lettura. Nei casi considerati il rollback riguarda aggiornamenti transazionali: non ripristina automaticamente variabili locali o normali LOCK; $INCREMENT/$SEQUENCE hanno regole specifiche.",
+    "cases": [
+      {
+        "title": "Una transazione annidata si traccia per livelli",
+        "qs": [
+          1,
+          2,
+          3,
+          14,
+          15,
+          18
+        ],
+        "scenario": "Order.status viene scritto al livello 1; total e items al livello 2; TROLLBACK 1 annulla solo il livello interno; notes viene poi scritto al livello 1.",
+        "code": "TSTART\nSET ^Order(101,\"status\") = \"Processing\"\nTSTART\nSET ^Order(101,\"total\") = 250\nTROLLBACK 1\nSET ^Order(101,\"notes\") = \"Reviewed\"\nTCOMMIT",
+        "reason": "Assumendo un contesto iniziale senza transazioni, i livelli sono 0→1→2→1→0. Restano status e notes; total torna al valore precedente. Un TCOMMIT interno riduce l’annidamento: non rende autonome e irrevocabili le scritture rispetto a un rollback esterno.",
+        "trap": "Leggere il numero 1 di TROLLBACK come “annulla tutto”, oppure considerare un commit interno una transazione separata già definitiva.",
+        "lesson": "Annota il livello e l’insieme delle scritture dopo ogni comando; così distingui rollback parziale e totale.",
+        "challenge": "Se al posto di TROLLBACK 1 usi TROLLBACK senza argomento, qual è il livello finale subito dopo il comando?",
+        "solution": "0: l’intera transazione aperta viene annullata, non soltanto il livello interno.",
+        "visual": "Timeline livelli 0 -> 1 status -> 2 total/items -> rollback interno -> 1 notes -> commit -> 0. Restano status e notes; annullati total/items.",
+        "file": "01 - Una transazione annidata si traccia per livelli.md"
+      },
+      {
+        "title": "LOCK è un protocollo tra partecipanti",
+        "qs": [
+          4,
+          5,
+          6,
+          7,
+          10,
+          11,
+          16
+        ],
+        "scenario": "Il processo A ottiene un LOCK su ^Patient(42). Il processo B esegue SET senza tentare quel LOCK.",
+        "code": "LOCK +^Patient(42):5\nIF $TEST {\n  ; aggiornamento protetto fra processi cooperanti\n  LOCK -^Patient(42)\n}",
+        "reason": "Il LOCK ordinario non intercetta magicamente ogni SET: B può scrivere se non rispetta il protocollo. Il timeout limita l’attesa e $TEST indica l’acquisizione. Lock e transazione risolvono problemi diversi: esclusione fra partecipanti e atomicità degli aggiornamenti.",
+        "trap": "Pensare che il global diventi fisicamente non scrivibile, o usare TSTART come sostituto dell’esclusione richiesta dalla logica applicativa.",
+        "lesson": "Tutti i percorsi concorrenti devono concordare sulla stessa risorsa e sull’ordine di acquisizione.",
+        "challenge": "Due processi usano risorse LOCK diverse per modificare lo stesso record. La sola presenza di LOCK garantisce la serializzazione?",
+        "solution": "No: non c’è conflitto sulla stessa risorsa, quindi il protocollo non coordina quei percorsi.",
+        "visual": "Due corsie processi A/B: A acquisisce LOCK Patient42; B tenta stesso LOCK -> attende; B fa SET senza LOCK -> non è impedito dal protocollo ordinario.",
+        "file": "02 - LOCK è un protocollo tra partecipanti.md"
+      },
+      {
+        "title": "Il segno più cambia l’insieme dei lock",
+        "qs": [
+          12,
+          13
+        ],
+        "scenario": "Due acquisizioni incrementali sono seguite da una acquisizione semplice.",
+        "code": "LOCK +^Order(1)\nLOCK +^Order(2)\nLOCK ^Order(3)",
+        "reason": "Dopo il primo comando l’insieme è {1}; dopo il secondo {1,2}; la forma senza + rilascia i lock precedenti e acquisisce 3. Rimane quindi soltanto {3}. La forma - rilascia invece la risorsa indicata, rispettando il conteggio di acquisizioni.",
+        "trap": "Leggere LOCK ^Order(3) come una terza aggiunta. La mancanza del più modifica il significato del comando.",
+        "lesson": "Non osservare soltanto il record corrente: controlla l’intero insieme di risorse possedute.",
+        "challenge": "Sostituisci l’ultima riga con LOCK +^Order(3). Quali risorse restano possedute?",
+        "solution": "1,2,3, assumendo che tutte le acquisizioni riescano.",
+        "visual": "Tre stati dell’insieme lock: +1 -> {1}; +2 -> {1,2}; semplice 3 -> {3}. Evidenziare + aggiunge, forma semplice sostituisce.",
+        "file": "03 - Il segno più cambia l’insieme dei lock.md"
+      }
+    ],
+    "folder": "T2 - Basic Programming/T2.1: Ensures Data Integrity/Approfondimenti esercizi",
+    "image": "schema-esercizi.png",
+    "references": [
+      {
+        "title": "TROLLBACK",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_ctrollback"
+      },
+      {
+        "title": "LOCK",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_clock"
+      },
+      {
+        "title": "Transazioni",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GAPPS_tp"
+      }
+    ],
+    "question_analyses": "Domanda per domanda/README.md",
+    "visual_guide": "tavole-esercizi.md",
+    "additional_image": "schema-esercizi-extra.png",
+    "image_language": "en"
+  },
+  {
+    "id": "T2.2",
+    "notes": "Le affermazioni sui livelli e l’attivazione di ^%ISCLOG vanno verificate per il componente: non è un logger applicativo universale con una scala garantita 0–3. $ZHOROLOG è invece documentato: secondi dall’avvio con frazioni, non data/ora civile.",
+    "cases": [
+      {
+        "title": "Un ramo può esistere senza valore nel nodo",
+        "qs": [
+          3,
+          8,
+          9,
+          11
+        ],
+        "scenario": "Phone ha figli 1 e 2 ma nessun valore assegnato esattamente a Phone.",
+        "code": "set data(\"Phone\",1) = \"555-0100\"\nset data(\"Phone\",2) = \"555-0200\"\nwrite $DATA(data(\"Phone\"))",
+        "reason": "Il risultato è 10: esistono discendenti, non un valore diretto. $DATA distingue due proprietà indipendenti. Se assegni anche data(\"Phone\")=\"home\", il risultato diventa 11. Una lettura diretta del ramo senza valore non è equivalente a leggerne i figli.",
+        "trap": "Usare IF $DATA(node) come prova sufficiente che WRITE node sia valido: anche 10 è vero, ma il valore diretto manca.",
+        "lesson": "Per testare la presenza del valore usa la componente unità, per esempio $DATA(node)#2.",
+        "challenge": "Un nodo ha un valore e nessun figlio. Quanto restituisce $DATA? E dopo aver aggiunto un figlio?",
+        "solution": "Prima 1, poi 11.",
+        "visual": "Albero Phone senza valore, figli 1 e 2 con valori; $DATA=10. Aggiunta valore sul padre -> 11. Matrice 0/1/10/11.",
+        "file": "01 - Un ramo può esistere senza valore nel nodo.md"
+      },
+      {
+        "title": "Un log ha bisogno di identità e durata",
+        "qs": [
+          1,
+          2,
+          4,
+          5,
+          6,
+          7,
+          12
+        ],
+        "scenario": "Il quiz usa un process-private global per un log di lavoro e confronta $INCREMENT con chiavi casuali.",
+        "code": "set id = $INCREMENT(^||queryLog)\nset ^||queryLog(id) = $LISTBUILD($HOROLOG,\"query completata\")",
+        "reason": "Il contatore alloca identificativi senza collisioni fra gli inserimenti sullo stesso nodo. Una chiave casuale non esclude la sovrascrittura. ^||queryLog isola il processo e viene eliminato alla sua terminazione: utile per lavoro temporaneo, inadatto come unica traccia di un crash da investigare dopo.",
+        "trap": "Confondere “privato” con “persistente”, oppure scegliere una struttura temporanea per un audit da conservare.",
+        "lesson": "Prima del formato del log decidi chi deve leggerlo e fino a quando deve sopravvivere.",
+        "challenge": "Devi analizzare un batch domani, dopo la fine del processo. Il solo ^||queryLog basta?",
+        "solution": "No: esporta o scrivi gli eventi necessari in uno storage con durata adeguata.",
+        "visual": "Evento -> ID incrementale -> log PPG isolato -> fine processo -> eliminato. Bivio: debug temporaneo versus audit durevole.",
+        "file": "02 - Un log ha bisogno di identità e durata.md"
+      },
+      {
+        "title": "Misurare durata, quantità e costo separatamente",
+        "qs": [
+          10,
+          13,
+          14,
+          15
+        ],
+        "scenario": "Un blocco dura meno di un secondo; la sola ora intera non consente una misura utile.",
+        "code": "set start = $ZHOROLOG\n; eseguire il blocco da misurare\nset elapsed = $ZHOROLOG - start",
+        "reason": "$ZHOROLOG rappresenta secondi dall’avvio con frazioni e attraversa il confine di giornata senza dover scomporre date. La durata non spiega da sola la causa: confrontala con conteggi di operazioni, letture e profilo delle righe. Ripeti con input rappresentativi e separa il riscaldamento dalla fase misurata.",
+        "trap": "Usare un timestamp formattato come numero o attribuire la lentezza alla CPU dal solo tempo totale.",
+        "lesson": "Un’unità di misura esplicita e un carico riproducibile rendono confrontabili le osservazioni.",
+        "challenge": "100 esecuzioni impiegano 2,5 secondi. Qual è la media, senza confonderla con un percentile?",
+        "solution": "0,025 secondi, cioè 25 ms. La media non descrive da sola le code di latenza.",
+        "visual": "Cronometro $ZHOROLOG: fine-inizio=2,5s; 100 prove -> media 25ms. Tre contatori distinti: durata, operazioni, I/O.",
+        "file": "03 - Misurare durata, quantità e costo separatamente.md"
+      }
+    ],
+    "folder": "T2 - Basic Programming/T2.2: Tracks Application Data/Approfondimenti esercizi",
+    "image": "schema-esercizi.png",
+    "references": [
+      {
+        "title": "$DATA",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fdata"
+      },
+      {
+        "title": "$ZHOROLOG",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_vzhorolog"
+      },
+      {
+        "title": "Global e dati di processo",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_globals"
+      }
+    ],
+    "question_analyses": "Domanda per domanda/README.md",
+    "visual_guide": "tavole-esercizi.md",
+    "additional_image": "schema-esercizi-extra.png",
+    "image_language": "en"
+  },
+  {
+    "id": "T2.3",
+    "notes": "Private limita l’accesso al metodo e non sostituisce l’autorizzazione a risorse. I PPG isolano processi ma non sono un confine universale contro amministratori o un sostituto della gestione dei segreti. La parametrizzazione protegge i valori, non nomi di tabella/colonna concatenati.",
+    "cases": [
+      {
+        "title": "Autorizzare un’operazione richiede una risorsa",
+        "qs": [
+          1,
+          2,
+          3,
+          4,
+          8,
+          9
+        ],
+        "scenario": "AppAdmin cercato come sottostringa corrisponde anche a SuperAppAdmin. Il controllo non prova l’appartenenza esatta al ruolo né il privilegio richiesto.",
+        "code": "ClassMethod Manage() As %Status [ Requires = \"%App_Manage:RW\" ]\n{\n  ; corpo del metodo protetto dalla risorsa\n  return $$$OK\n}",
+        "reason": "Requires esprime il requisito di risorsa e viene controllato prima del corpo. Un controllo programmatico delle autorizzazioni permette invece di decidere come rappresentare il fallimento. Se cerchi un ruolo, usa un confronto esatto degli elementi e non una ricerca di sottostringa.",
+        "trap": "Equivalere il nome di un ruolo al permesso effettivo, oppure ignorare la differenza fra eccezione e status restituito.",
+        "lesson": "Definisci prima la capacità richiesta dall’operazione; poi scegli il punto e il modo in cui negarla.",
+        "challenge": "“SuperAppAdmin” contiene “AppAdmin”: è una prova valida del ruolo AppAdmin?",
+        "solution": "No. È solo una corrispondenza testuale parziale.",
+        "visual": "Filtro sottostringa AppAdmin accetta erroneamente SuperAppAdmin -> X. Flusso risorsa %App_Manage:RW -> controllo -> corpo oppure PROTECT.",
+        "file": "01 - Autorizzare un’operazione richiede una risorsa.md"
+      },
+      {
+        "title": "Preparare SQL non corregge una concatenazione pericolosa",
+        "qs": [
+          5,
+          6,
+          14,
+          15
+        ],
+        "scenario": "Il nome fornito dall’utente viene incollato nel testo SQL prima della preparazione. %Prepare riceve già una nuova struttura sintattica.",
+        "code": "set sql = \"SELECT Name FROM Patient WHERE Name = ?\"\nset stmt = ##class(%SQL.Statement).%New()\nset sc = stmt.%Prepare(sql)\n; controllare sc prima di eseguire\nset rs = stmt.%Execute(userInput)",
+        "reason": "Con il placeholder, lo schema SQL rimane fisso e userInput viene passato come valore. Una sequenza di apici e operatori resta un dato. Se è dinamico anche il nome della colonna, il binding dei valori non basta: la scelta dell’identificatore deve provenire da un insieme consentito.",
+        "trap": "Dire che l’uso di %SQL.Statement rende sicura qualunque stringa oppure tentare di parametrizzare un identificatore come se fosse un valore.",
+        "lesson": "Separa il codice della query dai dati; controlla indipendentemente le parti strutturali che restano dinamiche.",
+        "challenge": "Hai WHERE Name=? ma concateni ORDER BY con testo libero. Il binding di Name protegge anche ORDER BY?",
+        "solution": "No: l’identificatore o la direzione vanno selezionati da valori consentiti.",
+        "visual": "Due canali: template SQL fisso WHERE Name=? e valore utente separato. Nomi colonne -> allowlist. %Prepare non sanifica concatenazioni.",
+        "file": "02 - Preparare SQL non corregge una concatenazione pericolosa.md"
+      },
+      {
+        "title": "SQL privilege e contesto di esecuzione",
+        "qs": [
+          7,
+          10,
+          11,
+          12,
+          13
+        ],
+        "scenario": "L’utente ha SELECT ma non UPDATE. Il quiz propone un UPDATE Embedded SQL: i privilegi SQL non vengono verificati automaticamente in questo percorso.",
+        "code": "",
+        "reason": "La documentazione attribuisce all’applicazione il controllo dei privilegi per Embedded SQL. L’assenza del controllo automatico SQL non annulla le altre autorizzazioni del sistema. Per Dynamic SQL ordinario i privilegi SQL sono invece applicati. Un REVOKE parziale da ALL non dimostra che resti soltanto SELECT.",
+        "trap": "Generalizzare “l’utente non ha UPDATE” a ogni percorso di esecuzione o credere che ALL meno tre privilegi equivalga sempre a sola lettura.",
+        "lesson": "L’autorizzazione dipende anche dal percorso; verifica i privilegi effettivi e il punto in cui sono applicati.",
+        "challenge": "Una host variable :status rende un UPDATE Embedded SQL immune da ogni problema di autorizzazione?",
+        "solution": "No: binding dei valori e controllo dei privilegi risolvono problemi separati.",
+        "visual": "Due percorsi: Embedded SQL -> controlli applicativi dei privilegi SQL; Dynamic SQL ordinario -> verifica privilegi SQL. Binding valori: tema separato.",
+        "file": "03 - SQL privilege e contesto di esecuzione.md"
+      }
+    ],
+    "folder": "T2 - Basic Programming/T2.3: Implements Security Features/Approfondimenti esercizi",
+    "image": "schema-esercizi.png",
+    "references": [
+      {
+        "title": "Privilegi SQL",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_privileges"
+      },
+      {
+        "title": "Dynamic SQL",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_dynsql"
+      },
+      {
+        "title": "Requires",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=ROBJ_method_requires"
+      }
+    ],
+    "question_analyses": "Domanda per domanda/README.md",
+    "visual_guide": "tavole-esercizi.md",
+    "additional_image": "schema-esercizi-extra.png",
+    "image_language": "en"
+  },
+  {
+    "id": "T3.1",
+    "notes": "I mapping dei global temporanei dipendono dalla configurazione: un prefisso da solo non prova la destinazione fisica. Un locale non scompare a ogni QUIT: la durata dipende da scope/procedure/NEW. I PPG durano quanto il processo, non quanto una sessione web logica.",
+    "cases": [
+      {
+        "title": "Tre domande prima di scegliere lo storage",
+        "qs": [
+          1,
+          2,
+          5,
+          6,
+          8,
+          13,
+          15
+        ],
+        "scenario": "Un parsing produce molti dati temporanei; una coda deve sopravvivere al processo. La dimensione non è l’unico criterio.",
+        "code": "",
+        "reason": "Per ogni struttura specifica visibilità, durata e necessità di recupero. Un PPG permette dati di lavoro privati e viene eliminato a fine processo. Un global in database temporaneo può essere condiviso ma non offre durata attraverso il riavvio. Un global in database durevole è un candidato per una coda da conservare, con journaling e configurazione appropriati.",
+        "trap": "Confondere condiviso con durevole o assumere che ogni nome con ^ significhi lo stesso tipo di persistenza.",
+        "lesson": "Lo storage è una scelta di contratto: chi legge, quando viene eliminato, come si recupera.",
+        "challenge": "Due processi devono condividere una cache ricostruibile. PPG è la scelta corretta?",
+        "solution": "No: è privato. Serve uno spazio condiviso con una durata compatibile con la cache.",
+        "visual": "Matrice tre righe: PPG privato/fine processo; global temporaneo condiviso/temporaneo; global durevole condiviso/durata database.",
+        "file": "01 - Tre domande prima di scegliere lo storage.md"
+      },
+      {
+        "title": "Un processo non coincide con una sessione utente",
+        "qs": [
+          3,
+          4,
+          10,
+          12,
+          14
+        ],
+        "scenario": "Due richieste web dello stesso utente possono essere servite da processi diversi. ^||sessionState non garantisce quindi continuità fra richieste.",
+        "code": "",
+        "reason": "Il prefisso ^|| seleziona il contesto privato del processo corrente. Nel processo B, ^||counter è una struttura diversa da quella del processo A. Anche se i nomi sono identici, non sono lo stesso dato. Per lo stato di sessione usa un meccanismo legato all’identità della sessione e alla sua durata.",
+        "trap": "Dedurre che due richieste dello stesso utente vedano lo stesso PPG oppure usare un contatore privato come totale di tutti i worker.",
+        "lesson": "La chiave di isolamento va allineata all’entità logica: processo, sessione, utente o lavoro.",
+        "challenge": "A incrementa ^||counter a 10. B legge il proprio ^||counter mai impostato: riceve 10?",
+        "solution": "No: nel contesto B quel nodo non è definito.",
+        "visual": "Richiesta 1 -> processo A -> PPG A; richiesta 2 -> processo B -> PPG B. Stesso utente non implica stesso processo.",
+        "file": "02 - Un processo non coincide con una sessione utente.md"
+      },
+      {
+        "title": "Un contatore condiviso non rende atomico l’intero lavoro",
+        "qs": [
+          7,
+          9,
+          11
+        ],
+        "scenario": "Più worker vogliono assegnare un identificativo a ogni elemento della coda.",
+        "code": "set id = $INCREMENT(^QueueCounter)\nset ^Queue(id) = payload",
+        "reason": "$INCREMENT coordina l’allocazione sullo stesso nodo; il successivo SET è un’altra operazione. Un crash fra le due righe può lasciare un ID allocato senza elemento. La sopravvivenza di coda e contatore dipende dal database, dal journaling e dalla strategia di recupero, non dal solo incremento.",
+        "trap": "Scambiare l’atomicità di una singola allocazione con una transazione completa o con una sequenza senza buchi.",
+        "lesson": "Definisci separatamente identità, atomicità del payload e durata.",
+        "challenge": "Un worker alloca 8 e termina prima del SET. Il prossimo ID deve per forza essere 8?",
+        "solution": "No: l’allocazione può lasciare un buco; non costruire il conteggio dei lavori dal massimo ID.",
+        "visual": "Timeline allocazione ID 8 -> crash prima payload -> buco; ID successivo 9. Atomicità contatore diversa da atomicità lavoro.",
+        "file": "03 - Un contatore condiviso non rende atomico l’intero lavoro.md"
+      }
+    ],
+    "folder": "T3 - IRIS Features/T3.1: Differentiates Storage Media/Approfondimenti esercizi",
+    "image": "schema-esercizi.png",
+    "references": [
+      {
+        "title": "Global e dati di processo",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_globals"
+      },
+      {
+        "title": "Variabili e scope",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_variables"
+      }
+    ],
+    "question_analyses": "Domanda per domanda/README.md",
+    "visual_guide": "tavole-esercizi.md",
+    "additional_image": "schema-esercizi-extra.png",
+    "image_language": "en"
+  },
+  {
+    "id": "T3.2",
+    "notes": "Non dedurre il formato di tutti i risultati SQL dal solo esempio di host variable. Output logico/ODBC/display va verificato per interfaccia e modalità. Proiezione SQL e nomi dei campi possono essere personalizzati: non imporre una regola universale sulle classi.",
+    "cases": [
+      {
+        "title": "L’operatore decide come interpretare il dato",
+        "qs": [
+          1,
+          4,
+          11,
+          15
+        ],
+        "scenario": "\"5 apples\" e \"3 oranges\" sono stringhe, ma + richiede una conversione numerica mentre _ concatena.",
+        "code": "set x = \"5 apples\", y = \"3 oranges\"\nwrite x + y, !\nwrite x _ y",
+        "reason": "Con + vengono usati i prefissi numerici 5 e 3: risultato 8. Con _ i testi restano interi: 5 apples3 oranges. \"abc3.14\" non ha un prefisso numerico utile e in quel contesto vale 0; non viene cercato il numero nel mezzo della stringa.",
+        "trap": "Interpretare + come concatenazione oppure pensare che qualunque cifra contenuta nel testo venga estratta.",
+        "lesson": "Una conversione permissiva è una regola di valutazione, non una validazione dell’input.",
+        "challenge": "Quanto vale \"10abc20\"+5? E \"abc20\"+5?",
+        "solution": "15 e 5: conta il prefisso, non la cifra nel mezzo.",
+        "visual": "Due trasformazioni delle stesse stringhe: + -> 5+3=8; _ -> 5 apples3 oranges. \"10abc20\" -> prefisso 10.",
+        "file": "01 - L’operatore decide come interpretare il dato.md"
+      },
+      {
+        "title": "Le macro appartengono alla compilazione",
+        "qs": [
+          3,
+          6,
+          12
+        ],
+        "scenario": "TaxRate viene definita nell’include e sostituita nel codice prima dell’esecuzione.",
+        "code": "Include MyApp.Constants\n\nClass MyApp.Tax\n{\nClassMethod GetTax(amount As %Numeric) As %Numeric\n{\n  return amount * $$$TaxRate\n}\n}",
+        "reason": "Con #Define TaxRate 0.07 nel file include, la formula compilata usa 0.07. La chiamata con 100 restituisce 7. Se cambia il testo dell’include, il codice già compilato non diventa automaticamente una lettura dinamica di quel file: va gestita la ricompilazione dei dipendenti.",
+        "trap": "Cercare una variabile runtime TaxRate oppure mettere un include nel punto sbagliato e credere di aver reso disponibile la macro a tutta la classe.",
+        "lesson": "Distingui tempo di compilazione e tempo di esecuzione; gli errori di macro si diagnosticano nel primo.",
+        "challenge": "Modifichi la macro a 0.08 ma non ricompili la classe. Puoi assumere che il prossimo GetTax usi il nuovo valore?",
+        "solution": "No: la sostituzione è avvenuta nella compilazione precedente.",
+        "visual": "Pipeline include #Define TaxRate 0.07 -> compilazione sostituisce $$$TaxRate -> runtime 100*0.07=7.",
+        "file": "02 - Le macro appartengono alla compilazione.md"
+      },
+      {
+        "title": "Un cursore richiede stato, controllo e chiusura",
+        "qs": [
+          7,
+          10,
+          14,
+          16
+        ],
+        "scenario": "Cinque FETCH riusciti vengono seguiti da un FETCH con SQLCODE=100. Il codice non deve elaborare una sesta riga inesistente.",
+        "code": "",
+        "reason": "Per ogni FETCH controlla SQLCODE prima di usare gli host variable. 0 indica successo, 100 fine dati, un valore negativo un errore SQL. Nel caso del quiz il conteggio delle righe recuperate è 5. Gestisci OPEN e CLOSE anche nel percorso di errore; in Dynamic SQL osserva il risultato dell’oggetto, non assumere che tutti gli indicatori siano variabili locali Embedded SQL.",
+        "trap": "Leggere i valori dopo il FETCH fallito o interpretare SQLCODE=100 come la stessa cosa di un errore negativo.",
+        "lesson": "La condizione di terminazione deve precedere l’elaborazione del valore corrente.",
+        "challenge": "Il primo FETCH restituisce 100. Quante righe elabori?",
+        "solution": "Zero. Non usare i precedenti valori delle variabili come se fossero una riga valida.",
+        "visual": "Ciclo FETCH -> SQLCODE 0? elabora e conta; 100? fine; negativo? errore. Esempio 5 successi + fine = 5 righe.",
+        "file": "03 - Un cursore richiede stato, controllo e chiusura.md"
+      }
+    ],
+    "folder": "T3 - IRIS Features/T3.2: Leverages ObjectScript - SQL Features/Approfondimenti esercizi",
+    "image": "schema-esercizi.png",
+    "references": [
+      {
+        "title": "Operatori",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_operators"
+      },
+      {
+        "title": "Macro",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_macros"
+      },
+      {
+        "title": "Variabili di contesto SQL",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RSQL_variables"
+      }
+    ],
+    "question_analyses": "Domanda per domanda/README.md",
+    "visual_guide": "tavole-esercizi.md",
+    "additional_image": "schema-esercizi-extra.png",
+    "image_language": "en"
+  },
+  {
+    "id": "T3.3",
+    "notes": "La mappatura tra SQL e ObjectScript non identifica SQL NULL con una variabile ObjectScript mai definita. JSON null costituisce ancora un altro contesto. Gli esempi qui distinguono valore assente, stringa vuota e carattere NUL.",
+    "cases": [
+      {
+        "title": "Assente, vuoto e NUL non sono sinonimi",
+        "qs": [
+          1,
+          2,
+          3,
+          6,
+          9,
+          10,
+          12,
+          14
+        ],
+        "scenario": "ObjectScript \"\" ha lunghezza zero; $CHAR(0) ha lunghezza uno. La loro proiezione SQL è diversa.",
+        "code": "write $LENGTH(\"\"), !\nwrite $LENGTH($CHAR(0)), !\nwrite $CHAR(0) = \"\"",
+        "reason": "I risultati sono 0,1,0. Nel mapping IRIS fra un valore SQL e ObjectScript, SQL NULL corrisponde a \"\", mentre SQL zero-length string corrisponde a $CHAR(0). Una variabile mai definita non ha neppure quel valore: leggerla direttamente può produrre UNDEFINED.",
+        "trap": "Rendere equivalenti il byte NUL, una stringa senza caratteri e un identificatore mai assegnato.",
+        "lesson": "Disegna il valore a livello applicativo e la sua rappresentazione; il nome “null” da solo è ambiguo.",
+        "challenge": "SQL INSERT di due stringhe vuote e un NULL: quante righe soddisfano IS NULL?",
+        "solution": "Una. Le due stringhe SQL vuote restano valori non NULL.",
+        "visual": "Tabella: ObjectScript \"\" lunghezza0 <-> SQL NULL; ObjectScript $CHAR(0) lunghezza1 <-> SQL stringa vuota. Variabile undefined separata.",
+        "file": "01 - Assente, vuoto e NUL non sono sinonimi.md"
+      },
+      {
+        "title": "Le aggregazioni contano cose diverse",
+        "qs": [
+          4,
+          7
+        ],
+        "scenario": "Le righe Score sono 10,NULL,20,NULL,30.",
+        "code": "",
+        "reason": "COUNT(*) conta le cinque righe; COUNT(Score) soltanto tre valori non NULL. SUM vale 60 e AVG usa 60/3=20. Sostituire NULL con zero prima di AVG cambia la domanda: la media su cinque valori diventa 12. Non è una semplice modifica cosmetica del risultato.",
+        "trap": "Usare il totale delle righe come denominatore di AVG(Score) o trattare NULL come zero senza una decisione di dominio.",
+        "lesson": "Prima della formula definisci la popolazione: righe esistenti oppure misure disponibili.",
+        "challenge": "Aggiungi una sesta riga Score=0. Nuovi COUNT(Score), COUNT(*) e AVG?",
+        "solution": "4, 6 e 15: lo zero è una misura presente e partecipa alla media.",
+        "visual": "Cinque celle 10,NULL,20,NULL,30. COUNT*=5; COUNT Score=3; SUM=60; AVG=20. Con COALESCE a zero: media 12, domanda diversa.",
+        "file": "02 - Le aggregazioni contano cose diverse.md"
+      },
+      {
+        "title": "UNKNOWN non passa un filtro WHERE",
+        "qs": [
+          5,
+          8,
+          11,
+          13,
+          15
+        ],
+        "scenario": "Su 100 persone, 30 hanno Boston, 20 City NULL e 50 una città diversa. City<>Boston seleziona solo 50 righe.",
+        "code": "",
+        "reason": "Una comparazione con NULL produce UNKNOWN, non TRUE. WHERE conserva solo TRUE. Per includere chi non ha la città, scrivi la condizione esplicita City<>'Boston' OR City IS NULL. Per un calcolo Total-Discount, COALESCE(Discount,0) sceglie un default solo se semanticamente corretto.",
+        "trap": "Interpretare “non Boston” come complemento automatico di Boston includendo NULL, oppure aspettarsi che NOT trasformi UNKNOWN in TRUE.",
+        "lesson": "Un dato sconosciuto richiede una regola esplicita: escluderlo, includerlo o sostituirlo con un valore giustificato.",
+        "challenge": "Con 30 Boston,20 NULL,50 altre città, quante righe produce City<>Boston OR City IS NULL?",
+        "solution": "70: 50 città diverse più 20 valori mancanti.",
+        "visual": "Tre gruppi Boston30, NULL20, altre50. WHERE City<>Boston ->50; con OR IS NULL ->70. TRUE passa, UNKNOWN no.",
+        "file": "03 - UNKNOWN non passa un filtro WHERE.md"
+      }
+    ],
+    "folder": "T3 - IRIS Features/T3.3: Handles Nulls/Approfondimenti esercizi",
+    "image": "schema-esercizi.png",
+    "references": [
+      {
+        "title": "Elementi del linguaggio SQL e NULL",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_langelements"
+      },
+      {
+        "title": "AVG",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RSQL_avg"
+      },
+      {
+        "title": "COALESCE",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RSQL_coalesce"
+      }
+    ],
+    "question_analyses": "Domanda per domanda/README.md",
+    "visual_guide": "tavole-esercizi.md",
+    "additional_image": "schema-esercizi-extra.png",
+    "image_language": "en"
+  },
+  {
+    "id": "T3.4",
+    "notes": "Nuova definizione, popolamento dell’indice e statistiche sono operazioni distinte. TUNE TABLE normalmente aggiorna i piani cache quando cambiano le statistiche: non prescrivere sempre un purge indiscriminato. Piano congelato e modalità di costruzione online vanno verificati per la versione in uso.",
+    "cases": [
+      {
+        "title": "Cambiare un nome non sposta il dato",
+        "qs": [
+          3,
+          4,
+          5,
+          6,
+          10,
+          14
+        ],
+        "scenario": "Name occupa lo slot 2. La proprietà rinominata FullName viene associata a un nuovo slot vuoto: il dato originale può essere ancora presente nello slot 2.",
+        "code": "",
+        "reason": "Distingui lo schema che descrive una proprietà dai byte già salvati. Una nuova associazione legge una posizione diversa, non converte le righe passate. Prima di correggere lo storage verifica la definizione completa, i sottotipi e i percorsi SQL/oggetto. Un cambio di tipo richiede inoltre una decisione sui valori incompatibili.",
+        "trap": "Credere che ricompilare migri tutti i valori o che un campo apparentemente vuoto dimostri la perdita fisica del vecchio contenuto.",
+        "lesson": "Una modifica di schema deve dichiarare anche il destino dei dati preesistenti.",
+        "challenge": "Aggiungi Phone con InitialExpression=\"N/A\". I vecchi record vengono tutti aggiornati automaticamente?",
+        "solution": "No: il default di creazione non equivale a un backfill dei dati esistenti.",
+        "visual": "Storage slot2 contiene Alice; Name legge slot2. Dopo rename FullName legge slot4 vuoto. Mappa corretta verso slot2 recupera lettura senza fingere migrazione automatica.",
+        "file": "01 - Cambiare un nome non sposta il dato.md"
+      },
+      {
+        "title": "Definire un indice non significa averlo popolato",
+        "qs": [
+          1,
+          2,
+          7,
+          8,
+          11,
+          12,
+          15
+        ],
+        "scenario": "Aggiungi StatusIdx a una classe con molte righe esistenti. Il codice di manutenzione futuro non dimostra che le righe passate siano già indicizzate.",
+        "code": "",
+        "reason": "La compilazione della definizione e la costruzione sui dati storici sono due passi. Per cambi di tipo o collation verifica la ricostruzione necessaria e le opzioni di build previste. Il percorso SQL DDL CREATE INDEX gestisce anche il popolamento secondo le sue opzioni; non generalizzare il comportamento del solo compile a ogni interfaccia.",
+        "trap": "Dichiarare pronto l’indice perché compare nella classe, oppure cambiare bitmap in standard riutilizzando senza verifica i vecchi dati.",
+        "lesson": "La struttura derivata deve essere coerente con dati, tipo e regola di confronto.",
+        "challenge": "Cambi la collation ma i dati delle righe restano uguali. È irrilevante per l’indice?",
+        "solution": "No: le chiavi indicizzate dipendono dalla regola di confronto e vanno rese coerenti.",
+        "visual": "Tre passi: definizione -> build righe esistenti -> verifica coerenza. Frecce dati storici e nuove scritture distinte.",
+        "file": "02 - Definire un indice non significa averlo popolato.md"
+      },
+      {
+        "title": "Un piano congelato spiega un indice ignorato",
+        "qs": [
+          9,
+          13,
+          16,
+          17
+        ],
+        "scenario": "Indice costruito e statistiche aggiornate non cambiano il piano della query critica: è congelato.",
+        "code": "",
+        "reason": "Separa disponibilità dell’indice, qualità delle statistiche e libertà di riottimizzare. Un piano congelato conserva una scelta precedente. Confronta la nuova alternativa su carico rappresentativo e decidi se scongelare; non promettere che l’indice nuovo sia comunque più veloce.",
+        "trap": "Ripetere TUNE TABLE o un purge come ricetta universale senza controllare lo stato del piano.",
+        "lesson": "Una modifica della struttura rende possibili nuove scelte; non obbliga ogni query a usarle.",
+        "challenge": "Il piano nuovo usa un indice ma legge più blocchi del vecchio. Quale scegli?",
+        "solution": "Quello che soddisfa meglio gli obiettivi misurati sul carico rappresentativo, non quello con il nome più nuovo.",
+        "visual": "Tre porte verso nuova scelta: indice pronto, statistiche, piano non congelato. Lucchetto piano congelato blocca riottimizzazione; confronto misurato prima di cambiare.",
+        "file": "03 - Un piano congelato spiega un indice ignorato.md"
+      }
+    ],
+    "folder": "T3 - IRIS Features/T3.4: Handles Schema Evolution/Approfondimenti esercizi",
+    "image": "schema-esercizi.png",
+    "references": [
+      {
+        "title": "Storage delle classi",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_storage"
+      },
+      {
+        "title": "CREATE INDEX",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RSQL_createindex"
+      },
+      {
+        "title": "TUNE TABLE",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RSQL_tunetable"
+      }
+    ],
+    "question_analyses": "Domanda per domanda/README.md",
+    "visual_guide": "tavole-esercizi.md",
+    "additional_image": "schema-esercizi-extra.png",
+    "image_language": "en"
+  },
+  {
+    "id": "T3.5",
+    "notes": "Non assumere una soglia universale del 20% per aggiornare statistiche. I quiz Q7–9 semplificano troppo: TUNE TABLE gestisce normalmente la ricompilazione se cambiano statistiche; l’ottimizzatore può riordinare join e filtri e valutare combinazioni di indici. La misura del piano concreto prevale su regole assolute.",
+    "cases": [
+      {
+        "title": "Un indice selettivo risparmia candidati, non ogni lettura",
+        "qs": [
+          3,
+          4,
+          5,
+          9,
+          11,
+          14,
+          15
+        ],
+        "scenario": "Su 100 righe, Active ricorre 80 volte: una media astratta di un terzo per stato nasconde una distribuzione molto sbilanciata.",
+        "code": "",
+        "reason": "Un indice che restituisce 80 ID può ancora richiedere molte letture della riga se le colonne richieste non sono coperte. Un valore raro può avere un costo molto diverso. Valuta righe candidate, copertura, ordine richiesto e distribuzione. Un bitmap AND combina insiemi di ID ma non rende automaticamente gratuita la proiezione finale.",
+        "trap": "Dedurre il costo dalla sola presenza di un indice o usare la selettività media come se tutti i valori fossero equiprobabili.",
+        "lesson": "La domanda corretta è quanti candidati e quanti accessi effettivi produce questo piano per questo valore.",
+        "challenge": "Status raro trova 2 righe, Active ne trova 80. Puoi aspettarti costi identici dallo stesso indice?",
+        "solution": "No: distribuzione, copertura e letture delle righe possono rendere i costi diversi.",
+        "visual": "100 righe: Active80, altri20. Percorso indice -> ID candidati -> eventuale lettura dati. Mostra selettività diversa fra valore comune e raro.",
+        "file": "01 - Un indice selettivo risparmia candidati, non ogni lettura.md"
+      },
+      {
+        "title": "Un benchmark deve separare preparazione ed esecuzione",
+        "qs": [
+          1,
+          6,
+          10
+        ],
+        "scenario": "Vuoi confrontare il costo ripetuto di una query. Prepararla dentro ogni iterazione misura anche la preparazione.",
+        "code": "set start = $ZHOROLOG\nfor i=1:1:100 {\n  ; eseguire query già preparata e consumare i risultati\n}\nset avg = ($ZHOROLOG - start) / 100",
+        "reason": "Definisci cosa misuri: prepare, execute, fetch o l’intero percorso utente. Esegui lo stesso lavoro e consuma i risultati in entrambe le alternative. La media di 100 prove non descrive il caso peggiore. Cache fredda e calda sono condizioni diverse da riportare.",
+        "trap": "Confrontare una query che legge tutti i risultati con una che restituisce soltanto il primo, oppure confondere una compilazione sporadica con il costo costante.",
+        "lesson": "Il confronto è valido solo se include lo stesso confine operativo e lo stesso carico.",
+        "challenge": "A impiega 10 ms per execute ma altri 90 per fetch; B 30 e 20. Chi completa prima i dati?",
+        "solution": "B: 50 ms contro 100 ms. Il solo execute avrebbe suggerito il contrario.",
+        "visual": "Barre: A execute10 + fetch90 =100ms; B execute30 + fetch20 =50ms. Separare prepare, execute, fetch e cache.",
+        "file": "02 - Un benchmark deve separare preparazione ed esecuzione.md"
+      },
+      {
+        "title": "Dal sintomo al piano, con una modifica verificabile",
+        "qs": [
+          2,
+          7,
+          8,
+          12,
+          13
+        ],
+        "scenario": "In sviluppo la query è rapida; in produzione i dati sono più numerosi e distribuiti diversamente.",
+        "code": "",
+        "reason": "Raccogli piano e statistiche sul carico rappresentativo. Individua scansioni grandi, candidati intermedi e accessi ripetuti; formula un’ipotesi concreta. Applica una modifica alla volta e confronta risultati e costo. L’ordine testuale delle clausole non dimostra da solo l’ordine fisico di esecuzione.",
+        "trap": "Aggiungere indici indiscriminatamente o leggere WHERE dopo JOIN nel testo come prova che il motore filtri per forza soltanto alla fine.",
+        "lesson": "La diagnosi collega un costo osservato a una causa testabile, non a una regola stilistica.",
+        "challenge": "Un nuovo indice rallenta le scritture e non riduce il tempo della query. Basta il fatto che venga usato per tenerlo?",
+        "solution": "No: valuta il beneficio complessivo e il costo di manutenzione.",
+        "visual": "Ciclo evidenza -> ipotesi -> una modifica -> misura -> confronto correttezza/costo. Icone piano, distribuzione dati, I/O.",
+        "file": "03 - Dal sintomo al piano, con una modifica verificabile.md"
+      }
+    ],
+    "folder": "T3 - IRIS Features/T3.5: Ensures Scalability and Performance/Approfondimenti esercizi",
+    "image": "schema-esercizi.png",
+    "references": [
+      {
+        "title": "TUNE TABLE",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RSQL_tunetable"
+      },
+      {
+        "title": "Piani e query SQL",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_queries"
+      },
+      {
+        "title": "$ZHOROLOG",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_vzhorolog"
+      }
+    ],
+    "question_analyses": "Domanda per domanda/README.md",
+    "visual_guide": "tavole-esercizi.md",
+    "additional_image": "schema-esercizi-extra.png",
+    "image_language": "en"
+  },
+  {
+    "id": "T4.1",
+    "notes": "Gli esempi di ordinamento presuppongono la collation dello scenario. Non confondere la chiave restituita da $ORDER con il valore del nodo; controllare la fine prima di dereferenziare.",
+    "cases": [
+      {
+        "title": "Si ordinano le chiavi, poi si leggono i valori",
+        "qs": [
+          1,
+          3,
+          5,
+          6,
+          8,
+          10,
+          13,
+          18
+        ],
+        "scenario": "arr(1)=A, arr(3)=B, arr(10)=C, arr(2)=D. L’inserimento non stabilisce l’ordine di attraversamento.",
+        "code": "set key=\"\"\nfor {\n  set key=$ORDER(arr(key))\n  quit:key=\"\"\n  write arr(key)\n}",
+        "reason": "Le chiavi numeriche canoniche vengono percorse 1,2,3,10. Leggendo i valori associati ottieni ADBC. Nello scenario con 1.10 numerico, quel subscript equivale a 1.1, non a una versione “uno punto dieci”.",
+        "trap": "Stampare AB​CD perché si ricorda l’ordine del codice oppure confrontare numeri come testi arbitrari.",
+        "lesson": "Costruisci una tabella chiave→valore e ordinala secondo le regole del contenitore prima di calcolare l’output.",
+        "challenge": "Quali chiavi precedono 10: 2 e 3, oppure soltanto 1?",
+        "solution": "Anche 2 e 3: nell’ordinamento numerico 1<2<3<10.",
+        "visual": "Mappa chiavi 1:A,3:B,10:C,2:D -> ordine 1,2,3,10 -> output ADBC. Distinguere chiave e valore con due colori.",
+        "file": "01 - Si ordinano le chiavi, poi si leggono i valori.md"
+      },
+      {
+        "title": "Un nodo e i suoi figli sono informazioni indipendenti",
+        "qs": [
+          4,
+          9,
+          12,
+          14,
+          17
+        ],
+        "scenario": "warehouse ha sia valore Main sia figli aisle1 e aisle2.",
+        "code": "write $DATA(^inventory(\"warehouse\"))\nset timeout=$GET(^settings(\"timeout\"),30)",
+        "reason": "$DATA restituisce 11 quando esistono valore e figli. $GET permette un default per un valore mancante senza affermare che manchino anche i discendenti. Per verificare solo la presenza del valore considera $DATA(node)#2. Il default 30 non viene scritto automaticamente nello storage.",
+        "trap": "Pensare che $GET crei il nodo, o trattare $DATA=10 come prova che il valore del padre sia leggibile.",
+        "lesson": "Presenza del ramo, presenza del valore e assegnazione di un default sono operazioni diverse.",
+        "challenge": "timeout non esiste. Dopo $GET(...,30), il global contiene automaticamente 30?",
+        "solution": "No: viene restituito un valore senza creare la configurazione persistente.",
+        "visual": "Albero warehouse Main + figli -> DATA11. GET timeout mancante -> restituisce30, nessuna scrittura.",
+        "file": "02 - Un nodo e i suoi figli sono informazioni indipendenti.md"
+      },
+      {
+        "title": "Il controllo di fine precede l’accesso",
+        "qs": [
+          2,
+          7,
+          11,
+          15,
+          16
+        ],
+        "scenario": "Un attraversamento multidimensionale richiede un cursore per ogni livello. Quando $ORDER restituisce \"\", il ciclo è terminato.",
+        "code": "",
+        "reason": "Aggiorna la chiave, verifica il terminatore e soltanto allora leggi il valore. Nel ciclo annidato reimposta il cursore interno per ogni chiave esterna. Un typo ordKey invece di key introduce una variabile diversa, non un nuovo nome equivalente.",
+        "trap": "Usare una chiave non inizializzata o leggere arr(key) prima di verificare key=\"\".",
+        "lesson": "La sentinella descrive lo stato del cursore; non è una normale riga da elaborare.",
+        "challenge": "Al primo passo $ORDER restituisce \"\". Quante letture di arr(key) deve fare il ciclo corretto?",
+        "solution": "Zero.",
+        "visual": "Tre blocchi nell’ordine: avanza key -> fine? esci -> leggi arr(key). Ciclo annidato: reset cursore interno a ogni padre.",
+        "file": "03 - Il controllo di fine precede l’accesso.md"
+      }
+    ],
+    "folder": "T4 - Functions & APIs/T4.1: Traverses and Sorts Arrays/Approfondimenti esercizi",
+    "image": "schema-esercizi.png",
+    "references": [
+      {
+        "title": "$ORDER",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_forder"
+      },
+      {
+        "title": "$DATA",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fdata"
+      },
+      {
+        "title": "$GET",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fget"
+      }
+    ],
+    "question_analyses": "Domanda per domanda/README.md",
+    "visual_guide": "tavole-esercizi.md",
+    "additional_image": "schema-esercizi-extra.png",
+    "image_language": "en"
+  },
+  {
+    "id": "T4.2",
+    "notes": "Il puntatore di $LISTNEXT è opaco, non un indice 1,2,3. Con un elemento omesso la funzione può restituire 1 lasciando value non definita: il ciclo deve gestire esplicitamente questo caso. Non usare la rappresentazione binaria come contratto applicativo sui tipi.",
+    "cases": [
+      {
+        "title": "Elemento omesso, stringa vuota e indice assente",
+        "qs": [
+          1,
+          3,
+          11,
+          12
+        ],
+        "scenario": "x=$LISTBUILD(\"A\",,\"C\") contiene una posizione omessa. La lettura stretta della seconda posizione solleva NULL VALUE.",
+        "code": "set x=$LISTBUILD(\"A\",,\"C\")\nwrite $LISTGET(x,2,\"N/A\"), !\nwrite $LISTGET(x,5,\"N/A\")",
+        "reason": "Entrambe le letture protette restituiscono N/A: una posizione omessa e una oltre la fine condividono il fallback. Un elemento esplicito \"\" è invece un valore definito vuoto e non va equiparato all’omissione. La lista deve comunque essere valida: il default non sanifica byte arbitrari.",
+        "trap": "Supporre che ogni posizione inferiore a $LISTLENGTH contenga un valore leggibile con $LIST, o che il fallback distingua da solo tutte le cause.",
+        "lesson": "Scegli l’API in base al contratto: lettura obbligatoria oppure valore opzionale con default.",
+        "challenge": "x=$LB(\"A\",\"\",\"C\"). $LISTGET(x,2,\"N/A\") restituisce N/A?",
+        "solution": "No: restituisce la stringa vuota esplicita.",
+        "visual": "Lista tre celle A, omesso, C; LIST seconda -> NULL VALUE; LISTGET seconda -> N/A. Confronto cella stringa vuota esplicita -> \"\".",
+        "file": "01 - Elemento omesso, stringa vuota e indice assente.md"
+      },
+      {
+        "title": "Iterare non significa incrementare un numero di posizione",
+        "qs": [
+          6,
+          8,
+          15
+        ],
+        "scenario": "Per una scansione sequenziale $LISTNEXT aggiorna un puntatore interno passato per riferimento.",
+        "code": "set ptr=0\nwhile $LISTNEXT(items,ptr,value) {\n  if $DATA(value)#2 { write value,! }\n  else { write \"elemento omesso\",! }\n}",
+        "reason": "ptr va inizializzato a zero e lasciato alla funzione. Il valore di ritorno indica se è stato incontrato un elemento; non garantisce che l’elemento avesse un valore definito. Il controllo su value mantiene corretto il ciclo anche con omissioni. Il codice presuppone items come lista valida.",
+        "trap": "Fare ptr=ptr+1 o stampare value senza gestire gli elementi omessi.",
+        "lesson": "Un cursore di formato è diverso dall’indice logico dell’elemento.",
+        "challenge": "Vuoi anche numerare gli elementi visitati. Devi usare ptr come contatore?",
+        "solution": "No: mantieni un contatore separato, incrementato a ogni visita.",
+        "visual": "LISTNEXT: ptr iniziale0 -> puntatore opaco aggiornato; tre celle visitate. Omissione -> value undefined -> ramo esplicito; contatore separato.",
+        "file": "02 - Iterare non significa incrementare un numero di posizione.md"
+      },
+      {
+        "title": "Una lista codificata evita l’ambiguità dei delimitatori",
+        "qs": [
+          2,
+          4,
+          5,
+          7,
+          9,
+          10,
+          13,
+          14
+        ],
+        "scenario": "Il valore di un elemento può contenere il carattere che una stringa delimitata usa come separatore.",
+        "code": "set x=$LISTBUILD(\"A|B\",\"C\")\nwrite $LISTLENGTH(x), !\nwrite $LISTGET(x,1)",
+        "reason": "La lista contiene due elementi e il primo è A|B. Se la converti in una stringa con separatore | senza un protocollo di escaping, A|B|C non permette di ricostruire univocamente i due elementi originali. Le posizioni delle funzioni $LIST sono uno-based; un range 2..4 comprende tre elementi.",
+        "trap": "Pensare che convertire in testo delimitato e riconvertire sia sempre reversibile oppure usare indici JSON zero-based.",
+        "lesson": "Il formato del contenitore fa parte del significato dei dati: non scegliere soltanto quello più leggibile a occhio.",
+        "challenge": "A|B e C diventano A|B|C. Quanti campi vede un parser ingenuo a delimitatore |?",
+        "solution": "Tre, perdendo la struttura originale a due elementi.",
+        "visual": "Due celle lista [A|B] [C] -> testo A|B|C -> parser ingenuo tre campi. Evidenziare ambiguità del delimitatore.",
+        "file": "03 - Una lista codificata evita l’ambiguità dei delimitatori.md"
+      }
+    ],
+    "folder": "T4 - Functions & APIs/T4.2: Manipulates Lists/Approfondimenti esercizi",
+    "image": "schema-esercizi.png",
+    "references": [
+      {
+        "title": "$LISTGET",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_flistget"
+      },
+      {
+        "title": "$LISTNEXT",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_flistnext"
+      },
+      {
+        "title": "$LIST",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_flist"
+      }
+    ],
+    "question_analyses": "Domanda per domanda/README.md",
+    "visual_guide": "tavole-esercizi.md",
+    "additional_image": "schema-esercizi-extra.png",
+    "image_language": "en"
+  },
+  {
+    "id": "T4.3",
+    "notes": "Le posizioni di $EXTRACT sono caratteri; $PIECE opera su campi delimitati. Il risultato HTML-encoded è specifico del contesto HTML e non è un sanificatore universale. Nei calcoli numerici non usare la coercizione implicita come validatore.",
+    "cases": [
+      {
+        "title": "Posizione di campo e posizione di carattere",
+        "qs": [
+          1,
+          2,
+          3,
+          4,
+          15,
+          17
+        ],
+        "scenario": "Smith^John^New York^NY ha quattro campi. Cambiare il terzo non richiede di calcolare gli offset dei caratteri.",
+        "code": "set rec=\"Smith^John^New York^NY\"\nset $PIECE(rec,\"^\",3)=\"Boston\"\nwrite rec\nwrite $PIECE(\"A-B-C-D-E\",\"-\",2,4)",
+        "reason": "Il record diventa Smith^John^Boston^NY. L’intervallo 2..4 restituisce B-C-D, estremi inclusi. $EXTRACT(9,16) seleziona invece otto caratteri: in un formato a larghezza fissa anche gli spazi fanno parte dell’output.",
+        "trap": "Applicare l’indice del campo come se fosse un offset di carattere oppure rimuovere mentalmente gli spazi del record fisso.",
+        "lesson": "Prima di manipolare il testo, definisci l’unità di posizione: campo o carattere.",
+        "challenge": "Quanti caratteri include l’intervallo 9..16?",
+        "solution": "Otto: 16-9+1.",
+        "visual": "Due righelli: campi delimitati 1..4 con City terzo; caratteri 9..16 con otto celle inclusi spazi.",
+        "file": "01 - Posizione di campo e posizione di carattere.md"
+      },
+      {
+        "title": "Sostituire sequenze e tradurre caratteri",
+        "qs": [
+          5,
+          6,
+          7,
+          8,
+          18
+        ],
+        "scenario": "banana viene trasformata con $REPLACE e $TRANSLATE usando gli stessi caratteri, ma le due funzioni hanno unità diverse.",
+        "code": "write $REPLACE(\"banana\",\"an\",\"X\"), !\nwrite $TRANSLATE(\"banana\",\"an\",\"XY\")",
+        "reason": "$REPLACE riconosce la sequenza an e la sostituisce con X: bXXa. $TRANSLATE mappa ogni a in X e ogni n in Y: bXYXYX. Una ricerca di parola o sequenza non è quindi equivalente a una tabella di trasformazione dei singoli caratteri.",
+        "trap": "Trattare XY come una singola sostituzione di an dentro $TRANSLATE.",
+        "lesson": "Chiediti se l’operazione agisce su sottostringhe o su caratteri indipendenti.",
+        "challenge": "Con $TRANSLATE(\"banana\",\"an\",\"\") che cosa rimane?",
+        "solution": "b: vengono eliminati tutti gli a e tutti gli n.",
+        "visual": "banana segmentata b|an|an|a -> REPLACE an con X -> bXXa. Mappa a->X,n->Y -> TRANSLATE -> bXYXYX.",
+        "file": "02 - Sostituire sequenze e tradurre caratteri.md"
+      },
+      {
+        "title": "Normalizzare non è sempre preservare il significato",
+        "qs": [
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          16
+        ],
+        "scenario": "Togliere spazi ai bordi e rimuovere tutti gli spazi produce risultati diversi. Anche codificare HTML e convertire in maiuscolo rispondono a obiettivi distinti.",
+        "code": "",
+        "reason": "Per \"  Hello World  \", un trim dei bordi conserva lo spazio interno; una rimozione globale produce HelloWorld. La normalizzazione deve rispettare il dominio: un nome, un codice e testo da visualizzare non hanno lo stesso contratto. Un valore HTML-encoded non è automaticamente corretto per SQL, URL o altri contesti.",
+        "trap": "Applicare una trasformazione distruttiva universale o interpretare encoding come autorizzazione o parametrizzazione.",
+        "lesson": "Specifica il risultato desiderato con un esempio prima di scegliere l’operazione.",
+        "challenge": "Per un nome completo vuoi eliminare gli spazi esterni: \"Ada Lovelace\" deve diventare \"AdaLovelace\"?",
+        "solution": "No: lo spazio interno è significativo e va preservato.",
+        "visual": "Input con spazi esterni Hello World: trim -> Hello World; rimuovi tutti spazi -> HelloWorld. Encoding per contesto in riquadro separato.",
+        "file": "03 - Normalizzare non è sempre preservare il significato.md"
+      }
+    ],
+    "folder": "T4 - Functions & APIs/T4.3: Manipulates Strings/Approfondimenti esercizi",
+    "image": "schema-esercizi.png",
+    "references": [
+      {
+        "title": "$PIECE",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fpiece"
+      },
+      {
+        "title": "$EXTRACT",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fextract"
+      },
+      {
+        "title": "$TRANSLATE",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_ftranslate"
+      },
+      {
+        "title": "$REPLACE",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_freplace"
+      }
+    ],
+    "question_analyses": "Domanda per domanda/README.md",
+    "visual_guide": "tavole-esercizi.md",
+    "additional_image": "schema-esercizi-extra.png",
+    "image_language": "en"
+  },
+  {
+    "id": "T4.4",
+    "notes": "L’aritmetica ObjectScript si valuta da sinistra a destra salvo parentesi. La somma alla parte numerica di $HOROLOG produce un numero di giorni, non un timestamp completo. Per intervalli di durata usa una misura adeguata, non la sottrazione dei prefissi giorno.",
+    "cases": [
+      {
+        "title": "Le parentesi rendono esplicito il calcolo",
+        "qs": [
+          1,
+          2,
+          3,
+          11,
+          13
+        ],
+        "scenario": "10-2*3+1 viene valutato progressivamente in ObjectScript.",
+        "code": "write 10 - 2 * 3 + 1, !\nwrite 10 - (2 * 3) + 1",
+        "reason": "Nella prima riga: 10-2=8, 8*3=24, 24+1=25. Nella seconda il prodotto vale prima 6 e il risultato è 5. Importare automaticamente la precedenza aritmetica di un altro linguaggio cambia l’output.",
+        "trap": "Dare per implicita la precedenza usuale di moltiplicazione e divisione.",
+        "lesson": "Usa parentesi per esprimere l’intenzione, anche quando conosci la regola di valutazione.",
+        "challenge": "Quanto valgono 2+3*4 e 2+(3*4)?",
+        "solution": "20 e 14.",
+        "visual": "Catena 10-2=8 -> *3=24 -> +1=25. Con parentesi 10-(2*3)+1=5. Secondo mini esempio 2+3*4=20.",
+        "file": "01 - Le parentesi rendono esplicito il calcolo.md"
+      },
+      {
+        "title": "Quoziente e resto rispondono a domande diverse",
+        "qs": [
+          4,
+          5,
+          6
+        ],
+        "scenario": "47 elementi sono distribuiti in gruppi da 8. Il quoziente intero e il resto non sono intercambiabili.",
+        "code": "write 47 \\ 8, !\nwrite 47 # 8",
+        "reason": "Il quoziente intero è 5 e il resto è 7: cinque gruppi completi da otto e sette elementi residui. Per valori negativi verifica la convenzione dell’operatore: nell’esempio -7#3 vale 2. Una formula per pagina o bucket deve dichiarare anche se parte da zero o da uno.",
+        "trap": "Usare il resto come numero della pagina o dimenticare il confine fra indice zero-based e numerazione umana.",
+        "lesson": "Collega ogni operatore a una quantità concreta e verifica i casi sul bordo esatto del gruppo.",
+        "challenge": "Con 48 elementi e gruppi da 8, quanti gruppi completi e quanti residui?",
+        "solution": "6 e 0.",
+        "visual": "47 elementi -> cinque blocchi di8 +7 residui. Quoziente5, resto7. Riga di controllo 48 ->6 e0.",
+        "file": "02 - Quoziente e resto rispondono a domande diverse.md"
+      },
+      {
+        "title": "Data civile, orario e durata hanno rappresentazioni diverse",
+        "qs": [
+          7,
+          8,
+          9,
+          10,
+          12,
+          14,
+          15
+        ],
+        "scenario": "$HOROLOG rappresenta giorno,secondi. $ZTIMESTAMP descrive data/ora UTC con frazioni; $ZHOROLOG è un contatore di secondi dall’avvio.",
+        "code": "set h=$HOROLOG\nset day=$PIECE(h,\",\",1)\nset seconds=$PIECE(h,\",\",2)",
+        "reason": "I componenti di h non sono una singola durata numerica. Per aggiungere giorni a una sola data opera sul componente giorno; per mantenere un timestamp ricomponi anche l’orario. Al passaggio di mezzanotte i secondi si azzerano e il giorno aumenta. La scelta UTC/local va resa esplicita.",
+        "trap": "Sottrarre due stringhe giorno,secondi e chiamare il risultato “secondi trascorsi”.",
+        "lesson": "Scegli la rappresentazione a partire dall’operazione: calendario, istante o intervallo.",
+        "challenge": "23:59:50 più 20 secondi: basta tenere lo stesso giorno e scrivere 00:00:10?",
+        "solution": "No: serve incrementare il giorno.",
+        "visual": "Tre strumenti: HOROLOG locale giorno,secondi; ZTIMESTAMP UTC; ZHOROLOG secondi dall’avvio per durata. Mezzanotte 23:59:50 +20s -> giorno dopo 00:00:10.",
+        "file": "03 - Data civile, orario e durata hanno rappresentazioni diverse.md"
+      }
+    ],
+    "folder": "T4 - Functions & APIs/T4.4: Mathematical, Logical, and Date - Time Operations/Approfondimenti esercizi",
+    "image": "schema-esercizi.png",
+    "references": [
+      {
+        "title": "Operatori",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_operators"
+      },
+      {
+        "title": "$HOROLOG",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_vhorolog"
+      },
+      {
+        "title": "$ZTIMESTAMP",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_vztimestamp"
+      },
+      {
+        "title": "$ZHOROLOG",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_vzhorolog"
+      }
+    ],
+    "question_analyses": "Domanda per domanda/README.md",
+    "visual_guide": "tavole-esercizi.md",
+    "additional_image": "schema-esercizi-extra.png",
+    "image_language": "en"
+  },
+  {
+    "id": "T4.5",
+    "notes": "Nel quiz la distinzione fra QUIT con valore e RETURN dipende dal contesto di esecuzione: in un ciclo FOR un QUIT con argomento non sostituisce un ritorno dal metodo. $SELECT senza una condizione vera genera SELECT.",
+    "cases": [
+      {
+        "title": "Una stringa non vuota può essere falsa",
+        "qs": [
+          1,
+          2,
+          3,
+          7,
+          10,
+          11,
+          14
+        ],
+        "scenario": "\"abc\" è non vuota ma nel contesto booleano la conversione numerica produce zero; \"1abc\" produce un valore non nullo.",
+        "code": "",
+        "reason": "ObjectScript valuta il valore numerico nel contesto booleano. Quindi \"\",0,\"0\",\"abc\" sono falsi negli esempi, mentre \"1abc\" e \"2dogs\" sono veri. Per chiedere “testo non vuoto” confronta esplicitamente con \"\"; non affidarti al valore booleano del contenuto.",
+        "trap": "Trasferire la regola “ogni stringa non vuota è vera” da altri linguaggi.",
+        "lesson": "Prima di IF decidi se stai chiedendo un booleano, una presenza o una validità di formato.",
+        "challenge": "\"abc\" deve essere accettata perché è una descrizione non vuota. IF value esprime correttamente questo requisito?",
+        "solution": "No: verifica esplicitamente che value sia definita e diversa da \"\".",
+        "visual": "Tabella booleani: \"abc\" ->0 falso; \"1abc\" ->1 vero; \"\" ->0. Test non vuoto distinto da test booleano.",
+        "file": "01 - Una stringa non vuota può essere falsa.md"
+      },
+      {
+        "title": "Saltare, uscire dal ciclo e tornare al chiamante",
+        "qs": [
+          5,
+          6,
+          8,
+          9,
+          15
+        ],
+        "scenario": "Il quiz usa CONTINUE per saltare i pari e RETURN per terminare un metodo appena trova il risultato.",
+        "code": "set count=0\nfor i=1:1:10 {\n  continue:i#2=0\n  set count=count+1\n}\nwrite count",
+        "reason": "I pari saltano il resto dell’iterazione; i dispari incrementano count, che arriva a 5. QUIT senza argomento esce dal ciclo nel contesto appropriato; RETURN termina il metodo con il risultato. Scrivere QUIT i dentro il FOR non è la forma corretta per restituire l’indice dal metodo.",
+        "trap": "Usare CONTINUE come se terminasse tutto il ciclo o usare QUIT con valore al posto di RETURN.",
+        "lesson": "Annota il bersaglio di ogni salto: iterazione, ciclo o metodo.",
+        "challenge": "In un metodo trovi il target alla posizione 2 e vuoi restituire 2 subito. Quale comando esprime il ritorno?",
+        "solution": "RETURN 2 nel metodo.",
+        "visual": "Tre frecce: CONTINUE -> prossima iterazione; QUIT senza valore -> fuori ciclo; RETURN valore -> chiamante metodo. Esempio dispari1..10 conteggio5.",
+        "file": "02 - Saltare, uscire dal ciclo e tornare al chiamante.md"
+      },
+      {
+        "title": "Una scelta totale ha un caso di riserva",
+        "qs": [
+          4,
+          12,
+          13
+        ],
+        "scenario": "Due SET postcondizionali gestiscono x>5 e x<5. Con x=5 nessuno dei due assegna result.",
+        "code": "set result=\"equal\"\nset:x>5 result=\"big\"\nset:x<5 result=\"small\"",
+        "reason": "L’inizializzazione esplicita rende definito l’esito del confine x=5. Analogamente una $SELECT che non trova condizioni vere genera un errore: un ramo finale 1:default rende totale la scelta quando il dominio richiede un fallback.",
+        "trap": "Esaminare soltanto il caso 10 del quiz e non la soglia, oppure lasciare che un valore precedente di result mascheri il ramo mancante.",
+        "lesson": "Per ogni selezione prova un valore sotto, uno sulla soglia e uno sopra.",
+        "challenge": "x vale esattamente 5. Nel frammento qual è result?",
+        "solution": "equal. Senza inizializzazione potrebbe restare un valore precedente o risultare non definita.",
+        "visual": "Tre casi x<5 small; x=5 equal; x>5 big. Evidenziare caso confine e fallback SELECT.",
+        "file": "03 - Una scelta totale ha un caso di riserva.md"
+      }
+    ],
+    "folder": "T4 - Functions & APIs/T4.5: Decision and Control Structures/Approfondimenti esercizi",
+    "image": "schema-esercizi.png",
+    "references": [
+      {
+        "title": "RETURN",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_creturn"
+      },
+      {
+        "title": "QUIT",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_cquit"
+      },
+      {
+        "title": "$SELECT",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fselect"
+      },
+      {
+        "title": "Operatori",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_operators"
+      }
+    ],
+    "question_analyses": "Domanda per domanda/README.md",
+    "visual_guide": "tavole-esercizi.md",
+    "additional_image": "schema-esercizi-extra.png",
+    "image_language": "en"
+  },
+  {
+    "id": "T4.6",
+    "notes": "Un controllo %IsA richiede prima che il valore sia un oggetto. I nomi dinamici sono una superficie di scelta da limitare. Metadati dichiarati e compilati rispondono a domande diverse, soprattutto per i membri ereditati.",
+    "cases": [
+      {
+        "title": "Validare un riferimento prima di interrogarne la classe",
+        "qs": [
+          1,
+          2,
+          5,
+          6,
+          10,
+          11
+        ],
+        "scenario": "x=\"Hello\" non è un oggetto; emp è un’istanza di Employee che eredita da Person ed Entity.",
+        "code": "if $ISOBJECT(obj) {\n  write obj.%IsA(\"App.Person\")\n}",
+        "reason": "$ISOBJECT evita di chiamare un metodo su un valore che non è un oref valido. %IsA esamina la compatibilità nella gerarchia, non soltanto il nome esatto della classe concreta. Un Employee può soddisfare più controlli di appartenenza.",
+        "trap": "Chiamare %IsA per verificare se qualcosa è un oggetto: la chiamata presuppone già un riferimento valido.",
+        "lesson": "Separa validità del riferimento e compatibilità del tipo.",
+        "challenge": "Employee estende Person. Un Employee può avere %IsA(\"App.Person\")=1 pur chiamandosi Employee?",
+        "solution": "Sì: il test segue l’ereditarietà.",
+        "visual": "Due gate: ISOBJECT -> riferimento valido? poi IsA Person -> compatibile? Gerarchia Entity -> Person -> Employee.",
+        "file": "01 - Validare un riferimento prima di interrogarne la classe.md"
+      },
+      {
+        "title": "Il dispatch dinamico cambia il nome, non il contratto",
+        "qs": [
+          3,
+          4,
+          7,
+          12,
+          15
+        ],
+        "scenario": "Un metodo Add viene scelto tramite una stringa e invocato con 10 e 20; una proprietà Timeout viene selezionata per nome.",
+        "code": "set methodName=\"Add\"\nset result=$METHOD(obj,methodName,10,20)\nset $PROPERTY(config,\"Timeout\")=30",
+        "reason": "La chiamata dinamica restituisce 30 se Add ha il contratto descritto. L’API non rende corretto qualunque nome ricevuto dall’esterno: controlla il set di metodi/proprietà ammessi e gli argomenti. La scrittura dinamica agisce sulla stessa istanza config.",
+        "trap": "Confondere riflessione con assenza di validazione o considerare una stringa qualsiasi un metodo sicuro da esporre.",
+        "lesson": "Il nome può essere deciso a runtime, ma i confini dell’operazione restano espliciti.",
+        "challenge": "Un utente sceglie liberamente il nome del metodo amministrativo da invocare. Basta che il metodo esista?",
+        "solution": "No: serve limitare e autorizzare le operazioni esposte.",
+        "visual": "Nome Add + argomenti10,20 -> dispatch su obj ->30. Gate allowlist prima del dispatch. Proprietà Timeout ->30 su stessa istanza.",
+        "file": "02 - Il dispatch dinamico cambia il nome, non il contratto.md"
+      },
+      {
+        "title": "Definizione e classe compilata sono viste diverse",
+        "qs": [
+          8,
+          9,
+          13,
+          14
+        ],
+        "scenario": "Vuoi generare una tabella dei membri e includere anche metodi ereditati dalla classe compilata.",
+        "code": "",
+        "reason": "La definizione descrive ciò che è dichiarato nella sorgente; i metadati compilati descrivono il risultato dopo compilazione e risoluzione dell’ereditarietà. Scegli la vista in funzione della domanda. Per ogni proprietà distingui nome ObjectScript, tipo, Required e nome della colonna SQL: non sono tutti la stessa stringa.",
+        "trap": "Usare la sola definizione sorgente per dichiarare che un membro ereditato non esiste o assumere identità fra nome proprietà e nome SQL.",
+        "lesson": "Chiedi se stai documentando la dichiarazione locale o il contratto effettivo compilato.",
+        "challenge": "Un metodo è ereditato e non appare come dichiarazione locale. Questo prova che l’istanza non possa chiamarlo?",
+        "solution": "No: la vista compilata e la gerarchia possono includerlo.",
+        "visual": "Due lenti: ClassDefinition sorgente locale; CompiledMethod contratto risolto inclusa ereditarietà. Scheda proprietà: nome, tipo, Required, nomeSQL distinti.",
+        "file": "03 - Definizione e classe compilata sono viste diverse.md"
+      }
+    ],
+    "folder": "T4 - Functions & APIs/T4.6: Executes Methods and Queries Objects/Approfondimenti esercizi",
+    "image": "schema-esercizi.png",
+    "references": [
+      {
+        "title": "API degli oggetti",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_objapi"
+      },
+      {
+        "title": "$METHOD",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fmethod"
+      },
+      {
+        "title": "$PROPERTY",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fproperty"
+      },
+      {
+        "title": "Riferimento classi e metadati",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=ROBJ"
+      }
+    ],
+    "question_analyses": "Domanda per domanda/README.md",
+    "visual_guide": "tavole-esercizi.md",
+    "additional_image": "schema-esercizi-extra.png",
+    "image_language": "en"
+  },
+  {
+    "id": "T4.7",
+    "notes": "Gli snippet di rete sono esempi di flusso, non configurazioni complete. Https richiede anche la configurazione TLS appropriata. Successo di trasporto e codice HTTP sono controlli distinti; gli esempi non eseguono alcuna richiesta reale.",
+    "cases": [
+      {
+        "title": "Tipo di stream e posizione sono due scelte diverse",
+        "qs": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "scenario": "Leggere un file di testo, memorizzare un PDF e copiare un contenuto richiedono API simili ma rappresentazioni diverse.",
+        "code": "do stream.Rewind()\nwhile 'stream.AtEnd {\n  set line=stream.ReadLine()\n  write line,!\n}",
+        "reason": "Character è per testo, Binary per byte che non devono subire conversioni testuali. File e Global decidono il supporto, non il tipo dei contenuti. Rewind rende esplicita la posizione. La copia deve dichiarare quale posizione sorgente intende usare e controllare lo status disponibile.",
+        "trap": "Usare Character per un PDF o supporre che ogni ReadLine riparta dalla prima riga.",
+        "lesson": "Scegli prima contenuto e supporto, poi gestisci il cursore.",
+        "challenge": "Un PDF deve essere trattato come testo perché alla fine è comunque un file?",
+        "solution": "No: usa una rappresentazione binaria per preservarne i byte.",
+        "visual": "Matrice 2x2: Character/Binary versus File/Global. Nastro con Rewind e lettura sequenziale. PDF -> Binary.",
+        "file": "01 - Tipo di stream e posizione sono due scelte diverse.md"
+      },
+      {
+        "title": "Una chiamata HTTP ha due livelli di esito",
+        "qs": [
+          8,
+          9,
+          10,
+          11,
+          15
+        ],
+        "scenario": "Il client invia una richiesta; il server può rispondere 404 anche se la comunicazione è avvenuta correttamente.",
+        "code": "",
+        "reason": "Prima controlla lo status dell’operazione client; se esiste una risposta, controlla il suo codice HTTP e il body. Un body JSON non è automaticamente un oggetto già deserializzato: viene letto dallo stream della risposta e poi interpretato. Server, porta, TLS, Content-Type e credenziali sono configurazioni distinte.",
+        "trap": "Interpretare la presenza del body come successo applicativo o confondere uno status IRIS con il codice HTTP.",
+        "lesson": "Trasporto, protocollo e contenuto hanno contratti di errore diversi.",
+        "challenge": "La connessione riesce ma il server restituisce 500. L’operazione applicativa ha avuto successo?",
+        "solution": "No: il percorso di trasporto è riuscito, ma la risposta HTTP segnala un errore del server.",
+        "visual": "Client -> trasporto -> risposta HTTP -> body stream -> parser JSON. Esito trasporto OK può accompagnare HTTP404/500.",
+        "file": "02 - Una chiamata HTTP ha due livelli di esito.md"
+      },
+      {
+        "title": "Messaggio e canale di invio hanno ruoli distinti",
+        "qs": [
+          12,
+          13,
+          14
+        ],
+        "scenario": "Per l’email un oggetto rappresenta destinatari e contenuto; un altro gestisce la comunicazione SMTP.",
+        "code": "",
+        "reason": "%Net.MailMessage contiene i dati del messaggio; %Net.SMTP gestisce l’invio tramite server. Costruire il messaggio non dimostra che sia stato consegnato al server, e l’accettazione SMTP non prova la lettura del destinatario. FTP usa un’altra API e un altro protocollo, con configurazione e risposte proprie.",
+        "trap": "Scambiare la costruzione del payload con la consegna finale o usare un’API perché il nome sembra simile.",
+        "lesson": "Disegna una freccia per ogni passaggio di responsabilità e identifica il risultato verificabile di ciascuno.",
+        "challenge": "Hai creato MailMessage con To, Subject e body. L’email è già stata inviata?",
+        "solution": "No: va passato al canale SMTP configurato e occorre controllare l’esito dell’invio.",
+        "visual": "MailMessage contenuto -> SMTP canale -> server accetta -> consegna successiva. Creazione diversa da invio e da lettura destinatario.",
+        "file": "03 - Messaggio e canale di invio hanno ruoli distinti.md"
+      }
+    ],
+    "folder": "T4 - Functions & APIs/T4.7: Uses APIs for Common Operations/Approfondimenti esercizi",
+    "image": "schema-esercizi.png",
+    "references": [
+      {
+        "title": "Proprietà stream",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_propstream"
+      },
+      {
+        "title": "Client HTTP",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GNET_http"
+      },
+      {
+        "title": "Posta elettronica",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GNET_email"
+      },
+      {
+        "title": "FTP",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GNET_ftp"
+      }
+    ],
+    "question_analyses": "Domanda per domanda/README.md",
+    "visual_guide": "tavole-esercizi.md",
+    "additional_image": "schema-esercizi-extra.png",
+    "image_language": "en"
+  },
+  {
+    "id": "T5.1",
+    "notes": "Il risultato 66818 dell’esempio Q4 non si ricava in generale dalla sottrazione di due $HOROLOG: la conversione numerica vede il prefisso giorno. Non generalizzare flag di compilazione o soglie di cache senza il riferimento della versione. Il termine $ZH è valido: abbrevia $ZHOROLOG.",
+    "cases": [
+      {
+        "title": "Un errore di compilazione si risolve nel suo stadio",
+        "qs": [
+          1,
+          2,
+          6,
+          7,
+          10,
+          11,
+          12,
+          13
+        ],
+        "scenario": "La macro LogError non è definita, oppure %Strig è scritto al posto di %String. Nessun controllo del runtime può completare quella compilazione.",
+        "code": "",
+        "reason": "Classifica prima il messaggio: preprocessore e include, sintassi, risoluzione del tipo o dipendenza. Verifica che l’include effettivo contenga la macro e che le dipendenze siano compilabili. La maiuscola di Return non è il problema: i comandi ObjectScript non distinguono quel caso.",
+        "trap": "Modificare il codice di gestione eccezioni quando l’errore impedisce ancora di produrre il codice eseguibile.",
+        "lesson": "La fase che fallisce limita l’insieme delle cause possibili.",
+        "challenge": "Il compilatore segnala macro DbName non definita. Controllare il database a runtime è il primo passo utile?",
+        "solution": "No: verifica include, definizione della macro e preprocessing.",
+        "visual": "Pipeline preprocessore -> tipi/dipendenze -> compilazione -> runtime. Errori macro e typo %Strig fermano stadi precedenti.",
+        "file": "01 - Un errore di compilazione si risolve nel suo stadio.md"
+      },
+      {
+        "title": "Il timer deve misurare un intervallo reale",
+        "qs": [
+          3,
+          4
+        ],
+        "scenario": "Una trasformazione va cronometrata con un contatore di secondi, non con la rappresentazione data,orario usata come numero.",
+        "code": "set start=$ZHOROLOG\n; trasformazione\nset elapsed=$ZHOROLOG-start",
+        "reason": "$ZH abbrevia $ZHOROLOG e comprende frazioni di secondo dall’avvio. La sottrazione di due $HOROLOG forza invece una conversione del prefisso giorno e perde la componente oraria: non rappresenta la durata voluta. Documenta anche la piattaforma e il carico se il benchmark deve essere ripetibile.",
+        "trap": "Usare il formato di stampa di una data come se fosse un cronometro o attribuire significato a un numero senza unità.",
+        "lesson": "Prima della sottrazione verifica che i due operandi siano grandezze nella stessa unità.",
+        "challenge": "Inizio 100,250 secondi dall’avvio e fine 100,875: quanto dura il blocco?",
+        "solution": "0,625 secondi. I numeri qui sono espressi come quantità decimali, non come coppie $HOROLOG.",
+        "visual": "Cronometro: inizio100.250s, fine100.875s ->0.625s. HOROLOG giorno,secondi non è un numero di durata.",
+        "file": "02 - Il timer deve misurare un intervallo reale.md"
+      },
+      {
+        "title": "Ogni strumento risponde a una scala diversa",
+        "qs": [
+          5,
+          8,
+          9,
+          14,
+          15
+        ],
+        "scenario": "Il sistema è lento: una dashboard mostra il quadro globale, mentre il costo può concentrarsi in una riga o in una query.",
+        "code": "",
+        "reason": "Usa metriche di sistema per capire il tipo di pressione; piano e statistiche SQL per una query; un profiler di righe per un metodo. Correlare tempi, letture e frequenza aiuta a individuare la causa. Un singolo rapporto di cache non dimostra da solo il numero di letture fisiche né identifica la riga responsabile.",
+        "trap": "Scegliere lo strumento prima della domanda o trattare una correlazione aggregata come prova della causa applicativa.",
+        "lesson": "Passa dal sintomo generale al punto specifico mantenendo misure confrontabili.",
+        "challenge": "Il processo usa molto tempo ma la query è breve. È sensato insistere solo sul piano SQL?",
+        "solution": "No: amplia la misura al codice e alle altre attese del processo.",
+        "visual": "Tre lenti: sistema dashboard/PERFMON; query piano/runtime; riga MONLBL. Frecce zoom dal sintomo alla causa verificabile.",
+        "file": "03 - Ogni strumento risponde a una scala diversa.md"
+      }
+    ],
+    "folder": "T5 - Error Handling/T5.1: Uses Troubleshooting Tools/Approfondimenti esercizi",
+    "image": "schema-esercizi.png",
+    "references": [
+      {
+        "title": "$ZHOROLOG",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_vzhorolog"
+      },
+      {
+        "title": "Macro",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_macros"
+      },
+      {
+        "title": "Monitoraggio prestazioni",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCM_perfmon"
+      }
+    ],
+    "question_analyses": "Domanda per domanda/README.md",
+    "visual_guide": "tavole-esercizi.md",
+    "additional_image": "schema-esercizi-extra.png",
+    "image_language": "en"
+  },
+  {
+    "id": "T5.2",
+    "notes": "Q17 è impreciso: $STACK restituisce la profondità corrente; $STACK(-1) riguarda il livello più alto con informazioni, anche di errore, e non è sempre un sinonimo. Registrare lo stack nel CATCH non va presentato come ricostruzione garantita di ogni frame già svolto.",
+    "cases": [
+      {
+        "title": "Uno status di errore non salta da solo nel CATCH",
+        "qs": [
+          2,
+          4,
+          6,
+          7,
+          9,
+          11,
+          16
+        ],
+        "scenario": "Step1 restituisce un %Status di errore dentro TRY. Il chiamante può restituirlo subito oppure convertirlo in un’eccezione.",
+        "code": "",
+        "reason": "TRY intercetta eccezioni, non ogni valore che rappresenta un fallimento. Se il codice esegue IF $$$ISERR(sc) RETURN sc, termina normalmente con uno status d’errore e non entra nel CATCH. Una conversione esplicita con le API/macro previste permette invece di usare il percorso delle eccezioni.",
+        "trap": "Considerare TRY una verifica automatica di tutti i valori restituiti o confondere $$$ISERR con un comando che lancia errori.",
+        "lesson": "Scegli un contratto e rendi esplicite le conversioni al confine fra status ed eccezioni.",
+        "challenge": "Un metodo restituisce sc di errore senza THROW. Il solo fatto che sia in TRY garantisce il CATCH?",
+        "solution": "No.",
+        "visual": "Due corsie: ritorno %Status errore -> controllo ISERR -> propagazione; THROW eccezione -> CATCH -> eventuale AsStatus. Nessun salto automatico fra corsie.",
+        "file": "01 - Uno status di errore non salta da solo nel CATCH.md"
+      },
+      {
+        "title": "Conservare contesto senza inghiottire l’errore",
+        "qs": [
+          1,
+          5,
+          8,
+          10,
+          12,
+          13,
+          17,
+          18
+        ],
+        "scenario": "Il gestore vuole registrare il fallimento e poi lasciare al chiamante la decisione finale.",
+        "code": "try {\n  ; operazione che può lanciare un’eccezione\n} catch ex {\n  ; registrare nome, posizione e contesto utile\n  throw ex\n}",
+        "reason": "Rilanciare lo stesso oggetto mantiene le informazioni dell’eccezione meglio che restituire sempre un generico successo. Messaggio, Location, identità del lavoro e stack disponibile rispondono a domande diverse. Evita di registrare dati sensibili non necessari. Per lo stack scegli esplicitamente contesto corrente o informazioni d’errore disponibili.",
+        "trap": "Catturare tutto e continuare come se il risultato fosse valido, oppure sostituire la causa originale con un messaggio senza posizione.",
+        "lesson": "Un log utile accompagna la propagazione; non la sostituisce implicitamente.",
+        "challenge": "Hai loggato l’errore ma restituisci OK. Il chiamante può distinguere il lavoro fallito da quello completato?",
+        "solution": "No: il contratto gli comunica successo, a meno che esista un altro canale esplicito.",
+        "visual": "Eccezione -> cattura -> log con contesto -> rilancia stessa eccezione -> chiamante. Log non equivale a successo.",
+        "file": "02 - Conservare contesto senza inghiottire l’errore.md"
+      },
+      {
+        "title": "Un errore composto richiede una rappresentazione strutturata",
+        "qs": [
+          3,
+          14,
+          15
+        ],
+        "scenario": "La validazione raccoglie più problemi. %Status non va trattato come una frase singola da concatenare a mano.",
+        "code": "",
+        "reason": "Usa le API di composizione e decomposizione degli status per conservare i singoli errori. Per mostrare all’utente usa la conversione in testo prevista; per prendere decisioni mantieni il risultato strutturato. L’oggetto restituito da %New e lo status di %Save appartengono ancora a canali differenti.",
+        "trap": "Concatenare testi e poi provare a ricavarne affidabilmente codici e campi, oppure accedere a una proprietà di un oref vuoto.",
+        "lesson": "Separare formato macchina, presentazione e validità del riferimento evita errori secondari che mascherano il primo.",
+        "challenge": "Due vincoli falliscono. È sufficiente mostrare solo l’ultima stringa di errore ignorando il primo?",
+        "solution": "No, se il contratto richiede una validazione completa: conserva e presenta entrambi in modo strutturato.",
+        "visual": "Due errori campo A e campo B -> composizione %Status -> decomposizione -> due messaggi. Macchina e presentazione su due livelli.",
+        "file": "03 - Un errore composto richiede una rappresentazione strutturata.md"
+      }
+    ],
+    "folder": "T5 - Error Handling/T5.2: Handles and Logs Runtime Errors/Approfondimenti esercizi",
+    "image": "schema-esercizi.png",
+    "references": [
+      {
+        "title": "%Status",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_status"
+      },
+      {
+        "title": "$STACK",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fstack"
+      },
+      {
+        "title": "TRY/CATCH",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_ctrycatch"
+      }
+    ],
+    "question_analyses": "Domanda per domanda/README.md",
+    "visual_guide": "tavole-esercizi.md",
+    "additional_image": "schema-esercizi-extra.png",
+    "image_language": "en"
+  },
+  {
+    "id": "T5.3",
+    "notes": "Q3: l’esito dell’accesso data(\"\") dipende anche dalle regole dei subscript nulli del processo; distinguere un nodo senza valore da un subscript vietato. Q7: PROTECT può derivare sia da privilegi insufficienti sia da un database read-only; verificare entrambe le cause. Q16: leggere un conteggio variadico non definito può produrre UNDEFINED; per l’insieme vuoto usare $GET(scores,0) e gestire n=0 prima della divisione. Non usare 511 byte come limite universale: locali, global e PPG hanno limiti diversi.",
+    "cases": [
+      {
+        "title": "La prima causa si cerca nel nome e nel valore effettivi",
+        "qs": [
+          2,
+          3,
+          5,
+          6,
+          8,
+          13,
+          14,
+          18
+        ],
+        "scenario": "ordKey e key sono variabili diverse; City e city pure. Un ciclo che legge dopo la sentinella può inoltre tentare un nodo privo di valore.",
+        "code": "set key=\"\"\nfor {\n  set key=$ORDER(data(key))\n  quit:key=\"\"\n  write data(key),!\n}",
+        "reason": "Controlla il nome esatto e se il valore è stato definito lungo quel percorso. Il ciclo corretto esce prima di leggere data(\"\"). Se manca soltanto il valore, la categoria è UNDEFINED; SUBSCRIPT riguarda invece un subscript non valido secondo il contesto. Prima di accedere a customer.Email verifica l’oref.",
+        "trap": "Correggere il dato nel database quando il codice usa un identificatore sbagliato, o assegnare sempre la stessa categoria d’errore a ogni accesso fallito.",
+        "lesson": "Riproduci la prima istruzione che fallisce e annota operando, valore e contesto.",
+        "challenge": "Hai impostato city=\"Roma\" ma leggi City. Sono la stessa variabile?",
+        "solution": "No: i nomi delle variabili distinguono maiuscole e minuscole.",
+        "visual": "Lente sul typo city diverso da City. Ciclo: ORDER -> sentinella -> lettura. Tre cause distinte: nome undefined, subscript invalido, oref invalido.",
+        "file": "01 - La prima causa si cerca nel nome e nel valore effettivi.md"
+      },
+      {
+        "title": "Un algoritmo deve avere un’uscita e un dominio valido",
+        "qs": [
+          4,
+          16,
+          17
+        ],
+        "scenario": "Una ricorsione manca del caso base, un collegamento torna al nodo già visitato, oppure una media riceve zero valori.",
+        "code": "",
+        "reason": "Per una ricorsione identifica il caso base e una quantità che diminuisce. Per un grafo con cicli mantieni un insieme dei visitati o un limite giustificato. Per una media controlla n>0 prima di dividere: il risultato su un insieme vuoto è una decisione di contratto, non un valore da inventare. Un ciclo infinito non deve necessariamente generare subito un errore di stack.",
+        "trap": "Aspettare un’eccezione per interrompere un ciclo logico o attribuire a tutte le forme di mancata terminazione lo stesso errore.",
+        "lesson": "Definisci precondizione e prova di avanzamento prima di fidarti del caso felice.",
+        "challenge": "La lista collegata fa 1→2→3→1. Basta attendere che current diventi vuoto?",
+        "solution": "No: non lo diventerà. Rileva un nodo già visitato e gestisci il ciclo.",
+        "visual": "Grafo 1->2->3->1 con insieme visitati; ritorno a1 -> ciclo rilevato. Riquadri ricorsione caso base e media guardia n>0.",
+        "file": "02 - Un algoritmo deve avere un’uscita e un dominio valido.md"
+      },
+      {
+        "title": "Un valore opzionale richiede una politica esplicita",
+        "qs": [
+          1,
+          7,
+          9,
+          10,
+          11,
+          12,
+          15
+        ],
+        "scenario": "La lista 10,20,omesso,40 fallisce alla terza lettura stretta. Usare un default può evitare l’errore, ma cambia il significato del calcolo.",
+        "code": "set x=$LISTBUILD(10,20,,40)\nset item=$LISTGET(x,3,0)",
+        "reason": "$LISTGET qui restituisce zero, ma decidere che un dato mancante valga zero è una regola del problema. Puoi invece rifiutare il record o escluderlo dalla media con un conteggio separato. Analogamente, un errore di accesso ai global richiede distinguere permessi, destinazione e modalità del database: non si risolve cambiando il default della lettura.",
+        "trap": "Nascondere ogni problema con $GET/$LISTGET oppure concedere privilegi estesi senza identificare risorsa e percorso.",
+        "lesson": "Un fallback è corretto quando il dominio lo autorizza; altrimenti rende silenzioso un errore di qualità del dato.",
+        "challenge": "Per la media di 10,20,omesso,40, ignorare il mancante e sostituirlo con zero danno la stessa risposta?",
+        "solution": "No: 70/3 contro 70/4. Devi scegliere e documentare la politica.",
+        "visual": "Lista 10,20,omesso,40 -> bivio rifiuta / ignora / zero. Medie ignora70/3, zero70/4: semantiche diverse.",
+        "file": "03 - Un valore opzionale richiede una politica esplicita.md"
+      }
+    ],
+    "folder": "T5 - Error Handling/T5.3: Diagnoses Common Errors/Approfondimenti esercizi",
+    "image": "schema-esercizi.png",
+    "references": [
+      {
+        "title": "Diagnosi degli errori",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_vzerror"
+      },
+      {
+        "title": "$GET",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fget"
+      },
+      {
+        "title": "$LISTGET",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_flistget"
+      },
+      {
+        "title": "FOR",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_cfor"
+      },
+      {
+        "title": "Namespace e database, incluso read-only",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GORIENT_enviro"
+      },
+      {
+        "title": "Definizione e chiamata dei metodi",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_methods"
+      },
+      {
+        "title": "Limiti di sistema",
+        "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_appx_limits"
+      }
+    ],
+    "question_analyses": "Domanda per domanda/README.md",
+    "visual_guide": "tavole-esercizi.md",
+    "additional_image": "schema-esercizi-extra.png",
+    "image_language": "en"
+  }
+]

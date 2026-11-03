@@ -1,0 +1,207 @@
+{
+  "quiz": {
+    "title": "T1.4: Complex Structures",
+    "description": "Scenario-based questions on dynamic objects/arrays (JSON), %DynamicObject, %DynamicArray, and stream objects (%Stream.GlobalCharacter, %Stream.FileCharacter, %Stream.FileBinary) in InterSystems IRIS ObjectScript.",
+    "version": "2.1",
+    "publishedDate": "2026-04-08",
+    "questions": [
+      {
+        "id": 1,
+        "type": "single",
+        "question": "Consider the following code.\n\nset patient = {}\nset patient.name = \"Alice Smith\"\nset patient.age = 34\nset patient.active = true\nwrite patient.%ToJSON()\n\nWhat is the output?",
+        "options": [
+          "{\"name\":\"Alice Smith\",\"age\":34,\"active\":true}",
+          "{\"name\":\"Alice Smith\",\"age\":\"34\",\"active\":\"true\"}",
+          "An <UNDEFINED> error on the line set patient.active = true",
+          "{\"name\":\"Alice Smith\",\"age\":34,\"active\":1}"
+        ],
+        "correct": [2],
+        "explanation": "In ObjectScript, 'true' is not a keyword or literal -- it is interpreted as a variable name. Since no variable named 'true' has been defined, the SET command raises an <UNDEFINED> *true error. To set a JSON boolean, you must either use the %Set method with a type parameter: do patient.%Set(\"active\", 1, \"boolean\"), or use the JSON literal syntax: set patient = {\"active\": true}. The JSON literal parser recognizes true/false/null, but the ObjectScript language itself does not. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GJSON_create)"
+      },
+      {
+        "id": 2,
+        "type": "single",
+        "question": "Consider the following code that processes a JSON API response.\n\nset jsonStr = \"{\"\"patients\"\":[{\"\"name\"\":\"\"Alice\"\",\"\"age\"\":30},{\"\"name\"\":\"\"Bob\"\",\"\"age\"\":45}]}\"\nset response = ##class(%DynamicObject).%FromJSON(jsonStr)\nset patients = response.patients\nwrite patients.%Get(1).name\n\nWhat is the output?",
+        "options": [
+          "Alice",
+          "Bob",
+          "An error because %Get() does not support chained property access",
+          "An error because %FromJSON cannot parse nested structures"
+        ],
+        "correct": [1],
+        "explanation": "%DynamicArray is zero-indexed. %Get(0) returns the first element (Alice's object) and %Get(1) returns the second element (Bob's object). Then .name accesses the \"name\" property of that object, returning \"Bob\". The %FromJSON method correctly parses nested JSON structures into nested %DynamicObject and %DynamicArray instances. Property access can be chained on the returned objects. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GJSON_create)"
+      },
+      {
+        "id": 3,
+        "type": "single",
+        "question": "A developer needs to build a JSON response with explicit null and boolean values.\n\nset resp = {}\ndo resp.%Set(\"status\", \"success\")\ndo resp.%Set(\"count\", 42)\ndo resp.%Set(\"error\", \"\", \"null\")\ndo resp.%Set(\"verified\", 1, \"boolean\")\nwrite resp.%ToJSON()\n\nWhat is the output?",
+        "options": [
+          "{\"status\":\"success\",\"count\":42,\"error\":\"\",\"verified\":1}",
+          "{\"status\":\"success\",\"count\":42,\"error\":null,\"verified\":true}",
+          "{\"status\":\"success\",\"count\":\"42\",\"error\":null,\"verified\":\"true\"}",
+          "An error because %Set does not accept a third argument"
+        ],
+        "correct": [1],
+        "explanation": "The three-argument form of %Set(key, value, type) controls how values are serialized to JSON. With type \"null\", the value is output as the JSON keyword null regardless of the actual value passed. With type \"boolean\", a truthy ObjectScript value (1) becomes JSON true and a falsy value (0) becomes JSON false. Without the type argument, numbers stay as JSON numbers and strings stay as JSON strings. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GJSON_create)"
+      },
+      {
+        "id": 4,
+        "revised": true,
+        "type": "single",
+        "question": "Consider the following code that iterates over a %DynamicObject.\n\nset config = {\"host\": \"localhost\", \"port\": 8080, \"debug\": true}\nset key = \"\"\nset result = \"\"\nfor {\n  set key = config.%GetNext(.key)\n  quit:key=\"\"\n  set result = result _ key _ \"=\" _ config.%Get(key) _ \";\"\n}\nwrite result\n\nWhich of the following best describes the output?",
+        "options": [
+          "A <METHOD DOES NOT EXIST> error because %GetNext is not a method of %DynamicObject",
+          "host=localhost;port=8080;debug=1; -- each property key and value are enumerated",
+          "An error because the for loop has no bounds",
+          "host;port;debug; -- %GetNext only returns keys, not values"
+        ],
+        "correct": [0],
+        "explanation": "%GetNext() is NOT a method of %DynamicObject. Calling config.%GetNext(.key) raises a <METHOD DOES NOT EXIST> error. To iterate over the properties of a %DynamicObject, you must first call %GetIterator() to obtain a %Iterator.Object, then use the iterator's %GetNext(.key, .value) method in a loop. For example: set iter = config.%GetIterator() while iter.%GetNext(.key, .value) { ... }. This is a common mistake -- %GetNext exists on %ResultSet and other classes, but not on %DynamicObject. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GJSON_create)"
+      },
+      {
+        "id": 5,
+        "type": "single",
+        "question": "A developer writes the following code to build a %DynamicArray.\n\nset colors = []\ndo colors.%Push(\"red\")\ndo colors.%Push(\"green\")\ndo colors.%Push(\"blue\")\nset removed = colors.%Pop()\ndo colors.%Push(\"yellow\")\nwrite colors.%Size(), \": \"\nwrite colors.%ToJSON()\n\nWhat is the output?",
+        "options": [
+          "4: [\"red\",\"green\",\"blue\",\"yellow\"]",
+          "3: [\"red\",\"green\",\"yellow\"]",
+          "3: [\"red\",\"green\",\"blue\"]",
+          "4: [\"red\",\"green\",\"yellow\",\"blue\"]"
+        ],
+        "correct": [1],
+        "explanation": "Starting with an empty array, %Push adds \"red\" (index 0), \"green\" (index 1), \"blue\" (index 2). Then %Pop() removes and returns the last element (\"blue\"), leaving [\"red\", \"green\"]. Then %Push(\"yellow\") adds \"yellow\" at the end, resulting in [\"red\", \"green\", \"yellow\"]. %Size() returns 3 because there are 3 elements. The output is 3: [\"red\",\"green\",\"yellow\"]. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GJSON_create)"
+      },
+      {
+        "id": 6,
+        "type": "single",
+        "question": "Consider the following code.\n\nset obj = {\"name\": \"Test\", \"values\": [10, 20, 30]}\nset arr = obj.values\ndo arr.%Set(1, 99)\nwrite obj.%ToJSON()\n\nWhat is the output?",
+        "options": [
+          "{\"name\":\"Test\",\"values\":[10,20,30]} -- arr is a copy, not a reference",
+          "{\"name\":\"Test\",\"values\":[10,99,30]} -- arr references the same array object",
+          "{\"name\":\"Test\",\"values\":[99,20,30]} -- %Set(1, 99) replaces the first element",
+          "An error because you cannot modify a nested array through a separate variable"
+        ],
+        "correct": [1],
+        "explanation": "When you access obj.values, you receive a reference to the same %DynamicArray object -- not a copy. Modifying it through the arr variable (setting index 1 to 99) directly modifies the array inside obj. %DynamicArray is zero-indexed, so %Set(1, 99) replaces the element at index 1 (which was 20) with 99. The result is [10, 99, 30]. This is consistent with how object references work in ObjectScript. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GJSON_create)"
+      },
+      {
+        "id": 7,
+        "type": "single",
+        "question": "A developer needs to check whether a JSON property exists and determine its type.\n\nset data = {\"name\": \"Alice\", \"score\": 95, \"address\": null}\nwrite data.%IsDefined(\"name\"), \" \"\nwrite data.%IsDefined(\"phone\"), \" \"\nwrite data.%GetTypeOf(\"address\")\n\nWhat is the output?",
+        "options": [
+          "1 0 null",
+          "1 0 string",
+          "1 1 null",
+          "1 0 unassigned"
+        ],
+        "correct": [0],
+        "explanation": "%IsDefined() returns 1 if the property exists in the object and 0 if it does not. \"name\" exists (returns 1), \"phone\" does not exist (returns 0). %GetTypeOf() returns a string describing the JSON type of the value: \"null\" for JSON null, \"string\" for strings, \"number\" for numbers, \"boolean\" for booleans, \"object\" for nested objects, \"array\" for arrays, and \"unassigned\" for properties that do not exist. Since \"address\" is explicitly set to null, its type is \"null\". (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GJSON_create)"
+      },
+      {
+        "id": 8,
+        "type": "single",
+        "question": "Consider the following code that writes JSON to a stream.\n\nset report = {\"title\": \"Monthly Report\", \"items\": [1, 2, 3]}\nset stream = ##class(%Stream.GlobalCharacter).%New()\ndo report.%ToJSON(stream)\ndo stream.Rewind()\nset json = \"\"\nwhile 'stream.AtEnd {\n  set json = json _ stream.Read()\n}\nwrite json\n\nWhat is the output?",
+        "options": [
+          "An error because %ToJSON() does not accept a stream argument",
+          "{\"title\":\"Monthly Report\",\"items\":[1,2,3]}",
+          "An empty string because the stream was not saved",
+          "An error because %Stream.GlobalCharacter requires a persistent parent object"
+        ],
+        "correct": [1],
+        "explanation": "%ToJSON() can accept an optional stream argument. When a stream is passed, the JSON output is written directly to the stream instead of being returned as a string. This is more memory-efficient for large objects. After writing, Rewind() resets the read position to the beginning, and the while loop reads all the data. The stream does not need to be saved to a persistent object to be used in memory. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GJSON_create)"
+      },
+      {
+        "id": 9,
+        "type": "single",
+        "question": "A developer needs to store large medical images in the database. Consider the following class.\n\nClass Medical.Scan Extends %Persistent\n{\nProperty PatientId As %String;\nProperty ScanDate As %Date;\nProperty Image As %Stream.GlobalBinary;\n}\n\nThe developer writes code to store an image.\n\nset scan = ##class(Medical.Scan).%New()\nset scan.PatientId = \"P001\"\nset scan.ScanDate = +$H\nset file = ##class(%Stream.FileBinary).%New()\nset file.Filename = \"/data/images/scan001.dcm\"\nset sc = scan.Image.CopyFromAndSave(file)\nset sc = scan.%Save()\n\nWhich of the following is true about where the image data is stored?",
+        "options": [
+          "In the DataLocation global alongside the PatientId and ScanDate values",
+          "In the StreamLocation global defined in the storage definition, separate from the main data global",
+          "In the file /data/images/scan001.dcm -- the database stores only a file path reference",
+          "In a temporary global that is cleaned up when the process ends"
+        ],
+        "correct": [1],
+        "explanation": "%Stream.GlobalBinary properties store their data in the global specified by the <StreamLocation> element in the storage definition (e.g., ^Medical.ScanS). The stream data is stored separately from the main data global to avoid bloating the data nodes with large binary content. The CopyFromAndSave method copies data from the source file stream into the global-based stream. The original file on disk is read but the data is stored in the database. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_propstream)"
+      },
+      {
+        "id": 10,
+        "revised": true,
+        "type": "single",
+        "question": "Consider the following code.\n\nset stream = ##class(%Stream.GlobalCharacter).%New()\ndo stream.Write(\"Line 1 of the report. \")\ndo stream.Write(\"Line 2 of the report. \")\ndo stream.Write(\"Line 3 of the report.\")\nwrite stream.Size, !\nwrite stream.Read(9)\n\nWhat is the output?",
+        "options": [
+          "65\nLine 1 of",
+          "3\nLine 1 of the report. Line 2 of the report. Line 3 of the report.",
+          "65\nLine 1 of the report. Line 2 of the report. Line 3 of the report.",
+          "An error because Rewind() must be called before Read()"
+        ],
+        "correct": [0],
+        "explanation": "The stream's Size property returns the total number of characters in the stream. Three writes produce: \"Line 1 of the report. \" (22 chars) + \"Line 2 of the report. \" (22 chars) + \"Line 3 of the report.\" (21 chars) = 65 characters. For newly created streams (not yet saved and reopened), the read position is at the beginning, so Read(9) returns the first 9 characters: \"Line 1 of\". The argument to Read() specifies the maximum number of characters to return. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_propstream)"
+      },
+      {
+        "id": 11,
+        "type": "single",
+        "question": "Consider the following code that processes a JSON array.\n\nset data = [{\"name\": \"Alice\", \"score\": 85}, {\"name\": \"Bob\", \"score\": 92}, {\"name\": \"Carol\", \"score\": 78}]\nset total = 0\nset count = data.%Size()\nfor i = 0:1:count-1 {\n  set total = total + data.%Get(i).score\n}\nwrite \"Average: \", total / count\n\nWhat is the output?",
+        "options": [
+          "Average: 85",
+          "Average: 85 -- integer division",
+          "Average: 85.000000000000000",
+          "An error because you cannot access .score on the result of %Get()"
+        ],
+        "correct": [0],
+        "explanation": "The code iterates through the %DynamicArray using zero-based indexing (0 to count-1 where count=3). For each element, it accesses the nested object's score property via chained access: data.%Get(i).score, which is valid because %Get returns the %DynamicObject. Total becomes 85 + 92 + 78 = 255. Then 255 / 3 = 85 exactly. ObjectScript displays exact integer results without trailing decimals, so the output is \"Average: 85\". (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GJSON_create)"
+      },
+      {
+        "id": 12,
+        "type": "single",
+        "question": "A developer needs to remove a property from a %DynamicObject before sending it as a JSON response.\n\nset user = {\"id\": 1, \"name\": \"Alice\", \"password\": \"secret123\", \"role\": \"admin\"}\ndo user.%Remove(\"password\")\nwrite user.%ToJSON()\n\nWhat is the output?",
+        "options": [
+          "{\"id\":1,\"name\":\"Alice\",\"password\":null,\"role\":\"admin\"}",
+          "{\"id\":1,\"name\":\"Alice\",\"role\":\"admin\"}",
+          "An error because %Remove is not a valid method on %DynamicObject",
+          "{\"id\":1,\"name\":\"Alice\",\"password\":\"\",\"role\":\"admin\"}"
+        ],
+        "correct": [1],
+        "explanation": "%Remove() completely removes the specified property from the %DynamicObject. After removal, the property no longer exists in the object -- it is not set to null or empty string, it is entirely gone. The %ToJSON() output excludes the removed property, producing a clean JSON object with only the remaining properties. This is useful for sanitizing data before sending API responses. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GJSON_create)"
+      },
+      {
+        "id": 13,
+        "type": "single",
+        "question": "Consider the following code that copies a file into a database-stored stream.\n\nClass Doc.Attachment Extends %Persistent\n{\nProperty FileName As %String(MAXLEN = 200);\nProperty Content As %Stream.GlobalBinary;\n}\n\n// Code:\nset att = ##class(Doc.Attachment).%New()\nset att.FileName = \"report.pdf\"\nset fileStream = ##class(%Stream.FileBinary).%New()\nset fileStream.Filename = \"/tmp/report.pdf\"\nset sc = att.Content.CopyFrom(fileStream)\nset sc = att.%Save()\n\nAfter this code runs successfully, where is the PDF content stored?",
+        "options": [
+          "On the filesystem at /tmp/report.pdf only",
+          "In the database global specified by the StreamLocation in the storage definition",
+          "In a temporary global that is discarded when the process ends",
+          "In the DataLocation global alongside FileName"
+        ],
+        "correct": [1],
+        "explanation": "CopyFrom() reads data from the source stream (the %Stream.FileBinary pointing to /tmp/report.pdf) and writes it into the target stream (att.Content, which is a %Stream.GlobalBinary). When %Save() is called, the data is persisted to the database in the StreamLocation global. The original file on disk is unaffected but the database now has its own copy. Stream data is always stored separately from the main data global. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_propstream)"
+      },
+      {
+        "id": 14,
+        "type": "single",
+        "question": "A developer creates a nested JSON structure.\n\nset order = {}\nset order.orderId = \"ORD-001\"\nset order.items = []\nset item1 = {\"sku\": \"A100\", \"qty\": 2, \"price\": 29.99}\nset item2 = {\"sku\": \"B200\", \"qty\": 1, \"price\": 49.99}\ndo order.items.%Push(item1)\ndo order.items.%Push(item2)\nset order.total = 109.97\nwrite order.%ToJSON()\n\nWhich of the following represents the output?",
+        "options": [
+          "{\"orderId\":\"ORD-001\",\"items\":[{\"sku\":\"A100\",\"qty\":2,\"price\":29.99},{\"sku\":\"B200\",\"qty\":1,\"price\":49.99}],\"total\":109.97}",
+          "{\"orderId\":\"ORD-001\",\"items\":[],\"total\":109.97} -- %Push does not work on arrays accessed via dot syntax",
+          "An error because you cannot %Push a %DynamicObject into a %DynamicArray",
+          "{\"orderId\":\"ORD-001\",\"items\":[\"[object]\",\"[object]\"],\"total\":109.97}"
+        ],
+        "correct": [0],
+        "explanation": "%DynamicArrays can hold any type of value including nested %DynamicObjects. When item1 and item2 are pushed into the items array, they maintain their full structure. %ToJSON() recursively serializes the entire object graph, producing the complete nested JSON. The dot syntax (order.items) returns a reference to the same array object, so %Push operations on it affect the array inside the order object. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GJSON_create)"
+      },
+      {
+        "id": 15,
+        "type": "single",
+        "question": "Consider the following code that uses %Stream.FileCharacter.\n\nset stream = ##class(%Stream.FileCharacter).%New()\nset stream.Filename = \"/tmp/output.txt\"\ndo stream.Write(\"Hello, World!\")\ndo stream.WriteLine(\"\")\ndo stream.Write(\"Second line.\")\nset sc = stream.%Save()\n\nAfter this code runs, what does the file /tmp/output.txt contain?",
+        "options": [
+          "Hello, World! followed by a newline, then Second line.",
+          "Only \"Second line.\" because each Write overwrites the file",
+          "An error because %Stream.FileCharacter cannot be saved without a persistent parent object",
+          "The file is empty because Write only buffers data until the stream object is destroyed"
+        ],
+        "correct": [0],
+        "explanation": "%Stream.FileCharacter writes data to a file on the filesystem. Write() appends text and WriteLine() appends text plus a platform-appropriate line terminator. The content accumulates: \"Hello, World!\" + newline (from WriteLine) + \"Second line.\". When %Save() is called, the buffered data is flushed to the file. Unlike %Stream.GlobalCharacter, file-based streams can be saved independently without requiring a persistent parent object. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_propstream)"
+      }
+    ]
+  }
+}

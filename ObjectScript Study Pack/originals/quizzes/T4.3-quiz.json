@@ -1,0 +1,244 @@
+{
+  "quiz": {
+    "title": "T4.3: Manipulates Strings",
+    "description": "Scenario-based questions on $PIECE extract/replace, $EXTRACT, $REPLACE, $TRANSLATE, $ZSTRIP, string concatenation (_), $MATCH/$LOCATE regex, $ZCONVERT encoding, $LENGTH, and escaping quotes in ObjectScript.",
+    "version": "2.0",
+    "publishedDate": "2026-03-05",
+    "questions": [
+      {
+        "id": 1,
+        "type": "single",
+        "question": "You are parsing an HL7 PID segment. Consider:\n\nset pid = \"PID|1||12345^^^MRN||Smith^John^A||19800515|M\"\nwrite $PIECE(pid, \"|\", 6)\n\nWhat is the output?",
+        "options": [
+          "12345^^^MRN",
+          "Smith^John^A",
+          "19800515",
+          "1"
+        ],
+        "correct": [1],
+        "explanation": "$PIECE extracts a delimited piece from a string. Counting pipe-delimited pieces: 1=\"PID\", 2=\"1\", 3=\"\", 4=\"12345^^^MRN\", 5=\"\", 6=\"Smith^John^A\". The sixth pipe-delimited piece is the patient name field. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fpiece)"
+      },
+      {
+        "id": 2,
+        "type": "single",
+        "question": "A data correction routine needs to update the city field in a delimited record. Consider:\n\nset rec = \"Smith^John^New York^NY\"\nset $PIECE(rec, \"^\", 3) = \"Boston\"\nwrite rec\n\nWhat is the output?",
+        "options": [
+          "Smith^John^Boston^NY",
+          "Smith^John^New York^Boston",
+          "Boston^John^New York^NY",
+          "A <SYNTAX> error"
+        ],
+        "correct": [0],
+        "explanation": "SET $PIECE can modify a string by replacing a specific delimited piece. Setting $PIECE(rec, \"^\", 3) = \"Boston\" replaces the third ^-delimited piece (\"New York\") with \"Boston\", resulting in \"Smith^John^Boston^NY\". (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fpiece)"
+      },
+      {
+        "id": 3,
+        "type": "single",
+        "question": "You need to extract a range of pieces from a delimited string. Consider:\n\nset data = \"A-B-C-D-E\"\nwrite $PIECE(data, \"-\", 2, 4)\n\nWhat is the output?",
+        "options": [
+          "B",
+          "B-C-D",
+          "BCD",
+          "B-C"
+        ],
+        "correct": [1],
+        "explanation": "$PIECE with four arguments extracts pieces from position 2 to position 4 inclusive, returning them with their delimiters intact. So $PIECE(\"A-B-C-D-E\", \"-\", 2, 4) returns \"B-C-D\". (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fpiece)"
+      },
+      {
+        "id": 4,
+        "type": "single",
+        "question": "You are extracting a substring from a fixed-width record. Consider:\n\nset record = \"SMITH   JOHN    20260305\"\nset result = $EXTRACT(record, 9, 16)\nwrite \"[\", result, \"]\"\nwrite \" Length: \", $LENGTH(result)\n\nWhat is the output?",
+        "options": [
+          "[JOHN    ] Length: 8 — JOHN followed by 4 trailing spaces",
+          "[SMITH   ] Length: 8 — SMITH followed by 3 trailing spaces",
+          "[JOHN] Length: 4 — trailing spaces are automatically trimmed",
+          "[20260305] Length: 8"
+        ],
+        "correct": [0],
+        "explanation": "$EXTRACT extracts characters by position (1-based, inclusive). Characters 9-16 of \"SMITH   JOHN    20260305\" are \"JOHN    \" (JOHN followed by 4 spaces), which is 8 characters. $EXTRACT preserves all characters including trailing spaces — it does not trim. Use $ZSTRIP to remove whitespace if needed. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fextract)"
+      },
+      {
+        "id": 5,
+        "type": "single",
+        "question": "You need to replace characters in a fixed-width string. Consider:\n\nset code = \"ABCDEF\"\nset $EXTRACT(code, 3, 4) = \"XY\"\nwrite code\n\nWhat is the output?",
+        "options": [
+          "ABXYEF",
+          "ABCXYDEF",
+          "ABXYDEF",
+          "AXYCDEF"
+        ],
+        "correct": [0],
+        "explanation": "SET $EXTRACT(str, from, to) = value replaces characters at positions from through to with value. Positions 3-4 (\"CD\") are replaced by \"XY\", giving \"ABXYEF\". The replacement length matches the range. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fextract)"
+      },
+      {
+        "id": 6,
+        "type": "single",
+        "question": "A template engine needs to replace placeholders. Consider:\n\nset template = \"Hello {{name}}, welcome to {{city}}!\"\nset result = $REPLACE(template, \"{{name}}\", \"Alice\")\nset result = $REPLACE(result, \"{{city}}\", \"Paris\")\nwrite result\n\nWhat is the output?",
+        "options": [
+          "Hello Alice, welcome to Paris!",
+          "Hello {{name}}, welcome to {{city}}!",
+          "Hello Alice, welcome to {{city}}!",
+          "A <SYNTAX> error"
+        ],
+        "correct": [0],
+        "explanation": "$REPLACE replaces all occurrences of a substring with a replacement. The first call replaces {{name}} with Alice, the second replaces {{city}} with Paris. Each call returns a new string; the original is not modified in place (the result is reassigned). (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_freplace)"
+      },
+      {
+        "id": 7,
+        "type": "single",
+        "question": "You are sanitizing a phone number by removing all non-digit characters. Consider:\n\nset phone = \"(555) 123-4567\"\nset clean = $TRANSLATE(phone, \"()- \", \"\")\nwrite clean\n\nWhat is the output?",
+        "options": [
+          "5551234567",
+          "(555) 123-4567",
+          "555 1234567",
+          "A <FUNCTION> error"
+        ],
+        "correct": [0],
+        "explanation": "$TRANSLATE performs character-by-character replacement. When the third argument is shorter than the second, unmatched characters are removed. Here \"(\", \")\", \"-\", and \" \" all have no corresponding replacement character, so they are deleted, leaving \"5551234567\". (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_ftranslate)"
+      },
+      {
+        "id": 8,
+        "type": "single",
+        "question": "You need to obfuscate vowels in a string. Consider:\n\nset name = \"Hello\"\nwrite $TRANSLATE(name, \"aeiou\", \"*\")\n\nWhat is the output?",
+        "options": [
+          "H*ll*",
+          "H*llo",
+          "H*ll",
+          "Hll"
+        ],
+        "correct": [3],
+        "explanation": "$TRANSLATE performs character-by-character mapping. 'a' at position 1 maps to '*' at position 1. But 'e' (position 2), 'i' (position 3), 'o' (position 4), 'u' (position 5) have no corresponding character in the replacement string \"*\" (only 1 character). Characters without a mapping are deleted. In \"Hello\": H stays (not in from-string), 'e' is deleted, 'l' stays, 'l' stays, 'o' is deleted. Result: \"Hll\". Note: $TRANSLATE is case-sensitive, so uppercase 'H' is not affected by lowercase 'h' in the from-string. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_ftranslate)"
+      },
+      {
+        "id": 9,
+        "type": "single",
+        "question": "You are cleaning user input by stripping leading and trailing whitespace. Consider:\n\nset input = \"  Hello World  \"\nset result = $ZSTRIP(input, \"<>W\")\nwrite \"[\", result, \"] Length: \", $LENGTH(result)\n\nWhat is the output?",
+        "options": [
+          "[Hello World] Length: 11 — leading and trailing spaces removed, interior space kept",
+          "[HelloWorld] Length: 10 — all spaces removed",
+          "[  Hello World  ] Length: 15 — unchanged, no spaces removed",
+          "[Hello World  ] Length: 14 — only leading spaces removed"
+        ],
+        "correct": [0],
+        "explanation": "$ZSTRIP removes characters matching a mask. '<' strips from the left, '>' strips from the right, 'W' targets whitespace characters. So \"<>W\" strips leading and trailing whitespace, producing \"Hello World\" (11 chars) with the interior space preserved. Use \"*W\" to also remove embedded spaces. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fzstrip)"
+      },
+      {
+        "id": 10,
+        "type": "single",
+        "question": "A data cleansing routine needs to remove ALL whitespace from a string, including embedded spaces. Consider:\n\nset messy = \" A B  C \"\nset result = $ZSTRIP(messy, \"*W\")\nwrite \"[\", result, \"] Length: \", $LENGTH(result)\n\nWhat is the output?",
+        "options": [
+          "[A B  C] Length: 6 — only leading/trailing spaces removed",
+          "[ABC] Length: 3 — all spaces removed including embedded",
+          "[ A B  C ] Length: 8 — unchanged, no spaces removed",
+          "[A B C] Length: 5 — extra embedded spaces collapsed to single spaces"
+        ],
+        "correct": [1],
+        "explanation": "The '*' mask in $ZSTRIP means strip from everywhere — leading, trailing, AND embedded. Combined with 'W' for whitespace, \"*W\" removes all whitespace characters from the string, including interior spaces, producing \"ABC\" (3 chars). Compare with \"<>W\" which only strips leading and trailing whitespace. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fzstrip)"
+      },
+      {
+        "id": 11,
+        "type": "single",
+        "question": "You are normalizing user input for case-insensitive comparison. Consider:\n\nset input = \"Hello World\"\nwrite $ZCONVERT(input, \"U\")\n\nWhat is the output?",
+        "options": [
+          "hello world",
+          "HELLO WORLD",
+          "Hello world",
+          "Hello World"
+        ],
+        "correct": [1],
+        "explanation": "$ZCONVERT with \"U\" converts a string to uppercase. Other options: \"L\" for lowercase, \"W\" for title case (capitalize first letter of each word). (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fzconvert)"
+      },
+      {
+        "id": 12,
+        "type": "single",
+        "question": "A developer needs to embed a quote character inside a string for a SQL query. Which line correctly produces the string:\n\nHe said \"hello\"\n\n?",
+        "options": [
+          "set msg = \"He said \\\"hello\\\"\"",
+          "set msg = \"He said \"\"hello\"\"\"",
+          "set msg = \"He said 'hello'\"",
+          "set msg = 'He said \"hello\"'"
+        ],
+        "correct": [1],
+        "explanation": "In ObjectScript, you embed a literal double-quote character by doubling it: \"\" inside a string represents a single \". So \"He said \"\"hello\"\"\" produces the string: He said \"hello\". ObjectScript does not use backslash escaping. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_operators#GCOS_operators_string)"
+      },
+      {
+        "id": 13,
+        "type": "single",
+        "question": "You encounter a puzzling expression in legacy code. Consider:\n\nset x = \"3cats\"\nset y = \"5dogs\"\nwrite x + y\n\nWhat is the output?",
+        "options": [
+          "\"3cats5dogs\"",
+          "8",
+          "0",
+          "An <ILLEGAL VALUE> error"
+        ],
+        "correct": [1],
+        "explanation": "The + operator performs numeric addition in ObjectScript. Strings are coerced to numbers by extracting the leading numeric portion: \"3cats\" becomes 3, \"5dogs\" becomes 5. So 3 + 5 = 8. String concatenation uses the _ operator: \"3cats\" _ \"5dogs\" = \"3cats5dogs\". (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_operators#GCOS_operators_numeric)"
+      },
+      {
+        "id": 14,
+        "type": "single",
+        "question": "You are building a validation routine using regular expressions. Consider:\n\nset email = \"user@example.com\"\nwrite $MATCH(email, \"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$\")\n\nWhat is the output?",
+        "options": [
+          "1",
+          "0",
+          "\"user@example.com\"",
+          "A <SYNTAX> error"
+        ],
+        "correct": [0],
+        "explanation": "$MATCH tests whether a string matches a regular expression pattern and returns 1 (match) or 0 (no match). The email pattern matches \"user@example.com\", so $MATCH returns 1. $MATCH always returns a Boolean, not the matched string. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fmatch)"
+      },
+      {
+        "id": 15,
+        "type": "single",
+        "question": "You are counting delimited fields in a data record. Consider:\n\nwrite $LENGTH(\"A^B^C^D\", \"^\")\n\nWhat is the output?",
+        "options": [
+          "3",
+          "4",
+          "7",
+          "8"
+        ],
+        "correct": [1],
+        "explanation": "The two-argument form of $LENGTH counts the number of delimited pieces (not characters). \"A^B^C^D\" has 4 ^-delimited pieces: A, B, C, D. The one-argument form $LENGTH(\"A^B^C^D\") would return 7 (the character count). (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_flength)"
+      },
+      {
+        "id": 16,
+        "type": "single",
+        "question": "A web application needs to encode user input for safe HTML output. Consider:\n\nset input = \"<script>alert('XSS')</script>\"\nset safe = $ZCONVERT(input, \"O\", \"HTML\")\n\nWhich statement best describes what 'safe' contains?",
+        "options": [
+          "The original string unchanged",
+          "An HTML-encoded string where < becomes &lt; and > becomes &gt;",
+          "A Base64-encoded version of the string",
+          "The string with all HTML tags removed"
+        ],
+        "correct": [1],
+        "explanation": "$ZCONVERT with \"O\" (output) and \"HTML\" encoding converts special HTML characters to their entity equivalents: < to &lt;, > to &gt;, & to &amp;, and quotes to their entities. This prevents XSS attacks by ensuring the browser displays the text rather than executing it. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fzconvert)"
+      },
+      {
+        "id": 17,
+        "type": "single",
+        "question": "You are parsing a CSV record that has an empty field. Consider:\n\nset row = \"Smith,,42,Male\"\nwrite $PIECE(row, \",\", 2)\n\nWhat is the output?",
+        "options": [
+          "42",
+          "Male",
+          "\"\" (empty string)",
+          "An <UNDEFINED> error"
+        ],
+        "correct": [2],
+        "explanation": "The string has two consecutive commas between \"Smith\" and \"42\". $PIECE(row, \",\", 2) returns the second comma-delimited piece, which is an empty string (the gap between the two commas). $PIECE never throws an error for empty pieces. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fpiece)"
+      },
+      {
+        "id": 18,
+        "type": "single",
+        "question": "You need to understand the difference between $REPLACE and $TRANSLATE. Consider:\n\nset str = \"banana\"\nset r1 = $REPLACE(str, \"an\", \"X\")\nset r2 = $TRANSLATE(str, \"an\", \"XY\")\nwrite r1, \" / \", r2\n\nWhat is the output?",
+        "options": [
+          "bXXa / bXYXYX",
+          "bXXa / bXyXyX",
+          "bXana / bXYXYX",
+          "bXXa / bXYXYx"
+        ],
+        "correct": [0],
+        "explanation": "$REPLACE works on substrings: it finds \"an\" in \"banana\" and replaces each occurrence. \"b-an-an-a\" has two occurrences of \"an\", giving \"bXXa\". $TRANSLATE works character-by-character: 'a' maps to 'X' (pos 1->pos 1) and 'n' maps to 'Y' (pos 2->pos 2). So in \"banana\": b stays, a->X, n->Y, a->X, n->Y, a->X = \"bXYXYX\". This illustrates the fundamental difference: $REPLACE matches substrings, $TRANSLATE maps individual characters. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_freplace)"
+      }
+    ]
+  }
+}

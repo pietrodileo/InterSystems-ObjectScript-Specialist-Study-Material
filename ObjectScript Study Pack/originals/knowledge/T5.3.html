@@ -1,0 +1,1341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Study guide for T5.3: Diagnoses Common Errors - part of the InterSystems ObjectScript Specialist certification. Learn key concepts, best practices, and exam preparation tips.">
+    <meta name="keywords" content="InterSystems certification, ObjectScript Specialist, T5.3: Diagnoses Common Errors, exam preparation, practice quiz">
+    <meta name="author" content="exam-prep.es">
+    <meta name="robots" content="index, follow">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://exam-prep.es/exams/objectscript/knowledge/T5.3.html">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://exam-prep.es/exams/objectscript/knowledge/T5.3.html">
+    <meta property="og:title" content="T5.3: Diagnoses Common Errors - InterSystems ObjectScript Specialist Study Guide">
+    <meta property="og:description" content="Study guide for T5.3: Diagnoses Common Errors - part of the InterSystems ObjectScript Specialist certification. Learn key concepts, best practices, and exam preparation tips.">
+    <meta property="og:image" content="https://exam-prep.es/images/og-image.png">
+    <meta property="og:site_name" content="InterSystems Certification Prep">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://exam-prep.es/exams/objectscript/knowledge/T5.3.html">
+    <meta name="twitter:title" content="T5.3: Diagnoses Common Errors - InterSystems ObjectScript Specialist Study Guide">
+    <meta name="twitter:description" content="Study guide for T5.3: Diagnoses Common Errors - part of the InterSystems ObjectScript Specialist certification. Learn key concepts, best practices, and exam preparation tips.">
+    <meta name="twitter:image" content="https://exam-prep.es/images/og-image.png">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+    <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+
+    <!-- hreflang Tags -->
+    <link rel="alternate" hreflang="en" href="https://exam-prep.es/exams/objectscript/knowledge/T5.3.html" />
+    <link rel="alternate" hreflang="es" href="https://exam-prep.es/exams/objectscript/knowledge/es/T5.3.html" />
+    <link rel="alternate" hreflang="x-default" href="https://exam-prep.es/exams/objectscript/knowledge/T5.3.html" />
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../colors.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+    <link rel="stylesheet" href="../../../css/consent.css">
+
+    <title>T5.3: Diagnoses Common Errors - InterSystems ObjectScript Specialist Study Guide | exam-prep.es</title>
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "T5.3: Diagnoses Common Errors - InterSystems ObjectScript Specialist Study Guide",
+    "description": "Study guide for T5.3: Diagnoses Common Errors - part of the InterSystems ObjectScript Specialist certification. Learn key concepts, best practices, and exam preparation tips.",
+    "author": {
+        "@type": "Organization",
+        "name": "exam-prep.es"
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "InterSystems Certification Prep",
+        "url": "https://exam-prep.es"
+    },
+    "inLanguage": "en",
+    "about": {
+        "@type": "Course",
+        "name": "InterSystems ObjectScript Specialist"
+    }
+}
+    </script>
+</head>
+<body>
+    <div class="container">
+        <nav class="nav-bar">
+            <a href="../index.html" class="back-link">&#8592; Back to Topics</a>
+            <div class="lang-toggle">
+                <a href="T5.3.html" class="lang-btn active">EN</a>
+                <a href="es/T5.3.html" class="lang-btn">ES</a>
+            </div>
+            <a href="../quiz.html?file=quizzes/T5.3-quiz.json" class="quiz-link">Take Quiz &#8594;</a>
+            <div class="auth-bar">
+                <button id="loginBtn" class="auth-btn login-btn" onclick="Auth.login()">Sign In</button>
+                <div id="userInfo" class="user-info">
+                    <div id="userAvatar" class="user-avatar">?</div>
+                    <span id="userName" class="user-name">User</span>
+                </div>
+                <button id="logoutBtn" class="auth-btn logout-btn" onclick="Auth.logout()">Sign Out</button>
+            </div>
+        </nav>
+
+        <header class="header">
+            <h1>T5.3: Diagnoses Common Errors</h1>
+            <p>Knowledge Review - InterSystems ObjectScript Specialist</p>
+        </header>
+
+        <nav class="toc">
+            <h3>Contents</h3>
+            <ol>
+                <li><a href="#section-1">&lt;SUBSCRIPT&gt; errors</a></li>
+                <li><a href="#section-2">&lt;PROTECT&gt; errors</a></li>
+                <li><a href="#section-3">&lt;FRAMESTACK&gt; errors</a></li>
+                <li><a href="#section-4">&lt;UNDEFINED&gt; errors</a></li>
+                <li><a href="#section-5">&lt;INVALID OREF&gt; errors</a></li>
+                <li><a href="#section-6">&lt;CLASS DOES NOT EXIST&gt; errors</a></li>
+                <li><a href="#section-7">&lt;METHOD DOES NOT EXIST&gt; errors</a></li>
+                <li><a href="#section-8">&lt;PROPERTY DOES NOT EXIST&gt; errors</a></li>
+                <li><a href="#section-9">&lt;SYNTAX&gt; errors</a></li>
+            </ol>
+        </nav>
+
+        <main class="content">
+            <section id="section-1" class="knowledge-item">
+                <h2>1. &lt;SUBSCRIPT&gt; errors <button class="subsection-report-btn" onclick="openReportModal('section-1', 'Section 1')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>Accessing undefined subscript</strong>: Referencing a global or local array node that does not exist</li>
+                        <li><strong>Out-of-range $LIST access</strong>: Using $LIST or $LISTGET with a position beyond the list length</li>
+                        <li><strong>Empty string as subscript</strong>: Global subscripts cannot be the empty string ""</li>
+                        <li><strong>Wrong number of arguments</strong>: Passing fewer arguments than expected can cause subscript errors in called code</li>
+                        <li><strong>$DATA and $GET</strong>: Use these to check existence before accessing subscripts</li>
+                        <li><strong>$LISTLENGTH</strong>: Check list length before accessing specific positions</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Overview</h4>
+                        <p><code>&lt;SUBSCRIPT&gt;</code> errors occur when code attempts to use an invalid subscript to reference a global or local array node, or when <code>$LIST</code> operations reference positions that do not exist in a list structure. These are among the most common runtime errors in ObjectScript.</p>
+                        <h4>Accessing Undefined Subscript Nodes</h4>
+                        <pre><code class="language-objectscript">// ERROR: Accessing a subscript that doesn&#x27;t exist
+Kill ^Data
+Set ^Data(1) = &quot;First&quot;
+Set ^Data(3) = &quot;Third&quot;
+
+// This causes &lt;SUBSCRIPT&gt; if ^Data(2) doesn&#x27;t exist
+// and you use it in certain contexts
+Write ^Data(2)    // &lt;SUBSCRIPT&gt; error - node 2 doesn&#x27;t exist
+
+// FIX: Use $GET with a default value
+Write $GET(^Data(2), &quot;N/A&quot;), !   // Returns &quot;N/A&quot; safely
+
+// FIX: Check with $DATA first
+If $DATA(^Data(2)) {
+    Write ^Data(2), !
+}
+Else {
+    Write &quot;No data for subscript 2&quot;, !
+}</code></pre>
+                        <h4>Empty String as Subscript</h4>
+                        <pre><code class="language-objectscript">// ERROR: Empty string is not a valid global subscript
+Set key = &quot;&quot;
+Set ^Data(key) = &quot;value&quot;    // &lt;SUBSCRIPT&gt; error
+
+// FIX: Validate before use
+ClassMethod StoreValue(key As %String, value As %String) As %Status
+{
+    If key = &quot;&quot; {
+        Return $$$ERROR($$$GeneralError, &quot;Key cannot be empty&quot;)
+    }
+    Set ^Data(key) = value
+    Return $$$OK
+}</code></pre>
+                        <h4>Out-of-Range $LIST Access</h4>
+                        <pre><code class="language-objectscript">// ERROR: $LIST with out-of-range position
+Set myList = $LISTBUILD(&quot;Apple&quot;, &quot;Banana&quot;, &quot;Cherry&quot;)
+// myList has 3 elements
+
+// Accessing position 5 causes &lt;SUBSCRIPT&gt; error with $LIST
+Write $LIST(myList, 5)    // &lt;SUBSCRIPT&gt; error
+
+// FIX: Use $LISTGET (returns &quot;&quot; for missing positions)
+Write $LISTGET(myList, 5), !          // Returns &quot;&quot;
+Write $LISTGET(myList, 5, &quot;N/A&quot;), !   // Returns &quot;N/A&quot;
+
+// FIX: Check length first
+If $LISTLENGTH(myList) &gt;= 5 {
+    Write $LIST(myList, 5), !
+}
+Else {
+    Write &quot;List has only &quot;, $LISTLENGTH(myList), &quot; elements&quot;, !
+}</code></pre>
+                        <h4>$LIST vs $LISTGET Comparison</h4>
+                        <pre><code class="language-objectscript">Set list = $LISTBUILD(&quot;A&quot;, &quot;B&quot;, &quot;C&quot;)
+
+// $LIST - throws &lt;SUBSCRIPT&gt; if position invalid
+// Use when you KNOW the position exists
+Set first = $LIST(list, 1)      // &quot;A&quot; - safe
+// Set fifth = $LIST(list, 5)   // &lt;SUBSCRIPT&gt; error!
+
+// $LISTGET - returns default if position invalid
+// Use when position may not exist
+Set first = $LISTGET(list, 1)        // &quot;A&quot;
+Set fifth = $LISTGET(list, 5)        // &quot;&quot; (empty string)
+Set fifth = $LISTGET(list, 5, &quot;?&quot;)   // &quot;?&quot; (custom default)</code></pre>
+                        <h4>Wrong Number of Arguments</h4>
+                        <pre><code class="language-objectscript">// ERROR: Method expects data in a subscripted array
+ClassMethod ProcessItems(ByRef items)
+{
+    // Expects items(1), items(2), etc.
+    For i = 1:1:items {
+        Write items(i), !  // &lt;SUBSCRIPT&gt; if items(i) doesn&#x27;t exist
+    }
+}
+
+// Caller passes wrong structure
+ClassMethod CallerBug()
+{
+    Set data = 3           // Set count
+    Set data(1) = &quot;Apple&quot;
+    Set data(2) = &quot;Banana&quot;
+    // Forgot to set data(3)!
+    Do ..ProcessItems(.data)  // &lt;SUBSCRIPT&gt; at items(3)
+}
+
+// FIX: Defensive coding with $GET
+ClassMethod ProcessItemsSafe(ByRef items)
+{
+    For i = 1:1:$GET(items, 0) {
+        Set value = $GET(items(i), &quot;&quot;)
+        If value &#x27;= &quot;&quot; {
+            Write value, !
+        }
+    }
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RERR_gen#RERR_SUBSCRIPT" target="_blank">&lt;SUBSCRIPT&gt; Error</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fget" target="_blank">$GET Function</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fdata" target="_blank">$DATA Function</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_flist" target="_blank">$LIST Function</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_flistget" target="_blank">$LISTGET Function</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="section-2" class="knowledge-item">
+                <h2>2. &lt;PROTECT&gt; errors <button class="subsection-report-btn" onclick="openReportModal('section-2', 'Section 2')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>Database read-only</strong>: Writing to a global in a read-only or mounted read-only database</li>
+                        <li><strong>Insufficient permissions</strong>: Process lacks the required resource privileges to access a database</li>
+                        <li><strong>Namespace access denied</strong>: Process not permitted to switch to or operate in a namespace</li>
+                        <li><strong>Role missing database resource</strong>: User's roles do not include Read-Write access to the database resource</li>
+                        <li><strong>System globals</strong>: Certain system globals are protected and cannot be modified by application code</li>
+                        <li><strong>Resolution</strong>: Check database properties, user roles, and resource allocations in Management Portal</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Overview</h4>
+                        <p><code>&lt;PROTECT&gt;</code> errors occur when a process attempts an operation that violates security constraints or database access permissions. These errors are security-related and require understanding of the InterSystems IRIS security model: resources, roles, and database permissions.</p>
+                        <h4>Writing to a Read-Only Database</h4>
+                        <pre><code class="language-objectscript">// ERROR: Database is mounted read-only
+// (e.g., IRISSYS or a database mounted for backup)
+Set ^SomeGlobal = &quot;value&quot;   // &lt;PROTECT&gt; if database is read-only
+
+// Checking if you can write to the current namespace:
+ClassMethod CanWrite() As %Boolean
+{
+    TRY {
+        Set testKey = &quot;##TEST##&quot; _ $JOB
+        Set ^CacheTemp(testKey) = 1
+        Kill ^CacheTemp(testKey)
+        Return 1
+    }
+    CATCH ex {
+        If ex.Name = &quot;&lt;PROTECT&gt;&quot; {
+            Return 0
+        }
+        THROW ex
+    }
+}</code></pre>
+                        <h4>Handling <PROTECT> in Application Code</h4>
+                        <pre><code class="language-objectscript">ClassMethod SaveData(key As %String, value As %String) As %Status
+{
+    TRY {
+        Set ^AppData(key) = value
+        Return $$$OK
+    }
+    CATCH ex {
+        If ex.Name = &quot;&lt;PROTECT&gt;&quot; {
+            // Provide a clear message to the user
+            Return $$$ERROR($$$GeneralError,
+                &quot;Cannot write to database. Check that the database &quot; _
+                &quot;is not read-only and that your account has &quot; _
+                &quot;Read-Write access to the database resource.&quot;)
+        }
+        Return ex.AsStatus()
+    }
+}</code></pre>
+                        <h4>Common Causes and Resolutions</h4>
+                        <pre><code>Cause: Database is read-only
+  Check: Management Portal &gt; System Administration &gt; Configuration &gt;
+         System Configuration &gt; Local Databases
+  Fix:   Change database from Read-Only to Read-Write
+
+Cause: User lacks database resource permission
+  Check: Management Portal &gt; System Administration &gt; Security &gt;
+         Users &gt; [user] &gt; Roles tab
+  Fix:   Add a role that has Read-Write on the database resource
+
+Cause: Application runs as UnknownUser with minimal privileges
+  Check: Management Portal &gt; System Administration &gt; Security &gt;
+         Users &gt; UnknownUser
+  Fix:   Assign appropriate roles or configure application to
+         authenticate properly
+
+Cause: Namespace default database differs from expectation
+  Check: Management Portal &gt; System Administration &gt; Configuration &gt;
+         System Configuration &gt; Namespaces
+  Fix:   Verify the global database mapping for the namespace</code></pre>
+                        <h4>Programmatic Security Check</h4>
+                        <pre><code class="language-objectscript">ClassMethod CheckDatabaseAccess(namespace As %String) As %String
+{
+    // Get the default database for a namespace
+    Set db = ##class(%SYS.Namespace).GetGlobalDest(namespace)
+    Write &quot;Global database: &quot;, db, !
+
+    // Check current user&#x27;s roles
+    Write &quot;Current user: &quot;, $USERNAME, !
+    Write &quot;Current roles: &quot;, $ROLES, !
+
+    Return db
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RERR_gen#RERR_PROTECT" target="_blank">&lt;PROTECT&gt; Error</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCAS_dbsecurity" target="_blank">Database Security</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCAS_roles" target="_blank">Resources, Roles, and Privileges</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCAS_dbsrv" target="_blank">Managing Databases</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="section-3" class="knowledge-item">
+                <h2>3. &lt;FRAMESTACK&gt; errors <button class="subsection-report-btn" onclick="openReportModal('section-3', 'Section 3')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>Infinite recursion</strong>: Most common cause; a method calls itself without a proper base case</li>
+                        <li><strong>Excessive call depth</strong>: Even non-recursive code can exhaust the frame stack with deeply nested call chains</li>
+                        <li><strong>Indirect recursion</strong>: Method A calls Method B, which calls Method A, creating an infinite loop</li>
+                        <li><strong>Frame stack</strong>: Fixed-size stack that stores return addresses and context for each method call</li>
+                        <li><strong>Base case</strong>: Every recursive method must have a condition that stops the recursion</li>
+                        <li><strong>Iterative alternatives</strong>: Convert deep recursion to iterative loops when possible</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Overview</h4>
+                        <p><code>&lt;FRAMESTACK&gt;</code> errors occur when the execution call stack overflows. Each method call, DO command, or XECUTE pushes a frame onto the stack. When the stack is exhausted (typically after thousands of nested calls), IRIS raises a <code>&lt;FRAMESTACK&gt;</code> error. The most common cause is infinite recursion.</p>
+                        <h4>Infinite Recursion - Direct</h4>
+                        <pre><code class="language-objectscript">// ERROR: No base case - infinite recursion
+ClassMethod BadFactorial(n As %Integer) As %Integer
+{
+    // Missing: If n &lt;= 1 Return 1
+    Return n * ..BadFactorial(n - 1)   // Never stops!
+    // Calls: BadFactorial(5) -&gt; BadFactorial(4) -&gt; ... -&gt; BadFactorial(-9999) -&gt; &lt;FRAMESTACK&gt;
+}
+
+// FIX: Add a proper base case
+ClassMethod Factorial(n As %Integer) As %Integer
+{
+    If n &lt;= 1 {
+        Return 1    // BASE CASE - stops recursion
+    }
+    Return n * ..Factorial(n - 1)
+}</code></pre>
+                        <h4>Infinite Recursion - Indirect</h4>
+                        <pre><code class="language-objectscript">// ERROR: Indirect recursion - A calls B, B calls A
+ClassMethod ProcessA(data As %String)
+{
+    // Some processing...
+    Set data = data _ &quot;A&quot;
+    Do ..ProcessB(data)     // Calls B
+}
+
+ClassMethod ProcessB(data As %String)
+{
+    // Some processing...
+    Set data = data _ &quot;B&quot;
+    Do ..ProcessA(data)     // Calls A -&gt; infinite loop!
+}
+
+// FIX: Add termination condition
+ClassMethod ProcessA(data As %String, depth As %Integer = 0)
+{
+    If depth &gt; 100 {
+        Write &quot;Maximum processing depth reached&quot;, !
+        Return
+    }
+    Set data = data _ &quot;A&quot;
+    Do ..ProcessB(data, depth + 1)
+}
+
+ClassMethod ProcessB(data As %String, depth As %Integer = 0)
+{
+    If depth &gt; 100 {
+        Write &quot;Maximum processing depth reached&quot;, !
+        Return
+    }
+    Set data = data _ &quot;B&quot;
+    Do ..ProcessA(data, depth + 1)
+}</code></pre>
+                        <h4>Converting Recursion to Iteration</h4>
+                        <pre><code class="language-objectscript">// RECURSIVE version - may cause &lt;FRAMESTACK&gt; for deep trees
+ClassMethod TraverseTree(node As %String)
+{
+    Quit:node=&quot;&quot;
+    Write node, !
+    Set child = $ORDER(^Tree(node, &quot;&quot;))
+    While child &#x27;= &quot;&quot; {
+        Do ..TraverseTree(child)    // Recursive call
+        Set child = $ORDER(^Tree(node, child))
+    }
+}
+
+// ITERATIVE version - uses an explicit stack (no &lt;FRAMESTACK&gt; risk)
+ClassMethod TraverseTreeIterative(startNode As %String)
+{
+    // Use a local array as an explicit stack
+    Set stackTop = 1
+    Set stack(stackTop) = startNode
+
+    While stackTop &gt; 0 {
+        // Pop from stack
+        Set node = stack(stackTop)
+        Set stackTop = stackTop - 1
+
+        If node = &quot;&quot; Continue
+
+        Write node, !
+
+        // Push children onto stack
+        Set child = $ORDER(^Tree(node, &quot;&quot;))
+        While child &#x27;= &quot;&quot; {
+            Set stackTop = stackTop + 1
+            Set stack(stackTop) = child
+            Set child = $ORDER(^Tree(node, child))
+        }
+    }
+}</code></pre>
+                        <h4>Catching <FRAMESTACK> Errors</h4>
+                        <pre><code class="language-objectscript">ClassMethod SafeRecursion(data As %String) As %Status
+{
+    TRY {
+        Do ..DeepRecursiveProcess(data, 0)
+        Return $$$OK
+    }
+    CATCH ex {
+        If ex.Name = &quot;&lt;FRAMESTACK&gt;&quot; {
+            Return $$$ERROR($$$GeneralError,
+                &quot;Operation exceeded maximum recursion depth. &quot; _
+                &quot;Data may be too deeply nested.&quot;)
+        }
+        Return ex.AsStatus()
+    }
+}
+
+ClassMethod DeepRecursiveProcess(data As %String, depth As %Integer)
+{
+    // Guard clause: prevent &lt;FRAMESTACK&gt; with explicit limit
+    If depth &gt; 500 {
+        Throw ##class(%Exception.General).%New(
+            &quot;MaxDepth&quot;, 5001, , &quot;Recursion depth exceeded 500&quot;)
+    }
+    // ... recursive processing ...
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RERR_gen#RERR_FRAMESTACK" target="_blank">&lt;FRAMESTACK&gt; Error</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSTU_process" target="_blank">Process Memory</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSTU_process" target="_blank">Maximum Per-Process Memory</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="section-4" class="knowledge-item">
+                <h2>4. &lt;UNDEFINED&gt; errors <button class="subsection-report-btn" onclick="openReportModal('section-4', 'Section 4')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>Undefined local variable</strong>: Using a variable that was never assigned a value</li>
+                        <li><strong>Undefined global</strong>: Referencing a global node that does not exist (reading, not setting)</li>
+                        <li><strong>Typo in variable name</strong>: Misspelling a variable name creates a different (undefined) variable</li>
+                        <li><strong>Variable not initialized</strong>: Code path reaches a variable use before its assignment</li>
+                        <li><strong>$GET to prevent</strong>: Use $GET(variable, default) to safely access potentially undefined variables</li>
+                        <li><strong>$DATA to check</strong>: Use $DATA(variable) to test existence before accessing</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Overview</h4>
+                        <p><code>&lt;UNDEFINED&gt;</code> is the most common runtime error in ObjectScript. It occurs when code attempts to read the value of a variable (local or global) that has no value assigned. The error message includes the variable name, making it relatively easy to diagnose. Prevention relies on defensive coding practices.</p>
+                        <h4>Undefined Local Variable</h4>
+                        <pre><code class="language-objectscript">// ERROR: Variable never assigned
+ClassMethod UndefinedExample()
+{
+    // Write result  // &lt;UNDEFINED&gt; - &#x27;result&#x27; was never set
+
+    // Common pattern: conditional assignment
+    Set inputValue = &quot;&quot;
+    If inputValue &#x27;= &quot;&quot; {
+        Set processed = $ZCONVERT(inputValue, &quot;U&quot;)
+    }
+    // ERROR: If inputValue was &quot;&quot;, &#x27;processed&#x27; was never set
+    Write processed   // &lt;UNDEFINED&gt; *processed
+
+    // FIX: Initialize before conditional
+    Set processed = &quot;&quot;
+    If inputValue &#x27;= &quot;&quot; {
+        Set processed = $ZCONVERT(inputValue, &quot;U&quot;)
+    }
+    Write processed, !   // Safe - always has a value
+}</code></pre>
+                        <h4>Typos in Variable Names</h4>
+                        <pre><code class="language-objectscript">// ERROR: Typo creates a different variable
+ClassMethod TypoExample()
+{
+    Set customerName = &quot;John Doe&quot;
+
+    // ... many lines later ...
+
+    // Typo: &#x27;custormerName&#x27; instead of &#x27;customerName&#x27;
+    Write custormerName   // &lt;UNDEFINED&gt; *custormerName
+
+    // ObjectScript is case-sensitive for variable names!
+    Set myValue = 42
+    Write MyValue         // &lt;UNDEFINED&gt; *MyValue  (capital M!)
+    Write myvalue         // &lt;UNDEFINED&gt; *myvalue  (lowercase v!)
+    Write myValue, !      // Correct: 42
+}</code></pre>
+                        <h4>Variable Not Initialized on All Code Paths</h4>
+                        <pre><code class="language-objectscript">// ERROR: Variable only set on some branches
+ClassMethod ConditionalBug(type As %String) As %String
+{
+    If type = &quot;A&quot; {
+        Set result = &quot;Type A processing&quot;
+    }
+    ElseIf type = &quot;B&quot; {
+        Set result = &quot;Type B processing&quot;
+    }
+    // What if type = &quot;C&quot;? &#x27;result&#x27; is never set!
+    Return result    // &lt;UNDEFINED&gt; *result when type = &quot;C&quot;
+
+    // FIX: Initialize with default before conditionals
+}
+
+ClassMethod ConditionalFixed(type As %String) As %String
+{
+    Set result = &quot;Unknown type: &quot; _ type    // Default value
+
+    If type = &quot;A&quot; {
+        Set result = &quot;Type A processing&quot;
+    }
+    ElseIf type = &quot;B&quot; {
+        Set result = &quot;Type B processing&quot;
+    }
+    Return result    // Always has a value
+}</code></pre>
+                        <h4>Using $GET to Prevent <UNDEFINED></h4>
+                        <pre><code class="language-objectscript">ClassMethod SafeAccessExamples()
+{
+    // $GET with local variables
+    Set name = $GET(undefinedVar)           // Returns &quot;&quot;
+    Set name = $GET(undefinedVar, &quot;N/A&quot;)   // Returns &quot;N/A&quot;
+
+    // $GET with global variables
+    Set config = $GET(^Config(&quot;timeout&quot;), 30)  // Default 30 if not set
+
+    // $GET with object properties (when object might be &quot;&quot;)
+    Set obj = ##class(MyApp.Person).%OpenId(999)
+    // If ID 999 doesn&#x27;t exist, obj = &quot;&quot;
+    // obj.Name would cause an error, but:
+    If obj &#x27;= &quot;&quot; {
+        Set name = obj.Name
+    }
+    Else {
+        Set name = &quot;Not found&quot;
+    }
+
+    // $GET with multidimensional array
+    Set data(1) = &quot;first&quot;
+    Set data(3) = &quot;third&quot;
+    // data(2) is not set
+    For i = 1:1:3 {
+        Write i, &quot;: &quot;, $GET(data(i), &quot;(empty)&quot;), !
+    }
+    // Output:
+    // 1: first
+    // 2: (empty)
+    // 3: third
+}</code></pre>
+                        <h4>Using $DATA to Check Existence</h4>
+                        <pre><code class="language-objectscript">ClassMethod DataCheckExamples()
+{
+    Set ^Config(&quot;host&quot;) = &quot;localhost&quot;
+    Set ^Config(&quot;port&quot;) = 8080
+    // ^Config(&quot;password&quot;) is not set
+
+    // $DATA returns:
+    // 0 - node does not exist
+    // 1 - node has data, no children
+    // 10 - node has children, no data
+    // 11 - node has both data and children
+
+    If $DATA(^Config(&quot;password&quot;)) {
+        Set pw = ^Config(&quot;password&quot;)
+    }
+    Else {
+        Write &quot;Password not configured!&quot;, !
+    }
+
+    // Compact form using $DATA&#x27;s truthiness
+    Set host = $SELECT($DATA(^Config(&quot;host&quot;)):^Config(&quot;host&quot;), 1:&quot;127.0.0.1&quot;)
+}</code></pre>
+                        <h4>Undefined Global Reference</h4>
+                        <pre><code class="language-objectscript">// ERROR: Reading a global that doesn&#x27;t exist
+Kill ^TempData
+Write ^TempData(1)    // &lt;UNDEFINED&gt; *^TempData(1)
+
+// FIX: Use $GET
+Write $GET(^TempData(1), &quot;not set&quot;), !
+
+// FIX: Use $DATA
+If $DATA(^TempData(1)) {
+    Write ^TempData(1), !
+}
+
+// NOTE: Setting a global never causes &lt;UNDEFINED&gt;
+Set ^TempData(1) = &quot;value&quot;   // Always works (assuming no &lt;PROTECT&gt;)</code></pre>
+                        <h4>Comprehensive Defensive Pattern</h4>
+                        <pre><code class="language-objectscript">Include %occStatus
+
+ClassMethod ProcessRecord(id As %Integer) As %Status
+{
+    TRY {
+        // Defensive: validate inputs
+        If &#x27;$DATA(id) || (id = &quot;&quot;) {
+            Return $$$ERROR($$$GeneralError, &quot;ID is required&quot;)
+        }
+
+        // Defensive: check object exists before using
+        Set obj = ##class(MyApp.Record).%OpenId(id, , .sc)
+        $$$ThrowOnError(sc)
+        If obj = &quot;&quot; {
+            Return $$$ERROR($$$GeneralError, &quot;Record not found: &quot; _ id)
+        }
+
+        // Defensive: use $GET for optional properties
+        Set category = $GET(obj.Category, &quot;General&quot;)
+        Set priority = $GET(obj.Priority, 3)
+
+        // Defensive: use $GET for global lookups
+        Set config = $GET(^AppConfig(&quot;maxRetries&quot;), 5)
+
+        Return $$$OK
+    }
+    CATCH ex {
+        If ex.Name = &quot;&lt;UNDEFINED&gt;&quot; {
+            Return $$$ERROR($$$GeneralError,
+                &quot;Undefined variable: &quot; _ ex.Data _ &quot; at &quot; _ ex.Location)
+        }
+        Return ex.AsStatus()
+    }
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RERR_gen#RERR_UNDEFINED" target="_blank">&lt;UNDEFINED&gt; Error</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fget" target="_blank">$GET Function</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fdata" target="_blank">$DATA Function</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_variables" target="_blank">Local Variables</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="section-5" class="knowledge-item">
+                <h2>5. &lt;INVALID OREF&gt; errors <button class="subsection-report-btn" onclick="openReportModal('section-5', 'Section 5')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>Calling method on non-object</strong>: Using dot syntax on a value that is not a valid object reference (empty string, number)</li>
+                        <li><strong>Failed %OpenId</strong>: `%OpenId()` returns `""` when the ID doesn't exist; calling a method on that result triggers the error</li>
+                        <li><strong>Expired OREF</strong>: Object reference becomes invalid after the object is closed or goes out of scope</li>
+                        <li><strong>$ISOBJECT check</strong>: Always verify an OREF is valid with `$ISOBJECT()` before accessing properties or methods</li>
+                        <li><strong>%Status checking</strong>: Use the status output parameter of `%OpenId()` to detect and handle open failures</li>
+                        <li><strong>Common pattern</strong>: Open → check → use; never assume `%OpenId()` succeeds</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Overview</h4>
+                        <p><code>&lt;INVALID OREF&gt;</code> errors occur when code attempts to call a method or access a property on a value that is not a valid object reference. The most common cause is using the result of <code>%OpenId()</code> without checking whether it returned a valid object. If the requested ID does not exist, <code>%OpenId()</code> returns <code>&quot;&quot;</code>, and any subsequent dot-syntax access on that value triggers <code>&lt;INVALID OREF&gt;</code>.</p>
+                        <h4>Failed %OpenId Leading to INVALID OREF</h4>
+                        <pre><code class="language-objectscript">// ERROR: %OpenId returns &quot;&quot; when ID doesn&#x27;t exist
+ClassMethod DisplayPerson(id As %Integer)
+{
+    Set person = ##class(MyApp.Person).%OpenId(id)
+    // If id 999 doesn&#x27;t exist, person = &quot;&quot;
+    Write person.Name, !    // &lt;INVALID OREF&gt; error!
+}
+
+// FIX: Check with $ISOBJECT before use
+ClassMethod DisplayPersonSafe(id As %Integer) As %Status
+{
+    Set person = ##class(MyApp.Person).%OpenId(id)
+    If &#x27;$ISOBJECT(person) {
+        Write &quot;Person not found: &quot;, id, !
+        Return $$$ERROR($$$GeneralError, &quot;Person not found: &quot; _ id)
+    }
+    Write person.Name, !
+    Return $$$OK
+}</code></pre>
+                        <h4>Expired or Killed Object Reference</h4>
+                        <pre><code class="language-objectscript">// ERROR: OREF becomes invalid after object is killed
+ClassMethod OrefScopeIssue()
+{
+    Set obj = ##class(%ArrayOfDataTypes).%New()
+    Do obj.SetAt(&quot;value1&quot;, &quot;key1&quot;)
+
+    // Kill the object
+    Set obj = &quot;&quot;
+
+    // Now obj is &quot;&quot; (empty string), not an OREF
+    Do obj.SetAt(&quot;value2&quot;, &quot;key2&quot;)    // &lt;INVALID OREF&gt; error!
+
+    // FIX: Check before use
+    If $ISOBJECT(obj) {
+        Do obj.SetAt(&quot;value2&quot;, &quot;key2&quot;)
+    }
+}</code></pre>
+                        <h4>Using %Status Output Parameter</h4>
+                        <pre><code class="language-objectscript">// BEST PRACTICE: Use the status parameter of %OpenId
+ClassMethod ProcessRecord(id As %Integer) As %Status
+{
+    Set record = ##class(MyApp.Record).%OpenId(id, , .sc)
+    If $$$ISERR(sc) {
+        // Open failed - sc contains the reason
+        Return sc
+    }
+    If &#x27;$ISOBJECT(record) {
+        Return $$$ERROR($$$GeneralError, &quot;Record not found: &quot; _ id)
+    }
+
+    // Safe to use record
+    Set record.Status = &quot;Processed&quot;
+    Return record.%Save()
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RERR_gen#RERR_INVALID_OREF" target="_blank">&lt;INVALID OREF&gt; Error</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fisobject" target="_blank">$ISOBJECT Function</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_openid" target="_blank">%OpenId Method</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="section-6" class="knowledge-item">
+                <h2>6. &lt;CLASS DOES NOT EXIST&gt; errors <button class="subsection-report-btn" onclick="openReportModal('section-6', 'Section 6')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>Misspelled class name</strong>: Typo in the class name used with `##class()` causes immediate failure</li>
+                        <li><strong>Missing package name</strong>: Using a short class name without the full package path</li>
+                        <li><strong>Class not compiled</strong>: The class exists in source but has not been compiled yet</li>
+                        <li><strong>Case sensitivity</strong>: Class names in ObjectScript are case-sensitive</li>
+                        <li><strong>Verify with %Dictionary</strong>: Use `##class(%Dictionary.ClassDefinition).%ExistsId()` to check at runtime</li>
+                        <li><strong>IDE auto-complete</strong>: Use Studio or VS Code with ObjectScript extensions to prevent typos</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Overview</h4>
+                        <p><code>&lt;CLASS DOES NOT EXIST&gt;</code> errors occur when code references a class that cannot be found in the class dictionary. This typically happens due to typos in <code>##class()</code> calls, missing package prefixes, or referencing a class that has not been compiled. The error includes the class name that was not found, making diagnosis straightforward.</p>
+                        <h4>Typo in Class Name</h4>
+                        <pre><code class="language-objectscript">// ERROR: Misspelled class name
+ClassMethod CreatePerson() As %Status
+{
+    // Typo: &quot;Perso&quot; instead of &quot;Person&quot;
+    Set person = ##class(MyApp.Perso).%New()    // &lt;CLASS DOES NOT EXIST&gt;
+
+    // FIX: Correct the class name
+    Set person = ##class(MyApp.Person).%New()
+}</code></pre>
+                        <h4>Missing Package Prefix</h4>
+                        <pre><code class="language-objectscript">// ERROR: Missing the full package path
+ClassMethod OpenRecord() As %Status
+{
+    // Missing &quot;MyApp.&quot; package prefix
+    Set obj = ##class(Person).%New()    // &lt;CLASS DOES NOT EXIST&gt;
+
+    // FIX: Include the full package name
+    Set obj = ##class(MyApp.Person).%New()
+}</code></pre>
+                        <h4>Wrong Class Path in System Calls</h4>
+                        <pre><code class="language-objectscript">// ERROR: Wrong class hierarchy for system utilities
+// Common mistake with SQL statistics gathering
+Do $SYSTEM.SQL.Stats.GatherTableStats(&quot;MyApp.Person&quot;)
+// &lt;CLASS DOES NOT EXIST&gt; if the correct path differs
+
+// FIX: Use the correct class path
+Do $SYSTEM.SQL.Stats.Table.GatherTableStats(&quot;MyApp.Person&quot;)</code></pre>
+                        <h4>Runtime Class Existence Check</h4>
+                        <pre><code class="language-objectscript">// Checking if a class exists before using it
+ClassMethod SafeCreateObject(className As %String) As %RegisteredObject
+{
+    // Check if the class exists in the dictionary
+    If &#x27;##class(%Dictionary.ClassDefinition).%ExistsId(className) {
+        Write &quot;Class does not exist: &quot;, className, !
+        Return &quot;&quot;
+    }
+
+    // Safe to create an instance
+    Set obj = $CLASSMETHOD(className, &quot;%New&quot;)
+    Return obj
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RERR_gen#RERR_CLASS_DOES_NOT_EXIST" target="_blank">&lt;CLASS DOES NOT EXIST&gt; Error</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_commands#GCOS_commands_class" target="_blank">##class Syntax</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_cdictclassdef" target="_blank">%Dictionary.ClassDefinition</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="section-7" class="knowledge-item">
+                <h2>7. &lt;METHOD DOES NOT EXIST&gt; errors <button class="subsection-report-btn" onclick="openReportModal('section-7', 'Section 7')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>Misspelled method name</strong>: Typo in the method name when calling it on an object or class</li>
+                        <li><strong>Missing % prefix</strong>: Many system methods start with `%` (e.g., `%Save()` not `Save()`)</li>
+                        <li><strong>Instance vs class method</strong>: Calling an instance method as a class method or vice versa</li>
+                        <li><strong>Method not in class</strong>: Method exists in a different class or superclass than expected</li>
+                        <li><strong>$CLASSMETHOD/$METHOD</strong>: These system functions can trigger this error with wrong method names</li>
+                        <li><strong>Check class definition</strong>: Verify method exists and its type (instance vs class) before calling</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Overview</h4>
+                        <p><code>&lt;METHOD DOES NOT EXIST&gt;</code> errors occur when code attempts to call a method that is not defined in the target class (or any of its superclasses). The most common causes are typos in method names, forgetting the <code>%</code> prefix on system methods, and confusing instance methods with class methods. The error message includes both the method name and the class name.</p>
+                        <h4>Missing % Prefix on System Methods</h4>
+                        <pre><code class="language-objectscript">// ERROR: Forgetting the % prefix on system methods
+ClassMethod SavePerson() As %Status
+{
+    Set person = ##class(MyApp.Person).%New()
+    Set person.Name = &quot;John&quot;
+
+    // Wrong: Save() does not exist - the method is %Save()
+    Set sc = person.Save()    // &lt;METHOD DOES NOT EXIST&gt;
+
+    // FIX: Use the correct method name with % prefix
+    Set sc = person.%Save()
+    Return sc
+}</code></pre>
+                        <h4>Instance Method Called as Class Method</h4>
+                        <pre><code class="language-objectscript">// ERROR: Calling an instance method as a class method
+ClassMethod ProcessExample()
+{
+    // %Save is an instance method, not a class method
+    Set sc = ##class(MyApp.Person).%Save()    // &lt;METHOD DOES NOT EXIST&gt;
+
+    // FIX: Create or open an instance first, then call the method
+    Set person = ##class(MyApp.Person).%New()
+    Set person.Name = &quot;Jane&quot;
+    Set sc = person.%Save()    // Correct: called on instance
+}</code></pre>
+                        <h4>Typo in Method Name</h4>
+                        <pre><code class="language-objectscript">// ERROR: Misspelled method name
+ClassMethod QueryExample()
+{
+    Set stmt = ##class(%SQL.Statement).%New()
+
+    // Wrong: &quot;Preapre&quot; instead of &quot;Prepare&quot;
+    Set sc = stmt.Preapre(&quot;SELECT Name FROM MyApp.Person&quot;)    // &lt;METHOD DOES NOT EXIST&gt;
+
+    // FIX: Correct spelling
+    Set sc = stmt.%Prepare(&quot;SELECT Name FROM MyApp.Person&quot;)
+}</code></pre>
+                        <h4>Using $CLASSMETHOD Safely</h4>
+                        <pre><code class="language-objectscript">// Dynamic method dispatch - verify method exists first
+ClassMethod DynamicCall(className As %String, methodName As %String) As %String
+{
+    // Check if the method exists in the class
+    Set methodDef = className _ &quot;||&quot; _ methodName
+    If &#x27;##class(%Dictionary.MethodDefinition).%ExistsId(methodDef) {
+        Write &quot;Method does not exist: &quot;, className, &quot;.&quot;, methodName, !
+        Return &quot;&quot;
+    }
+
+    // Safe to call
+    Return $CLASSMETHOD(className, methodName)
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RERR_gen#RERR_METHOD_DOES_NOT_EXIST" target="_blank">&lt;METHOD DOES NOT EXIST&gt; Error</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fclassmethod" target="_blank">$CLASSMETHOD Function</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fmethod" target="_blank">$METHOD Function</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="section-8" class="knowledge-item">
+                <h2>8. &lt;PROPERTY DOES NOT EXIST&gt; errors <button class="subsection-report-btn" onclick="openReportModal('section-8', 'Section 8')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>Misspelled property name</strong>: Typo in the property name when accessing via dot syntax</li>
+                        <li><strong>Wrong class assumption</strong>: Object is of a different class than expected, lacking the property</li>
+                        <li><strong>Case sensitivity</strong>: Property names are case-sensitive in ObjectScript</li>
+                        <li><strong>Dynamic property access</strong>: Using `$PROPERTY()` with an incorrect property name</li>
+                        <li><strong>Check class definition</strong>: Use `%Dictionary.PropertyDefinition` to verify property existence at runtime</li>
+                        <li><strong>Computed properties</strong>: Some properties may be calculated and not stored — but they still exist in the class definition</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Overview</h4>
+                        <p><code>&lt;PROPERTY DOES NOT EXIST&gt;</code> errors occur when code attempts to access a property that is not defined in the object's class. This is similar to <code>&lt;METHOD DOES NOT EXIST&gt;</code> but for properties. The error message includes the property name and the class name. Common causes include typos, case-sensitivity issues, and accessing a property on the wrong class.</p>
+                        <h4>Typo in Property Name</h4>
+                        <pre><code class="language-objectscript">// ERROR: Misspelled property name
+ClassMethod DisplayPerson(id As %Integer)
+{
+    Set person = ##class(MyApp.Person).%OpenId(id)
+    If &#x27;$ISOBJECT(person) Return
+
+    // Wrong: &quot;Naem&quot; instead of &quot;Name&quot;
+    Write person.Naem, !    // &lt;PROPERTY DOES NOT EXIST&gt;
+
+    // FIX: Correct the property name
+    Write person.Name, !
+}</code></pre>
+                        <h4>Wrong Class Assumption</h4>
+                        <pre><code class="language-objectscript">// ERROR: Assuming the wrong class
+ClassMethod ProcessItem(item As %RegisteredObject)
+{
+    // Caller passes a %ArrayOfDataTypes but code assumes MyApp.Person
+    Write item.Name, !    // &lt;PROPERTY DOES NOT EXIST&gt; if item is not a Person
+
+    // FIX: Check the class before accessing specific properties
+    If item.%IsA(&quot;MyApp.Person&quot;) {
+        Write item.Name, !
+    }
+    Else {
+        Write &quot;Unexpected object type: &quot;, item.%ClassName(1), !
+    }
+}</code></pre>
+                        <h4>Dynamic Property Access with $PROPERTY</h4>
+                        <pre><code class="language-objectscript">// ERROR: Wrong property name in dynamic access
+ClassMethod GetPropertyValue(obj As %RegisteredObject, propName As %String) As %String
+{
+    // If propName is wrong, this triggers &lt;PROPERTY DOES NOT EXIST&gt;
+    Return $PROPERTY(obj, propName)
+}
+
+// FIX: Validate property existence first
+ClassMethod GetPropertyValueSafe(obj As %RegisteredObject, propName As %String) As %String
+{
+    Set className = obj.%ClassName(1)
+    Set propDef = className _ &quot;||&quot; _ propName
+    If &#x27;##class(%Dictionary.PropertyDefinition).%ExistsId(propDef) {
+        Write &quot;Property does not exist: &quot;, className, &quot;.&quot;, propName, !
+        Return &quot;&quot;
+    }
+    Return $PROPERTY(obj, propName)
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RERR_gen#RERR_PROPERTY_DOES_NOT_EXIST" target="_blank">&lt;PROPERTY DOES NOT EXIST&gt; Error</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fproperty" target="_blank">$PROPERTY Function</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_cdictpropdef" target="_blank">%Dictionary.PropertyDefinition</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="section-9" class="knowledge-item">
+                <h2>9. &lt;SYNTAX&gt; errors <button class="subsection-report-btn" onclick="openReportModal('section-9', 'Section 9')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>Compile-time detection</strong>: Most syntax errors are caught when the class or routine is compiled</li>
+                        <li><strong>Runtime with XECUTE</strong>: Syntax errors in dynamically executed code (`XECUTE`, `$XECUTE`) occur at runtime</li>
+                        <li><strong>Missing closing delimiters</strong>: Unmatched parentheses, braces, or quotes are common causes</li>
+                        <li><strong>Wrong operator</strong>: Using an invalid operator or operator in the wrong context</li>
+                        <li><strong>String quoting</strong>: Missing or mismatched quotes in string literals</li>
+                        <li><strong>Indirection</strong>: Syntax errors in `@variable` indirection expressions are detected at runtime</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Overview</h4>
+                        <p><code>&lt;SYNTAX&gt;</code> errors indicate that the ObjectScript parser cannot interpret the code due to a structural problem. Most syntax errors are caught at compile time, preventing the code from running at all. However, syntax errors can also occur at runtime when using dynamic code execution (<code>XECUTE</code> command, <code>$XECUTE</code> function) or indirection (<code>@</code>), since these construct and parse code strings at runtime.</p>
+                        <h4>Missing Closing Parenthesis</h4>
+                        <pre><code class="language-objectscript">// ERROR: Missing closing parenthesis (caught at compile time)
+ClassMethod CompileError()
+{
+    Set x = $LENGTH(&quot;hello&quot;    // &lt;SYNTAX&gt; - missing closing )
+
+    // FIX: Match all parentheses
+    Set x = $LENGTH(&quot;hello&quot;)
+}</code></pre>
+                        <h4>Unbalanced Braces</h4>
+                        <pre><code class="language-objectscript">// ERROR: Missing closing brace (caught at compile time)
+ClassMethod BraceError()
+{
+    If x = 1 {
+        Write &quot;one&quot;, !
+    // Missing closing }     // &lt;SYNTAX&gt;
+
+    // FIX: Ensure every { has a matching }
+    If x = 1 {
+        Write &quot;one&quot;, !
+    }
+}</code></pre>
+                        <h4>Runtime Syntax Error with XECUTE</h4>
+                        <pre><code class="language-objectscript">// ERROR: Syntax error in dynamic code (caught at RUNTIME)
+ClassMethod DynamicCodeError()
+{
+    Set code = &quot;Set x = $LENGTH(&quot;&quot;hello&quot;&quot;&quot;    // Missing closing )
+
+    // This compiles fine - the string is valid
+    // But executing it causes &lt;SYNTAX&gt; at runtime
+    XECUTE code    // &lt;SYNTAX&gt; error at runtime!
+
+    // FIX: Validate dynamic code carefully
+    Set code = &quot;Set x = $LENGTH(&quot;&quot;hello&quot;&quot;)&quot;
+    XECUTE code    // Works correctly
+}</code></pre>
+                        <h4>Syntax Error with Indirection</h4>
+                        <pre><code class="language-objectscript">// ERROR: Invalid expression in indirection
+ClassMethod IndirectionError()
+{
+    Set expr = &quot;1 + + 2&quot;    // Invalid expression
+    Set result = @expr       // &lt;SYNTAX&gt; at runtime
+
+    // FIX: Validate the expression
+    Set expr = &quot;1 + 2&quot;
+    Set result = @expr       // Works: result = 3
+}</code></pre>
+                        <h4>Common Syntax Mistakes</h4>
+                        <pre><code class="language-objectscript">// Common syntax errors and their fixes:
+
+// 1. Missing dot before method call in same class
+//    Do MyMethod()     // &lt;SYNTAX&gt; in instance context
+//    Do ..MyMethod()   // Correct for instance methods
+
+// 2. Wrong string quoting (doubling quotes inside strings)
+//    Set x = &quot;He said &quot;hello&quot;&quot;    // &lt;SYNTAX&gt;
+//    Set x = &quot;He said &quot;&quot;hello&quot;&quot;&quot;  // Correct
+
+// 3. Missing comma in function arguments
+//    Set x = $EXTRACT(str 1 3)    // &lt;SYNTAX&gt;
+//    Set x = $EXTRACT(str, 1, 3)  // Correct
+
+// 4. Using = instead of == in expressions (not an error but a logic bug)
+//    Note: ObjectScript uses = for both assignment and comparison
+//    depending on context, so this is valid syntax</code></pre>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RERR_gen#RERR_SYNTAX" target="_blank">&lt;SYNTAX&gt; Error</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_cxecute" target="_blank">XECUTE Command</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_commands" target="_blank">Indirection</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <div class="exam-prep">
+                <h2>Exam Preparation Summary</h2>
+                <h3>Critical Concepts to Master:</h3>
+                <ol>
+                    <li><strong><SUBSCRIPT></strong>: Know that $LIST throws <SUBSCRIPT> for out-of-range but $LISTGET returns "" safely</li>
+                    <li><strong><PROTECT></strong>: Understand the relationship between databases, resources, roles, and access permissions</li>
+                    <li><strong><FRAMESTACK></strong>: Recognize infinite recursion (direct and indirect) as the primary cause</li>
+                    <li><strong><UNDEFINED></strong>: Know that reading (not setting) an undefined variable causes the error, and ex.Data contains the variable name</li>
+                    <li><strong><INVALID OREF></strong>: Occurs when calling a method or property on a non-object; always check `$ISOBJECT()` after `%OpenId()`</li>
+                    <li><strong><CLASS DOES NOT EXIST></strong>: Typos in `##class()`, missing package names, or uncompiled classes</li>
+                    <li><strong><METHOD DOES NOT EXIST></strong>: Missing `%` prefix on system methods, instance vs class method confusion</li>
+                    <li><strong><PROPERTY DOES NOT EXIST></strong>: Typos in property names, wrong class assumption, case sensitivity</li>
+                    <li><strong><SYNTAX></strong>: Usually caught at compile time, but can occur at runtime with `XECUTE` or indirection</li>
+                    <li><strong>$GET as prevention</strong>: $GET is the primary defensive tool for both <UNDEFINED> and <SUBSCRIPT> prevention</li>
+                    <li><strong>$DATA for checking</strong>: $DATA returns 0 for non-existent nodes, non-zero for existing</li>
+                    <li><strong>Error names in ex.Name</strong>: Know the angle-bracket format: <SUBSCRIPT>, <PROTECT>, <FRAMESTACK>, <UNDEFINED>, <INVALID OREF>, etc.</li>
+                    <li><strong>Base cases</strong>: Every recursive method must have a condition that terminates recursion</li>
+                </ol>
+                <h3>Common Exam Scenarios:</h3>
+                <ul>
+                    <li>Given code that accesses a global subscript, determine if a <SUBSCRIPT> error can occur</li>
+                    <li>Identifying the cause of a <PROTECT> error (read-only database, missing role, resource permission)</li>
+                    <li>Spotting infinite recursion in code and identifying the fix (add base case)</li>
+                    <li>Recognizing that a variable used in one branch of an IF but not another can cause <UNDEFINED></li>
+                    <li>Choosing between $GET and $DATA for a given defensive coding scenario</li>
+                    <li>Determining which $LIST function is safe for potentially out-of-range access ($LISTGET)</li>
+                    <li>Identifying case-sensitivity issues in variable names that lead to <UNDEFINED></li>
+                    <li>Recognizing that `%OpenId()` can return `""` and that using dot syntax on it causes <INVALID OREF></li>
+                    <li>Spotting typos in class names, method names, or property names that cause "DOES NOT EXIST" errors</li>
+                    <li>Distinguishing between compile-time <SYNTAX> errors and runtime <SYNTAX> from XECUTE/indirection</li>
+                    <li>Knowing that `Save()` is wrong but `%Save()` is correct (missing % prefix pattern)</li>
+                </ul>
+                <h3>Hands-On Practice Recommendations:</h3>
+                <ul>
+                    <li>Deliberately cause each error type and examine the exception object</li>
+                    <li>Write recursive methods with and without base cases to observe <FRAMESTACK></li>
+                    <li>Create code that uses $GET and $DATA defensively, then remove the guards to see the errors</li>
+                    <li>Set up a read-only database and try writing to it to observe <PROTECT></li>
+                    <li>Write a method with a typo in a variable name and observe the <UNDEFINED> error with ex.Data</li>
+                    <li>Practice converting recursive algorithms to iterative ones using explicit stacks</li>
+                    <li>Use $LISTGET vs $LIST with out-of-range positions to understand the difference</li>
+                    <li>Open a non-existent ID with `%OpenId()` and try accessing a property to see <INVALID OREF></li>
+                    <li>Deliberately misspell a class name in `##class()` to see <CLASS DOES NOT EXIST></li>
+                    <li>Call `Save()` instead of `%Save()` to see <METHOD DOES NOT EXIST></li>
+                    <li>Use XECUTE with malformed code to observe runtime <SYNTAX> errors</li>
+                    <li>Build a comprehensive error handler that identifies each error type and provides specific guidance</li>
+                </ul>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <a href="../quiz.html?file=quizzes/T5.3-quiz.json" class="take-quiz-btn">Take the Quiz</a>
+        </footer>
+    </div>
+
+    <div id="reportModal" class="report-modal">
+        <div class="report-content">
+            <h3>Report an Issue</h3>
+            <label for="issueType">Issue Type</label>
+            <select id="issueType">
+                <option value="confusing">Confusing Content</option>
+                <option value="wrong_answer">Incorrect Information</option>
+                <option value="outdated">Outdated Content</option>
+                <option value="formatting">Formatting Issue</option>
+                <option value="typo">Typo</option>
+                <option value="other">Other</option>
+            </select>
+            <label for="issueDescription">Description</label>
+            <textarea id="issueDescription" placeholder="Please describe the issue..."></textarea>
+            <div style="display: flex; align-items: center; gap: 10px; margin: 15px 0;">
+                <input type="checkbox" id="wantEmailNotification" style="width: 18px; height: 18px;">
+                <label for="wantEmailNotification" style="margin: 0; cursor: pointer;">
+                    Notify me by email when resolved
+                </label>
+            </div>
+            <div class="report-actions">
+                <button class="report-cancel" onclick="closeReportModal()">Cancel</button>
+                <button class="report-submit" onclick="submitReport()">Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../../js/config.js"></script>
+    <script src="../../../js/auth.js"></script>
+    <script src="../../../js/api.js"></script>
+    <script>
+        const CERTIFICATION_NAME = 'ObjectScript-Specialist';
+        const TOPIC_REF = 'T5.3';
+
+        document.addEventListener('DOMContentLoaded', function() {
+            updateAuthUI();
+            trackKnowledgeView();
+        });
+
+        function updateAuthUI() {
+            const loginBtn = document.getElementById('loginBtn');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const userInfo = document.getElementById('userInfo');
+            const userAvatar = document.getElementById('userAvatar');
+            const userName = document.getElementById('userName');
+
+            if (typeof Auth !== 'undefined' && Auth.isAuthenticated()) {
+                const user = Auth.getUser();
+                loginBtn.style.display = 'none';
+                logoutBtn.style.display = 'inline-block';
+                userInfo.style.display = 'flex';
+                if (user) {
+                    const initial = (user.name || user.email || '?')[0].toUpperCase();
+                    userAvatar.textContent = initial;
+                    userName.textContent = user.name || user.email || 'User';
+                }
+            } else {
+                loginBtn.style.display = 'inline-block';
+                logoutBtn.style.display = 'none';
+                userInfo.style.display = 'none';
+            }
+        }
+
+        async function trackKnowledgeView() {
+            if (typeof Auth === 'undefined' || !Auth.isAuthenticated()) {
+                return;
+            }
+
+            try {
+                await Api.trackKnowledge(CERTIFICATION_NAME, TOPIC_REF);
+                console.log('Knowledge view tracked:', TOPIC_REF);
+            } catch (error) {
+                console.log('View tracking skipped:', error.message);
+            }
+        }
+
+        function openReportModal(sectionId, sectionTitle) {
+            if (typeof Auth === 'undefined' || !Auth.isAuthenticated()) {
+                alert('Please sign in to report issues.');
+                return;
+            }
+            // Store section context
+            window.currentReportSection = {
+                id: sectionId || 'general',
+                title: sectionTitle || 'General'
+            };
+            // Update modal header to show section
+            const modalHeader = document.querySelector('#reportModal h3');
+            if (modalHeader && sectionTitle) {
+                modalHeader.textContent = 'Report Issue: ' + sectionTitle;
+            } else if (modalHeader) {
+                modalHeader.textContent = 'Report an Issue';
+            }
+            document.getElementById('wantEmailNotification').checked = false;
+            document.getElementById('reportModal').classList.add('active');
+        }
+
+        function closeReportModal() {
+            document.getElementById('reportModal').classList.remove('active');
+            document.getElementById('issueType').value = 'confusing';
+            document.getElementById('issueDescription').value = '';
+        }
+
+        async function submitReport() {
+            const issueType = document.getElementById('issueType').value;
+            const description = document.getElementById('issueDescription').value.trim();
+            const wantEmailNotification = document.getElementById('wantEmailNotification').checked;
+            const sectionContext = window.currentReportSection || { id: 'general', title: 'General' };
+
+            if (!description) {
+                alert('Please provide a description of the issue.');
+                return;
+            }
+
+            // Build content reference with section context
+            const contentRef = sectionContext.id !== 'general'
+                ? `${TOPIC_REF} (${sectionContext.title})`
+                : TOPIC_REF;
+
+            try {
+                await Api.reportProblem({
+                    certificationName: CERTIFICATION_NAME,
+                    contentType: 'knowledge',
+                    contentReference: contentRef,
+                    issueType: issueType,
+                    description: description,
+                    wantEmailNotification: wantEmailNotification
+                });
+                alert('Thank you! Your report has been submitted.');
+                closeReportModal();
+            } catch (error) {
+                if (error.status === 429) {
+                    const retryMinutes = Math.ceil((error.data?.retryAfter || 3600) / 60);
+                    alert(`You've submitted too many reports recently. Please wait ${retryMinutes} minutes before submitting another report.`);
+                } else {
+                    alert('Failed to submit report: ' + error.message);
+                }
+            }
+        }
+
+        document.querySelectorAll('.detailed-notes h3').forEach(h3 => {
+            h3.style.cursor = 'pointer';
+        });
+    </script>
+    <script src="../../../js/consent.js"></script>
+    <script src="../../../js/analytics.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            CookieConsent.init();
+            Analytics.init();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Study guide for T5.1: Uses Troubleshooting Tools - part of the InterSystems ObjectScript Specialist certification. Learn key concepts, best practices, and exam preparation tips.">
+    <meta name="keywords" content="InterSystems certification, ObjectScript Specialist, T5.1: Uses Troubleshooting Tools, exam preparation, practice quiz">
+    <meta name="author" content="exam-prep.es">
+    <meta name="robots" content="index, follow">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://exam-prep.es/exams/objectscript/knowledge/T5.1.html">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://exam-prep.es/exams/objectscript/knowledge/T5.1.html">
+    <meta property="og:title" content="T5.1: Uses Troubleshooting Tools - InterSystems ObjectScript Specialist Study Guide">
+    <meta property="og:description" content="Study guide for T5.1: Uses Troubleshooting Tools - part of the InterSystems ObjectScript Specialist certification. Learn key concepts, best practices, and exam preparation tips.">
+    <meta property="og:image" content="https://exam-prep.es/images/og-image.png">
+    <meta property="og:site_name" content="InterSystems Certification Prep">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://exam-prep.es/exams/objectscript/knowledge/T5.1.html">
+    <meta name="twitter:title" content="T5.1: Uses Troubleshooting Tools - InterSystems ObjectScript Specialist Study Guide">
+    <meta name="twitter:description" content="Study guide for T5.1: Uses Troubleshooting Tools - part of the InterSystems ObjectScript Specialist certification. Learn key concepts, best practices, and exam preparation tips.">
+    <meta name="twitter:image" content="https://exam-prep.es/images/og-image.png">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+    <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+
+    <!-- hreflang Tags -->
+    <link rel="alternate" hreflang="en" href="https://exam-prep.es/exams/objectscript/knowledge/T5.1.html" />
+    <link rel="alternate" hreflang="es" href="https://exam-prep.es/exams/objectscript/knowledge/es/T5.1.html" />
+    <link rel="alternate" hreflang="x-default" href="https://exam-prep.es/exams/objectscript/knowledge/T5.1.html" />
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../colors.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+    <link rel="stylesheet" href="../../../css/consent.css">
+
+    <title>T5.1: Uses Troubleshooting Tools - InterSystems ObjectScript Specialist Study Guide | exam-prep.es</title>
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "T5.1: Uses Troubleshooting Tools - InterSystems ObjectScript Specialist Study Guide",
+    "description": "Study guide for T5.1: Uses Troubleshooting Tools - part of the InterSystems ObjectScript Specialist certification. Learn key concepts, best practices, and exam preparation tips.",
+    "author": {
+        "@type": "Organization",
+        "name": "exam-prep.es"
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "InterSystems Certification Prep",
+        "url": "https://exam-prep.es"
+    },
+    "inLanguage": "en",
+    "about": {
+        "@type": "Course",
+        "name": "InterSystems ObjectScript Specialist"
+    }
+}
+    </script>
+</head>
+<body>
+    <div class="container">
+        <nav class="nav-bar">
+            <a href="../index.html" class="back-link">&#8592; Back to Topics</a>
+            <div class="lang-toggle">
+                <a href="T5.1.html" class="lang-btn active">EN</a>
+                <a href="es/T5.1.html" class="lang-btn">ES</a>
+            </div>
+            <a href="../quiz.html?file=quizzes/T5.1-quiz.json" class="quiz-link">Take Quiz &#8594;</a>
+            <div class="auth-bar">
+                <button id="loginBtn" class="auth-btn login-btn" onclick="Auth.login()">Sign In</button>
+                <div id="userInfo" class="user-info">
+                    <div id="userAvatar" class="user-avatar">?</div>
+                    <span id="userName" class="user-name">User</span>
+                </div>
+                <button id="logoutBtn" class="auth-btn logout-btn" onclick="Auth.logout()">Sign Out</button>
+            </div>
+        </nav>
+
+        <header class="header">
+            <h1>T5.1: Uses Troubleshooting Tools</h1>
+            <p>Knowledge Review - InterSystems ObjectScript Specialist</p>
+        </header>
+
+        <nav class="toc">
+            <h3>Contents</h3>
+            <ol>
+                <li><a href="#section-1">Tools for monitoring code performance</a></li>
+                <li><a href="#section-2">Interprets class compilation errors</a></li>
+            </ol>
+        </nav>
+
+        <main class="content">
+            <section id="section-1" class="knowledge-item">
+                <h2>1. Tools for monitoring code performance <button class="subsection-report-btn" onclick="openReportModal('section-1', 'Section 1')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>^PERFMON</strong>: System-level performance monitoring utility capturing global references, commands, and routine statistics</li>
+                        <li><strong>%SYS.PTools</strong>: SQL query performance analysis framework for identifying slow queries and optimizing execution plans</li>
+                        <li><strong>$ZH</strong>: High-resolution timestamp (seconds with fractional precision) for measuring elapsed execution time</li>
+                        <li><strong>Management Portal</strong>: System Operation pages provide real-time dashboards for processes, locks, and system health</li>
+                        <li><strong>^MONLBL</strong>: Line-by-line monitoring utility that profiles execution time and hit counts for individual lines of code</li>
+                        <li><strong>^%SYS.MONLBL</strong>: Enhanced line-by-line monitor available in modern IRIS versions</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Overview</h4>
+                        <p>InterSystems IRIS provides a rich set of performance monitoring tools, from coarse-grained system dashboards to fine-grained line-by-line profilers. Choosing the right tool depends on whether you are investigating a system-wide bottleneck, a slow SQL query, or a specific ObjectScript routine.</p>
+                        <h4>Using $ZH for Timing Code</h4>
+                        <p>The simplest and most direct way to measure performance is using the <code>$ZH</code> special variable, which returns the current timestamp as a high-resolution floating-point number of seconds. By capturing <code>$ZH</code> before and after a code block, you can calculate elapsed wall-clock time with sub-millisecond precision.</p>
+                        <pre><code class="language-objectscript">ClassMethod TimedOperation() As %String
+{
+    Set start = $ZH
+
+    // Code to measure
+    For i = 1:1:100000 {
+        Set ^TempData(i) = $RANDOM(1000000)
+    }
+
+    Set elapsed = $ZH - start
+    Write &quot;Elapsed time: &quot;, elapsed, &quot; seconds&quot;, !
+    Return elapsed
+}</code></pre>
+                        <p>For comparing two approaches:</p>
+                        <pre><code class="language-objectscript">ClassMethod CompareApproaches()
+{
+    // Approach 1: String concatenation
+    Set start1 = $ZH
+    Set str = &quot;&quot;
+    For i = 1:1:10000 {
+        Set str = str _ &quot;X&quot;
+    }
+    Set time1 = $ZH - start1
+
+    // Approach 2: $JUSTIFY pre-allocation
+    Set start2 = $ZH
+    Set str = $JUSTIFY(&quot;&quot;, 10000)
+    Set str = $TRANSLATE(str, &quot; &quot;, &quot;X&quot;)
+    Set time2 = $ZH - start2
+
+    Write &quot;Concatenation: &quot;, time1, &quot; seconds&quot;, !
+    Write &quot;$JUSTIFY:       &quot;, time2, &quot; seconds&quot;, !
+}</code></pre>
+                        <h4>^PERFMON System Performance Monitor</h4>
+                        <p>The <code>^PERFMON</code> utility is a system-level performance monitor that collects metrics including global references, routine calls, lines executed, and other counters. It runs as a background process sampling at configurable intervals. The routine lives in the <code>%SYS</code> namespace, so all invocations must be preceded by <code>zn &quot;%SYS&quot;</code>.</p>
+                        <pre><code class="language-objectscript">// Switch to %SYS namespace, then start the performance monitor (from Terminal)
+zn &quot;%SYS&quot;
+Do ^PERFMON
+
+// Programmatic control
+// Start collecting with 5-second sample interval
+Do Start^PERFMON(5)
+
+// Let it run for a period...
+Hang 60
+
+// Stop collecting
+Do Stop^PERFMON
+
+// Display collected results
+Do Report^PERFMON</code></pre>
+                        <p>Key metrics captured by ^PERFMON include:</p>
+                        <ul>
+                            <li><strong>GloRef</strong>: Number of global references (reads and sets)</li>
+                            <li><strong>GloSet</strong>: Number of global SET operations</li>
+                            <li><strong>GloKill</strong>: Number of global KILL operations</li>
+                            <li><strong>RouLine</strong>: Lines of ObjectScript executed</li>
+                            <li><strong>RouLoad</strong>: Number of routine loads from disk into cache</li>
+                        </ul>
+                        <h4>%SYS.PTools for SQL Performance</h4>
+                        <p>The <code>%SYS.PTools</code> package provides SQL query performance analysis. It captures execution plans, timing, and statistics for SQL queries.</p>
+                        <pre><code class="language-objectscript">// Enable SQL statistics collection
+Do ##class(%SYS.PTools.SQLStats).SetSQLStatsJob(3)
+
+// Execute your SQL queries...
+Set rs = ##class(%SQL.Statement).%ExecDirect(,
+    &quot;SELECT Name, DOB FROM Sample.Person WHERE Age &gt; 50&quot;)
+
+// View collected statistics
+Do ##class(%SYS.PTools.SQLStats).DisplayStats()
+
+// Disable collection
+Do ##class(%SYS.PTools.SQLStats).SetSQLStatsJob(0)</code></pre>
+                        <p>You can also analyze query plans directly:</p>
+                        <pre><code class="language-objectscript">// Show the query plan for a specific query
+Set stmt = ##class(%SQL.Statement).%New()
+Set sc = stmt.%Prepare(&quot;SELECT Name FROM Sample.Person WHERE SSN = ?&quot;)
+Do stmt.%ShowPlan()</code></pre>
+                        <h4>^MONLBL Line-by-Line Monitoring</h4>
+                        <p>The <code>^MONLBL</code> utility provides line-by-line execution profiling, showing exactly how many times each line executed and how long each line took. This is invaluable for identifying hot spots within a routine.</p>
+                        <pre><code class="language-objectscript">// Start line-by-line monitoring for a specific routine
+Do Start^%MONLBL(&quot;MyApp.MyClass.1&quot;)
+
+// Execute the code you want to profile
+Do ##class(MyApp.MyClass).MyMethod()
+
+// Stop monitoring
+Do Stop^%MONLBL
+
+// Display results - shows each line with execution count and time
+Do Report^%MONLBL</code></pre>
+                        <p>The report output shows columns for:</p>
+                        <ul>
+                            <li><strong>Line</strong>: The source code line</li>
+                            <li><strong>Count</strong>: Number of times the line executed</li>
+                            <li><strong>Total Time</strong>: Cumulative time spent on the line</li>
+                            <li><strong>Average Time</strong>: Average time per execution</li>
+                        </ul>
+                        <h4>Management Portal System Operation Pages</h4>
+                        <p>The Management Portal provides several key pages under <strong>System Operation</strong>:</p>
+                        <ul>
+                            <li><strong>System Dashboard</strong>: Real-time overview of CPU, memory, disk, and cache utilization</li>
+                            <li><strong>Processes</strong>: List of all active processes with CPU time, state, namespace, and current routine</li>
+                            <li><strong>Locks</strong>: Current lock table showing all held locks and any lock conflicts</li>
+                            <li><strong>Task Manager</strong>: Scheduled and running tasks with execution history</li>
+                            <li><strong>System Usage</strong>: Detailed resource consumption breakdown</li>
+                        </ul>
+                        <p>Navigate to: <strong>System Operation > System Dashboard</strong> for the main overview. From the <strong>Processes</strong> page, you can drill into individual processes to see their call stack, variables, and resource usage.</p>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCM_dashboard" target="_blank">Monitoring Performance</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQLOPT" target="_blank">SQL Performance Analysis Tools</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_vzh" target="_blank">$ZH Special Variable</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCM_monlbl" target="_blank">Line-by-Line Monitor ^%MONLBL</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCM_healthmon" target="_blank">System Monitor</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="section-2" class="knowledge-item">
+                <h2>2. Interprets class compilation errors <button class="subsection-report-btn" onclick="openReportModal('section-2', 'Section 2')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>MPP errors</strong>: Macro Pre-Processor errors occur during the first phase of compilation before ObjectScript parsing</li>
+                        <li><strong>"Referenced macro not defined"</strong>: Missing or misspelled macro name, or missing #Include statement</li>
+                        <li><strong>"Invalid character"</strong>: Illegal character in source code, often from copy-paste from external editors</li>
+                        <li><strong>Dependency compilation order</strong>: Classes that reference other classes must be compiled after their dependencies</li>
+                        <li><strong>#Include issues</strong>: Include files (.inc) must exist and be accessible; case-sensitive on some platforms</li>
+                        <li><strong>Compilation flags</strong>: Use "ck" flags to compile with keep-generated and dependency checking</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Overview</h4>
+                        <p>Class compilation in InterSystems IRIS involves multiple phases: macro pre-processing, syntax analysis, code generation, and final compilation of the generated intermediate routines. Errors can occur at any phase, and understanding which phase produced an error is critical to diagnosing the issue.</p>
+                        <h4>Common MPP (Macro Pre-Processor) Errors</h4>
+                        <p>MPP errors occur before the ObjectScript code is even parsed. They relate to macros, #Include directives, and preprocessor instructions.</p>
+                        <p><strong>"Referenced macro not defined"</strong> - This error occurs when code uses a macro (<code>$$$MacroName</code>) that the compiler cannot find:</p>
+                        <pre><code class="language-objectscript">// ERROR: Missing #Include
+Class MyApp.Example Extends %Persistent
+{
+    Method Save() As %Status
+    {
+        Set sc = ..%Save()
+        // ERROR: $$$ISERR is defined in %occStatus.inc
+        // but we forgot to include it
+        If $$$ISERR(sc) {
+            Write &quot;Error!&quot;, !
+        }
+    }
+}</code></pre>
+                        <p><strong>Fix</strong>: Add the appropriate #Include directive at the top of the class:</p>
+                        <pre><code class="language-objectscript">Include %occStatus
+
+Class MyApp.Example Extends %Persistent
+{
+    Method Save() As %Status
+    {
+        Set sc = ..%Save()
+        If $$$ISERR(sc) {
+            Write &quot;Error!&quot;, !
+        }
+    }
+}</code></pre>
+                        <p>For multiple include files:</p>
+                        <pre><code class="language-objectscript">Include (%occStatus, %occErrors, MyApp.Macros)
+
+Class MyApp.Example Extends %Persistent
+{
+    // Can now use macros from all three include files
+}</code></pre>
+                        <h4>Invalid Character Errors</h4>
+                        <p>These typically arise from invisible Unicode characters introduced by copy-paste from web pages, word processors, or external editors:</p>
+                        <pre><code class="language-objectscript">// ERROR: &quot;Invalid character&quot; - smart quotes instead of regular quotes
+Set name = &quot;John&quot;    // Uses Unicode curly quotes (U+201C, U+201D)
+
+// FIX: Use standard ASCII quotes
+Set name = &quot;John&quot;    // Uses standard double quotes (U+0022)</code></pre>
+                        <p>Common culprits:</p>
+                        <ul>
+                            <li>Smart/curly quotes (" " instead of ")</li>
+                            <li>En-dash or em-dash (-- or --- instead of -)</li>
+                            <li>Non-breaking spaces (U+00A0 instead of regular space)</li>
+                            <li>Zero-width characters</li>
+                        </ul>
+                        <h4>Dependency Compilation Order</h4>
+                        <p>When classes reference each other, compilation order matters. If Class A extends Class B, then Class B must be compiled first.</p>
+                        <pre><code class="language-objectscript">// Class B must be compiled BEFORE Class A
+Class MyApp.Base Extends %Persistent
+{
+    Property Name As %String;
+}
+
+Class MyApp.Child Extends MyApp.Base
+{
+    Property Age As %Integer;
+}</code></pre>
+                        <p>Compiling with dependency checking:</p>
+                        <pre><code class="language-objectscript">// Compile a single class with dependency checking
+Do $SYSTEM.OBJ.Compile(&quot;MyApp.Child&quot;, &quot;ck&quot;)
+
+// Compile an entire package (handles dependencies automatically)
+Do $SYSTEM.OBJ.CompilePackage(&quot;MyApp&quot;, &quot;ck&quot;)
+
+// Compile all classes in namespace
+Do $SYSTEM.OBJ.CompileAll(&quot;ck&quot;)</code></pre>
+                        <p>Compilation flag reference:</p>
+                        <ul>
+                            <li><strong>c</strong>: Compile</li>
+                            <li><strong>k</strong>: Keep generated source (useful for debugging)</li>
+                            <li><strong>d</strong>: Display compilation output</li>
+                            <li><strong>b</strong>: Include subclasses</li>
+                            <li><strong>u</strong>: Update only (skip unchanged classes)</li>
+                        </ul>
+                        <h4>Diagnosing Compilation Errors in Practice</h4>
+                        <pre><code class="language-objectscript">// Capture compilation status programmatically
+Set sc = $SYSTEM.OBJ.Compile(&quot;MyApp.Problem&quot;, &quot;ck&quot;)
+If $$$ISERR(sc) {
+    // Display the full error text
+    Do $SYSTEM.Status.DisplayError(sc)
+}
+
+// View errors in the Management Portal:
+// System Explorer &gt; Classes &gt; select class &gt; Compile
+// Errors appear in the Output pane</code></pre>
+                        <p>Common compilation error patterns and their causes:</p>
+                        <table class="detail-table">
+                            <thead><tr><th>Error Message</th><th>Likely Cause</th></tr></thead>
+                            <tbody>
+                            <tr><td>"Referenced macro not defined"</td><td>Missing #Include or typo in macro name</td></tr>
+                            <tr><td>"Invalid character"</td><td>Non-ASCII characters from copy-paste</td></tr>
+                            <tr><td>"Class 'X' does not exist"</td><td>Dependency not compiled or typo in class name</td></tr>
+                            <tr><td>"Method 'X' does not exist in class 'Y'"</td><td>Wrong method name or class not recompiled</td></tr>
+                            <tr><td>"Property 'X' does not exist"</td><td>Typo in property name or referencing wrong class</td></tr>
+                            <tr><td>"Datatype class 'X' does not exist"</td><td>Missing or misspelled datatype class</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_classdef_modifying" target="_blank">Compiling Classes</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_macros" target="_blank">Using Macros and Include Files</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_mppinclude" target="_blank">#Include Directive</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_dsystem_obj" target="_blank">$SYSTEM.OBJ Class</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <div class="exam-prep">
+                <h2>Exam Preparation Summary</h2>
+                <h3>Critical Concepts to Master:</h3>
+                <ol>
+                    <li><strong>$ZH timing</strong>: Know how to bracket code with `$ZH` to measure elapsed time; understand it returns seconds with fractional precision</li>
+                    <li><strong>^PERFMON</strong>: Understand its role as a system-level sampling profiler and the key metrics it captures (GloRef, GloSet, RouLine)</li>
+                    <li><strong>%SYS.PTools</strong>: Know how to enable SQL statistics collection and view query plans</li>
+                    <li><strong>^MONLBL</strong>: Understand line-by-line profiling and how to interpret the output (count, total time, average time)</li>
+                    <li><strong>Management Portal</strong>: Know the key System Operation pages (Dashboard, Processes, Locks)</li>
+                    <li><strong>#Include</strong>: Understand that macros require the correct Include file and that missing includes cause MPP errors</li>
+                    <li><strong>Compilation flags</strong>: Know the common flags (c, k, d, b, u) and when to use dependency checking</li>
+                    <li><strong>Compilation order</strong>: Understand that superclasses must be compiled before subclasses</li>
+                </ol>
+                <h3>Common Exam Scenarios:</h3>
+                <ul>
+                    <li>Identifying why `$$$ISERR` causes a compilation error (missing `Include %occStatus`)</li>
+                    <li>Choosing the right tool: $ZH for simple timing, ^MONLBL for line-level profiling, ^PERFMON for system-wide monitoring</li>
+                    <li>Reading a compilation error message and determining the root cause</li>
+                    <li>Selecting appropriate compilation flags for a given situation</li>
+                    <li>Diagnosing performance issues using Management Portal System Operation pages</li>
+                </ul>
+                <h3>Hands-On Practice Recommendations:</h3>
+                <ul>
+                    <li>Time a loop using `$ZH` and experiment with different loop sizes to see precision</li>
+                    <li>Deliberately omit an #Include and observe the compiler error message</li>
+                    <li>Compile a subclass before its superclass to see the dependency error</li>
+                    <li>Use ^MONLBL to profile a method and identify the slowest lines</li>
+                    <li>Navigate the Management Portal System Operation pages to understand available metrics</li>
+                    <li>Copy text from a word processor into Studio/VS Code and observe invalid character errors</li>
+                    <li>Use `$SYSTEM.OBJ.Compile()` with different flag combinations and compare output</li>
+                </ul>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <a href="../quiz.html?file=quizzes/T5.1-quiz.json" class="take-quiz-btn">Take the Quiz</a>
+        </footer>
+    </div>
+
+    <div id="reportModal" class="report-modal">
+        <div class="report-content">
+            <h3>Report an Issue</h3>
+            <label for="issueType">Issue Type</label>
+            <select id="issueType">
+                <option value="confusing">Confusing Content</option>
+                <option value="wrong_answer">Incorrect Information</option>
+                <option value="outdated">Outdated Content</option>
+                <option value="formatting">Formatting Issue</option>
+                <option value="typo">Typo</option>
+                <option value="other">Other</option>
+            </select>
+            <label for="issueDescription">Description</label>
+            <textarea id="issueDescription" placeholder="Please describe the issue..."></textarea>
+            <div style="display: flex; align-items: center; gap: 10px; margin: 15px 0;">
+                <input type="checkbox" id="wantEmailNotification" style="width: 18px; height: 18px;">
+                <label for="wantEmailNotification" style="margin: 0; cursor: pointer;">
+                    Notify me by email when resolved
+                </label>
+            </div>
+            <div class="report-actions">
+                <button class="report-cancel" onclick="closeReportModal()">Cancel</button>
+                <button class="report-submit" onclick="submitReport()">Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../../js/config.js"></script>
+    <script src="../../../js/auth.js"></script>
+    <script src="../../../js/api.js"></script>
+    <script>
+        const CERTIFICATION_NAME = 'ObjectScript-Specialist';
+        const TOPIC_REF = 'T5.1';
+
+        document.addEventListener('DOMContentLoaded', function() {
+            updateAuthUI();
+            trackKnowledgeView();
+        });
+
+        function updateAuthUI() {
+            const loginBtn = document.getElementById('loginBtn');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const userInfo = document.getElementById('userInfo');
+            const userAvatar = document.getElementById('userAvatar');
+            const userName = document.getElementById('userName');
+
+            if (typeof Auth !== 'undefined' && Auth.isAuthenticated()) {
+                const user = Auth.getUser();
+                loginBtn.style.display = 'none';
+                logoutBtn.style.display = 'inline-block';
+                userInfo.style.display = 'flex';
+                if (user) {
+                    const initial = (user.name || user.email || '?')[0].toUpperCase();
+                    userAvatar.textContent = initial;
+                    userName.textContent = user.name || user.email || 'User';
+                }
+            } else {
+                loginBtn.style.display = 'inline-block';
+                logoutBtn.style.display = 'none';
+                userInfo.style.display = 'none';
+            }
+        }
+
+        async function trackKnowledgeView() {
+            if (typeof Auth === 'undefined' || !Auth.isAuthenticated()) {
+                return;
+            }
+
+            try {
+                await Api.trackKnowledge(CERTIFICATION_NAME, TOPIC_REF);
+                console.log('Knowledge view tracked:', TOPIC_REF);
+            } catch (error) {
+                console.log('View tracking skipped:', error.message);
+            }
+        }
+
+        function openReportModal(sectionId, sectionTitle) {
+            if (typeof Auth === 'undefined' || !Auth.isAuthenticated()) {
+                alert('Please sign in to report issues.');
+                return;
+            }
+            // Store section context
+            window.currentReportSection = {
+                id: sectionId || 'general',
+                title: sectionTitle || 'General'
+            };
+            // Update modal header to show section
+            const modalHeader = document.querySelector('#reportModal h3');
+            if (modalHeader && sectionTitle) {
+                modalHeader.textContent = 'Report Issue: ' + sectionTitle;
+            } else if (modalHeader) {
+                modalHeader.textContent = 'Report an Issue';
+            }
+            document.getElementById('wantEmailNotification').checked = false;
+            document.getElementById('reportModal').classList.add('active');
+        }
+
+        function closeReportModal() {
+            document.getElementById('reportModal').classList.remove('active');
+            document.getElementById('issueType').value = 'confusing';
+            document.getElementById('issueDescription').value = '';
+        }
+
+        async function submitReport() {
+            const issueType = document.getElementById('issueType').value;
+            const description = document.getElementById('issueDescription').value.trim();
+            const wantEmailNotification = document.getElementById('wantEmailNotification').checked;
+            const sectionContext = window.currentReportSection || { id: 'general', title: 'General' };
+
+            if (!description) {
+                alert('Please provide a description of the issue.');
+                return;
+            }
+
+            // Build content reference with section context
+            const contentRef = sectionContext.id !== 'general'
+                ? `${TOPIC_REF} (${sectionContext.title})`
+                : TOPIC_REF;
+
+            try {
+                await Api.reportProblem({
+                    certificationName: CERTIFICATION_NAME,
+                    contentType: 'knowledge',
+                    contentReference: contentRef,
+                    issueType: issueType,
+                    description: description,
+                    wantEmailNotification: wantEmailNotification
+                });
+                alert('Thank you! Your report has been submitted.');
+                closeReportModal();
+            } catch (error) {
+                if (error.status === 429) {
+                    const retryMinutes = Math.ceil((error.data?.retryAfter || 3600) / 60);
+                    alert(`You've submitted too many reports recently. Please wait ${retryMinutes} minutes before submitting another report.`);
+                } else {
+                    alert('Failed to submit report: ' + error.message);
+                }
+            }
+        }
+
+        document.querySelectorAll('.detailed-notes h3').forEach(h3 => {
+            h3.style.cursor = 'pointer';
+        });
+    </script>
+    <script src="../../../js/consent.js"></script>
+    <script src="../../../js/analytics.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            CookieConsent.init();
+            Analytics.init();
+        });
+    </script>
+</body>
+</html>

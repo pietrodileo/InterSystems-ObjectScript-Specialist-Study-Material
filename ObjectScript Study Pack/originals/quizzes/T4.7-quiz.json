@@ -1,0 +1,213 @@
+{
+  "quiz": {
+    "title": "T4.7: Uses Streams and Network APIs",
+    "description": "Scenario-based questions on %Stream.FileCharacter/%Stream.FileBinary for file I/O, stream operations (Write, Read, Rewind, CopyFrom, AtEnd), %Net.HttpRequest for HTTP, %Net.FtpSession for FTP, and %Net.SMTP/%Net.MailMessage for email in ObjectScript.",
+    "version": "2.3",
+    "publishedDate": "2026-09-17",
+    "questions": [
+      {
+        "id": 1,
+        "type": "single",
+        "question": "You need to read a large log file line by line. Which class should you use?",
+        "options": [
+          "%Stream.FileBinary",
+          "%Stream.FileCharacter",
+          "%Stream.GlobalCharacter",
+          "%File"
+        ],
+        "correct": [1],
+        "explanation": "%Stream.FileCharacter is designed for reading and writing text (character) files. It handles character encoding and provides ReadLine() for line-by-line reading. %Stream.FileBinary is for binary files (images, PDFs) where character encoding is not relevant. %Stream.GlobalCharacter stores data in globals, not files. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_propstream)"
+      },
+      {
+        "id": 2,
+        "type": "single",
+        "question": "You are writing a utility to create a text file. Which code correctly writes data and saves it?",
+        "options": [
+          "set stream = ##class(%Stream.FileCharacter).%New()\nset stream.Filename = \"/tmp/output.txt\"\ndo stream.Write(\"Hello World\")\nset sc = stream.%Save()",
+          "set stream = ##class(%Stream.FileCharacter).%New()\ndo stream.Open(\"/tmp/output.txt\")\ndo stream.Write(\"Hello World\")\ndo stream.Close()",
+          "set stream = ##class(%Stream.FileCharacter).%New()\nset stream.Filename = \"/tmp/output.txt\"\ndo stream.Append(\"Hello World\")\ndo stream.Flush()",
+          "set stream = ##class(%Stream.FileCharacter).%New()\ndo stream.SetFilename(\"/tmp/output.txt\")\ndo stream.Put(\"Hello World\")\nset sc = stream.%Save()"
+        ],
+        "correct": [0],
+        "explanation": "The correct pattern for %Stream.FileCharacter: (1) Create a new instance, (2) set the Filename property to the target path, (3) use Write() or WriteLine() to add data, (4) call %Save() to persist to disk. There are no Open/Close, Append, Flush, SetFilename, or Put methods for this pattern. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_propstream)"
+      },
+      {
+        "id": 3,
+        "type": "single",
+        "question": "You are reading an entire file stream. Which code correctly reads all content?",
+        "options": [
+          "while 'stream.AtEnd {\n  set line = stream.ReadLine()\n  write line, !\n}",
+          "while stream.HasNext() {\n  set line = stream.Next()\n  write line, !\n}",
+          "for i = 1:1:stream.Length {\n  write stream.ReadChar(), !\n}",
+          "set content = stream.GetAll()"
+        ],
+        "correct": [0],
+        "explanation": "The standard stream reading pattern uses While 'stream.AtEnd (while NOT at end) with ReadLine() or Read(). AtEnd is a property that returns 1 when the stream position has reached the end. HasNext(), Next(), ReadChar(), and GetAll() are not standard stream methods. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_propstream)"
+      },
+      {
+        "id": 4,
+        "type": "single",
+        "question": "A colleague's code reads a stream but needs to read it again from the beginning. Consider:\n\nset stream = ##class(%Stream.GlobalCharacter).%New()\ndo stream.Write(\"First line\")\ndo stream.WriteLine(\"\")\ndo stream.Write(\"Second line\")\n// Read the stream once...\nwhile 'stream.AtEnd { set x = stream.Read() }\n// Now need to read it again\n\nWhat method resets the read position to the beginning?",
+        "options": [
+          "do stream.Reset()",
+          "do stream.Rewind()",
+          "set stream.Position = 0",
+          "do stream.MoveToStart()"
+        ],
+        "correct": [1],
+        "explanation": "Rewind() resets the stream's read position to the beginning, allowing you to read the content from the start again. It does not modify the stream's content. There is no Reset(), Position property, or MoveToStart() method on standard streams. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_propstream)"
+      },
+      {
+        "id": 5,
+        "type": "single",
+        "question": "You need to copy data from one stream to another. Consider:\n\nset source = ##class(%Stream.GlobalCharacter).%New()\ndo source.Write(\"Important data\")\ndo source.Rewind()\n\nset target = ##class(%Stream.FileCharacter).%New()\nset target.Filename = \"/tmp/backup.txt\"\n\nWhich line correctly copies the source content to the target?",
+        "options": [
+          "set target = source",
+          "do target.CopyFrom(source)",
+          "do target.Write(source.ReadAll())",
+          "set target.Content = source.Content"
+        ],
+        "correct": [1],
+        "explanation": "CopyFrom() copies the entire contents of the source stream into the target stream. This is more efficient than manually reading and writing, especially for large streams. Simple assignment (set target = source) would copy the object reference, not the data. There is no ReadAll() or Content property on standard streams. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_propstream)"
+      },
+      {
+        "id": 6,
+        "type": "single",
+        "question": "You are testing stream behavior. Consider:\n\nset stream = ##class(%Stream.GlobalCharacter).%New()\ndo stream.Write(\"Hello \")\ndo stream.Write(\"World\")\ndo stream.Rewind()\nwrite stream.Read()\n\nWhat is the output?",
+        "options": [
+          "Hello ",
+          "World",
+          "Hello World",
+          "A <STREAM> error"
+        ],
+        "correct": [2],
+        "explanation": "Two Write calls append data sequentially to the stream: \"Hello \" then \"World\". After Rewind(), the read position is reset to the beginning. Read() without a length argument reads all remaining content, returning \"Hello World\". Multiple writes are concatenated. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_propstream)"
+      },
+      {
+        "id": 7,
+        "type": "multiple",
+        "question": "Which of the following are valid stream classes in InterSystems IRIS? (Select all that apply)",
+        "options": [
+          "%Stream.FileCharacter - text files",
+          "%Stream.FileBinary - binary files",
+          "%Stream.GlobalCharacter - text in globals",
+          "%Stream.GlobalBinary - binary in globals",
+          "%Stream.MemoryCharacter - in-memory text"
+        ],
+        "correct": [0, 1, 2, 3],
+        "explanation": "IRIS provides four main stream types: FileCharacter and FileBinary for file-based storage, GlobalCharacter and GlobalBinary for database (global) storage. There is no %Stream.MemoryCharacter; for temporary in-memory streams, use %Stream.TmpCharacter or %Stream.TmpBinary. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_propstream)"
+      },
+      {
+        "id": 8,
+        "type": "single",
+        "question": "You need to make an HTTP GET request to retrieve data from a REST API. Which code is correct?",
+        "options": [
+          "set req = ##class(%Net.HttpRequest).%New()\nset req.Server = \"api.example.com\"\nset sc = req.Get(\"/data\")",
+          "set req = ##class(%Net.HttpRequest).%New()\nset sc = req.Send(\"GET\", \"http://api.example.com/data\")",
+          "set req = ##class(%Net.HttpRequest).%New(\"http://api.example.com\")\nset sc = req.Execute(\"GET\", \"/data\")",
+          "set response = ##class(%Net.HttpRequest).Get(\"http://api.example.com/data\")"
+        ],
+        "correct": [0],
+        "explanation": "The correct pattern: (1) Create a %Net.HttpRequest object, (2) set the Server property to the hostname, (3) call Get(\"/path\") with the request path. While %Net.HttpRequest does have a Send(type, location) method (used internally by Get/Post/Put/etc.), option B passes a full URL as the location parameter instead of just the path, and does not set the Server property. Option C uses Execute() which does not exist. Option D uses a static Get() which does not exist. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GNET_http)",
+        "revised": true
+      },
+      {
+        "id": 9,
+        "type": "single",
+        "question": "After making an HTTP request, you need to read the response body. Consider:\n\nset req = ##class(%Net.HttpRequest).%New()\nset req.Server = \"api.example.com\"\nset sc = req.Get(\"/users\")\n\nHow do you access the response body?",
+        "options": [
+          "set body = req.Response.Body",
+          "set body = req.HttpResponse.Data",
+          "set body = req.GetResponseBody()",
+          "set body = req.HttpResponse.Content"
+        ],
+        "correct": [1],
+        "explanation": "After an HTTP request, the response is in req.HttpResponse (a %Net.HttpResponse object). The response body is available as a stream in req.HttpResponse.Data. You can read it with .Read() or iterate with ReadLine(). The status code is in req.HttpResponse.StatusCode. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GNET_http)"
+      },
+      {
+        "id": 10,
+        "type": "single",
+        "question": "You are building an integration that sends JSON data via HTTP POST. Consider:\n\nset req = ##class(%Net.HttpRequest).%New()\nset req.Server = \"api.example.com\"\nset req.ContentType = \"application/json\"\ndo req.EntityBody.Write(\"{\"\"name\"\":\"\"John\"\"}\")\nset sc = req.Post(\"/users\")\n\nWhich statement best describes what this code does?",
+        "options": [
+          "It sends a GET request with JSON query parameters",
+          "It sends a POST request with a JSON body to /users",
+          "It creates a JSON file on the server at /users",
+          "It throws an error because EntityBody is not a valid property"
+        ],
+        "correct": [1],
+        "explanation": "The code creates an HTTP POST request with Content-Type set to application/json. The request body is written to req.EntityBody (a stream). Post(\"/users\") sends the request with the JSON body to the /users endpoint. EntityBody is the standard way to set the request body for POST/PUT requests. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GNET_http)"
+      },
+      {
+        "id": 11,
+        "type": "multiple",
+        "question": "Which HTTP methods are directly supported as methods on %Net.HttpRequest? (Select all that apply)",
+        "options": [
+          "Get() for HTTP GET",
+          "Post() for HTTP POST",
+          "Put() for HTTP PUT",
+          "Delete() for HTTP DELETE",
+          "Patch() for HTTP PATCH",
+          "Options() for HTTP OPTIONS"
+        ],
+        "correct": [0, 1, 2, 3, 4],
+        "explanation": "%Net.HttpRequest provides Get(), Post(), Put(), Delete() and Patch() directly, and Head() for HTTP HEAD. It has no Options() method: for OPTIONS -- or any other verb without a dedicated method -- you call Send() and pass the verb as a string, for example do request.Send(\"OPTIONS\", url). (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GNET_http)",
+        "revised": true
+      },
+      {
+        "id": 12,
+        "type": "single",
+        "question": "You need to send an email notification. Which two classes are involved and what are their roles?",
+        "options": [
+          "%Net.SMTP sends the email; %Net.MailMessage defines the email content (To, From, Subject, Body)",
+          "%Net.MailMessage both composes and sends the email directly",
+          "%Net.SMTP both composes and sends the email with setters for To, From, Subject",
+          "%Net.EmailClient sends the email; %Net.EmailMessage defines the content"
+        ],
+        "correct": [0],
+        "explanation": "Two classes work together: %Net.MailMessage is used to compose the email (set To, From, Subject, TextBody or add HTML/attachments). %Net.SMTP is the transport - set its SmtpServer property, then call smtp.Send(message) to deliver. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GNET_email)"
+      },
+      {
+        "id": 13,
+        "type": "single",
+        "question": "You are writing an email-sending utility. Which code correctly sets up and sends an email?",
+        "options": [
+          "set msg = ##class(%Net.MailMessage).%New()\nset msg.From = \"sender@test.com\"\ndo msg.To.Insert(\"recipient@test.com\")\nset msg.Subject = \"Test\"\nset msg.TextData.Write(\"Hello\")\nset smtp = ##class(%Net.SMTP).%New()\nset smtp.smtpserver = \"mail.test.com\"\nset sc = smtp.Send(msg)",
+          "set smtp = ##class(%Net.SMTP).%New()\nset smtp.To = \"recipient@test.com\"\nset smtp.From = \"sender@test.com\"\nset smtp.Subject = \"Test\"\nset smtp.Body = \"Hello\"\nset sc = smtp.Send()",
+          "set msg = ##class(%Net.MailMessage).%New()\nset msg.To = \"recipient@test.com\"\ndo msg.Send(\"mail.test.com\")",
+          "set sc = ##class(%Net.SMTP).SendMail(\"mail.test.com\", \"sender@test.com\", \"recipient@test.com\", \"Test\", \"Hello\")"
+        ],
+        "correct": [0],
+        "explanation": "The correct pattern: (1) Create a %Net.MailMessage and configure From, To (via To.Insert), Subject, and body content (TextData stream or IsHTML). (2) Create a %Net.SMTP, set smtpserver. (3) Call smtp.Send(msg). The To property is a list that requires Insert() to add recipients. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GNET_email)"
+      },
+      {
+        "id": 14,
+        "type": "single",
+        "question": "Which class provides FTP client functionality for transferring files in ObjectScript?",
+        "options": [
+          "%Net.FTP",
+          "%Net.FtpSession",
+          "%Net.FtpClient",
+          "%Net.FileTransfer"
+        ],
+        "correct": [1],
+        "explanation": "%Net.FtpSession provides FTP client functionality including connecting to FTP servers, uploading/downloading files, listing directories, and managing remote files. Set the Server property, call Connect(), then use methods like Store(), Retrieve(), and List(). (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GNET_ftp)"
+      },
+      {
+        "id": 15,
+        "type": "multiple",
+        "question": "You need to configure an HTTPS request with custom headers. Which properties and methods of %Net.HttpRequest are valid? (Select all that apply)",
+        "options": [
+          "Server - sets the target hostname",
+          "Port - sets the target port number",
+          "Https - set to 1 to enable SSL/TLS",
+          "ContentType - sets the Content-Type header",
+          "SetHeader(name, value) - sets a custom HTTP header",
+          "Setting Https=1 is sufficient on its own; SSLConfiguration is only needed for client certificates"
+        ],
+        "correct": [0, 1, 2, 3, 4],
+        "explanation": "Server sets the hostname, Port the port, Https=1 selects TLS, ContentType sets the Content-Type header, and SetHeader() adds arbitrary headers such as Authorization or Accept. Https=1 alone is not enough: SSLConfiguration must name a configured SSL/TLS client configuration, which supplies the trusted certificate authorities and protocol settings the connection needs. Without it the request fails to establish TLS, and that is true whether or not a client certificate is involved. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GNET_http)",
+        "revised": true
+      }
+    ]
+  }
+}

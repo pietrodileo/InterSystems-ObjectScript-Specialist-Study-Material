@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Study guide for T4.7: Uses APIs for Common Operations - part of the InterSystems ObjectScript Specialist certification. Learn key concepts, best practices, and exam preparation tips.">
+    <meta name="keywords" content="InterSystems certification, ObjectScript Specialist, T4.7: Uses APIs for Common Operations, exam preparation, practice quiz">
+    <meta name="author" content="exam-prep.es">
+    <meta name="robots" content="index, follow">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://exam-prep.es/exams/objectscript/knowledge/T4.7.html">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://exam-prep.es/exams/objectscript/knowledge/T4.7.html">
+    <meta property="og:title" content="T4.7: Uses APIs for Common Operations - InterSystems ObjectScript Specialist Study Guide">
+    <meta property="og:description" content="Study guide for T4.7: Uses APIs for Common Operations - part of the InterSystems ObjectScript Specialist certification. Learn key concepts, best practices, and exam preparation tips.">
+    <meta property="og:image" content="https://exam-prep.es/images/og-image.png">
+    <meta property="og:site_name" content="InterSystems Certification Prep">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://exam-prep.es/exams/objectscript/knowledge/T4.7.html">
+    <meta name="twitter:title" content="T4.7: Uses APIs for Common Operations - InterSystems ObjectScript Specialist Study Guide">
+    <meta name="twitter:description" content="Study guide for T4.7: Uses APIs for Common Operations - part of the InterSystems ObjectScript Specialist certification. Learn key concepts, best practices, and exam preparation tips.">
+    <meta name="twitter:image" content="https://exam-prep.es/images/og-image.png">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+    <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+
+    <!-- hreflang Tags -->
+    <link rel="alternate" hreflang="en" href="https://exam-prep.es/exams/objectscript/knowledge/T4.7.html" />
+    <link rel="alternate" hreflang="es" href="https://exam-prep.es/exams/objectscript/knowledge/es/T4.7.html" />
+    <link rel="alternate" hreflang="x-default" href="https://exam-prep.es/exams/objectscript/knowledge/T4.7.html" />
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../colors.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+    <link rel="stylesheet" href="../../../css/consent.css">
+
+    <title>T4.7: Uses APIs for Common Operations - InterSystems ObjectScript Specialist Study Guide | exam-prep.es</title>
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "T4.7: Uses APIs for Common Operations - InterSystems ObjectScript Specialist Study Guide",
+    "description": "Study guide for T4.7: Uses APIs for Common Operations - part of the InterSystems ObjectScript Specialist certification. Learn key concepts, best practices, and exam preparation tips.",
+    "author": {
+        "@type": "Organization",
+        "name": "exam-prep.es"
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "InterSystems Certification Prep",
+        "url": "https://exam-prep.es"
+    },
+    "inLanguage": "en",
+    "about": {
+        "@type": "Course",
+        "name": "InterSystems ObjectScript Specialist"
+    }
+}
+    </script>
+</head>
+<body>
+    <div class="container">
+        <nav class="nav-bar">
+            <a href="../index.html" class="back-link">&#8592; Back to Topics</a>
+            <div class="lang-toggle">
+                <a href="T4.7.html" class="lang-btn active">EN</a>
+                <a href="es/T4.7.html" class="lang-btn">ES</a>
+            </div>
+            <a href="../quiz.html?file=quizzes/T4.7-quiz.json" class="quiz-link">Take Quiz &#8594;</a>
+            <div class="auth-bar">
+                <button id="loginBtn" class="auth-btn login-btn" onclick="Auth.login()">Sign In</button>
+                <div id="userInfo" class="user-info">
+                    <div id="userAvatar" class="user-avatar">?</div>
+                    <span id="userName" class="user-name">User</span>
+                </div>
+                <button id="logoutBtn" class="auth-btn logout-btn" onclick="Auth.logout()">Sign Out</button>
+            </div>
+        </nav>
+
+        <header class="header">
+            <h1>T4.7: Uses APIs for Common Operations</h1>
+            <p>Knowledge Review - InterSystems ObjectScript Specialist</p>
+        </header>
+
+        <nav class="toc">
+            <h3>Contents</h3>
+            <ol>
+                <li><a href="#section-1">%Stream for file I/O</a></li>
+                <li><a href="#section-2">%Net for HTTP, FTP, and email</a></li>
+            </ol>
+        </nav>
+
+        <main class="content">
+            <section id="section-1" class="knowledge-item">
+                <h2>1. %Stream for file I/O <button class="subsection-report-btn" onclick="openReportModal('section-1', 'Section 1')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>%Stream.FileCharacter</strong>: Read/write text files with character encoding support</li>
+                        <li><strong>%Stream.FileBinary</strong>: Read/write binary files (images, PDFs, etc.)</li>
+                        <li><strong>.Filename property</strong>: Set the file path before reading or writing</li>
+                        <li><strong>.Write() / .WriteLine()</strong>: Write content to the stream</li>
+                        <li><strong>.Read(len)</strong>: Read up to len characters/bytes from the stream</li>
+                        <li><strong>.ReadLine()</strong>: Read one line of text (for character streams)</li>
+                        <li><strong>.Rewind()</strong>: Reset position to beginning of stream</li>
+                        <li><strong>.MoveToEnd()</strong>: Position at end of stream (for appending)</li>
+                        <li><strong>.AtEnd</strong>: Property that is true when no more data to read</li>
+                        <li><strong>.Size</strong>: Property containing the total size of the stream</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Overview</h4>
+                        <p>The %Stream classes provide ObjectScript's standard file I/O mechanism. Unlike traditional languages that use file handles, InterSystems IRIS uses stream objects that encapsulate the file, its position, and its encoding. Streams are also used extensively in web services, SQL BLOBs/CLOBs, and interoperability productions.</p>
+                        <h4>Writing a Text File</h4>
+                        <pre><code class="language-objectscript"> SET stream = ##class(%Stream.FileCharacter).%New()
+ SET stream.Filename = &quot;/tmp/output.txt&quot;
+
+ // Write content
+ DO stream.WriteLine(&quot;Line 1: Hello World&quot;)
+ DO stream.WriteLine(&quot;Line 2: ObjectScript&quot;)
+ DO stream.Write(&quot;No newline at end&quot;)
+
+ // Save the stream to disk
+ SET status = stream.%Save()
+ IF $$$ISERR(status) {
+     WRITE &quot;Error saving: &quot;, $SYSTEM.Status.GetErrorText(status), !
+ } ELSE {
+     WRITE &quot;File written successfully&quot;, !
+ }</code></pre>
+                        <h4>Reading a Text File</h4>
+                        <pre><code class="language-objectscript"> SET stream = ##class(%Stream.FileCharacter).%New()
+ SET stream.Filename = &quot;/tmp/output.txt&quot;
+
+ // Check if file exists via Size
+ IF stream.Size = 0 {
+     WRITE &quot;File is empty or does not exist&quot;, !
+     QUIT
+ }
+
+ // Read line by line
+ WHILE &#x27;stream.AtEnd {
+     SET line = stream.ReadLine()
+     WRITE line, !
+ }</code></pre>
+                        <h4>Reading a Fixed Number of Characters</h4>
+                        <pre><code class="language-objectscript"> SET stream = ##class(%Stream.FileCharacter).%New()
+ SET stream.Filename = &quot;/tmp/largefile.txt&quot;
+
+ // Read in chunks of 32000 characters
+ WHILE &#x27;stream.AtEnd {
+     SET chunk = stream.Read(32000)
+     // Process chunk...
+     SET totalLen = totalLen + $LENGTH(chunk)
+ }
+ WRITE &quot;Total characters read: &quot;, totalLen, !</code></pre>
+                        <h4>Binary File Operations</h4>
+                        <pre><code class="language-objectscript"> // Copy a binary file
+ SET input = ##class(%Stream.FileBinary).%New()
+ SET input.Filename = &quot;/tmp/image.png&quot;
+
+ SET output = ##class(%Stream.FileBinary).%New()
+ SET output.Filename = &quot;/tmp/image_copy.png&quot;
+
+ // Copy content
+ WHILE &#x27;input.AtEnd {
+     SET chunk = input.Read(32000)
+     DO output.Write(chunk)
+ }
+ SET status = output.%Save()</code></pre>
+                        <h4>Stream Navigation</h4>
+                        <pre><code class="language-objectscript"> SET stream = ##class(%Stream.FileCharacter).%New()
+ SET stream.Filename = &quot;/tmp/data.txt&quot;
+
+ // Read first line
+ SET firstLine = stream.ReadLine()
+ WRITE &quot;First: &quot;, firstLine, !
+
+ // Rewind to beginning
+ DO stream.Rewind()
+
+ // Read everything
+ SET all = stream.Read(stream.Size)
+
+ // Move to end for appending
+ DO stream.MoveToEnd()
+ DO stream.WriteLine(&quot;Appended line&quot;)
+ SET status = stream.%Save()</code></pre>
+                        <h4>Copying Between Streams</h4>
+                        <pre><code class="language-objectscript"> // CopyFrom copies one stream&#x27;s content into another
+ SET source = ##class(%Stream.FileCharacter).%New()
+ SET source.Filename = &quot;/tmp/source.txt&quot;
+
+ SET dest = ##class(%Stream.FileCharacter).%New()
+ SET dest.Filename = &quot;/tmp/dest.txt&quot;
+
+ SET status = dest.CopyFrom(source)
+ SET status = dest.%Save()</code></pre>
+                        <h4>Stream Properties and Methods Summary</h4>
+                        <pre><code class="language-objectscript"> SET stream = ##class(%Stream.FileCharacter).%New()
+ SET stream.Filename = &quot;/tmp/test.txt&quot;
+
+ // Properties
+ WRITE &quot;Size: &quot;, stream.Size, !           // Total size in characters/bytes
+ WRITE &quot;At End: &quot;, stream.AtEnd, !        // 1 if position is at end
+ WRITE &quot;Filename: &quot;, stream.Filename, !   // File path
+
+ // Key Methods
+ // stream.Read(len)       - Read up to len chars
+ // stream.ReadLine()      - Read one line (text streams)
+ // stream.Write(data)     - Write data
+ // stream.WriteLine(data) - Write data + newline
+ // stream.Rewind()        - Go to beginning
+ // stream.MoveToEnd()     - Go to end
+ // stream.CopyFrom(src)   - Copy from another stream
+ // stream.Clear()         - Remove all content
+ // stream.%Save()         - Persist changes to disk</code></pre>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/documatic/%25CSP.Documatic.cls?LIBRARY=%25SYS&CLASSNAME=%25Stream.FileCharacter" target="_blank">%Stream.FileCharacter</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/documatic/%25CSP.Documatic.cls?LIBRARY=%25SYS&CLASSNAME=%25Stream.FileBinary" target="_blank">%Stream.FileBinary</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_propstream" target="_blank">Working with Streams</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="section-2" class="knowledge-item">
+                <h2>2. %Net for HTTP, FTP, and email <button class="subsection-report-btn" onclick="openReportModal('section-2', 'Section 2')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>%Net.HttpRequest</strong>: Send HTTP GET, POST, PUT, DELETE requests</li>
+                        <li><strong>%Net.HttpResponse</strong>: Response object with StatusCode, Data (stream), headers</li>
+                        <li><strong>%Net.FtpSession</strong>: Connect to FTP servers, upload/download files</li>
+                        <li><strong>%Net.SMTP</strong>: Send email messages via SMTP</li>
+                        <li><strong>%Net.MailMessage</strong>: Compose email messages with attachments</li>
+                        <li><strong>SSL/TLS</strong>: Configure via SSLConfiguration property for HTTPS connections</li>
+                        <li><strong>Timeout</strong>: Set timeouts to avoid blocking on unresponsive servers</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Overview</h4>
+                        <p>The %Net package provides classes for common network protocols. %Net.HttpRequest handles HTTP communication (REST APIs, web services), %Net.FtpSession manages FTP file transfers, and %Net.SMTP sends email. These classes are essential for integrating InterSystems IRIS with external systems.</p>
+                        <h4>HTTP GET Request</h4>
+                        <pre><code class="language-objectscript"> SET request = ##class(%Net.HttpRequest).%New()
+ SET request.Server = &quot;api.example.com&quot;
+ SET request.Port = 443
+ SET request.Https = 1
+ SET request.SSLConfiguration = &quot;MySSLConfig&quot;
+ SET request.Timeout = 30
+
+ // Send GET request
+ SET status = request.Get(&quot;/api/users/1&quot;)
+ IF $$$ISERR(status) {
+     WRITE &quot;Request failed: &quot;, $SYSTEM.Status.GetErrorText(status), !
+     QUIT
+ }
+
+ // Read response
+ SET response = request.HttpResponse
+ WRITE &quot;Status: &quot;, response.StatusCode, !
+ WRITE &quot;Content-Type: &quot;, response.GetHeader(&quot;Content-Type&quot;), !
+
+ // Read response body
+ SET body = &quot;&quot;
+ WHILE &#x27;response.Data.AtEnd {
+     SET body = body _ response.Data.Read(32000)
+ }
+ WRITE &quot;Body: &quot;, body, !</code></pre>
+                        <h4>HTTP POST Request with JSON</h4>
+                        <pre><code class="language-objectscript"> SET request = ##class(%Net.HttpRequest).%New()
+ SET request.Server = &quot;api.example.com&quot;
+ SET request.ContentType = &quot;application/json&quot;
+
+ // Build JSON body using %DynamicObject
+ SET json = {}
+ SET json.name = &quot;Alice&quot;
+ SET json.age = 30
+ SET json.city = &quot;New York&quot;
+
+ // Write JSON to request body
+ DO request.EntityBody.Write(json.%ToJSON())
+
+ // Send POST
+ SET status = request.Post(&quot;/api/users&quot;)
+ IF $$$ISOK(status) {
+     WRITE &quot;Created! Status: &quot;, request.HttpResponse.StatusCode, !
+ }</code></pre>
+                        <h4>HTTP with Custom Headers</h4>
+                        <pre><code class="language-objectscript"> SET request = ##class(%Net.HttpRequest).%New()
+ SET request.Server = &quot;api.example.com&quot;
+
+ // Set custom headers
+ DO request.SetHeader(&quot;Authorization&quot;, &quot;Bearer &quot; _ token)
+ DO request.SetHeader(&quot;Accept&quot;, &quot;application/json&quot;)
+ DO request.SetHeader(&quot;X-Custom-Header&quot;, &quot;value&quot;)
+
+ SET status = request.Get(&quot;/api/protected-resource&quot;)</code></pre>
+                        <h4>HTTP Response Handling</h4>
+                        <pre><code class="language-objectscript"> // Check status codes
+ SET response = request.HttpResponse
+ IF response.StatusCode = 200 {
+     // Parse JSON response
+     SET jsonStr = response.Data.Read(response.Data.Size)
+     SET obj = {}.%FromJSON(jsonStr)
+     WRITE &quot;Name: &quot;, obj.name, !
+ } ELSEIF response.StatusCode = 404 {
+     WRITE &quot;Not found&quot;, !
+ } ELSEIF response.StatusCode &gt;= 500 {
+     WRITE &quot;Server error: &quot;, response.StatusCode, !
+ }</code></pre>
+                        <h4>FTP Operations</h4>
+                        <pre><code class="language-objectscript"> SET ftp = ##class(%Net.FtpSession).%New()
+ SET ftp.Server = &quot;ftp.example.com&quot;
+ SET ftp.Username = &quot;user&quot;
+ SET ftp.Password = &quot;pass&quot;
+
+ // Connect
+ SET status = ftp.Connect()
+ IF $$$ISERR(status) {
+     WRITE &quot;FTP connect failed&quot;, !
+     QUIT
+ }
+
+ // Change directory
+ DO ftp.SetDirectory(&quot;/uploads&quot;)
+
+ // Upload a file
+ SET stream = ##class(%Stream.FileBinary).%New()
+ SET stream.Filename = &quot;/tmp/upload.txt&quot;
+ SET status = ftp.Store(&quot;remote_file.txt&quot;, stream)
+
+ // Download a file
+ SET download = ##class(%Stream.FileBinary).%New()
+ SET download.Filename = &quot;/tmp/downloaded.txt&quot;
+ SET status = ftp.Retrieve(&quot;remote_file.txt&quot;, .download)
+ DO download.%Save()
+
+ // List directory
+ SET status = ftp.List(.list)
+
+ // Disconnect
+ DO ftp.Logout()</code></pre>
+                        <h4>Sending Email via SMTP</h4>
+                        <pre><code class="language-objectscript"> // Create the email message
+ SET msg = ##class(%Net.MailMessage).%New()
+ SET msg.From = &quot;sender@example.com&quot;
+ DO msg.To.Insert(&quot;recipient@example.com&quot;)
+ DO msg.Cc.Insert(&quot;cc@example.com&quot;)
+ SET msg.Subject = &quot;Test Email from IRIS&quot;
+ SET msg.IsSent = 0
+ SET msg.IsHTML = 1
+
+ // HTML body
+ DO msg.TextData.Write(&quot;&lt;h1&gt;Hello!&lt;/h1&gt;&quot;)
+ DO msg.TextData.Write(&quot;&lt;p&gt;This email was sent from InterSystems IRIS.&lt;/p&gt;&quot;)
+
+ // Add attachment
+ SET status = msg.AttachFile(&quot;/tmp&quot;, &quot;report.pdf&quot;)
+
+ // Configure and send via SMTP
+ SET smtp = ##class(%Net.SMTP).%New()
+ SET smtp.smtpserver = &quot;smtp.example.com&quot;
+ SET smtp.port = 587
+ SET smtp.timezone = &quot;US/Eastern&quot;
+
+ // Authentication
+ SET auth = ##class(%Net.Authenticator).%New()
+ SET auth.UserName = &quot;user@example.com&quot;
+ SET auth.Password = &quot;password&quot;
+ SET smtp.authenticator = auth
+
+ // Send
+ SET status = smtp.Send(msg)
+ IF $$$ISOK(status) {
+     WRITE &quot;Email sent successfully&quot;, !
+ } ELSE {
+     WRITE &quot;Failed: &quot;, $SYSTEM.Status.GetErrorText(status), !
+ }</code></pre>
+                        <h4>Plain Text Email</h4>
+                        <pre><code class="language-objectscript"> SET msg = ##class(%Net.MailMessage).%New()
+ SET msg.From = &quot;noreply@example.com&quot;
+ DO msg.To.Insert(&quot;admin@example.com&quot;)
+ SET msg.Subject = &quot;Alert: System Notification&quot;
+ SET msg.IsHTML = 0
+
+ // Plain text body
+ DO msg.TextData.Write(&quot;This is a plain text alert.&quot;)
+ DO msg.TextData.Write($CHAR(13, 10))    // CRLF
+ DO msg.TextData.Write(&quot;Please check the system.&quot;)
+
+ SET smtp = ##class(%Net.SMTP).%New()
+ SET smtp.smtpserver = &quot;smtp.example.com&quot;
+ SET status = smtp.Send(msg)</code></pre>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/documatic/%25CSP.Documatic.cls?LIBRARY=%25SYS&CLASSNAME=%25Net.HttpRequest" target="_blank">%Net.HttpRequest</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/documatic/%25CSP.Documatic.cls?LIBRARY=%25SYS&CLASSNAME=%25Net.HttpResponse" target="_blank">%Net.HttpResponse</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/documatic/%25CSP.Documatic.cls?LIBRARY=%25SYS&CLASSNAME=%25Net.FtpSession" target="_blank">%Net.FtpSession</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/documatic/%25CSP.Documatic.cls?LIBRARY=%25SYS&CLASSNAME=%25Net.SMTP" target="_blank">%Net.SMTP</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/documatic/%25CSP.Documatic.cls?LIBRARY=%25SYS&CLASSNAME=%25Net.MailMessage" target="_blank">%Net.MailMessage</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GNET_http" target="_blank">Sending HTTP Requests</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <div class="exam-prep">
+                <h2>Exam Preparation Summary</h2>
+                <h3>Critical Concepts to Master:</h3>
+                <ol>
+                    <li><strong>%Stream.FileCharacter vs %Stream.FileBinary</strong>: Character streams for text, binary for everything else</li>
+                    <li><strong>Stream reading pattern</strong>: WHILE 'stream.AtEnd { SET data = stream.Read(len) }</li>
+                    <li><strong>Stream writing</strong>: .Write() for raw content, .WriteLine() adds newline, .%Save() persists to disk</li>
+                    <li><strong>Stream navigation</strong>: .Rewind() to start, .MoveToEnd() for appending, .AtEnd to check for more data</li>
+                    <li><strong>%Net.HttpRequest flow</strong>: Create -> Set Server/Port -> Set Headers -> Get/Post -> Read HttpResponse</li>
+                    <li><strong>Response body is a stream</strong>: request.HttpResponse.Data is a %Stream -- read it like any stream</li>
+                    <li><strong>SMTP sending</strong>: Create %Net.MailMessage -> Configure %Net.SMTP -> smtp.Send(msg)</li>
+                    <li><strong>FTP flow</strong>: Create %Net.FtpSession -> Connect -> Store/Retrieve -> Logout</li>
+                    <li><strong>SSL configuration</strong>: Set SSLConfiguration property for HTTPS; requires pre-configured SSL config in IRIS</li>
+                    <li><strong>Error handling</strong>: Always check %Status return values from network operations</li>
+                </ol>
+                <h3>Common Exam Scenarios:</h3>
+                <ul>
+                    <li>Writing code to read a text file line by line using %Stream.FileCharacter</li>
+                    <li>Sending an HTTP GET request and processing the JSON response</li>
+                    <li>Choosing between FileCharacter and FileBinary for a given file type</li>
+                    <li>Configuring an HTTP POST request with JSON body and custom headers</li>
+                    <li>Sending an email with an attachment using %Net.SMTP and %Net.MailMessage</li>
+                    <li>Reading an HTTP response body from the Data stream property</li>
+                    <li>Handling stream operations: Rewind, Read, AtEnd, MoveToEnd</li>
+                    <li>Setting up FTP file transfer with %Net.FtpSession</li>
+                </ul>
+                <h3>Hands-On Practice Recommendations:</h3>
+                <ul>
+                    <li>Write a text file, then read it back line by line using %Stream.FileCharacter</li>
+                    <li>Copy a binary file using %Stream.FileBinary with chunked reads</li>
+                    <li>Send HTTP GET requests to a public API and parse JSON responses</li>
+                    <li>Send HTTP POST requests with JSON bodies</li>
+                    <li>Set up a simple SMTP test to send email (use a test SMTP server)</li>
+                    <li>Practice stream navigation: write, rewind, read, move to end, append</li>
+                    <li>Use CopyFrom to copy content between streams</li>
+                    <li>Experiment with HTTP response status codes and headers</li>
+                </ul>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <a href="../quiz.html?file=quizzes/T4.7-quiz.json" class="take-quiz-btn">Take the Quiz</a>
+        </footer>
+    </div>
+
+    <div id="reportModal" class="report-modal">
+        <div class="report-content">
+            <h3>Report an Issue</h3>
+            <label for="issueType">Issue Type</label>
+            <select id="issueType">
+                <option value="confusing">Confusing Content</option>
+                <option value="wrong_answer">Incorrect Information</option>
+                <option value="outdated">Outdated Content</option>
+                <option value="formatting">Formatting Issue</option>
+                <option value="typo">Typo</option>
+                <option value="other">Other</option>
+            </select>
+            <label for="issueDescription">Description</label>
+            <textarea id="issueDescription" placeholder="Please describe the issue..."></textarea>
+            <div style="display: flex; align-items: center; gap: 10px; margin: 15px 0;">
+                <input type="checkbox" id="wantEmailNotification" style="width: 18px; height: 18px;">
+                <label for="wantEmailNotification" style="margin: 0; cursor: pointer;">
+                    Notify me by email when resolved
+                </label>
+            </div>
+            <div class="report-actions">
+                <button class="report-cancel" onclick="closeReportModal()">Cancel</button>
+                <button class="report-submit" onclick="submitReport()">Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../../js/config.js"></script>
+    <script src="../../../js/auth.js"></script>
+    <script src="../../../js/api.js"></script>
+    <script>
+        const CERTIFICATION_NAME = 'ObjectScript-Specialist';
+        const TOPIC_REF = 'T4.7';
+
+        document.addEventListener('DOMContentLoaded', function() {
+            updateAuthUI();
+            trackKnowledgeView();
+        });
+
+        function updateAuthUI() {
+            const loginBtn = document.getElementById('loginBtn');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const userInfo = document.getElementById('userInfo');
+            const userAvatar = document.getElementById('userAvatar');
+            const userName = document.getElementById('userName');
+
+            if (typeof Auth !== 'undefined' && Auth.isAuthenticated()) {
+                const user = Auth.getUser();
+                loginBtn.style.display = 'none';
+                logoutBtn.style.display = 'inline-block';
+                userInfo.style.display = 'flex';
+                if (user) {
+                    const initial = (user.name || user.email || '?')[0].toUpperCase();
+                    userAvatar.textContent = initial;
+                    userName.textContent = user.name || user.email || 'User';
+                }
+            } else {
+                loginBtn.style.display = 'inline-block';
+                logoutBtn.style.display = 'none';
+                userInfo.style.display = 'none';
+            }
+        }
+
+        async function trackKnowledgeView() {
+            if (typeof Auth === 'undefined' || !Auth.isAuthenticated()) {
+                return;
+            }
+
+            try {
+                await Api.trackKnowledge(CERTIFICATION_NAME, TOPIC_REF);
+                console.log('Knowledge view tracked:', TOPIC_REF);
+            } catch (error) {
+                console.log('View tracking skipped:', error.message);
+            }
+        }
+
+        function openReportModal(sectionId, sectionTitle) {
+            if (typeof Auth === 'undefined' || !Auth.isAuthenticated()) {
+                alert('Please sign in to report issues.');
+                return;
+            }
+            // Store section context
+            window.currentReportSection = {
+                id: sectionId || 'general',
+                title: sectionTitle || 'General'
+            };
+            // Update modal header to show section
+            const modalHeader = document.querySelector('#reportModal h3');
+            if (modalHeader && sectionTitle) {
+                modalHeader.textContent = 'Report Issue: ' + sectionTitle;
+            } else if (modalHeader) {
+                modalHeader.textContent = 'Report an Issue';
+            }
+            document.getElementById('wantEmailNotification').checked = false;
+            document.getElementById('reportModal').classList.add('active');
+        }
+
+        function closeReportModal() {
+            document.getElementById('reportModal').classList.remove('active');
+            document.getElementById('issueType').value = 'confusing';
+            document.getElementById('issueDescription').value = '';
+        }
+
+        async function submitReport() {
+            const issueType = document.getElementById('issueType').value;
+            const description = document.getElementById('issueDescription').value.trim();
+            const wantEmailNotification = document.getElementById('wantEmailNotification').checked;
+            const sectionContext = window.currentReportSection || { id: 'general', title: 'General' };
+
+            if (!description) {
+                alert('Please provide a description of the issue.');
+                return;
+            }
+
+            // Build content reference with section context
+            const contentRef = sectionContext.id !== 'general'
+                ? `${TOPIC_REF} (${sectionContext.title})`
+                : TOPIC_REF;
+
+            try {
+                await Api.reportProblem({
+                    certificationName: CERTIFICATION_NAME,
+                    contentType: 'knowledge',
+                    contentReference: contentRef,
+                    issueType: issueType,
+                    description: description,
+                    wantEmailNotification: wantEmailNotification
+                });
+                alert('Thank you! Your report has been submitted.');
+                closeReportModal();
+            } catch (error) {
+                if (error.status === 429) {
+                    const retryMinutes = Math.ceil((error.data?.retryAfter || 3600) / 60);
+                    alert(`You've submitted too many reports recently. Please wait ${retryMinutes} minutes before submitting another report.`);
+                } else {
+                    alert('Failed to submit report: ' + error.message);
+                }
+            }
+        }
+
+        document.querySelectorAll('.detailed-notes h3').forEach(h3 => {
+            h3.style.cursor = 'pointer';
+        });
+    </script>
+    <script src="../../../js/consent.js"></script>
+    <script src="../../../js/analytics.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            CookieConsent.init();
+            Analytics.init();
+        });
+    </script>
+</body>
+</html>

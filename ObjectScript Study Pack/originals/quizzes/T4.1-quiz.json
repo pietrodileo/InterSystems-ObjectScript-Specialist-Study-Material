@@ -1,0 +1,249 @@
+{
+  "quiz": {
+    "title": "T4.1: Traverses and Sorts Arrays",
+    "description": "Scenario-based questions on subscript sorting (canonical ordering), $ORDER traversal, multi-level $ORDER, $DATA existence checks, and reverse traversal in ObjectScript arrays.",
+    "version": "2.2",
+    "publishedDate": "2026-04-21",
+    "questions": [
+      {
+        "id": 1,
+        "type": "single",
+        "question": "Consider the following array:\n\nset data(\"apple\") = 1\nset data(\"banana\") = 2\nset data(100) = 3\nset data(20) = 4\n\nWhat is the first subscript returned by $ORDER(data(\"\"))?",
+        "options": [
+          "\"apple\"",
+          "100",
+          "20",
+          "\"banana\""
+        ],
+        "correct": [2],
+        "explanation": "In canonical ordering, numeric subscripts come before string subscripts, and they are sorted numerically: 20 < 100. So $ORDER(data(\"\")) returns 20 as the first subscript. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_variables#GCOS_variables_global_subscripts)"
+      },
+      {
+        "id": 2,
+        "type": "single",
+        "question": "Consider the following array:\n\nset y = 10\nset y(\"X\") = 11\nset y(\"Y\") = 22\nset y(\"X\", 1) = 33\nset y(\"X\", 2) = 44\nset y(\"Y\", 1) = 55\nset y(\"Y\", 2) = 66\n\nYou would like to write a loop that prints all the values in the second level, so that the output looks like this:\n\n33445566\n\nWhich of the following code blocks accomplishes that?",
+        "options": [
+          "set key = $ORDER(y(\"\"))\nwhile key '= \"\" {\n    write y(key)\n    set key1 = $ORDER(y(key))\n}",
+          "set node = $QUERY(y)\nwhile node '= \"\" {\n    write node\n    set node = $QUERY(node)\n}",
+          "set key1 = $ORDER(y(\"\"))\nwhile key1 '= \"\" {\n    set key2 = $ORDER(y(key1, \"\"))\n    while key2 '= \"\" {\n         write y(key1, key2)\n         set key2 = $ORDER(y(key1,key2))\n    }\n    set key1 = $ORDER(y(key1))\n}",
+          "set node = $QUERY(y(\"\"), 1, target)\nwhile node '= \"\" {\n    set node = $QUERY(node)\n}\nset node = $QUERY(y(node, \"\"), 1, target)\nwhile node '= \"\" {\n    write node\n    set node = $QUERY(node, \"\")\n}"
+        ],
+        "correct": [2],
+        "explanation": "To traverse all second-level subscripts, you need nested $ORDER loops. The outer loop iterates over first-level subscripts (\"X\", \"Y\"), and for each, the inner loop iterates over second-level subscripts (1, 2). Option (a) only reads first-level values. Option (b) uses $QUERY incorrectly. Option (d) has syntax errors. The nested $ORDER loop correctly produces 33445566. (Reference: InterSystems Practice Q14; https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_forder)"
+      },
+      {
+        "id": 3,
+        "type": "single",
+        "question": "A developer is loading patient records into a local array and notices the traversal order is unexpected. Consider:\n\nset patients(3) = \"Chen\"\nset patients(\"10A\") = \"Patel\"\nset patients(1) = \"Smith\"\nset patients(10) = \"Jones\"\nset patients(\"2B\") = \"Garcia\"\n\nWhat is the $ORDER traversal order of the subscripts?",
+        "options": [
+          "1, 3, 10, \"10A\", \"2B\"",
+          "1, 3, 10, \"2B\", \"10A\"",
+          "\"10A\", 1, \"2B\", 3, 10",
+          "1, \"2B\", 3, 10, \"10A\""
+        ],
+        "correct": [0],
+        "explanation": "Canonical ordering places numeric subscripts first (sorted numerically: 1, 3, 10), then string subscripts (sorted by ASCII collation: \"10A\" before \"2B\" because \"1\" < \"2\" in ASCII). \"10A\" and \"2B\" are strings because they contain non-numeric characters. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_variables#GCOS_variables_global_subscripts)"
+      },
+      {
+        "id": 4,
+        "type": "single",
+        "question": "You are debugging a routine that checks whether a global node has children. Consider:\n\nset ^inventory(\"warehouse\") = \"Main\"\nset ^inventory(\"warehouse\", \"aisle1\") = 50\nset ^inventory(\"warehouse\", \"aisle2\") = 30\n\nwrite $DATA(^inventory(\"warehouse\"))\n\nWhat is the output?",
+        "options": [
+          "0",
+          "1",
+          "10",
+          "11"
+        ],
+        "correct": [3],
+        "explanation": "$DATA returns 11 when a node has both a value AND descendant nodes. ^inventory(\"warehouse\") has the value \"Main\" and also has child subscripts (\"aisle1\" and \"aisle2\"), so $DATA returns 11. Return values: 0=undefined, 1=value only, 10=descendants only, 11=both. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fdata)"
+      },
+      {
+        "id": 5,
+        "type": "single",
+        "question": "A colleague asks you to review their array traversal code. Consider:\n\nset arr(1) = \"A\"\nset arr(3) = \"B\"\nset arr(10) = \"C\"\nset arr(2) = \"D\"\nset key = \"\"\nfor {\n  set key = $ORDER(arr(key))\n  quit:key=\"\"\n  write arr(key)\n}\n\nWhat is the output?",
+        "options": [
+          "ABCD",
+          "ADBC",
+          "ABDC",
+          "DACB"
+        ],
+        "correct": [1],
+        "explanation": "$ORDER traverses numeric subscripts in numeric order: 1, 2, 3, 10. So the output is arr(1)=\"A\", arr(2)=\"D\", arr(3)=\"B\", arr(10)=\"C\" = \"ADBC\". The insertion order does not matter; canonical ordering always applies. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_forder)"
+      },
+      {
+        "id": 6,
+        "type": "single",
+        "question": "You need to find the last item in a price list stored in a global. Consider:\n\nset ^prices(10) = 9.99\nset ^prices(20) = 14.99\nset ^prices(30) = 24.99\nset ^prices(40) = 39.99\n\nWhich code correctly retrieves the last subscript (40)?",
+        "options": [
+          "set last = $ORDER(^prices(\"\"))",
+          "set last = $ORDER(^prices(\"\"), -1)",
+          "set last = $ORDER(^prices(40), 1)",
+          "set last = $ORDER(^prices(40))"
+        ],
+        "correct": [1],
+        "explanation": "$ORDER with direction -1 starting from \"\" returns the last subscript in the array. $ORDER(^prices(\"\"), -1) returns 40. Starting from \"\" with direction 1 gives the first subscript; starting from \"\" with direction -1 gives the last. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_forder)"
+      },
+      {
+        "id": 7,
+        "type": "single",
+        "question": "You are writing a utility that retrieves both the key and value in a single $ORDER call. Consider:\n\nset scores(\"Alice\") = 95\nset scores(\"Bob\") = 87\nset scores(\"Carol\") = 92\n\nset key = \"\"\nset key = $ORDER(scores(key), 1, val)\nwrite key, \": \", val\n\nWhat is the output?",
+        "options": [
+          "Alice: 95",
+          "Bob: 87",
+          "Carol: 92",
+          "An <UNDEFINED> error"
+        ],
+        "correct": [0],
+        "explanation": "The third argument of $ORDER receives the data value at the next node. Starting from \"\", the first subscript in canonical order is \"Alice\" (A < B < C in ASCII). The value 95 is stored in val. Output: \"Alice: 95\". (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_forder)"
+      },
+      {
+        "id": 8,
+        "type": "single",
+        "question": "While investigating a bug, you examine an array that uses negative subscripts:\n\nset arr(-3) = \"X\"\nset arr(0) = \"Y\"\nset arr(2) = \"Z\"\nset arr(-1) = \"W\"\nset key = \"\"\nfor {\n  set key = $ORDER(arr(key))\n  quit:key=\"\"\n  write key, \" \"\n}\n\nWhat is the output?",
+        "options": [
+          "-3 -1 0 2",
+          "0 2 -3 -1",
+          "-1 -3 0 2",
+          "2 0 -1 -3"
+        ],
+        "correct": [0],
+        "explanation": "Numeric subscripts are sorted in numeric order, including negative numbers. The traversal order is -3, -1, 0, 2. Canonical numeric sorting respects the actual numeric value. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_variables#GCOS_variables_global_subscripts)"
+      },
+      {
+        "id": 9,
+        "type": "multiple",
+        "question": "Which of the following are valid return values of the $DATA function? (Select all that apply)",
+        "options": [
+          "0 - node is undefined",
+          "1 - node has a value, no descendants",
+          "5 - node has five child subscripts",
+          "10 - no value at this node, but has descendants",
+          "11 - node has a value AND has descendants",
+          "100 - node has descendants at multiple levels"
+        ],
+        "correct": [0, 1, 3, 4],
+        "explanation": "$DATA returns only four possible values: 0, 1, 10, 11. The tens digit indicates descendants (0=none, 1=has descendants), and the ones digit indicates a value (0=none, 1=has value). Values like 5 and 100 are never returned. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fdata)"
+      },
+      {
+        "id": 10,
+        "type": "single",
+        "question": "A developer sets up a configuration array and is confused by the sorting. Consider:\n\nset cfg(\"abc\") = 1\nset cfg(\"ABC\") = 2\nset cfg(\"Abc\") = 3\nset key = \"\"\nfor {\n  set key = $ORDER(cfg(key))\n  quit:key=\"\"\n  write cfg(key)\n}\n\nWhat is the output?",
+        "options": [
+          "123",
+          "213",
+          "231",
+          "321"
+        ],
+        "correct": [2],
+        "explanation": "String subscripts are sorted in ASCII order. In ASCII, uppercase letters come before lowercase: 'A'=65, 'a'=97. So \"ABC\" (all uppercase) < \"Abc\" (A then lowercase) < \"abc\" (all lowercase). Output: cfg(\"ABC\")=2, cfg(\"Abc\")=3, cfg(\"abc\")=1 = \"231\". (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_variables#GCOS_variables_global_subscripts)"
+      },
+      {
+        "id": 11,
+        "type": "single",
+        "question": "You are building an order processing routine. Consider the following code:\n\nset orders(1001,\"item\") = \"Widget\"\nset orders(1001,\"qty\") = 5\nset orders(1002,\"item\") = \"Gadget\"\nset orders(1002,\"qty\") = 3\n\nset key = \"\"\nfor {\n  set key = $ORDER(orders(key))\n  quit:key=\"\"\n  write \"Order: \", ordKey, !\n  write \"  Item: \", orders(key,\"item\"), !\n}\n\nWhat happens when this code runs?",
+        "options": [
+          "It prints both orders correctly",
+          "<SYNTAX> error on the Write line",
+          "<UNDEFINED> error because ordKey was never set",
+          "<SUBSCRIPT> error because nested subscripts cannot be traversed"
+        ],
+        "correct": [2],
+        "explanation": "The loop uses the variable ordKey in the Write statement, but ordKey was never assigned a value. The correct variable should be key (which is set by $ORDER). This is a common typo bug that causes an <UNDEFINED> *ordKey error at runtime. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RERR_gen#RERR_UNDEFINED)"
+      },
+      {
+        "id": 12,
+        "type": "single",
+        "question": "A reporting module stores data in a deep hierarchy. Consider:\n\nset ^data(\"a\",\"b\",\"c\") = \"deep\"\nwrite $DATA(^data(\"a\",\"b\"))\n\nWhat is the output?",
+        "options": [
+          "0",
+          "1",
+          "10",
+          "11"
+        ],
+        "correct": [2],
+        "explanation": "^data(\"a\",\"b\") was never explicitly assigned a value, but it has a descendant node at (\"a\",\"b\",\"c\"). Therefore $DATA returns 10: no value at this node, but descendants exist. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fdata)"
+      },
+      {
+        "id": 13,
+        "type": "single",
+        "question": "You need to process decimal product IDs. Consider:\n\nset arr(1.5) = \"A\"\nset arr(1) = \"B\"\nset arr(2) = \"C\"\nset arr(1.10) = \"D\"\nset key = \"\"\nfor {\n  set key = $ORDER(arr(key))\n  quit:key=\"\"\n  write arr(key)\n}\n\nWhat is the output?",
+        "options": [
+          "BADC",
+          "BDAC",
+          "ABDC",
+          "BACD"
+        ],
+        "correct": [1],
+        "explanation": "Numeric subscripts are sorted by numeric value. 1.10 is canonically equivalent to 1.1. The sort order is: 1, 1.1, 1.5, 2. So: arr(1)=\"B\", arr(1.1)=\"D\", arr(1.5)=\"A\", arr(2)=\"C\" = \"BDAC\". Trailing zeros are stripped in canonical form. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_variables#GCOS_variables_global_subscripts)"
+      },
+      {
+        "id": 14,
+        "type": "single",
+        "question": "You are verifying that a configuration node was properly cleaned up. Consider:\n\nkill ^config(\"db\")\nset ^config(\"db\",\"host\") = \"localhost\"\nset ^config(\"db\",\"port\") = 1972\n\nwrite $DATA(^config(\"db\"))\n\nWhat is the output?",
+        "options": [
+          "0",
+          "1",
+          "10",
+          "11"
+        ],
+        "correct": [2],
+        "explanation": "After KILL ^config(\"db\"), the node and all descendants are removed. Then two child nodes are created under ^config(\"db\"), but ^config(\"db\") itself is never given a value. So $DATA returns 10: no value, but has descendants. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fdata)"
+      },
+      {
+        "id": 15,
+        "revised": true,
+        "type": "single",
+        "question": "What is the output of the following code?\n\nkill arr\nset arr(1) = \"one\"\nset arr(2) = \"two\"\nset key = \"\"\nset key = $ORDER(arr(key))\nset key = $ORDER(arr(key))\nset key = $ORDER(arr(key))\nwrite key",
+        "options": [
+          "\"two\"",
+          "2",
+          "\"\" (empty string)",
+          "An <UNDEFINED> error"
+        ],
+        "correct": [2],
+        "explanation": "Starting from \"\", the first $ORDER returns 1, the second returns 2, and the third call (from subscript 2) returns \"\" because there are no more subscripts. So key is \"\" and Write outputs an empty string. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_forder)"
+      },
+      {
+        "id": 16,
+        "type": "multiple",
+        "question": "A junior developer asks about $ORDER behavior. Which of the following statements are true? (Select all that apply)",
+        "options": [
+          "$ORDER with direction -1 traverses subscripts in reverse order",
+          "$ORDER returns \"\" when there are no more subscripts at that level",
+          "$ORDER can accept a third argument to retrieve the node's data value",
+          "$ORDER automatically descends into child subscripts",
+          "$ORDER can only be used with global arrays, not local arrays"
+        ],
+        "correct": [0, 1, 2],
+        "explanation": "$ORDER traverses subscripts at a single level only - it does NOT automatically descend into child subscripts (use nested $ORDER or $QUERY for that). It works with both local and global arrays. Direction -1 enables reverse traversal, it returns \"\" at the end, and the optional third argument retrieves the node value. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_forder)"
+      },
+      {
+        "id": 17,
+        "type": "single",
+        "question": "You want to safely check whether a global node exists before reading it. Which approach avoids an <UNDEFINED> error?\n\nset value = ^settings(\"timeout\")",
+        "options": [
+          "if $DATA(^settings(\"timeout\")) set value = ^settings(\"timeout\")",
+          "set value = $GET(^settings(\"timeout\"), 30)",
+          "set value = $ORDER(^settings(\"timeout\"))",
+          "Both $DATA and $GET approaches are correct"
+        ],
+        "correct": [1],
+        "explanation": "Only $GET safely avoids <UNDEFINED> in all cases. While $DATA(^settings(\"timeout\")) returns a truthy value (10) when the node has subnodes but no value at the node itself, the subsequent SET still causes <UNDEFINED> because the node has no data. The correct $DATA check would be $DATA(...)#2 (bitwise AND with 2) to verify the node has a value. $GET(^settings(\"timeout\"),30) safely returns the default value 30 when the node has no value, regardless of subnodes. $ORDER returns the next subscript, not the value. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fget)",
+        "revised": true
+      },
+      {
+        "id": 18,
+        "type": "single",
+        "question": "You are building an index of error codes. Consider:\n\nset ^errors(100) = \"Timeout\"\nset ^errors(200) = \"Not Found\"\nset ^errors(\"AUTH01\") = \"Unauthorized\"\nset ^errors(\"AUTH02\") = \"Forbidden\"\nset ^errors(500) = \"Internal\"\n\nset key = \"\"\nset key = $ORDER(^errors(key))\nset key = $ORDER(^errors(key))\nset key = $ORDER(^errors(key))\nwrite ^errors(key)",
+        "options": [
+          "Not Found",
+          "Internal",
+          "Unauthorized",
+          "Forbidden"
+        ],
+        "correct": [1],
+        "explanation": "Canonical ordering: numeric subscripts come first sorted numerically (100, 200, 500), then string subscripts sorted by ASCII (\"AUTH01\", \"AUTH02\"). The first $ORDER from \"\" returns 100, the second from 100 returns 200, the third from 200 returns 500. ^errors(500) = \"Internal\". (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_forder)"
+      }
+    ]
+  }
+}

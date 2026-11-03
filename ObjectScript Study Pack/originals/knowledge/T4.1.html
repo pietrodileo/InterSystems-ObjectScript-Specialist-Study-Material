@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Study guide for T4.1: Traverses and Sorts Arrays - part of the InterSystems ObjectScript Specialist certification. Learn key concepts, best practices, and exam preparation tips.">
+    <meta name="keywords" content="InterSystems certification, ObjectScript Specialist, T4.1: Traverses and Sorts Arrays, exam preparation, practice quiz">
+    <meta name="author" content="exam-prep.es">
+    <meta name="robots" content="index, follow">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://exam-prep.es/exams/objectscript/knowledge/T4.1.html">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://exam-prep.es/exams/objectscript/knowledge/T4.1.html">
+    <meta property="og:title" content="T4.1: Traverses and Sorts Arrays - InterSystems ObjectScript Specialist Study Guide">
+    <meta property="og:description" content="Study guide for T4.1: Traverses and Sorts Arrays - part of the InterSystems ObjectScript Specialist certification. Learn key concepts, best practices, and exam preparation tips.">
+    <meta property="og:image" content="https://exam-prep.es/images/og-image.png">
+    <meta property="og:site_name" content="InterSystems Certification Prep">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://exam-prep.es/exams/objectscript/knowledge/T4.1.html">
+    <meta name="twitter:title" content="T4.1: Traverses and Sorts Arrays - InterSystems ObjectScript Specialist Study Guide">
+    <meta name="twitter:description" content="Study guide for T4.1: Traverses and Sorts Arrays - part of the InterSystems ObjectScript Specialist certification. Learn key concepts, best practices, and exam preparation tips.">
+    <meta name="twitter:image" content="https://exam-prep.es/images/og-image.png">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+    <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+
+    <!-- hreflang Tags -->
+    <link rel="alternate" hreflang="en" href="https://exam-prep.es/exams/objectscript/knowledge/T4.1.html" />
+    <link rel="alternate" hreflang="es" href="https://exam-prep.es/exams/objectscript/knowledge/es/T4.1.html" />
+    <link rel="alternate" hreflang="x-default" href="https://exam-prep.es/exams/objectscript/knowledge/T4.1.html" />
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../colors.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+    <link rel="stylesheet" href="../../../css/consent.css">
+
+    <title>T4.1: Traverses and Sorts Arrays - InterSystems ObjectScript Specialist Study Guide | exam-prep.es</title>
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "T4.1: Traverses and Sorts Arrays - InterSystems ObjectScript Specialist Study Guide",
+    "description": "Study guide for T4.1: Traverses and Sorts Arrays - part of the InterSystems ObjectScript Specialist certification. Learn key concepts, best practices, and exam preparation tips.",
+    "author": {
+        "@type": "Organization",
+        "name": "exam-prep.es"
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "InterSystems Certification Prep",
+        "url": "https://exam-prep.es"
+    },
+    "inLanguage": "en",
+    "about": {
+        "@type": "Course",
+        "name": "InterSystems ObjectScript Specialist"
+    }
+}
+    </script>
+</head>
+<body>
+    <div class="container">
+        <nav class="nav-bar">
+            <a href="../index.html" class="back-link">&#8592; Back to Topics</a>
+            <div class="lang-toggle">
+                <a href="T4.1.html" class="lang-btn active">EN</a>
+                <a href="es/T4.1.html" class="lang-btn">ES</a>
+            </div>
+            <a href="../quiz.html?file=quizzes/T4.1-quiz.json" class="quiz-link">Take Quiz &#8594;</a>
+            <div class="auth-bar">
+                <button id="loginBtn" class="auth-btn login-btn" onclick="Auth.login()">Sign In</button>
+                <div id="userInfo" class="user-info">
+                    <div id="userAvatar" class="user-avatar">?</div>
+                    <span id="userName" class="user-name">User</span>
+                </div>
+                <button id="logoutBtn" class="auth-btn logout-btn" onclick="Auth.logout()">Sign Out</button>
+            </div>
+        </nav>
+
+        <header class="header">
+            <h1>T4.1: Traverses and Sorts Arrays</h1>
+            <p>Knowledge Review - InterSystems ObjectScript Specialist</p>
+        </header>
+
+        <nav class="toc">
+            <h3>Contents</h3>
+            <ol>
+                <li><a href="#section-1">Subscript sorting (canonical numeric order)</a></li>
+                <li><a href="#section-2">Traversing subscript subset with $ORDER</a></li>
+                <li><a href="#section-3">Multi-level traversal with $ORDER</a></li>
+                <li><a href="#section-4">$DATA to check node existence</a></li>
+            </ol>
+        </nav>
+
+        <main class="content">
+            <section id="section-1" class="knowledge-item">
+                <h2>1. Subscript sorting (canonical numeric order) <button class="subsection-report-btn" onclick="openReportModal('section-1', 'Section 1')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>Canonical numeric order</strong>: Numeric subscripts sort by numeric value: -2, 0, 1, 10</li>
+                        <li><strong>String order</strong>: Non-numeric subscripts sort in ASCII collation order after all numerics</li>
+                        <li><strong>Mixed subscripts</strong>: Numerics come first, then strings: -2, 0, 1, 10, "A", "B", "a"</li>
+                        <li><strong>Canonical form</strong>: A number is canonical if it equals its own numeric interpretation (no leading zeros, no trailing zeros after decimal)</li>
+                        <li><strong>Empty string</strong>: The empty string "" sorts before all other subscripts</li>
+                        <li><strong>Case sensitivity</strong>: Uppercase letters sort before lowercase ("A" < "B" < "a" < "b")</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Overview</h4>
+                        <p>InterSystems IRIS stores global and local array subscripts in a well-defined collation order. Understanding this order is essential for traversing arrays predictably. The default collation places canonical numeric values first (sorted by numeric value), followed by non-numeric string values (sorted by ASCII/Unicode byte order).</p>
+                        <h4>Canonical Numeric Order</h4>
+                        <p>A subscript is treated as numeric if it is in <strong>canonical form</strong> -- meaning it equals the result of adding zero to it. For example, <code>1</code>, <code>-2</code>, <code>3.14</code>, and <code>0</code> are canonical, while <code>&quot;01&quot;</code>, <code>&quot;3.0&quot;</code>, and <code>&quot;+5&quot;</code> are not (those are treated as strings). Canonical numerics sort by their numeric value, so the order is: -2, -1, 0, 0.5, 1, 2, 10, 100.</p>
+                        <pre><code class="language-objectscript"> // Demonstrate subscript ordering
+ SET data(-2) = &quot;neg two&quot;
+ SET data(0) = &quot;zero&quot;
+ SET data(1) = &quot;one&quot;
+ SET data(10) = &quot;ten&quot;
+ SET data(&quot;A&quot;) = &quot;letter A&quot;
+ SET data(&quot;B&quot;) = &quot;letter B&quot;
+ SET data(&quot;a&quot;) = &quot;letter a&quot;
+
+ // Traversing will yield: -2, 0, 1, 10, &quot;A&quot;, &quot;B&quot;, &quot;a&quot;
+ SET key = &quot;&quot;
+ FOR {
+     SET key = $ORDER(data(key))
+     QUIT:key=&quot;&quot;
+     WRITE key, &quot; = &quot;, data(key), !
+ }</code></pre>
+                        <h4>String Collation</h4>
+                        <p>Non-canonical subscripts are stored as strings and sort by their byte values. This means uppercase ASCII letters (A-Z, codes 65-90) sort before lowercase letters (a-z, codes 97-122). Strings that look like numbers but are not canonical ("01", "3.0", "+5") sort as strings, not numbers.</p>
+                        <pre><code class="language-objectscript"> // &quot;01&quot; is NOT canonical numeric -- it sorts as a string
+ SET arr(1) = &quot;canonical one&quot;
+ SET arr(&quot;01&quot;) = &quot;string zero-one&quot;
+
+ // Both nodes exist separately!
+ // $ORDER yields: 1, then &quot;01&quot;
+ SET key = &quot;&quot;
+ FOR {
+     SET key = $ORDER(arr(key))
+     QUIT:key=&quot;&quot;
+     WRITE key, &quot; -&gt; &quot;, arr(key), !
+ }
+ // Output: 1 -&gt; canonical one
+ //         01 -&gt; string zero-one</code></pre>
+                        <h4>Practical Implications</h4>
+                        <p>When designing globals, choose subscripts carefully. If you need predictable numeric sort, ensure values are canonical. If you mix types, be aware that <code>-3</code>, <code>0</code>, <code>5</code> sort first, then <code>&quot;Apple&quot;</code>, <code>&quot;Banana&quot;</code>, <code>&quot;apple&quot;</code> follow. This ordering is consistent across local arrays, process-private globals, and persistent globals.</p>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_variables" target="_blank">Subscript Sorting</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_variables" target="_blank">Canonical Form</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GGBL_structure" target="_blank">Collation and Subscript-Level Mapping</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="section-2" class="knowledge-item">
+                <h2>2. Traversing subscript subset with $ORDER <button class="subsection-report-btn" onclick="openReportModal('section-2', 'Section 2')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>$ORDER(array(subscript))</strong>: Returns the next subscript at the same level after the given subscript</li>
+                        <li><strong>Empty string start</strong>: Use `""` as starting subscript to get the first subscript</li>
+                        <li><strong>Loop termination</strong>: $ORDER returns `""` when no more subscripts exist</li>
+                        <li><strong>Direction parameter</strong>: $ORDER(array(subscript), direction) where 1=forward (default), -1=reverse</li>
+                        <li><strong>Value by reference</strong>: $ORDER(array(subscript), direction, .datavalue) retrieves data in one call</li>
+                        <li><strong>Subscript subset</strong>: Combine $ORDER with a starting point to traverse a portion of an array</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Overview</h4>
+                        <p>$ORDER is the fundamental function for traversing arrays in ObjectScript. It returns the next subscript at the same level, enabling iteration through all nodes of a global or local array. The function is efficient because it follows the internal B-tree structure directly.</p>
+                        <h4>Basic $ORDER Loop</h4>
+                        <p>The standard pattern starts with an empty string and loops until $ORDER returns an empty string:</p>
+                        <pre><code class="language-objectscript"> // Basic forward traversal
+ SET ^colors(1) = &quot;Red&quot;
+ SET ^colors(2) = &quot;Green&quot;
+ SET ^colors(5) = &quot;Blue&quot;
+ SET ^colors(10) = &quot;Yellow&quot;
+
+ SET key = &quot;&quot;
+ FOR {
+     SET key = $ORDER(^colors(key))
+     QUIT:key=&quot;&quot;
+     WRITE &quot;Key: &quot;, key, &quot; Value: &quot;, ^colors(key), !
+ }
+ // Output: Key: 1 Value: Red
+ //         Key: 2 Value: Green
+ //         Key: 5 Value: Blue
+ //         Key: 10 Value: Yellow</code></pre>
+                        <h4>Starting from a Specific Point</h4>
+                        <p>You can start traversal from any subscript -- $ORDER returns the NEXT subscript after the one you provide:</p>
+                        <pre><code class="language-objectscript"> // Start traversing from subscript 3 (gets next one: 5)
+ SET key = 3
+ FOR {
+     SET key = $ORDER(^colors(key))
+     QUIT:key=&quot;&quot;
+     WRITE key, &quot; = &quot;, ^colors(key), !
+ }
+ // Output: 5 = Blue
+ //         10 = Yellow</code></pre>
+                        <h4>Reverse Traversal with Direction -1</h4>
+                        <p>Pass -1 as the second argument to traverse in reverse order:</p>
+                        <pre><code class="language-objectscript"> // Reverse traversal
+ SET key = &quot;&quot;
+ FOR {
+     SET key = $ORDER(^colors(key), -1)
+     QUIT:key=&quot;&quot;
+     WRITE key, &quot; = &quot;, ^colors(key), !
+ }
+ // Output: 10 = Yellow
+ //         5 = Blue
+ //         2 = Green
+ //         1 = Red</code></pre>
+                        <h4>Retrieving Data with the Third Argument</h4>
+                        <p>The third argument (passed by reference) retrieves the node's data value in the same call, avoiding a separate global reference:</p>
+                        <pre><code class="language-objectscript"> // Efficient: get key AND value in one operation
+ SET key = &quot;&quot;
+ FOR {
+     SET key = $ORDER(^colors(key), 1, value)
+     QUIT:key=&quot;&quot;
+     WRITE key, &quot; = &quot;, value, !
+ }</code></pre>
+                        <p>This is more efficient for globals because it avoids a second disk/cache lookup per iteration.</p>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_forder" target="_blank">$ORDER Function</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GGBL_using#GGBL_using_traversing" target="_blank">Traversing Globals</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="section-3" class="knowledge-item">
+                <h2>3. Multi-level traversal with $ORDER <button class="subsection-report-btn" onclick="openReportModal('section-3', 'Section 3')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>Multi-level arrays</strong>: Globals often have multiple subscript levels: ^data(level1, level2, level3)</li>
+                        <li><strong>Nested loops</strong>: Use one $ORDER loop per subscript level</li>
+                        <li><strong>$ORDER at each level</strong>: Each inner loop starts with "" and traverses all subscripts at that level</li>
+                        <li><strong>Reverse traversal</strong>: Use direction -1 at any level for reverse order</li>
+                        <li><strong>$QUERY alternative</strong>: Traverses all nodes at all levels in a single call (returns full subscript reference)</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Overview</h4>
+                        <p>Real-world globals typically have multiple subscript levels. To traverse all data, you nest $ORDER loops, one for each level. Each loop independently iterates its subscript level within the context set by the outer loops.</p>
+                        <h4>Two-Level Traversal</h4>
+                        <pre><code class="language-objectscript"> // Build a two-level structure
+ SET ^students(&quot;Math&quot;, &quot;Alice&quot;) = 95
+ SET ^students(&quot;Math&quot;, &quot;Bob&quot;) = 87
+ SET ^students(&quot;Science&quot;, &quot;Alice&quot;) = 92
+ SET ^students(&quot;Science&quot;, &quot;Charlie&quot;) = 88
+
+ // Nested traversal
+ SET subject = &quot;&quot;
+ FOR {
+     SET subject = $ORDER(^students(subject))
+     QUIT:subject=&quot;&quot;
+     WRITE &quot;Subject: &quot;, subject, !
+     SET student = &quot;&quot;
+     FOR {
+         SET student = $ORDER(^students(subject, student), 1, grade)
+         QUIT:student=&quot;&quot;
+         WRITE &quot;  &quot;, student, &quot; = &quot;, grade, !
+     }
+ }
+ // Output:
+ //   Subject: Math
+ //     Alice = 95
+ //     Bob = 87
+ //   Subject: Science
+ //     Alice = 92
+ //     Charlie = 88</code></pre>
+                        <h4>Three-Level Traversal</h4>
+                        <pre><code class="language-objectscript"> // Three-level structure: ^data(year, month, day) = info
+ SET ^data(2025, 1, 15) = &quot;Event A&quot;
+ SET ^data(2025, 3, 1) = &quot;Event B&quot;
+ SET ^data(2025, 3, 20) = &quot;Event C&quot;
+ SET ^data(2026, 1, 5) = &quot;Event D&quot;
+
+ SET year = &quot;&quot;
+ FOR {
+     SET year = $ORDER(^data(year))
+     QUIT:year=&quot;&quot;
+     SET month = &quot;&quot;
+     FOR {
+         SET month = $ORDER(^data(year, month))
+         QUIT:month=&quot;&quot;
+         SET day = &quot;&quot;
+         FOR {
+             SET day = $ORDER(^data(year, month, day), 1, info)
+             QUIT:day=&quot;&quot;
+             WRITE year, &quot;-&quot;, month, &quot;-&quot;, day, &quot;: &quot;, info, !
+         }
+     }
+ }</code></pre>
+                        <h4>Reverse Traversal at Any Level</h4>
+                        <pre><code class="language-objectscript"> // Reverse outer level, forward inner level
+ SET subject = &quot;&quot;
+ FOR {
+     SET subject = $ORDER(^students(subject), -1)
+     QUIT:subject=&quot;&quot;
+     WRITE &quot;Subject: &quot;, subject, !
+     SET student = &quot;&quot;
+     FOR {
+         SET student = $ORDER(^students(subject, student), 1, grade)
+         QUIT:student=&quot;&quot;
+         WRITE &quot;  &quot;, student, &quot; = &quot;, grade, !
+     }
+ }
+ // Output: Science first, then Math (reverse alphabetical)</code></pre>
+                        <h4>Using $QUERY for Flat Traversal</h4>
+                        <p>$QUERY traverses all nodes at all levels in a single loop, returning the full reference as a string:</p>
+                        <pre><code class="language-objectscript"> SET ref = &quot;^students&quot;
+ FOR {
+     SET ref = $QUERY(@ref)
+     QUIT:ref=&quot;&quot;
+     WRITE ref, &quot; = &quot;, @ref, !
+ }
+ // Output:
+ //   ^students(&quot;Math&quot;,&quot;Alice&quot;) = 95
+ //   ^students(&quot;Math&quot;,&quot;Bob&quot;) = 87
+ //   ^students(&quot;Science&quot;,&quot;Alice&quot;) = 92
+ //   ^students(&quot;Science&quot;,&quot;Charlie&quot;) = 88</code></pre>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_forder" target="_blank">$ORDER Function</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fquery" target="_blank">$QUERY Function</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GGBL_using#GGBL_using_traversing" target="_blank">Traversing Globals</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="section-4" class="knowledge-item">
+                <h2>4. $DATA to check node existence <button class="subsection-report-btn" onclick="openReportModal('section-4', 'Section 4')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>$DATA returns 0</strong>: Node does not exist</li>
+                        <li><strong>$DATA returns 1</strong>: Node exists and has data, but no descendants</li>
+                        <li><strong>$DATA returns 10</strong>: Node has descendants but no data at this level</li>
+                        <li><strong>$DATA returns 11</strong>: Node has both data and descendants</li>
+                        <li><strong>$D shorthand</strong>: $D is a valid abbreviation for $DATA</li>
+                        <li><strong>Two-argument form</strong>: $DATA(var, target) stores the node's value in target if it exists</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Overview</h4>
+                        <p>$DATA (abbreviated $D) is the standard way to check whether a variable or global node exists before accessing it. It returns an integer that indicates both whether data exists at that node and whether descendant nodes exist below it.</p>
+                        <h4>Return Values Explained</h4>
+                        <pre><code class="language-objectscript"> KILL myarray
+ SET myarray(1) = &quot;data&quot;
+ SET myarray(2, &quot;child&quot;) = &quot;nested&quot;
+ SET myarray(3) = &quot;parent&quot;
+ SET myarray(3, &quot;child&quot;) = &quot;nested&quot;
+
+ WRITE $DATA(myarray(0)), !     // 0  - does not exist
+ WRITE $DATA(myarray(1)), !     // 1  - has data, no children
+ WRITE $DATA(myarray(2)), !     // 10 - no data, has children
+ WRITE $DATA(myarray(3)), !     // 11 - has data AND children</code></pre>
+                        <h4>Using $DATA in Conditional Logic</h4>
+                        <pre><code class="language-objectscript"> // Check if a node exists before reading
+ IF $DATA(^config(&quot;timeout&quot;)) {
+     SET timeout = ^config(&quot;timeout&quot;)
+ } ELSE {
+     SET timeout = 30  // default
+ }
+
+ // More concise: check for data presence (1 or 11)
+ // Use modular arithmetic: $DATA returns 1 or 11 when data exists
+ IF $DATA(^config(&quot;timeout&quot;)) # 2 {
+     // Node has data (return value is 1 or 11)
+     SET timeout = ^config(&quot;timeout&quot;)
+ }
+
+ // Check for descendants (10 or 11)
+ IF $DATA(^config(&quot;timeout&quot;)) \ 10 {
+     // Node has descendant subscripts
+     WRITE &quot;Has child nodes&quot;, !
+ }</code></pre>
+                        <h4>Two-Argument Form</h4>
+                        <p>The second argument receives the node's value (if data exists), avoiding a separate read:</p>
+                        <pre><code class="language-objectscript"> IF $DATA(^config(&quot;timeout&quot;), value) # 2 {
+     WRITE &quot;Timeout is: &quot;, value, !
+ } ELSE {
+     WRITE &quot;No timeout configured&quot;, !
+ }</code></pre>
+                        <h4>Common Pattern: Checking Variable Existence</h4>
+                        <pre><code class="language-objectscript"> // Check if a local variable is defined
+ IF &#x27;$DATA(myVar) {
+     SET myVar = &quot;default&quot;
+ }
+
+ // Shorthand $D
+ IF $D(^globalNode) WRITE &quot;Exists&quot;, !
+
+ // $DATA on undefined variables returns 0
+ KILL x
+ WRITE $D(x), !    // 0
+ SET x = 5
+ WRITE $D(x), !    // 1
+ SET x(1) = 10
+ WRITE $D(x), !    // 11</code></pre>
+                        <h4>$DATA vs $GET</h4>
+                        <p>$DATA tells you IF something exists; $GET retrieves the value with a default. They serve different purposes:</p>
+                        <pre><code class="language-objectscript"> // $GET returns the value or a default
+ SET timeout = $GET(^config(&quot;timeout&quot;), 30)
+
+ // $DATA tells you about existence and structure
+ SET status = $DATA(^config(&quot;timeout&quot;))</code></pre>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fdata" target="_blank">$DATA Function</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_variables" target="_blank">Multidimensional Arrays</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <div class="exam-prep">
+                <h2>Exam Preparation Summary</h2>
+                <h3>Critical Concepts to Master:</h3>
+                <ol>
+                    <li><strong>Subscript collation</strong>: Canonical numerics sort first by value, then strings sort by ASCII byte order</li>
+                    <li><strong>Canonical form</strong>: Know which values are canonical (1, -2, 3.14) vs non-canonical ("01", "3.0", "+5")</li>
+                    <li><strong>$ORDER pattern</strong>: Empty string start, FOR loop, QUIT:key="" termination</li>
+                    <li><strong>$ORDER direction</strong>: 1 for forward (default), -1 for reverse</li>
+                    <li><strong>$ORDER third argument</strong>: Retrieves data by reference, more efficient for globals</li>
+                    <li><strong>Nested $ORDER</strong>: One loop per subscript level for multi-level traversal</li>
+                    <li><strong>$DATA return values</strong>: 0 (nothing), 1 (data only), 10 (children only), 11 (both)</li>
+                    <li><strong>$DATA modular arithmetic</strong>: `# 2` to check for data, `\ 10` to check for descendants</li>
+                </ol>
+                <h3>Common Exam Scenarios:</h3>
+                <ul>
+                    <li>Predicting the order of subscripts in a mixed numeric/string array</li>
+                    <li>Writing a correct $ORDER loop to traverse a global</li>
+                    <li>Determining the output of nested $ORDER traversal</li>
+                    <li>Choosing between $DATA, $GET, and $ORDER for a given task</li>
+                    <li>Identifying canonical vs non-canonical subscript values</li>
+                    <li>Using $ORDER with direction -1 for reverse traversal</li>
+                    <li>Using $QUERY vs nested $ORDER for flat traversal</li>
+                </ul>
+                <h3>Hands-On Practice Recommendations:</h3>
+                <ul>
+                    <li>Create arrays with mixed numeric and string subscripts and verify the traversal order</li>
+                    <li>Write nested $ORDER loops for two-level and three-level globals</li>
+                    <li>Experiment with $DATA on nodes with and without data and descendants</li>
+                    <li>Use $ORDER with the third argument and compare performance to separate reads</li>
+                    <li>Practice reverse traversal and traversal from a specific starting point</li>
+                    <li>Try $QUERY on multi-level globals and compare to nested $ORDER approach</li>
+                </ul>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <a href="../quiz.html?file=quizzes/T4.1-quiz.json" class="take-quiz-btn">Take the Quiz</a>
+        </footer>
+    </div>
+
+    <div id="reportModal" class="report-modal">
+        <div class="report-content">
+            <h3>Report an Issue</h3>
+            <label for="issueType">Issue Type</label>
+            <select id="issueType">
+                <option value="confusing">Confusing Content</option>
+                <option value="wrong_answer">Incorrect Information</option>
+                <option value="outdated">Outdated Content</option>
+                <option value="formatting">Formatting Issue</option>
+                <option value="typo">Typo</option>
+                <option value="other">Other</option>
+            </select>
+            <label for="issueDescription">Description</label>
+            <textarea id="issueDescription" placeholder="Please describe the issue..."></textarea>
+            <div style="display: flex; align-items: center; gap: 10px; margin: 15px 0;">
+                <input type="checkbox" id="wantEmailNotification" style="width: 18px; height: 18px;">
+                <label for="wantEmailNotification" style="margin: 0; cursor: pointer;">
+                    Notify me by email when resolved
+                </label>
+            </div>
+            <div class="report-actions">
+                <button class="report-cancel" onclick="closeReportModal()">Cancel</button>
+                <button class="report-submit" onclick="submitReport()">Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../../js/config.js"></script>
+    <script src="../../../js/auth.js"></script>
+    <script src="../../../js/api.js"></script>
+    <script>
+        const CERTIFICATION_NAME = 'ObjectScript-Specialist';
+        const TOPIC_REF = 'T4.1';
+
+        document.addEventListener('DOMContentLoaded', function() {
+            updateAuthUI();
+            trackKnowledgeView();
+        });
+
+        function updateAuthUI() {
+            const loginBtn = document.getElementById('loginBtn');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const userInfo = document.getElementById('userInfo');
+            const userAvatar = document.getElementById('userAvatar');
+            const userName = document.getElementById('userName');
+
+            if (typeof Auth !== 'undefined' && Auth.isAuthenticated()) {
+                const user = Auth.getUser();
+                loginBtn.style.display = 'none';
+                logoutBtn.style.display = 'inline-block';
+                userInfo.style.display = 'flex';
+                if (user) {
+                    const initial = (user.name || user.email || '?')[0].toUpperCase();
+                    userAvatar.textContent = initial;
+                    userName.textContent = user.name || user.email || 'User';
+                }
+            } else {
+                loginBtn.style.display = 'inline-block';
+                logoutBtn.style.display = 'none';
+                userInfo.style.display = 'none';
+            }
+        }
+
+        async function trackKnowledgeView() {
+            if (typeof Auth === 'undefined' || !Auth.isAuthenticated()) {
+                return;
+            }
+
+            try {
+                await Api.trackKnowledge(CERTIFICATION_NAME, TOPIC_REF);
+                console.log('Knowledge view tracked:', TOPIC_REF);
+            } catch (error) {
+                console.log('View tracking skipped:', error.message);
+            }
+        }
+
+        function openReportModal(sectionId, sectionTitle) {
+            if (typeof Auth === 'undefined' || !Auth.isAuthenticated()) {
+                alert('Please sign in to report issues.');
+                return;
+            }
+            // Store section context
+            window.currentReportSection = {
+                id: sectionId || 'general',
+                title: sectionTitle || 'General'
+            };
+            // Update modal header to show section
+            const modalHeader = document.querySelector('#reportModal h3');
+            if (modalHeader && sectionTitle) {
+                modalHeader.textContent = 'Report Issue: ' + sectionTitle;
+            } else if (modalHeader) {
+                modalHeader.textContent = 'Report an Issue';
+            }
+            document.getElementById('wantEmailNotification').checked = false;
+            document.getElementById('reportModal').classList.add('active');
+        }
+
+        function closeReportModal() {
+            document.getElementById('reportModal').classList.remove('active');
+            document.getElementById('issueType').value = 'confusing';
+            document.getElementById('issueDescription').value = '';
+        }
+
+        async function submitReport() {
+            const issueType = document.getElementById('issueType').value;
+            const description = document.getElementById('issueDescription').value.trim();
+            const wantEmailNotification = document.getElementById('wantEmailNotification').checked;
+            const sectionContext = window.currentReportSection || { id: 'general', title: 'General' };
+
+            if (!description) {
+                alert('Please provide a description of the issue.');
+                return;
+            }
+
+            // Build content reference with section context
+            const contentRef = sectionContext.id !== 'general'
+                ? `${TOPIC_REF} (${sectionContext.title})`
+                : TOPIC_REF;
+
+            try {
+                await Api.reportProblem({
+                    certificationName: CERTIFICATION_NAME,
+                    contentType: 'knowledge',
+                    contentReference: contentRef,
+                    issueType: issueType,
+                    description: description,
+                    wantEmailNotification: wantEmailNotification
+                });
+                alert('Thank you! Your report has been submitted.');
+                closeReportModal();
+            } catch (error) {
+                if (error.status === 429) {
+                    const retryMinutes = Math.ceil((error.data?.retryAfter || 3600) / 60);
+                    alert(`You've submitted too many reports recently. Please wait ${retryMinutes} minutes before submitting another report.`);
+                } else {
+                    alert('Failed to submit report: ' + error.message);
+                }
+            }
+        }
+
+        document.querySelectorAll('.detailed-notes h3').forEach(h3 => {
+            h3.style.cursor = 'pointer';
+        });
+    </script>
+    <script src="../../../js/consent.js"></script>
+    <script src="../../../js/analytics.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            CookieConsent.init();
+            Analytics.init();
+        });
+    </script>
+</body>
+</html>

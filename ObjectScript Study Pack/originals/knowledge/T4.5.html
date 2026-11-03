@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Study guide for T4.5: Decision and Control Structures - part of the InterSystems ObjectScript Specialist certification. Learn key concepts, best practices, and exam preparation tips.">
+    <meta name="keywords" content="InterSystems certification, ObjectScript Specialist, T4.5: Decision and Control Structures, exam preparation, practice quiz">
+    <meta name="author" content="exam-prep.es">
+    <meta name="robots" content="index, follow">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://exam-prep.es/exams/objectscript/knowledge/T4.5.html">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://exam-prep.es/exams/objectscript/knowledge/T4.5.html">
+    <meta property="og:title" content="T4.5: Decision and Control Structures - InterSystems ObjectScript Specialist Study Guide">
+    <meta property="og:description" content="Study guide for T4.5: Decision and Control Structures - part of the InterSystems ObjectScript Specialist certification. Learn key concepts, best practices, and exam preparation tips.">
+    <meta property="og:image" content="https://exam-prep.es/images/og-image.png">
+    <meta property="og:site_name" content="InterSystems Certification Prep">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://exam-prep.es/exams/objectscript/knowledge/T4.5.html">
+    <meta name="twitter:title" content="T4.5: Decision and Control Structures - InterSystems ObjectScript Specialist Study Guide">
+    <meta name="twitter:description" content="Study guide for T4.5: Decision and Control Structures - part of the InterSystems ObjectScript Specialist certification. Learn key concepts, best practices, and exam preparation tips.">
+    <meta name="twitter:image" content="https://exam-prep.es/images/og-image.png">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+    <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+
+    <!-- hreflang Tags -->
+    <link rel="alternate" hreflang="en" href="https://exam-prep.es/exams/objectscript/knowledge/T4.5.html" />
+    <link rel="alternate" hreflang="es" href="https://exam-prep.es/exams/objectscript/knowledge/es/T4.5.html" />
+    <link rel="alternate" hreflang="x-default" href="https://exam-prep.es/exams/objectscript/knowledge/T4.5.html" />
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../colors.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+    <link rel="stylesheet" href="../../../css/consent.css">
+
+    <title>T4.5: Decision and Control Structures - InterSystems ObjectScript Specialist Study Guide | exam-prep.es</title>
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "T4.5: Decision and Control Structures - InterSystems ObjectScript Specialist Study Guide",
+    "description": "Study guide for T4.5: Decision and Control Structures - part of the InterSystems ObjectScript Specialist certification. Learn key concepts, best practices, and exam preparation tips.",
+    "author": {
+        "@type": "Organization",
+        "name": "exam-prep.es"
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "InterSystems Certification Prep",
+        "url": "https://exam-prep.es"
+    },
+    "inLanguage": "en",
+    "about": {
+        "@type": "Course",
+        "name": "InterSystems ObjectScript Specialist"
+    }
+}
+    </script>
+</head>
+<body>
+    <div class="container">
+        <nav class="nav-bar">
+            <a href="../index.html" class="back-link">&#8592; Back to Topics</a>
+            <div class="lang-toggle">
+                <a href="T4.5.html" class="lang-btn active">EN</a>
+                <a href="es/T4.5.html" class="lang-btn">ES</a>
+            </div>
+            <a href="../quiz.html?file=quizzes/T4.5-quiz.json" class="quiz-link">Take Quiz &#8594;</a>
+            <div class="auth-bar">
+                <button id="loginBtn" class="auth-btn login-btn" onclick="Auth.login()">Sign In</button>
+                <div id="userInfo" class="user-info">
+                    <div id="userAvatar" class="user-avatar">?</div>
+                    <span id="userName" class="user-name">User</span>
+                </div>
+                <button id="logoutBtn" class="auth-btn logout-btn" onclick="Auth.logout()">Sign Out</button>
+            </div>
+        </nav>
+
+        <header class="header">
+            <h1>T4.5: Decision and Control Structures</h1>
+            <p>Knowledge Review - InterSystems ObjectScript Specialist</p>
+        </header>
+
+        <nav class="toc">
+            <h3>Contents</h3>
+            <ol>
+                <li><a href="#section-1">Post-conditionals</a></li>
+                <li><a href="#section-2">Quit vs Return</a></li>
+                <li><a href="#section-3">Boolean evaluation</a></li>
+            </ol>
+        </nav>
+
+        <main class="content">
+            <section id="section-1" class="knowledge-item">
+                <h2>1. Post-conditionals <button class="subsection-report-btn" onclick="openReportModal('section-1', 'Section 1')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>Syntax</strong>: COMMAND:condition arguments -- colon between command and condition</li>
+                        <li><strong>Compact code</strong>: Execute a single command conditionally without IF/ELSE blocks</li>
+                        <li><strong>SET:condition</strong>: SET:condition var = value -- only sets if condition is true</li>
+                        <li><strong>QUIT:condition</strong>: Exit a loop or method conditionally</li>
+                        <li><strong>DO:condition</strong>: Call a method conditionally</li>
+                        <li><strong>WRITE:condition</strong>: Output conditionally</li>
+                        <li><strong>Any command</strong>: Most ObjectScript commands support post-conditionals</li>
+                        <li><strong>No ELSE</strong>: Post-conditionals have no ELSE counterpart -- use IF/ELSE for that</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Overview</h4>
+                        <p>Post-conditionals are a distinctive ObjectScript feature that allows any command to be executed conditionally by appending a colon and a boolean expression directly after the command keyword. This produces concise, readable code for simple conditional operations without the overhead of full IF/ELSE blocks.</p>
+                        <h4>Basic Post-Conditional Syntax</h4>
+                        <pre><code class="language-objectscript"> SET x = 10
+
+ // SET with post-conditional
+ SET:x&gt;5 message = &quot;x is large&quot;
+ WRITE message, !                  // x is large
+
+ // Equivalent to:
+ IF x &gt; 5 SET message = &quot;x is large&quot;
+
+ // WRITE with post-conditional
+ WRITE:x&gt;5 &quot;Greater than 5&quot;, !
+
+ // Multiple post-conditionals (each independent)
+ SET:x&gt;20 category = &quot;very large&quot;
+ SET:x&gt;10 category = &quot;large&quot;
+ SET:x&gt;5 category = &quot;medium&quot;
+ SET:x&lt;=5 category = &quot;small&quot;
+ WRITE category, !                 // medium</code></pre>
+                        <h4>QUIT with Post-Conditional</h4>
+                        <pre><code class="language-objectscript"> // Early exit from a FOR loop
+ SET sum = 0
+ FOR i = 1:1:100 {
+     SET sum = sum + i
+     QUIT:sum&gt;100
+ }
+ WRITE &quot;Sum: &quot;, sum, &quot; at i=&quot;, i, !
+ // Output: Sum: 105 at i=14
+
+ // In method: return early if precondition fails
+ ClassMethod Divide(a As %Numeric, b As %Numeric) As %Numeric
+ {
+     QUIT:b=0 &quot;&quot;    // Return empty if division by zero
+     QUIT a / b
+ }</code></pre>
+                        <h4>DO with Post-Conditional</h4>
+                        <pre><code class="language-objectscript"> // Call a method only if condition is met
+ DO:status&#x27;=$$$OK ..LogError(status)
+
+ // Multiple conditional calls
+ DO:age&gt;=18 ..ProcessAdult(name)
+ DO:age&lt;18 ..ProcessMinor(name)</code></pre>
+                        <h4>Post-Conditional with Complex Expressions</h4>
+                        <pre><code class="language-objectscript"> // Parentheses for complex conditions
+ SET:(x&gt;0)&amp;&amp;(x&lt;100) range = &quot;valid&quot;
+
+ // String conditions
+ SET name = &quot;Alice&quot;
+ WRITE:name=&quot;Alice&quot; &quot;Found Alice!&quot;, !
+
+ // Negation
+ SET:(obj&#x27;=&quot;&quot;) result = obj.Calculate()
+
+ // Post-conditional on KILL
+ KILL:cleanup tempVar</code></pre>
+                        <h4>Common Patterns</h4>
+                        <pre><code class="language-objectscript"> // Default value assignment
+ SET:(&#x27;$DATA(config)) config = &quot;default&quot;
+
+ // Conditional increment
+ SET:isValid count = count + 1
+
+ // Guard clause in a method
+ ClassMethod Process(input As %String) As %Status
+ {
+     QUIT:input=&quot;&quot; $$$ERROR($$$GeneralError, &quot;Input required&quot;)
+     // ... rest of processing
+     QUIT $$$OK
+ }
+
+ // Conditional THROW
+ THROW:status&#x27;=$$$OK ##class(%Exception.StatusException).CreateFromStatus(status)</code></pre>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_commands#GCOS_commands_postconditional" target="_blank">Post-Conditional Expressions</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_cset" target="_blank">SET Command</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_cquit" target="_blank">QUIT Command</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="section-2" class="knowledge-item">
+                <h2>2. Quit vs Return <button class="subsection-report-btn" onclick="openReportModal('section-2', 'Section 2')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>QUIT</strong>: Exits the current context -- loop body, method, or DO block</li>
+                        <li><strong>RETURN</strong>: Always exits the current method/routine, even from within a loop</li>
+                        <li><strong>QUIT in loop</strong>: Exits only the innermost loop, continues after the loop</li>
+                        <li><strong>RETURN in loop</strong>: Exits the entire method from within the loop</li>
+                        <li><strong>Return value</strong>: Both QUIT expr and RETURN expr can return values from methods</li>
+                        <li><strong>QUIT from method</strong>: When used outside a loop, QUIT exits the method (same as RETURN)</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Overview</h4>
+                        <p>QUIT and RETURN both exit code, but they differ in what they exit. QUIT exits the nearest enclosing context (loop or method), while RETURN always exits the method. This distinction is critical when you need to exit a method from inside a nested loop.</p>
+                        <h4>QUIT in Loops vs Methods</h4>
+                        <pre><code class="language-objectscript"> ClassMethod Example1()
+ {
+     WRITE &quot;Before loop&quot;, !
+     FOR i = 1:1:10 {
+         QUIT:i=3         // Exits the FOR loop only
+     }
+     WRITE &quot;After loop, i=&quot;, i, !    // Prints! i=3
+     WRITE &quot;Method continues&quot;, !      // Also prints
+ }</code></pre>
+                        <pre><code class="language-objectscript"> ClassMethod Example2()
+ {
+     WRITE &quot;Before loop&quot;, !
+     FOR i = 1:1:10 {
+         RETURN:i=3       // Exits the ENTIRE METHOD
+     }
+     WRITE &quot;After loop&quot;, !            // NEVER reached
+ }</code></pre>
+                        <h4>QUIT vs RETURN in Nested Loops</h4>
+                        <pre><code class="language-objectscript"> ClassMethod NestedExample()
+ {
+     FOR i = 1:1:5 {
+         FOR j = 1:1:5 {
+             IF (i = 3) &amp;&amp; (j = 2) {
+                 QUIT    // Exits inner FOR loop only
+                 // Outer loop continues with i=3, then i=4, i=5
+             }
+         }
+         WRITE &quot;i=&quot;, i, !    // Prints for all i values
+     }
+     WRITE &quot;Done&quot;, !          // Prints
+ }</code></pre>
+                        <pre><code class="language-objectscript"> ClassMethod NestedReturn()
+ {
+     FOR i = 1:1:5 {
+         FOR j = 1:1:5 {
+             IF (i = 3) &amp;&amp; (j = 2) {
+                 RETURN   // Exits the ENTIRE method immediately
+             }
+         }
+         WRITE &quot;i=&quot;, i, !    // Prints for i=1, i=2 only
+     }
+     WRITE &quot;Done&quot;, !          // NEVER reached
+ }</code></pre>
+                        <h4>Returning Values</h4>
+                        <pre><code class="language-objectscript"> // QUIT with return value (in a method returning a value)
+ ClassMethod Add(a, b) As %Integer
+ {
+     QUIT a + b
+ }
+
+ // RETURN with return value
+ ClassMethod FindFirst(list As %ListOfDataTypes) As %String
+ {
+     FOR i = 1:1:list.Count() {
+         SET item = list.GetAt(i)
+         IF item [ &quot;target&quot; {
+             RETURN item    // Exit method immediately with value
+         }
+     }
+     RETURN &quot;&quot;              // Not found
+ }
+
+ // QUIT in a method with no return value
+ ClassMethod Process()
+ {
+     QUIT:errorCondition    // Exit method (no return value)
+     // ... processing
+ }</code></pre>
+                        <h4>QUIT in DO Blocks</h4>
+                        <pre><code class="language-objectscript"> // QUIT exits a DO block (argumentless DO with code block)
+ DO {
+     SET x = $RANDOM(10)
+     QUIT:x=5              // Exits the DO block, not any outer loop
+     WRITE x, &quot; &quot;
+ } WHILE x &#x27;= 5</code></pre>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_cquit" target="_blank">QUIT Command</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_creturn" target="_blank">RETURN Command</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="section-3" class="knowledge-item">
+                <h2>3. Boolean evaluation <button class="subsection-report-btn" onclick="openReportModal('section-3', 'Section 3')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>True</strong>: Any nonzero numeric value is true (1, -1, 42, 3.14)</li>
+                        <li><strong>False</strong>: Zero (0) is false</li>
+                        <li><strong>Empty string</strong>: "" evaluates to 0, which is false</li>
+                        <li><strong>Non-numeric strings</strong>: "abc" evaluates to 0 (false) because its numeric value is 0</li>
+                        <li><strong>Leading numeric strings</strong>: "5abc" evaluates to 5, which is true</li>
+                        <li><strong>Canonical</strong>: Truthiness depends on the numeric interpretation of the value</li>
+                        <li><strong>Boolean result</strong>: Comparison and logical operators always return 0 or 1</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Overview</h4>
+                        <p>ObjectScript does not have a dedicated boolean type. Instead, it uses numeric evaluation: zero is false, any nonzero value is true. When a string is evaluated as a boolean, it is first converted to its numeric value. Understanding this coercion is critical for writing correct conditions.</p>
+                        <h4>Truthiness Rules</h4>
+                        <pre><code class="language-objectscript"> // Nonzero = true
+ IF 1 WRITE &quot;1 is true&quot;, !            // prints
+ IF -1 WRITE &quot;-1 is true&quot;, !          // prints
+ IF 42 WRITE &quot;42 is true&quot;, !          // prints
+ IF 0.001 WRITE &quot;0.001 is true&quot;, !    // prints
+
+ // Zero = false
+ IF 0 WRITE &quot;0 is true&quot;, !            // does NOT print
+ IF &#x27;0 WRITE &quot;0 is false&quot;, !          // prints
+
+ // Empty string = 0 = false
+ IF &quot;&quot; WRITE &quot;empty is true&quot;, !       // does NOT print
+ SET x = &quot;&quot;
+ IF &#x27;x WRITE &quot;empty is false&quot;, !      // prints
+
+ // Non-numeric strings = 0 = false
+ IF &quot;abc&quot; WRITE &quot;abc is true&quot;, !      // does NOT print
+ IF &quot;hello&quot; WRITE &quot;hello is true&quot;, !  // does NOT print
+
+ // Leading numeric strings = their numeric value
+ IF &quot;5abc&quot; WRITE &quot;5abc is true&quot;, !    // prints (5 is nonzero)
+ IF &quot;0abc&quot; WRITE &quot;0abc is true&quot;, !    // does NOT print (0)</code></pre>
+                        <h4>Boolean Results from Comparisons</h4>
+                        <pre><code class="language-objectscript"> // Comparisons return exactly 0 or 1
+ WRITE 5 &gt; 3, !             // 1
+ WRITE 3 &gt; 5, !             // 0
+ WRITE &quot;A&quot; = &quot;A&quot;, !         // 1
+ WRITE &quot;A&quot; = &quot;B&quot;, !         // 0
+
+ // Can store boolean results
+ SET isAdult = (age &gt;= 18)
+ SET isValid = (name &#x27;= &quot;&quot;) &amp;&amp; (age &gt; 0)
+
+ // Boolean arithmetic
+ SET total = (a &gt; 0) + (b &gt; 0) + (c &gt; 0)
+ WRITE &quot;Number of positive values: &quot;, total, !</code></pre>
+                        <h4>Common Boolean Pitfalls</h4>
+                        <pre><code class="language-objectscript"> // PITFALL: Testing a string that should be boolean
+ SET flag = &quot;yes&quot;
+ IF flag WRITE &quot;flag is true&quot;, !      // does NOT print!
+ // &quot;yes&quot; has numeric value 0, so it is false in boolean context
+
+ // Correct approach: test against specific values
+ IF flag = &quot;yes&quot; WRITE &quot;flag is yes&quot;, !  // prints
+
+ // PITFALL: Empty string vs zero
+ // In boolean context (IF), &quot;&quot; acts like 0 (false)
+ // But &quot;&quot; and 0 are NOT equal with the = operator!
+ SET val = &quot;&quot;
+ IF val WRITE &quot;truthy&quot;, !             // does NOT print (&quot;&quot; is falsy)
+ IF val = 0 WRITE &quot;equal to zero&quot;, !  // does NOT print! (&quot;&quot; &#x27;= 0)
+ IF val = &quot;&quot; WRITE &quot;equal to empty&quot;, ! // prints
+
+ SET zero = 0
+ IF zero WRITE &quot;truthy&quot;, !            // does NOT print (0 is falsy)
+ IF zero = &quot;&quot; WRITE &quot;equal to empty&quot;, ! // does NOT print! (0 &#x27;= &quot;&quot;)
+ IF zero = 0 WRITE &quot;equal to zero&quot;, ! // prints
+
+ // To coerce &quot;&quot; to numeric before comparison, use unary +
+ WRITE +&quot;&quot; = 0, !            // 1 (+&quot;&quot; gives 0, then 0 = 0)
+ WRITE &quot;&quot; = 0, !             // 0 (&quot;&quot; is not 0)
+
+ // PITFALL: Non-numeric strings are all falsy
+ IF &quot;yes&quot; WRITE &quot;yes&quot;, !     // does NOT print (&quot;yes&quot; = 0 numerically)
+ IF &quot;true&quot; WRITE &quot;true&quot;, !   // does NOT print
+ IF &quot;abc&quot; WRITE &quot;abc&quot;, !     // does NOT print
+ WRITE &quot;yes&quot; = 0, !          // 0 (&quot;yes&quot; is not 0 -- different values)
+ WRITE +&quot;yes&quot; = 0, !         // 1 (+&quot;yes&quot; coerces to 0, then 0 = 0)</code></pre>
+                        <h4>NOT Operator</h4>
+                        <pre><code class="language-objectscript"> SET x = 5
+ WRITE &#x27;x, !                // 0 (NOT 5 = false)
+
+ SET y = 0
+ WRITE &#x27;y, !                // 1 (NOT 0 = true)
+
+ // Double negation
+ WRITE &#x27;&#x27;x, !               // 1 (NOT NOT 5 = true)
+ WRITE &#x27;&#x27;y, !               // 0 (NOT NOT 0 = false)
+
+ // &#x27;&#x27; can normalize any value to 0 or 1
+ SET normalized = &#x27;&#x27;someValue
+ // normalized is now exactly 0 or 1</code></pre>
+                        <h4>Truthiness in Control Flow</h4>
+                        <pre><code class="language-objectscript"> // IF uses truthiness
+ SET name = &quot;Alice&quot;
+ IF name WRITE &quot;name has a value&quot;, !    // does NOT print (&quot;Alice&quot; = 0)
+
+ // Correct: check for non-empty
+ IF name &#x27;= &quot;&quot; WRITE &quot;name is not empty&quot;, !  // prints
+
+ // $DATA returns 0 (falsy) or 1/10/11 (truthy)
+ IF $DATA(^config(&quot;key&quot;)) WRITE &quot;key exists&quot;, !
+
+ // $LENGTH returns 0 for empty, positive for non-empty
+ IF $LENGTH(name) WRITE &quot;name has length&quot;, !  // prints (5 &gt; 0)</code></pre>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_operators#GCOS_operators_truth" target="_blank">Boolean Expressions</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_types#GCOS_types_numericstrings" target="_blank">Numeric Interpretation of Strings</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <div class="exam-prep">
+                <h2>Exam Preparation Summary</h2>
+                <h3>Critical Concepts to Master:</h3>
+                <ol>
+                    <li><strong>Post-conditional syntax</strong>: COMMAND:condition -- colon directly after command, no space</li>
+                    <li><strong>QUIT vs RETURN</strong>: QUIT exits nearest context (loop or method); RETURN always exits the method</li>
+                    <li><strong>QUIT in nested loops</strong>: Only exits the innermost loop -- use RETURN to exit the method</li>
+                    <li><strong>Boolean evaluation</strong>: 0 = false, nonzero = true; "" is falsy; "abc" is falsy (numeric value 0)</li>
+                    <li><strong>String truthiness trap</strong>: "yes", "true", "abc" are all FALSE because their numeric value is 0</li>
+                    <li><strong>"" vs 0</strong>: Both are falsy in boolean context, but `"" = 0` is FALSE — they are different values. Use unary `+` to coerce strings to numbers before numeric comparison</li>
+                    <li><strong>Post-conditionals on any command</strong>: SET, QUIT, DO, WRITE, KILL, THROW all support them</li>
+                    <li><strong>Return values</strong>: Both QUIT expr and RETURN expr can return values from methods</li>
+                </ol>
+                <h3>Common Exam Scenarios:</h3>
+                <ul>
+                    <li>Predicting whether QUIT exits a loop or method based on context</li>
+                    <li>Determining the output of code with post-conditionals</li>
+                    <li>Evaluating boolean expressions with string values (truthiness traps)</li>
+                    <li>Choosing between QUIT and RETURN for a given flow control need</li>
+                    <li>Writing guard clauses with QUIT:condition in methods</li>
+                    <li>Understanding that "" and 0 are both falsy but `"" = 0` is false</li>
+                    <li>Determining which lines execute after QUIT in a nested loop</li>
+                </ul>
+                <h3>Hands-On Practice Recommendations:</h3>
+                <ul>
+                    <li>Write methods using post-conditionals instead of IF blocks and verify behavior</li>
+                    <li>Create nested loops and test QUIT vs RETURN at different levels</li>
+                    <li>Experiment with truthiness of various values: "", "abc", "0", "1", 0, 1, "5abc"</li>
+                    <li>Test `"" = 0`, `0 = ""`, `+"" = 0` to understand coercion vs comparison</li>
+                    <li>Write a method that uses QUIT:condition as a guard clause</li>
+                    <li>Practice the pattern of QUIT:errorCondition $$$ERROR(...)</li>
+                    <li>Test double negation ('') to normalize values to boolean 0/1</li>
+                </ul>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <a href="../quiz.html?file=quizzes/T4.5-quiz.json" class="take-quiz-btn">Take the Quiz</a>
+        </footer>
+    </div>
+
+    <div id="reportModal" class="report-modal">
+        <div class="report-content">
+            <h3>Report an Issue</h3>
+            <label for="issueType">Issue Type</label>
+            <select id="issueType">
+                <option value="confusing">Confusing Content</option>
+                <option value="wrong_answer">Incorrect Information</option>
+                <option value="outdated">Outdated Content</option>
+                <option value="formatting">Formatting Issue</option>
+                <option value="typo">Typo</option>
+                <option value="other">Other</option>
+            </select>
+            <label for="issueDescription">Description</label>
+            <textarea id="issueDescription" placeholder="Please describe the issue..."></textarea>
+            <div style="display: flex; align-items: center; gap: 10px; margin: 15px 0;">
+                <input type="checkbox" id="wantEmailNotification" style="width: 18px; height: 18px;">
+                <label for="wantEmailNotification" style="margin: 0; cursor: pointer;">
+                    Notify me by email when resolved
+                </label>
+            </div>
+            <div class="report-actions">
+                <button class="report-cancel" onclick="closeReportModal()">Cancel</button>
+                <button class="report-submit" onclick="submitReport()">Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../../js/config.js"></script>
+    <script src="../../../js/auth.js"></script>
+    <script src="../../../js/api.js"></script>
+    <script>
+        const CERTIFICATION_NAME = 'ObjectScript-Specialist';
+        const TOPIC_REF = 'T4.5';
+
+        document.addEventListener('DOMContentLoaded', function() {
+            updateAuthUI();
+            trackKnowledgeView();
+        });
+
+        function updateAuthUI() {
+            const loginBtn = document.getElementById('loginBtn');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const userInfo = document.getElementById('userInfo');
+            const userAvatar = document.getElementById('userAvatar');
+            const userName = document.getElementById('userName');
+
+            if (typeof Auth !== 'undefined' && Auth.isAuthenticated()) {
+                const user = Auth.getUser();
+                loginBtn.style.display = 'none';
+                logoutBtn.style.display = 'inline-block';
+                userInfo.style.display = 'flex';
+                if (user) {
+                    const initial = (user.name || user.email || '?')[0].toUpperCase();
+                    userAvatar.textContent = initial;
+                    userName.textContent = user.name || user.email || 'User';
+                }
+            } else {
+                loginBtn.style.display = 'inline-block';
+                logoutBtn.style.display = 'none';
+                userInfo.style.display = 'none';
+            }
+        }
+
+        async function trackKnowledgeView() {
+            if (typeof Auth === 'undefined' || !Auth.isAuthenticated()) {
+                return;
+            }
+
+            try {
+                await Api.trackKnowledge(CERTIFICATION_NAME, TOPIC_REF);
+                console.log('Knowledge view tracked:', TOPIC_REF);
+            } catch (error) {
+                console.log('View tracking skipped:', error.message);
+            }
+        }
+
+        function openReportModal(sectionId, sectionTitle) {
+            if (typeof Auth === 'undefined' || !Auth.isAuthenticated()) {
+                alert('Please sign in to report issues.');
+                return;
+            }
+            // Store section context
+            window.currentReportSection = {
+                id: sectionId || 'general',
+                title: sectionTitle || 'General'
+            };
+            // Update modal header to show section
+            const modalHeader = document.querySelector('#reportModal h3');
+            if (modalHeader && sectionTitle) {
+                modalHeader.textContent = 'Report Issue: ' + sectionTitle;
+            } else if (modalHeader) {
+                modalHeader.textContent = 'Report an Issue';
+            }
+            document.getElementById('wantEmailNotification').checked = false;
+            document.getElementById('reportModal').classList.add('active');
+        }
+
+        function closeReportModal() {
+            document.getElementById('reportModal').classList.remove('active');
+            document.getElementById('issueType').value = 'confusing';
+            document.getElementById('issueDescription').value = '';
+        }
+
+        async function submitReport() {
+            const issueType = document.getElementById('issueType').value;
+            const description = document.getElementById('issueDescription').value.trim();
+            const wantEmailNotification = document.getElementById('wantEmailNotification').checked;
+            const sectionContext = window.currentReportSection || { id: 'general', title: 'General' };
+
+            if (!description) {
+                alert('Please provide a description of the issue.');
+                return;
+            }
+
+            // Build content reference with section context
+            const contentRef = sectionContext.id !== 'general'
+                ? `${TOPIC_REF} (${sectionContext.title})`
+                : TOPIC_REF;
+
+            try {
+                await Api.reportProblem({
+                    certificationName: CERTIFICATION_NAME,
+                    contentType: 'knowledge',
+                    contentReference: contentRef,
+                    issueType: issueType,
+                    description: description,
+                    wantEmailNotification: wantEmailNotification
+                });
+                alert('Thank you! Your report has been submitted.');
+                closeReportModal();
+            } catch (error) {
+                if (error.status === 429) {
+                    const retryMinutes = Math.ceil((error.data?.retryAfter || 3600) / 60);
+                    alert(`You've submitted too many reports recently. Please wait ${retryMinutes} minutes before submitting another report.`);
+                } else {
+                    alert('Failed to submit report: ' + error.message);
+                }
+            }
+        }
+
+        document.querySelectorAll('.detailed-notes h3').forEach(h3 => {
+            h3.style.cursor = 'pointer';
+        });
+    </script>
+    <script src="../../../js/consent.js"></script>
+    <script src="../../../js/analytics.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            CookieConsent.init();
+            Analytics.init();
+        });
+    </script>
+</body>
+</html>

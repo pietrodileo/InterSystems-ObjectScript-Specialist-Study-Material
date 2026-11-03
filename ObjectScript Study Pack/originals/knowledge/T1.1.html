@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Study guide for T1.1: Uses Classes - part of the InterSystems ObjectScript Specialist certification. Learn key concepts, best practices, and exam preparation tips.">
+    <meta name="keywords" content="InterSystems certification, ObjectScript Specialist, T1.1: Uses Classes, exam preparation, practice quiz">
+    <meta name="author" content="exam-prep.es">
+    <meta name="robots" content="index, follow">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://exam-prep.es/exams/objectscript/knowledge/T1.1.html">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://exam-prep.es/exams/objectscript/knowledge/T1.1.html">
+    <meta property="og:title" content="T1.1: Uses Classes - InterSystems ObjectScript Specialist Study Guide">
+    <meta property="og:description" content="Study guide for T1.1: Uses Classes - part of the InterSystems ObjectScript Specialist certification. Learn key concepts, best practices, and exam preparation tips.">
+    <meta property="og:image" content="https://exam-prep.es/images/og-image.png">
+    <meta property="og:site_name" content="InterSystems Certification Prep">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://exam-prep.es/exams/objectscript/knowledge/T1.1.html">
+    <meta name="twitter:title" content="T1.1: Uses Classes - InterSystems ObjectScript Specialist Study Guide">
+    <meta name="twitter:description" content="Study guide for T1.1: Uses Classes - part of the InterSystems ObjectScript Specialist certification. Learn key concepts, best practices, and exam preparation tips.">
+    <meta name="twitter:image" content="https://exam-prep.es/images/og-image.png">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+    <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+
+    <!-- hreflang Tags -->
+    <link rel="alternate" hreflang="en" href="https://exam-prep.es/exams/objectscript/knowledge/T1.1.html" />
+    <link rel="alternate" hreflang="es" href="https://exam-prep.es/exams/objectscript/knowledge/es/T1.1.html" />
+    <link rel="alternate" hreflang="x-default" href="https://exam-prep.es/exams/objectscript/knowledge/T1.1.html" />
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../colors.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+    <link rel="stylesheet" href="../../../css/consent.css">
+
+    <title>T1.1: Uses Classes - InterSystems ObjectScript Specialist Study Guide | exam-prep.es</title>
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "T1.1: Uses Classes - InterSystems ObjectScript Specialist Study Guide",
+    "description": "Study guide for T1.1: Uses Classes - part of the InterSystems ObjectScript Specialist certification. Learn key concepts, best practices, and exam preparation tips.",
+    "author": {
+        "@type": "Organization",
+        "name": "exam-prep.es"
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "InterSystems Certification Prep",
+        "url": "https://exam-prep.es"
+    },
+    "inLanguage": "en",
+    "about": {
+        "@type": "Course",
+        "name": "InterSystems ObjectScript Specialist"
+    }
+}
+    </script>
+</head>
+<body>
+    <div class="container">
+        <nav class="nav-bar">
+            <a href="../index.html" class="back-link">&#8592; Back to Topics</a>
+            <div class="lang-toggle">
+                <a href="T1.1.html" class="lang-btn active">EN</a>
+                <a href="es/T1.1.html" class="lang-btn">ES</a>
+            </div>
+            <a href="../quiz.html?file=quizzes/T1.1-quiz.json" class="quiz-link">Take Quiz &#8594;</a>
+            <div class="auth-bar">
+                <button id="loginBtn" class="auth-btn login-btn" onclick="Auth.login()">Sign In</button>
+                <div id="userInfo" class="user-info">
+                    <div id="userAvatar" class="user-avatar">?</div>
+                    <span id="userName" class="user-name">User</span>
+                </div>
+                <button id="logoutBtn" class="auth-btn logout-btn" onclick="Auth.logout()">Sign Out</button>
+            </div>
+        </nav>
+
+        <header class="header">
+            <h1>T1.1: Uses Classes</h1>
+            <p>Knowledge Review - InterSystems ObjectScript Specialist</p>
+        </header>
+
+        <nav class="toc">
+            <h3>Contents</h3>
+            <ol>
+                <li><a href="#section-1">Identifies use cases for persistent and registered object classes</a></li>
+                <li><a href="#section-2">Creates and saves a persistent object (%New(), %Save(), %Id())</a></li>
+                <li><a href="#section-3">Deletes objects (%DeleteId(), %DeleteExtent())</a></li>
+                <li><a href="#section-4">Interprets storage definitions (DataLocation, IdLocation, IndexLocation, USEEXTENTSET)</a></li>
+                <li><a href="#section-5">Implements multiple inheritance (order matters, method resolution)</a></li>
+                <li><a href="#section-6">Documents classes (Description keyword, /// comments)</a></li>
+            </ol>
+        </nav>
+
+        <main class="content">
+            <section id="section-1" class="knowledge-item">
+                <h2>1. Identifies use cases for persistent and registered object classes <button class="subsection-report-btn" onclick="openReportModal('section-1', 'Section 1')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>%Persistent</strong>: Objects that are stored permanently in the database with automatic SQL table projection</li>
+                        <li><strong>%RegisteredObject</strong>: Transient objects that exist only in memory during process lifetime</li>
+                        <li><strong>%SerialObject</strong>: Embeddable objects stored inline within a persistent object (no independent identity)</li>
+                        <li><strong>Use persistent classes</strong> when data must survive process termination and be queryable via SQL</li>
+                        <li><strong>Use registered classes</strong> for utility objects, business logic containers, and temporary data structures</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Overview</h4>
+                        <p>InterSystems IRIS provides three fundamental object types through system classes. Choosing the correct superclass determines how object instances are stored and managed. This decision has direct implications for SQL projection, memory usage, and data persistence.</p>
+                        <h4>Persistent Classes (%Persistent)</h4>
+                        <p>Persistent classes store their data in globals on disk. Each persistent class automatically projects as a SQL table, and each saved object instance becomes a row. Persistent objects have a unique object ID assigned upon saving.</p>
+                        <pre><code class="language-objectscript">Class Sample.Person Extends %Persistent
+{
+    Property Name As %String;
+    Property DOB As %Date;
+}</code></pre>
+                        <p>Use cases for persistent classes:</p>
+                        <ul>
+                            <li>Application data that must be stored long-term (patients, orders, transactions)</li>
+                            <li>Data that needs to be queried via SQL</li>
+                            <li>Objects that participate in relationships with other persistent objects</li>
+                            <li>Data shared across multiple processes</li>
+                        </ul>
+                        <h4>Registered Object Classes (%RegisteredObject)</h4>
+                        <p>Registered objects live only in memory for the duration of the process. They support the full object model (properties, methods, inheritance) but have no automatic storage mechanism.</p>
+                        <pre><code class="language-objectscript">Class Sample.Calculator Extends %RegisteredObject
+{
+    Property LastResult As %Numeric;
+
+    Method Add(a As %Numeric, b As %Numeric) As %Numeric
+    {
+        Set ..LastResult = a + b
+        Return ..LastResult
+    }
+}</code></pre>
+                        <p>Use cases for registered classes:</p>
+                        <ul>
+                            <li>Utility and helper classes that perform computations</li>
+                            <li>Temporary data holders during a request lifecycle</li>
+                            <li>Abstract base classes that define interfaces</li>
+                            <li>Service classes and adapters</li>
+                        </ul>
+                        <h4>Serial Object Classes (%SerialObject)</h4>
+                        <p>Serial objects are embedded within a persistent object. They do not have their own storage or ID; instead, their data is serialized into the parent object's storage. In SQL, serial properties project as multiple columns with a naming convention (e.g., <code>HomeAddress_City</code>, <code>HomeAddress_State</code>).</p>
+                        <pre><code class="language-objectscript">Class Sample.Address Extends %SerialObject
+{
+    Property City As %String;
+    Property State As %String;
+    Property Zip As %String;
+}
+
+Class Sample.Person Extends %Persistent
+{
+    Property Name As %String;
+    Property HomeAddress As Sample.Address;
+}</code></pre>
+                        <h4>Utility Classes (No Superclass)</h4>
+                        <p>A class defined without any <code>Extends</code> clause is a <strong>utility class</strong>. Since it does not inherit from <code>%RegisteredObject</code>, it cannot be instantiated with <code>%New()</code>. It can only contain <strong>ClassMethods</strong> and <strong>Parameters</strong> (no instance methods or properties).</p>
+                        <pre><code class="language-objectscript">Class Sample.MathUtils
+{
+    Parameter PI = 3.14159265;
+
+    ClassMethod Square(x As %Numeric) As %Numeric
+    {
+        Return x * x
+    }
+}</code></pre>
+                        <p>Common use case: grouping related class methods (utility functions, constants) without needing object instantiation.</p>
+                        <h4>Decision Criteria</h4>
+                        <table class="detail-table">
+                            <thead><tr><th>Criteria</th><th>%Persistent</th><th>%RegisteredObject</th><th>%SerialObject</th><th>No superclass</th></tr></thead>
+                            <tbody>
+                            <tr><td>Stored on disk</td><td>Yes</td><td>No</td><td>Embedded in parent</td><td>No</td></tr>
+                            <tr><td>Has unique ID</td><td>Yes</td><td>No</td><td>No</td><td>No</td></tr>
+                            <tr><td>SQL projection</td><td>Table</td><td>None</td><td>Columns in parent table</td><td>None</td></tr>
+                            <tr><td>Independent existence</td><td>Yes</td><td>In-memory only</td><td>Only within parent</td><td>N/A</td></tr>
+                            <tr><td>Instantiable (%New)</td><td>Yes</td><td>Yes</td><td>Yes</td><td>No</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_classes" target="_blank">Object Classes</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_persobj" target="_blank">Persistent Objects</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="section-2" class="knowledge-item">
+                <h2>2. Creates and saves a persistent object (%New(), %Save(), %Id()) <button class="subsection-report-btn" onclick="openReportModal('section-2', 'Section 2')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>%New()</strong> creates a new in-memory instance of a class and returns an object reference (oref)</li>
+                        <li><strong>%Save()</strong> persists the object to disk and returns a %Status value that must be checked</li>
+                        <li><strong>%Id()</strong> returns the unique persistent ID assigned to the object after saving</li>
+                        <li>Always check the return status of %Save() for error handling</li>
+                        <li><strong>%OpenId(id)</strong> retrieves a previously saved object from disk by its ID</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Overview</h4>
+                        <p>The lifecycle of a persistent object involves creation in memory, saving to disk, and later retrieval. Understanding this lifecycle and the methods involved is fundamental to working with InterSystems IRIS.</p>
+                        <h4>Creating an Object with %New()</h4>
+                        <p>The <code>%New()</code> method is inherited from <code>%RegisteredObject</code> and allocates memory for a new object instance. It returns an object reference (oref).</p>
+                        <pre><code class="language-objectscript">Set person = ##class(Sample.Person).%New()
+Set person.Name = &quot;John Smith&quot;
+Set person.DOB = $HOROLOG</code></pre>
+                        <p>Before <code>%Save()</code> is called, the object exists only in memory. If the variable goes out of scope without saving, the object is lost.</p>
+                        <h4>Saving with %Save()</h4>
+                        <p>The <code>%Save()</code> method serializes the object to the database globals. It returns a <code>%Status</code> value indicating success or failure.</p>
+                        <pre><code class="language-objectscript">Set sc = person.%Save()
+If $$$ISERR(sc) {
+    // Handle error
+    Do $System.Status.DisplayError(sc)
+}</code></pre>
+                        <p>Key behaviors of <code>%Save()</code>:</p>
+                        <ul>
+                            <li>First save assigns a new ID to the object</li>
+                            <li>Subsequent saves on the same oref update the existing record</li>
+                            <li>Validates required properties before saving</li>
+                            <li>Fires any triggers defined on the SQL table</li>
+                            <li>Cascades saves to embedded serial objects</li>
+                        </ul>
+                        <h4>Retrieving the ID with %Id()</h4>
+                        <p>After a successful save, <code>%Id()</code> returns the assigned unique identifier.</p>
+                        <pre><code class="language-objectscript">Set person = ##class(Sample.Person).%New()
+Set person.Name = &quot;Jane Doe&quot;
+Set sc = person.%Save()
+If $$$ISOK(sc) {
+    Write &quot;Saved with ID: &quot;, person.%Id(), !
+}</code></pre>
+                        <h4>Opening an Existing Object with %OpenId()</h4>
+                        <p>To retrieve a saved object by its ID:</p>
+                        <pre><code class="language-objectscript">Set person = ##class(Sample.Person).%OpenId(42)
+If person &#x27;= &quot;&quot; {
+    Write person.Name, !
+}</code></pre>
+                        <p>The concurrency parameter controls locking behavior: 0 (no lock), 1 (atomic read, default), 2 (shared lock), 3 (shared/retained lock), 4 (exclusive lock).</p>
+                        <h4>Complete Lifecycle Example</h4>
+                        <pre><code class="language-objectscript">// Create
+Set person = ##class(Sample.Person).%New()
+Set person.Name = &quot;Alice Johnson&quot;
+
+// Save
+Set sc = person.%Save()
+If $$$ISERR(sc) { Do $System.Status.DisplayError(sc) Quit }
+
+// Capture ID
+Set id = person.%Id()
+Write &quot;Created person with ID: &quot;, id, !
+
+// Later: open and modify
+Set person2 = ##class(Sample.Person).%OpenId(id)
+Set person2.Name = &quot;Alice Smith&quot;
+Set sc = person2.%Save()</code></pre>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_persobj_saving" target="_blank">Saving Objects</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_persobj_opening" target="_blank">Opening Objects</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="section-3" class="knowledge-item">
+                <h2>3. Deletes objects (%DeleteId(), %DeleteExtent()) <button class="subsection-report-btn" onclick="openReportModal('section-3', 'Section 3')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>%DeleteId(id)</strong> deletes a single object by its ID and returns a %Status</li>
+                        <li><strong>%DeleteExtent()</strong> deletes all instances of a class (all rows in the SQL table)</li>
+                        <li><strong>%KillExtent()</strong> is a faster but less safe alternative that directly kills the storage globals</li>
+                        <li>Deletion respects referential integrity constraints (foreign keys)</li>
+                        <li>Always check the return status for errors (e.g., object not found, referential integrity violation)</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Overview</h4>
+                        <p>InterSystems IRIS provides multiple approaches for deleting persistent objects. The choice depends on whether you need to delete a single instance, a filtered set, or the entire extent (all instances) of a class.</p>
+                        <h4>Deleting a Single Object with %DeleteId()</h4>
+                        <p>The <code>%DeleteId()</code> class method deletes one object by its ID. It returns a <code>%Status</code> value.</p>
+                        <pre><code class="language-objectscript">Set sc = ##class(Sample.Person).%DeleteId(42)
+If $$$ISERR(sc) {
+    Do $System.Status.DisplayError(sc)
+}</code></pre>
+                        <p>Key behaviors:</p>
+                        <ul>
+                            <li>Removes the object data from globals</li>
+                            <li>Removes associated index entries</li>
+                            <li>Fires <code>%OnDelete()</code> callback if defined in the class</li>
+                            <li>Respects foreign key constraints (deletion may fail if referenced by other objects)</li>
+                            <li>Fires SQL DELETE triggers if defined</li>
+                        </ul>
+                        <h4>Deleting All Objects with %DeleteExtent()</h4>
+                        <p>The <code>%DeleteExtent()</code> class method removes all instances of a class.</p>
+                        <pre><code class="language-objectscript">Set sc = ##class(Sample.Person).%DeleteExtent()</code></pre>
+                        <p>This method iterates through all objects and deletes them one at a time, which means:</p>
+                        <ul>
+                            <li>Each deletion fires triggers and callbacks</li>
+                            <li>Foreign key constraints are checked for each object</li>
+                            <li>It can be slow for large tables</li>
+                            <li>It returns the count of deleted objects via output parameters</li>
+                        </ul>
+                        <pre><code class="language-objectscript">Set sc = ##class(Sample.Person).%DeleteExtent(.deletecount, .instancecount)
+Write &quot;Deleted: &quot;, deletecount, &quot; of &quot;, instancecount, !</code></pre>
+                        <h4>Using %KillExtent() for Fast Deletion</h4>
+                        <p>For situations where triggers, callbacks, and referential integrity checks are not needed, <code>%KillExtent()</code> directly kills the underlying globals.</p>
+                        <pre><code class="language-objectscript">Do ##class(Sample.Person).%KillExtent()</code></pre>
+                        <p>Caution: <code>%KillExtent()</code> bypasses all object-level logic. Use it only when you are certain no side effects are needed, typically during development or data reset operations.</p>
+                        <h4>Handling Referential Integrity on Delete</h4>
+                        <p>If a class has foreign key references from other classes, deletion behavior depends on the <code>OnDelete</code> action defined on the foreign key:</p>
+                        <ul>
+                            <li><strong>NoAction</strong> (default): Deletion fails if referenced objects exist</li>
+                            <li><strong>Cascade</strong>: Referenced objects are also deleted</li>
+                            <li><strong>SetNull</strong>: Foreign key fields in referencing objects are set to null</li>
+                            <li><strong>SetDefault</strong>: Foreign key fields in referencing objects are set to their default value</li>
+                        </ul>
+                        <h4>The %OnDelete() Callback</h4>
+                        <p>Classes can implement the <code>%OnDelete()</code> callback method to perform custom logic before deletion:</p>
+                        <pre><code class="language-objectscript">ClassMethod %OnDelete(oid As %ObjectIdentity) As %Status
+{
+    // Custom cleanup logic
+    Write &quot;Deleting object: &quot;, oid, !
+    Return $$$OK
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_persobj_deleting" target="_blank">Deleting Objects</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=ROBJ_foreignkey" target="_blank">Foreign Keys</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="section-4" class="knowledge-item">
+                <h2>4. Interprets storage definitions (DataLocation, IdLocation, IndexLocation, USEEXTENTSET) <button class="subsection-report-btn" onclick="openReportModal('section-4', 'Section 4')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>Storage definition</strong> maps class properties to underlying global structures</li>
+                        <li><strong>DataLocation</strong> specifies the global where object data is stored (default: `^Package.ClassD`)</li>
+                        <li><strong>IdLocation</strong> specifies the global holding the ID counter (default: `^Package.ClassD`)</li>
+                        <li><strong>IndexLocation</strong> specifies the global for index data (default: `^Package.ClassI`)</li>
+                        <li><strong>USEEXTENTSET</strong> parameter changes storage to use short hashed global names instead of class-name-based globals</li>
+                        <li>Storage definitions are auto-generated but can be customized for special requirements</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Overview</h4>
+                        <p>Every persistent class has a storage definition that tells the system how to map object properties to globals. Understanding storage definitions is essential for troubleshooting, performance tuning, and interpreting existing code.</p>
+                        <h4>Default Storage Layout</h4>
+                        <p>By default, InterSystems IRIS uses <code>%Storage.Persistent</code> and creates globals named after the class:</p>
+                        <pre><code>Class Sample.Person Extends %Persistent
+{
+    Property Name As %String;
+    Property Age As %Integer;
+}</code></pre>
+                        <p>Default storage globals:</p>
+                        <ul>
+                            <li><strong>Data</strong>: <code>^Sample.PersonD</code> - stores object data</li>
+                            <li><strong>Index</strong>: <code>^Sample.PersonI</code> - stores index entries</li>
+                            <li><strong>ID Counter</strong>: <code>^Sample.PersonD(0)</code> or a separate counter node - tracks the next available ID</li>
+                        </ul>
+                        <p>The data global structure typically looks like:</p>
+                        <pre><code>^Sample.PersonD = &lt;next ID counter&gt;
+^Sample.PersonD(1) = $LB(&quot;&quot;, &quot;John Smith&quot;, 35)
+^Sample.PersonD(2) = $LB(&quot;&quot;, &quot;Jane Doe&quot;, 28)</code></pre>
+                        <p>Each node stores a <code>$LISTBUILD</code> structure where property values are stored in a defined order.</p>
+                        <h4>Storage Definition in Class Code</h4>
+                        <p>The storage definition appears at the end of the class and is managed by the compiler:</p>
+                        <pre><code class="language-xml">Storage Default
+{
+&lt;Data name=&quot;PersonDefaultData&quot;&gt;
+  &lt;Value name=&quot;1&quot;&gt;&lt;Value&gt;%%CLASSNAME&lt;/Value&gt;&lt;/Value&gt;
+  &lt;Value name=&quot;2&quot;&gt;&lt;Value&gt;Name&lt;/Value&gt;&lt;/Value&gt;
+  &lt;Value name=&quot;3&quot;&gt;&lt;Value&gt;Age&lt;/Value&gt;&lt;/Value&gt;
+&lt;/Data&gt;
+&lt;DataLocation&gt;^Sample.PersonD&lt;/DataLocation&gt;
+&lt;DefaultData&gt;PersonDefaultData&lt;/DefaultData&gt;
+&lt;IdLocation&gt;^Sample.PersonD&lt;/IdLocation&gt;
+&lt;IndexLocation&gt;^Sample.PersonI&lt;/IndexLocation&gt;
+&lt;StreamLocation&gt;^Sample.PersonS&lt;/StreamLocation&gt;
+&lt;Type&gt;%Storage.Persistent&lt;/Type&gt;
+}</code></pre>
+                        <h4>USEEXTENTSET Parameter</h4>
+                        <p>When <code>USEEXTENTSET = 1</code>, the system generates short hashed global names instead of using the class name:</p>
+                        <pre><code class="language-objectscript">Class Sample.Person Extends %Persistent [ SqlTableName = Person ]
+{
+    Parameter USEEXTENTSET = 1;
+}</code></pre>
+                        <p>With USEEXTENTSET enabled:</p>
+                        <ul>
+                            <li>Globals get names like <code>^Eprogramming.Hjkl.1</code> (short hashed names)</li>
+                            <li>Each property group and index gets its own global</li>
+                            <li>Avoids the 31-character global name limit for deeply nested packages</li>
+                            <li>Recommended for new development, especially with long package names</li>
+                        </ul>
+                        <h4>Why Storage Definitions Matter</h4>
+                        <ul>
+                            <li><strong>Troubleshooting</strong>: Direct global inspection to verify data integrity</li>
+                            <li><strong>Migration</strong>: Understanding storage is critical when moving data between systems</li>
+                            <li><strong>Performance</strong>: Custom storage layouts can optimize access patterns</li>
+                            <li><strong>Inheritance</strong>: Subclasses may share or extend the parent storage definition</li>
+                        </ul>
+                        <h4>Examining Storage at Runtime</h4>
+                        <p>You can programmatically inspect storage definitions using the <code>%Dictionary</code> package:</p>
+                        <pre><code class="language-objectscript">// Open the storage definition for a class
+Set storDef = ##class(%Dictionary.StorageDefinition).%OpenId(&quot;Sample.Person||Default&quot;)
+If storDef &#x27;= &quot;&quot; {
+    Write &quot;DataLocation: &quot;, storDef.DataLocation, !
+    Write &quot;IndexLocation: &quot;, storDef.IndexLocation, !
+    Write &quot;IdLocation: &quot;, storDef.IdLocation, !
+}
+
+// Directly inspect the global
+ZWrite ^Sample.PersonD</code></pre>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_storage" target="_blank">Storage Definitions</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_storageglobals" target="_blank">USEEXTENTSET Parameter</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="section-5" class="knowledge-item">
+                <h2>5. Implements multiple inheritance (order matters, method resolution) <button class="subsection-report-btn" onclick="openReportModal('section-5', 'Section 5')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li>InterSystems IRIS supports <strong>multiple inheritance</strong> (a class can extend multiple superclasses)</li>
+                        <li><strong>Left-to-right order</strong> determines priority when superclasses define the same member</li>
+                        <li>The <strong>leftmost superclass</strong> in the Extends list has the highest priority</li>
+                        <li>Storage inheritance comes from the <strong>primary (first) persistent superclass</strong></li>
+                        <li>Use multiple inheritance carefully to avoid ambiguity and complexity</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Overview</h4>
+                        <p>Multiple inheritance allows a class to combine behaviors from several parent classes. In InterSystems IRIS, a class can extend multiple superclasses separated by commas. The order in which superclasses are listed is significant because it determines which version of a member is inherited when conflicts occur.</p>
+                        <h4>Syntax</h4>
+                        <pre><code class="language-objectscript">Class MyApp.Manager Extends (Sample.Person, Sample.Employee, %Populate)
+{
+    // Inherits from all three classes
+    // Sample.Person has highest priority for conflicts
+}</code></pre>
+                        <h4>Method Resolution Order (MRO)</h4>
+                        <p>When two or more superclasses define a method or property with the same name, the class compiler resolves the conflict using <strong>left-to-right priority</strong>:</p>
+                        <p>1. The class's own members have the highest priority 2. Then the first (leftmost) superclass 3. Then the second superclass 4. And so on</p>
+                        <p>Example:</p>
+                        <pre><code class="language-objectscript">Class Base.A Extends %RegisteredObject
+{
+    Method Greet() { Write &quot;Hello from A&quot;, ! }
+}
+
+Class Base.B Extends %RegisteredObject
+{
+    Method Greet() { Write &quot;Hello from B&quot;, ! }
+}
+
+Class MyApp.Combined Extends (Base.A, Base.B)
+{
+    // Greet() is inherited from Base.A (leftmost)
+}</code></pre>
+                        <p>Calling <code>Greet()</code> on a <code>MyApp.Combined</code> instance executes <code>Base.A</code>'s implementation.</p>
+                        <h4>Storage and Primary Superclass</h4>
+                        <p>For persistent classes, the <strong>primary superclass</strong> (the first persistent class in the Extends list) determines the storage strategy. All other persistent superclasses contribute their properties but do not contribute an independent storage definition.</p>
+                        <pre><code class="language-objectscript">Class MyApp.ExtendedPerson Extends (Sample.Person, Sample.Auditable)
+{
+    // Storage comes from Sample.Person (primary)
+    // Properties from Sample.Auditable are added to Sample.Person&#x27;s storage
+}</code></pre>
+                        <h4>Common Patterns for Multiple Inheritance</h4>
+                        <ul>
+                            <li><strong>Mixin pattern</strong>: Combine a primary persistent class with utility registered classes that add behavior (logging, auditing, validation)</li>
+                            <li><strong>%Populate mixin</strong>: Add <code>%Populate</code> to enable test data generation</li>
+                            <li><strong>Adapter pattern</strong>: Combine persistent storage with interface adapters</li>
+                        </ul>
+                        <h4>Pitfalls to Avoid</h4>
+                        <ul>
+                            <li>Changing the order of superclasses can change which methods are inherited</li>
+                            <li>Adding a new superclass in the middle of the list may break existing behavior</li>
+                            <li>Diamond inheritance (where two superclasses share a common ancestor) is handled automatically but can create subtle issues</li>
+                            <li>Property name collisions between superclasses cause compiler errors if types differ</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_classes_inheritance" target="_blank">Class Inheritance</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_classes_inheritance#GOBJ_classes_multiple" target="_blank">Multiple Inheritance</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="section-6" class="knowledge-item">
+                <h2>6. Documents classes (Description keyword, /// comments) <button class="subsection-report-btn" onclick="openReportModal('section-6', 'Section 6')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>/// comments</strong> placed before a class, property, or method become the Description in the class reference</li>
+                        <li>The <strong>Description keyword</strong> can also be used in class/member definitions</li>
+                        <li>Documentation is accessible via the Class Reference in the Management Portal and Studio</li>
+                        <li>Supports <strong>HTML formatting</strong> within descriptions</li>
+                        <li>Good documentation is essential for maintainability and team collaboration</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Overview</h4>
+                        <p>InterSystems IRIS provides a built-in documentation system that extracts specially formatted comments from class source code and presents them in the Class Reference documentation browser. Proper documentation helps other developers understand your code and is a professional best practice.</p>
+                        <h4>Using /// Comments</h4>
+                        <p>Lines beginning with <code>///</code> immediately before a class, property, method, or other class member are treated as the member's description. These comments support HTML markup.</p>
+                        <pre><code class="language-objectscript">/// This class represents a patient in the healthcare system.
+/// &lt;p&gt;It stores demographic information and provides methods
+/// for managing patient records.&lt;/p&gt;
+Class Sample.Patient Extends %Persistent
+{
+    /// The patient&#x27;s full legal name as it appears on their ID.
+    Property Name As %String(MAXLEN = 200);
+
+    /// The patient&#x27;s date of birth in $HOROLOG format.
+    Property DOB As %Date;
+
+    /// Calculate the patient&#x27;s age based on their date of birth.
+    /// &lt;p&gt;Returns the age in whole years.&lt;/p&gt;
+    /// &lt;example&gt;
+    /// Set age = patient.GetAge()
+    /// Write &quot;Patient is &quot;, age, &quot; years old&quot;
+    /// &lt;/example&gt;
+    Method GetAge() As %Integer
+    {
+        // Method implementation
+        Return $HOROLOG - ..DOB \ 365.25
+    }
+}</code></pre>
+                        <h4>Using the Description Keyword</h4>
+                        <p>Alternatively, the <code>Description</code> keyword can be used within member definitions:</p>
+                        <pre><code class="language-objectscript">Property Name As %String [ Description = &quot;The patient&#x27;s full legal name&quot; ];</code></pre>
+                        <p>However, <code>///</code> comments are generally preferred because they are easier to read and maintain in the source code.</p>
+                        <h4>HTML Tags Supported in Documentation</h4>
+                        <ul>
+                            <li><code>&lt;p&gt;</code> - Paragraphs</li>
+                            <li><code>&lt;b&gt;</code>, <code>&lt;i&gt;</code> - Bold and italic</li>
+                            <li><code>&lt;ul&gt;</code>, <code>&lt;ol&gt;</code>, <code>&lt;li&gt;</code> - Lists</li>
+                            <li><code>&lt;table&gt;</code>, <code>&lt;tr&gt;</code>, <code>&lt;td&gt;</code> - Tables</li>
+                            <li><code>&lt;code&gt;</code> - Inline code</li>
+                            <li><code>&lt;example&gt;</code> - Code example blocks (InterSystems-specific tag)</li>
+                            <li><code>&lt;class&gt;ClassName&lt;/class&gt;</code> - Links to other class documentation</li>
+                            <li><code>&lt;method&gt;MethodName&lt;/method&gt;</code> - Links to methods</li>
+                            <li><code>&lt;property&gt;PropertyName&lt;/property&gt;</code> - Links to properties</li>
+                        </ul>
+                        <h4>Viewing Documentation</h4>
+                        <p>Class documentation can be viewed through:</p>
+                        <ul>
+                            <li><strong>Management Portal</strong>: System Explorer > Classes > select class > Documentation tab</li>
+                            <li><strong>VS Code Extension</strong>: Hover over class/member names to see descriptions</li>
+                            <li><strong>Class Reference</strong>: Generated HTML documentation browsable by package</li>
+                        </ul>
+                        <h4>Best Practices</h4>
+                        <ul>
+                            <li>Document every public class and method with <code>///</code> comments</li>
+                            <li>Include parameter descriptions and return value explanations for methods</li>
+                            <li>Use <code>&lt;example&gt;</code> tags to show usage patterns</li>
+                            <li>Document non-obvious behavior, edge cases, and assumptions</li>
+                            <li>Keep descriptions concise but informative</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_classes_documenting" target="_blank">Documenting Classes</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=ROBJ_class_desc" target="_blank">Class Reference</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <div class="exam-prep">
+                <h2>Exam Preparation Summary</h2>
+                <h3>Critical Concepts to Master:</h3>
+                <ol>
+                    <li>When to use %Persistent vs %RegisteredObject vs %SerialObject vs utility classes (no superclass)</li>
+                    <li>The complete object lifecycle: %New() -> property setting -> %Save() -> %Id()</li>
+                    <li>Always checking %Status return values from %Save() and %DeleteId()</li>
+                    <li>Difference between %DeleteExtent() (safe, triggers callbacks) and %KillExtent() (fast, no callbacks)</li>
+                    <li>How storage definitions map properties to globals (DataLocation, IdLocation, IndexLocation)</li>
+                    <li>USEEXTENTSET parameter and when to use it</li>
+                    <li>Left-to-right priority in multiple inheritance</li>
+                    <li>How /// comments generate class reference documentation</li>
+                </ol>
+                <h3>Common Exam Scenarios:</h3>
+                <ul>
+                    <li>Given a requirement, selecting the correct object class type (persistent, registered, serial)</li>
+                    <li>Identifying the correct sequence to create and save an object</li>
+                    <li>Interpreting a storage definition to determine which global stores the data</li>
+                    <li>Predicting which method is inherited when multiple superclasses define the same method</li>
+                    <li>Determining what happens when %DeleteId() is called on an object with foreign key references</li>
+                </ul>
+                <h3>Hands-On Practice Recommendations:</h3>
+                <ul>
+                    <li>Create persistent and serial classes, save objects, and inspect the underlying globals with ZWrite</li>
+                    <li>Experiment with %DeleteId() and %DeleteExtent() and observe the global changes</li>
+                    <li>Build a multiple inheritance scenario and verify which method wins</li>
+                    <li>Add /// documentation to a class and view it in the Class Reference</li>
+                    <li>Examine storage definitions of existing system classes to understand the structure</li>
+                </ul>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <a href="../quiz.html?file=quizzes/T1.1-quiz.json" class="take-quiz-btn">Take the Quiz</a>
+        </footer>
+    </div>
+
+    <div id="reportModal" class="report-modal">
+        <div class="report-content">
+            <h3>Report an Issue</h3>
+            <label for="issueType">Issue Type</label>
+            <select id="issueType">
+                <option value="confusing">Confusing Content</option>
+                <option value="wrong_answer">Incorrect Information</option>
+                <option value="outdated">Outdated Content</option>
+                <option value="formatting">Formatting Issue</option>
+                <option value="typo">Typo</option>
+                <option value="other">Other</option>
+            </select>
+            <label for="issueDescription">Description</label>
+            <textarea id="issueDescription" placeholder="Please describe the issue..."></textarea>
+            <div style="display: flex; align-items: center; gap: 10px; margin: 15px 0;">
+                <input type="checkbox" id="wantEmailNotification" style="width: 18px; height: 18px;">
+                <label for="wantEmailNotification" style="margin: 0; cursor: pointer;">
+                    Notify me by email when resolved
+                </label>
+            </div>
+            <div class="report-actions">
+                <button class="report-cancel" onclick="closeReportModal()">Cancel</button>
+                <button class="report-submit" onclick="submitReport()">Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../../js/config.js"></script>
+    <script src="../../../js/auth.js"></script>
+    <script src="../../../js/api.js"></script>
+    <script>
+        const CERTIFICATION_NAME = 'ObjectScript-Specialist';
+        const TOPIC_REF = 'T1.1';
+
+        document.addEventListener('DOMContentLoaded', function() {
+            updateAuthUI();
+            trackKnowledgeView();
+        });
+
+        function updateAuthUI() {
+            const loginBtn = document.getElementById('loginBtn');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const userInfo = document.getElementById('userInfo');
+            const userAvatar = document.getElementById('userAvatar');
+            const userName = document.getElementById('userName');
+
+            if (typeof Auth !== 'undefined' && Auth.isAuthenticated()) {
+                const user = Auth.getUser();
+                loginBtn.style.display = 'none';
+                logoutBtn.style.display = 'inline-block';
+                userInfo.style.display = 'flex';
+                if (user) {
+                    const initial = (user.name || user.email || '?')[0].toUpperCase();
+                    userAvatar.textContent = initial;
+                    userName.textContent = user.name || user.email || 'User';
+                }
+            } else {
+                loginBtn.style.display = 'inline-block';
+                logoutBtn.style.display = 'none';
+                userInfo.style.display = 'none';
+            }
+        }
+
+        async function trackKnowledgeView() {
+            if (typeof Auth === 'undefined' || !Auth.isAuthenticated()) {
+                return;
+            }
+
+            try {
+                await Api.trackKnowledge(CERTIFICATION_NAME, TOPIC_REF);
+                console.log('Knowledge view tracked:', TOPIC_REF);
+            } catch (error) {
+                console.log('View tracking skipped:', error.message);
+            }
+        }
+
+        function openReportModal(sectionId, sectionTitle) {
+            if (typeof Auth === 'undefined' || !Auth.isAuthenticated()) {
+                alert('Please sign in to report issues.');
+                return;
+            }
+            // Store section context
+            window.currentReportSection = {
+                id: sectionId || 'general',
+                title: sectionTitle || 'General'
+            };
+            // Update modal header to show section
+            const modalHeader = document.querySelector('#reportModal h3');
+            if (modalHeader && sectionTitle) {
+                modalHeader.textContent = 'Report Issue: ' + sectionTitle;
+            } else if (modalHeader) {
+                modalHeader.textContent = 'Report an Issue';
+            }
+            document.getElementById('wantEmailNotification').checked = false;
+            document.getElementById('reportModal').classList.add('active');
+        }
+
+        function closeReportModal() {
+            document.getElementById('reportModal').classList.remove('active');
+            document.getElementById('issueType').value = 'confusing';
+            document.getElementById('issueDescription').value = '';
+        }
+
+        async function submitReport() {
+            const issueType = document.getElementById('issueType').value;
+            const description = document.getElementById('issueDescription').value.trim();
+            const wantEmailNotification = document.getElementById('wantEmailNotification').checked;
+            const sectionContext = window.currentReportSection || { id: 'general', title: 'General' };
+
+            if (!description) {
+                alert('Please provide a description of the issue.');
+                return;
+            }
+
+            // Build content reference with section context
+            const contentRef = sectionContext.id !== 'general'
+                ? `${TOPIC_REF} (${sectionContext.title})`
+                : TOPIC_REF;
+
+            try {
+                await Api.reportProblem({
+                    certificationName: CERTIFICATION_NAME,
+                    contentType: 'knowledge',
+                    contentReference: contentRef,
+                    issueType: issueType,
+                    description: description,
+                    wantEmailNotification: wantEmailNotification
+                });
+                alert('Thank you! Your report has been submitted.');
+                closeReportModal();
+            } catch (error) {
+                if (error.status === 429) {
+                    const retryMinutes = Math.ceil((error.data?.retryAfter || 3600) / 60);
+                    alert(`You've submitted too many reports recently. Please wait ${retryMinutes} minutes before submitting another report.`);
+                } else {
+                    alert('Failed to submit report: ' + error.message);
+                }
+            }
+        }
+
+        document.querySelectorAll('.detailed-notes h3').forEach(h3 => {
+            h3.style.cursor = 'pointer';
+        });
+    </script>
+    <script src="../../../js/consent.js"></script>
+    <script src="../../../js/analytics.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            CookieConsent.init();
+            Analytics.init();
+        });
+    </script>
+</body>
+</html>

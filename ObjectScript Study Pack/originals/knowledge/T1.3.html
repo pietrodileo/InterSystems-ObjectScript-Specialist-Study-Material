@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Study guide for T1.3: Creates ObjectScript Methods - part of the InterSystems ObjectScript Specialist certification. Learn key concepts, best practices, and exam preparation tips.">
+    <meta name="keywords" content="InterSystems certification, ObjectScript Specialist, T1.3: Creates ObjectScript Methods, exam preparation, practice quiz">
+    <meta name="author" content="exam-prep.es">
+    <meta name="robots" content="index, follow">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://exam-prep.es/exams/objectscript/knowledge/T1.3.html">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://exam-prep.es/exams/objectscript/knowledge/T1.3.html">
+    <meta property="og:title" content="T1.3: Creates ObjectScript Methods - InterSystems ObjectScript Specialist Study Guide">
+    <meta property="og:description" content="Study guide for T1.3: Creates ObjectScript Methods - part of the InterSystems ObjectScript Specialist certification. Learn key concepts, best practices, and exam preparation tips.">
+    <meta property="og:image" content="https://exam-prep.es/images/og-image.png">
+    <meta property="og:site_name" content="InterSystems Certification Prep">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://exam-prep.es/exams/objectscript/knowledge/T1.3.html">
+    <meta name="twitter:title" content="T1.3: Creates ObjectScript Methods - InterSystems ObjectScript Specialist Study Guide">
+    <meta name="twitter:description" content="Study guide for T1.3: Creates ObjectScript Methods - part of the InterSystems ObjectScript Specialist certification. Learn key concepts, best practices, and exam preparation tips.">
+    <meta name="twitter:image" content="https://exam-prep.es/images/og-image.png">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+    <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+
+    <!-- hreflang Tags -->
+    <link rel="alternate" hreflang="en" href="https://exam-prep.es/exams/objectscript/knowledge/T1.3.html" />
+    <link rel="alternate" hreflang="es" href="https://exam-prep.es/exams/objectscript/knowledge/es/T1.3.html" />
+    <link rel="alternate" hreflang="x-default" href="https://exam-prep.es/exams/objectscript/knowledge/T1.3.html" />
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../colors.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+    <link rel="stylesheet" href="../../../css/consent.css">
+
+    <title>T1.3: Creates ObjectScript Methods - InterSystems ObjectScript Specialist Study Guide | exam-prep.es</title>
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "T1.3: Creates ObjectScript Methods - InterSystems ObjectScript Specialist Study Guide",
+    "description": "Study guide for T1.3: Creates ObjectScript Methods - part of the InterSystems ObjectScript Specialist certification. Learn key concepts, best practices, and exam preparation tips.",
+    "author": {
+        "@type": "Organization",
+        "name": "exam-prep.es"
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "InterSystems Certification Prep",
+        "url": "https://exam-prep.es"
+    },
+    "inLanguage": "en",
+    "about": {
+        "@type": "Course",
+        "name": "InterSystems ObjectScript Specialist"
+    }
+}
+    </script>
+</head>
+<body>
+    <div class="container">
+        <nav class="nav-bar">
+            <a href="../index.html" class="back-link">&#8592; Back to Topics</a>
+            <div class="lang-toggle">
+                <a href="T1.3.html" class="lang-btn active">EN</a>
+                <a href="es/T1.3.html" class="lang-btn">ES</a>
+            </div>
+            <a href="../quiz.html?file=quizzes/T1.3-quiz.json" class="quiz-link">Take Quiz &#8594;</a>
+            <div class="auth-bar">
+                <button id="loginBtn" class="auth-btn login-btn" onclick="Auth.login()">Sign In</button>
+                <div id="userInfo" class="user-info">
+                    <div id="userAvatar" class="user-avatar">?</div>
+                    <span id="userName" class="user-name">User</span>
+                </div>
+                <button id="logoutBtn" class="auth-btn logout-btn" onclick="Auth.logout()">Sign Out</button>
+            </div>
+        </nav>
+
+        <header class="header">
+            <h1>T1.3: Creates ObjectScript Methods</h1>
+            <p>Knowledge Review - InterSystems ObjectScript Specialist</p>
+        </header>
+
+        <nav class="toc">
+            <h3>Contents</h3>
+            <ol>
+                <li><a href="#section-1">Differentiates between instance and class methods (Method vs ClassMethod, ..property syntax)</a></li>
+                <li><a href="#section-2">Uses class parameters inside methods (..#ParameterName)</a></li>
+                <li><a href="#section-3">Specifies method arguments and return type (As clause, Output, ByRef)</a></li>
+                <li><a href="#section-4">Passes objects to methods (oref passing)</a></li>
+                <li><a href="#section-5">Passes variables by reference (ByRef, .variable syntax at call site)</a></li>
+                <li><a href="#section-6">Passes multidimensional variables by reference (passing arrays)</a></li>
+                <li><a href="#section-7">Uses and overrides inherited methods (overriding, calling parent)</a></li>
+                <li><a href="#section-8">Determines when to use ##super for calling superclass methods</a></li>
+            </ol>
+        </nav>
+
+        <main class="content">
+            <section id="section-1" class="knowledge-item">
+                <h2>1. Differentiates between instance and class methods (Method vs ClassMethod, ..property syntax) <button class="subsection-report-btn" onclick="openReportModal('section-1', 'Section 1')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>Method</strong>: Instance method that operates on a specific object instance; has access to properties via `..PropertyName`</li>
+                        <li><strong>ClassMethod</strong>: Invoked on the class itself without requiring an object instance</li>
+                        <li>Instance methods receive an implicit `%This` reference to the current object</li>
+                        <li><strong>..PropertyName</strong> syntax accesses properties of the current instance (only in instance methods)</li>
+                        <li>Class methods cannot use `..` syntax because there is no object instance</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Overview</h4>
+                        <p>InterSystems IRIS distinguishes between two fundamental method types. The choice between them determines how the method is invoked and what data it can access. This distinction is critical for proper class design.</p>
+                        <h4>Instance Methods</h4>
+                        <pre><code class="language-objectscript">Class Sample.Person Extends %Persistent
+{
+    Property Name As %String;
+    Property DOB As %Date;
+
+    /// Instance method - operates on a specific person
+    Method GetAge() As %Integer
+    {
+        Set today = +$HOROLOG
+        Set birthDays = ..DOB
+        Return (today - birthDays) \ 365.25
+    }
+
+    /// Instance method that modifies the object
+    Method UpdateName(newName As %String) As %Status
+    {
+        Set ..Name = newName
+        Return ..%Save()
+    }
+}</code></pre>
+                        <p>Calling an instance method requires an object reference:</p>
+                        <pre><code class="language-objectscript">Set person = ##class(Sample.Person).%OpenId(1)
+Set age = person.GetAge()
+Write &quot;Age: &quot;, age, !</code></pre>
+                        <h4>Class Methods</h4>
+                        <pre><code class="language-objectscript">Class Sample.Person Extends %Persistent
+{
+    /// Class method - no object instance needed
+    ClassMethod FindByName(name As %String) As Sample.Person
+    {
+        &amp;sql(SELECT ID INTO :id FROM Sample.Person WHERE Name = :name)
+        If SQLCODE = 0 {
+            Return ##class(Sample.Person).%OpenId(id)
+        }
+        Return &quot;&quot;
+    }
+
+    /// Class method - utility function
+    ClassMethod GetCount() As %Integer
+    {
+        &amp;sql(SELECT COUNT(*) INTO :count FROM Sample.Person)
+        Return count
+    }
+}</code></pre>
+                        <p>Calling a class method uses the class reference syntax:</p>
+                        <pre><code class="language-objectscript">Set person = ##class(Sample.Person).FindByName(&quot;John Smith&quot;)
+Set total = ##class(Sample.Person).GetCount()</code></pre>
+                        <h4>The <code>..</code> Syntax</h4>
+                        <p>The double-dot syntax is syntactic sugar available only in instance methods:</p>
+                        <ul>
+                            <li><code>..PropertyName</code> accesses a property (equivalent to <code>$THIS.PropertyName</code>)</li>
+                            <li><code>..MethodName()</code> calls another instance method on the same object</li>
+                            <li><code>..#ParameterName</code> accesses a class parameter (works in both instance and class methods)</li>
+                        </ul>
+                        <pre><code class="language-objectscript">Method DisplayInfo()
+{
+    Write &quot;Name: &quot;, ..Name, !
+    Write &quot;Age: &quot;, ..GetAge(), !         // calls instance method
+    Write &quot;Type: &quot;, ..#OBJECTTYPE, !     // accesses class parameter
+}</code></pre>
+                        <h4>When to Use Each Type</h4>
+                        <table class="detail-table">
+                            <thead><tr><th>Use Instance Method When...</th><th>Use ClassMethod When...</th></tr></thead>
+                            <tbody>
+                            <tr><td>Operating on a specific object's data</td><td>No specific object is needed</td></tr>
+                            <tr><td>Accessing or modifying properties</td><td>Performing lookups or searches</td></tr>
+                            <tr><td>Computing derived values from properties</td><td>Creating factory methods</td></tr>
+                            <tr><td>Implementing business logic for one object</td><td>Implementing utility functions</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_methods" target="_blank">Method Definitions</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_methods_kinds" target="_blank">Instance Methods vs Class Methods</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="section-2" class="knowledge-item">
+                <h2>2. Uses class parameters inside methods (..#ParameterName) <button class="subsection-report-btn" onclick="openReportModal('section-2', 'Section 2')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>..#ParameterName</strong> accesses a class parameter from within any method (instance or class)</li>
+                        <li>Class parameters act as constants defined at the class level</li>
+                        <li>Parameters can be overridden in subclasses, enabling polymorphic behavior</li>
+                        <li>Common system parameters: DEFAULTGLOBAL, USEEXTENTSET, MANAGEDEXTENT</li>
+                        <li>Use parameters for configuration values that may vary by subclass</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Overview</h4>
+                        <p>Class parameters define constants associated with a class. They provide a way to configure class behavior without hardcoding values in methods. Because parameters can be overridden in subclasses, they enable a powerful pattern where base class methods adapt their behavior based on subclass configuration.</p>
+                        <h4>Defining and Accessing Parameters</h4>
+                        <pre><code class="language-objectscript">Class Sample.Notification Extends %RegisteredObject
+{
+    Parameter MAXRETRIES = 3;
+    Parameter TIMEOUT = 30;
+    Parameter PROVIDER = &quot;Email&quot;;
+
+    Method Send(message As %String) As %Status
+    {
+        For i = 1:1:..#MAXRETRIES {
+            // Attempt to send with timeout
+            Set sc = ..DoSend(message, ..#TIMEOUT)
+            If $$$ISOK(sc) Return sc
+        }
+        Return $$$ERROR($$$GeneralError, &quot;Failed after &quot; _ ..#MAXRETRIES _ &quot; retries&quot;)
+    }
+
+    ClassMethod GetProvider() As %String
+    {
+        Return ..#PROVIDER
+    }
+}</code></pre>
+                        <h4>Overriding Parameters in Subclasses</h4>
+                        <pre><code class="language-objectscript">Class Sample.SMSNotification Extends Sample.Notification
+{
+    Parameter MAXRETRIES = 5;
+    Parameter TIMEOUT = 10;
+    Parameter PROVIDER = &quot;SMS&quot;;
+}</code></pre>
+                        <p>When <code>SMSNotification.Send()</code> executes, <code>..#MAXRETRIES</code> evaluates to 5 and <code>..#TIMEOUT</code> to 10 (the overridden values), even though the method code is defined in the parent class. This is resolved at compile time.</p>
+                        <h4>Parameter Types</h4>
+                        <p>Parameters can optionally have a type constraint:</p>
+                        <pre><code class="language-objectscript">Parameter BATCHSIZE As %Integer = 100;
+Parameter ENABLED As %Boolean = 1;
+Parameter PREFIX As %String = &quot;APP&quot;;</code></pre>
+                        <h4>Common System Parameters</h4>
+                        <p>Several system parameters control class behavior:</p>
+                        <table class="detail-table">
+                            <thead><tr><th>Parameter</th><th>Purpose</th></tr></thead>
+                            <tbody>
+                            <tr><td>USEEXTENTSET</td><td>Use hashed global names for storage</td></tr>
+                            <tr><td>MANAGEDEXTENT</td><td>Allow %ExtentMgr to track the extent</td></tr>
+                            <tr><td>DEFAULTGLOBAL</td><td>Override default global name for storage</td></tr>
+                            <tr><td>READONLY</td><td>Prevent modification of objects</td></tr>
+                            <tr><td>DSTIME</td><td>Enable BI synchronization</td></tr>
+                            </tbody>
+                        </table>
+                        <h4>Using Parameters for Configurable Behavior</h4>
+                        <pre><code class="language-objectscript">Class Sample.BaseProcessor Extends %RegisteredObject
+{
+    Parameter LOGPREFIX = &quot;PROC&quot;;
+    Parameter LOGLEVEL = 2;
+
+    Method Log(message As %String, level As %Integer = 1)
+    {
+        If level &lt;= ..#LOGLEVEL {
+            Write &quot;[&quot;, ..#LOGPREFIX, &quot;] &quot;, message, !
+        }
+    }
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_classes_parameters" target="_blank">Class Parameters</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=ROBJ_parameter" target="_blank">Parameter Keywords</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="section-3" class="knowledge-item">
+                <h2>3. Specifies method arguments and return type (As clause, Output, ByRef) <button class="subsection-report-btn" onclick="openReportModal('section-3', 'Section 3')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>As ClassName</strong> specifies the return type of a method</li>
+                        <li>Method arguments are declared with name, optional type, and optional default value</li>
+                        <li><strong>Output</strong> keyword indicates the argument is output-only (not passed in)</li>
+                        <li><strong>ByRef</strong> keyword indicates the argument is passed by reference (both in and out)</li>
+                        <li><strong>Important:</strong> `ByRef` and `Output` in the formal parameter list are purely <strong>indicative</strong> — they have no intrinsic effect on how the argument is passed. It is the <strong>caller</strong> who decides by using the dot (`.`) prefix. The method would work the same even without `ByRef`/`Output` in the signature.</li>
+                        <li>Default values are specified with `= value` in the argument list</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Overview</h4>
+                        <p>Well-defined method signatures improve code clarity, enable better compile-time checking, and generate accurate documentation. InterSystems IRIS supports typed arguments, return types, default values, and reference parameters.</p>
+                        <h4>Basic Method Signature</h4>
+                        <pre><code class="language-objectscript">Method Calculate(x As %Numeric, y As %Numeric) As %Numeric
+{
+    Return x + y
+}</code></pre>
+                        <p>The <code>As %Numeric</code> after the closing parenthesis specifies the return type. Argument types follow each argument name.</p>
+                        <h4>Default Values</h4>
+                        <pre><code class="language-objectscript">Method FormatDate(date As %Date, format As %String = &quot;YYYY-MM-DD&quot;) As %String
+{
+    // format defaults to &quot;YYYY-MM-DD&quot; if not provided
+    Return $ZDate(date, 3)
+}</code></pre>
+                        <p>Calling with or without the optional parameter:</p>
+                        <pre><code class="language-objectscript">Set result = obj.FormatDate($HOROLOG)          // uses default format
+Set result = obj.FormatDate($HOROLOG, &quot;MM/DD&quot;) // overrides default</code></pre>
+                        <h4>Output Parameters</h4>
+                        <p>The <code>Output</code> keyword marks an argument as output-only. The caller should not pass a value in; the method will set it:</p>
+                        <pre><code class="language-objectscript">ClassMethod Divide(a As %Numeric, b As %Numeric, Output result As %Numeric) As %Status
+{
+    If b = 0 Return $$$ERROR($$$GeneralError, &quot;Division by zero&quot;)
+    Set result = a / b
+    Return $$$OK
+}</code></pre>
+                        <p>Calling with an output parameter (use the dot prefix):</p>
+                        <pre><code class="language-objectscript">Set sc = ##class(Sample.Math).Divide(10, 3, .answer)
+If $$$ISOK(sc) Write &quot;Result: &quot;, answer, !</code></pre>
+                        <h4>ByRef Parameters</h4>
+                        <p>The <code>ByRef</code> keyword marks an argument as pass-by-reference. The caller's variable is both read and modified:</p>
+                        <pre><code class="language-objectscript">ClassMethod Increment(ByRef counter As %Integer, amount As %Integer = 1)
+{
+    Set counter = counter + amount
+}</code></pre>
+                        <p>Calling:</p>
+                        <pre><code class="language-objectscript">Set myCount = 5
+Do ##class(Sample.Util).Increment(.myCount, 3)
+Write myCount  // Outputs: 8</code></pre>
+                        <h4>Key Distinction: Output vs ByRef</h4>
+                        <table class="detail-table">
+                            <thead><tr><th>Aspect</th><th>Output</th><th>ByRef</th></tr></thead>
+                            <tbody>
+                            <tr><td>Initial value passed in</td><td>No (undefined inside method)</td><td>Yes (caller's value available)</td></tr>
+                            <tr><td>Value returned to caller</td><td>Yes</td><td>Yes</td></tr>
+                            <tr><td>Caller syntax</td><td><code>.variable</code></td><td><code>.variable</code></td></tr>
+                            <tr><td>Semantic meaning</td><td>Method produces a value</td><td>Method reads and modifies a value</td></tr>
+                            </tbody>
+                        </table>
+                        <h4>Critical: ByRef and Output Are Purely Indicative</h4>
+                        <p>In ObjectScript, <code>ByRef</code> and <code>Output</code> in the formal parameter list are <strong>documentation hints only</strong> — they have no enforcement or runtime effect. The passing mechanism is controlled <strong>entirely by the caller</strong> using the dot (<code>.</code>) prefix.</p>
+                        <p>This means:</p>
+                        <ul>
+                            <li>A caller can use <code>.variable</code> even if the parameter is <strong>not</strong> declared <code>ByRef</code> or <code>Output</code> — and it works</li>
+                            <li>A caller can omit the dot even if the parameter <strong>is</strong> declared <code>ByRef</code> — and it simply passes by value</li>
+                            <li>You could remove <code>ByRef</code>/<code>Output</code> from every method signature and everything would still function identically</li>
+                        </ul>
+                        <pre><code class="language-objectscript">/// No ByRef or Output keyword — but pass-by-reference still works!
+ClassMethod AddSuffix(text As %String, suffix As %String)
+{
+    Set text = text _ suffix
+}</code></pre>
+                        <pre><code class="language-objectscript">Set myText = &quot;Hello&quot;
+Do ##class(Sample.Util).AddSuffix(.myText, &quot; World&quot;)
+Write myText  // &quot;Hello World&quot; — modified despite no ByRef in signature!</code></pre>
+                        <p><strong>Best practice:</strong> Always declare <code>ByRef</code> or <code>Output</code> in the signature as documentation for the caller, even though the keywords themselves have no effect. They signal the intended contract of the method.</p>
+                        <h4>Methods Returning %Status</h4>
+                        <p>A common pattern is to return <code>%Status</code> and use Output parameters for actual results:</p>
+                        <pre><code class="language-objectscript">ClassMethod ProcessData(input As %String, Output result As %String, Output errorMsg As %String) As %Status
+{
+    If input = &quot;&quot; {
+        Set errorMsg = &quot;Input cannot be empty&quot;
+        Return $$$ERROR($$$GeneralError, errorMsg)
+    }
+    Set result = $ZCONVERT(input, &quot;U&quot;)
+    Return $$$OK
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_methods_arguments" target="_blank">Method Arguments</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=ROBJ_method" target="_blank">Method Keywords</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="section-4" class="knowledge-item">
+                <h2>4. Passes objects to methods (oref passing) <button class="subsection-report-btn" onclick="openReportModal('section-4', 'Section 4')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li>Object references (orefs) are passed <strong>by value</strong> by default, but the oref is a pointer to the object</li>
+                        <li>Modifying properties of a passed object affects the original object (shared reference)</li>
+                        <li>Assigning a new object to the parameter variable does NOT affect the caller's variable</li>
+                        <li>Type checking is performed at compile time when argument types are specified</li>
+                        <li>Objects are reference-counted; they persist as long as at least one variable references them</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Overview</h4>
+                        <p>When you pass an object to a method, you are passing the object reference (oref), which is essentially a pointer to the in-memory object. Understanding this is critical for avoiding bugs related to unintended modifications or lost references.</p>
+                        <h4>Passing Objects</h4>
+                        <pre><code class="language-objectscript">Class Sample.OrderProcessor Extends %RegisteredObject
+{
+    ClassMethod ApplyDiscount(order As Sample.Order, pct As %Numeric)
+    {
+        // This modifies the ORIGINAL order object
+        Set order.Total = order.Total * (1 - (pct / 100))
+    }
+
+    ClassMethod ProcessOrder(order As Sample.Order) As %Status
+    {
+        // Validate the order
+        If order.Total &lt;= 0 {
+            Return $$$ERROR($$$GeneralError, &quot;Invalid total&quot;)
+        }
+        // Modify the order&#x27;s status
+        Set order.Status = &quot;Processed&quot;
+        Return order.%Save()
+    }
+}</code></pre>
+                        <p>Usage:</p>
+                        <pre><code class="language-objectscript">Set order = ##class(Sample.Order).%OpenId(1)
+Write &quot;Before: &quot;, order.Total, !         // e.g., 100
+Do ##class(Sample.OrderProcessor).ApplyDiscount(order, 10)
+Write &quot;After: &quot;, order.Total, !          // 90 (original object modified)</code></pre>
+                        <h4>Value Semantics of the Reference</h4>
+                        <p>The oref itself is passed by value. Reassigning the parameter variable inside the method does not change the caller's variable:</p>
+                        <pre><code class="language-objectscript">ClassMethod ResetOrder(order As Sample.Order)
+{
+    // This does NOT affect the caller&#x27;s variable
+    Set order = ##class(Sample.Order).%New()
+    Set order.Total = 0
+}</code></pre>
+                        <pre><code class="language-objectscript">Set myOrder = ##class(Sample.Order).%OpenId(1)
+Do ##class(Sample.OrderProcessor).ResetOrder(myOrder)
+// myOrder still points to the original object (ID 1), unchanged</code></pre>
+                        <p>To actually modify the caller's variable, use <code>ByRef</code> or <code>Output</code>:</p>
+                        <pre><code class="language-objectscript">ClassMethod ResetOrder(ByRef order As Sample.Order)
+{
+    Set order = ##class(Sample.Order).%New()
+    Set order.Total = 0
+}
+// Now calling with: Do ##class(...).ResetOrder(.myOrder) changes myOrder</code></pre>
+                        <h4>Passing Objects in Collections</h4>
+                        <pre><code class="language-objectscript">ClassMethod ProcessAll(orders As %ListOfObjects) As %Status
+{
+    For i = 1:1:orders.Count() {
+        Set order = orders.GetAt(i)
+        Set order.Status = &quot;Processed&quot;
+    }
+    Return $$$OK
+}</code></pre>
+                        <h4>Checking Object Type at Runtime</h4>
+                        <pre><code class="language-objectscript">ClassMethod HandleItem(item As %RegisteredObject)
+{
+    If item.%IsA(&quot;Sample.Order&quot;) {
+        // Order-specific logic
+    } ElseIf item.%IsA(&quot;Sample.Invoice&quot;) {
+        // Invoice-specific logic
+    }
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_methods" target="_blank">Object References</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_methods_arguments" target="_blank">Passing Arguments</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="section-5" class="knowledge-item">
+                <h2>5. Passes variables by reference (ByRef, .variable syntax at call site) <button class="subsection-report-btn" onclick="openReportModal('section-5', 'Section 5')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li>The <strong>dot (.)</strong> prefix at the call site is the <strong>only</strong> mechanism that controls pass-by-reference — it is the caller's decision</li>
+                        <li>`ByRef` in the method signature is purely indicative (documentation) — it has no runtime effect</li>
+                        <li>Without the dot, the value is <strong>always</strong> passed by value, regardless of `ByRef` in the signature</li>
+                        <li>With the dot, the value is <strong>always</strong> passed by reference, even if the signature has no `ByRef`</li>
+                        <li>ByRef passes the existing value IN and allows a new value OUT</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Overview</h4>
+                        <p>By default, ObjectScript passes arguments by value. When a method needs to modify a variable in the caller's scope, the <strong>caller</strong> must pass by reference using the dot (<code>.</code>) prefix. The <code>ByRef</code> keyword in the signature is best practice for documentation but has no enforcement effect — it is purely the caller's responsibility to use the dot.</p>
+                        <h4>Basic ByRef Pattern</h4>
+                        <pre><code class="language-objectscript">ClassMethod Swap(ByRef a As %String, ByRef b As %String)
+{
+    Set temp = a
+    Set a = b
+    Set b = temp
+}</code></pre>
+                        <p>Calling:</p>
+                        <pre><code class="language-objectscript">Set x = &quot;Hello&quot;
+Set y = &quot;World&quot;
+Do ##class(Sample.Util).Swap(.x, .y)
+Write x  // &quot;World&quot;
+Write y  // &quot;Hello&quot;</code></pre>
+                        <h4>Forgetting the Dot</h4>
+                        <p>A common mistake is forgetting the dot at the call site:</p>
+                        <pre><code class="language-objectscript">Set x = &quot;Hello&quot;
+Set y = &quot;World&quot;
+Do ##class(Sample.Util).Swap(x, y)  // NO dots - passed by value!
+Write x  // Still &quot;Hello&quot; - unchanged
+Write y  // Still &quot;World&quot; - unchanged</code></pre>
+                        <p>The method executes without error, but the caller's variables are not modified because copies were passed.</p>
+                        <h4>Output vs ByRef Revisited</h4>
+                        <p>With <code>Output</code>, the variable's initial value is not passed into the method:</p>
+                        <pre><code class="language-objectscript">ClassMethod GetInfo(Output name As %String, Output count As %Integer)
+{
+    Set name = &quot;Test&quot;
+    Set count = 42
+}
+
+// Calling:
+Do ##class(Sample.Util).GetInfo(.n, .c)
+Write n   // &quot;Test&quot;
+Write c   // 42</code></pre>
+                        <p>With <code>ByRef</code>, the existing value IS available inside the method:</p>
+                        <pre><code class="language-objectscript">ClassMethod AppendSuffix(ByRef text As %String, suffix As %String)
+{
+    Set text = text _ suffix
+}
+
+Set myText = &quot;Hello&quot;
+Do ##class(Sample.Util).AppendSuffix(.myText, &quot; World&quot;)
+Write myText  // &quot;Hello World&quot;</code></pre>
+                        <h4>Practical Example: Error Collection</h4>
+                        <pre><code class="language-objectscript">ClassMethod ValidateRecord(record As Sample.Record, ByRef errors As %List) As %Boolean
+{
+    // errors may already contain items from prior validation
+    If record.Name = &quot;&quot; {
+        Set errors = errors _ $LB(&quot;Name is required&quot;)
+    }
+    If record.Age &lt; 0 {
+        Set errors = errors _ $LB(&quot;Age must be positive&quot;)
+    }
+    Return ($LISTLENGTH(errors) = 0)
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_methods_arguments" target="_blank">Passing by Reference</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_methods_arguments" target="_blank">Method Arguments</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="section-6" class="knowledge-item">
+                <h2>6. Passes multidimensional variables by reference (passing arrays) <button class="subsection-report-btn" onclick="openReportModal('section-6', 'Section 6')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li>ObjectScript supports <strong>multidimensional variables</strong> (arrays with subscripts)</li>
+                        <li>Pass arrays by reference using the <strong>dot (.)</strong> prefix to share the entire tree of subscripts</li>
+                        <li>The method receives the array with all its subscripts intact</li>
+                        <li>Use <strong>$ORDER</strong> to iterate over subscripts</li>
+                        <li>Arrays cannot be passed by value (only the top node would be copied without subscripts)</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Overview</h4>
+                        <p>Multidimensional variables (arrays) are a fundamental data structure in ObjectScript. They store data at multiple subscript levels within a single variable name. Passing arrays to methods requires by-reference passing to include all subscript levels.</p>
+                        <h4>Multidimensional Variable Basics</h4>
+                        <pre><code class="language-objectscript">Set colors(&quot;red&quot;) = &quot;#FF0000&quot;
+Set colors(&quot;green&quot;) = &quot;#00FF00&quot;
+Set colors(&quot;blue&quot;) = &quot;#0000FF&quot;
+Set colors(&quot;blue&quot;, &quot;light&quot;) = &quot;#ADD8E6&quot;
+Set colors(&quot;blue&quot;, &quot;dark&quot;) = &quot;#00008B&quot;</code></pre>
+                        <h4>Passing Arrays to Methods</h4>
+                        <pre><code class="language-objectscript">ClassMethod DisplayColors(ByRef colors)
+{
+    Set key = &quot;&quot;
+    For {
+        Set key = $ORDER(colors(key))
+        Quit:key=&quot;&quot;
+        Write key, &quot;: &quot;, colors(key), !
+    }
+}</code></pre>
+                        <p>Calling:</p>
+                        <pre><code class="language-objectscript">Set colors(&quot;red&quot;) = &quot;#FF0000&quot;
+Set colors(&quot;green&quot;) = &quot;#00FF00&quot;
+Set colors(&quot;blue&quot;) = &quot;#0000FF&quot;
+Do ##class(Sample.Util).DisplayColors(.colors)</code></pre>
+                        <p>Output:</p>
+                        <pre><code>blue: #0000FF
+green: #00FF00
+red: #FF0000</code></pre>
+                        <h4>Building Arrays Inside Methods</h4>
+                        <pre><code class="language-objectscript">ClassMethod GetStateCounts(Output states)
+{
+    &amp;sql(DECLARE C1 CURSOR FOR
+         SELECT State, COUNT(*) FROM Sample.Person GROUP BY State)
+    &amp;sql(OPEN C1)
+    For {
+        &amp;sql(FETCH C1 INTO :state, :cnt)
+        Quit:SQLCODE&#x27;=0
+        Set states(state) = cnt
+    }
+    &amp;sql(CLOSE C1)
+}</code></pre>
+                        <p>Calling:</p>
+                        <pre><code class="language-objectscript">Do ##class(Sample.Util).GetStateCounts(.states)
+Set st = &quot;&quot; For {
+    Set st = $ORDER(states(st)) Quit:st=&quot;&quot;
+    Write st, &quot;: &quot;, states(st), !
+}</code></pre>
+                        <h4>Multi-Level Array Passing</h4>
+                        <pre><code class="language-objectscript">ClassMethod ProcessTree(ByRef tree, level As %Integer = 0)
+{
+    Set key = &quot;&quot;
+    For {
+        Set key = $ORDER(tree(key))
+        Quit:key=&quot;&quot;
+        Write ?level*4, key, &quot;: &quot;, $GET(tree(key)), !
+        // Recursively process sub-nodes
+        // Note: must merge to a temp variable for recursive call
+        Merge sub = tree(key)
+        If $DATA(sub) &gt; 1 {
+            Do ..ProcessTree(.sub, level + 1)
+        }
+        Kill sub
+    }
+}</code></pre>
+                        <h4>Using $DATA to Check Array Nodes</h4>
+                        <pre><code class="language-objectscript">// $DATA returns:
+// 0 - node doesn&#x27;t exist
+// 1 - node has data, no children
+// 10 - node has children but no data
+// 11 - node has both data and children
+
+If $DATA(arr(&quot;key&quot;)) &gt; 9 {
+    Write &quot;Has child subscripts&quot;, !
+}</code></pre>
+                        <h4>MERGE Command for Array Operations</h4>
+                        <pre><code class="language-objectscript">// Copy an entire array
+Merge targetArr = sourceArr
+
+// Copy a subtree
+Merge targetArr = sourceArr(&quot;subtree&quot;)</code></pre>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_variables" target="_blank">Multidimensional Arrays</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_methods_arguments" target="_blank">Passing Variables by Reference</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="section-7" class="knowledge-item">
+                <h2>7. Uses and overrides inherited methods (overriding, calling parent) <button class="subsection-report-btn" onclick="openReportModal('section-7', 'Section 7')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li>Subclasses <strong>inherit</strong> all methods from their superclass(es)</li>
+                        <li>A subclass can <strong>override</strong> an inherited method by defining a method with the same name</li>
+                        <li>The overriding method must have a <strong>compatible signature</strong> (same arguments and return type)</li>
+                        <li>The <strong>Final</strong> keyword prevents a method from being overridden in subclasses</li>
+                        <li>Overriding is the foundation of <strong>polymorphism</strong> in object-oriented programming</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Overview</h4>
+                        <p>Method inheritance allows subclasses to reuse parent class behavior. When a subclass needs different behavior, it overrides the inherited method with its own implementation. This is a key mechanism of object-oriented programming that enables polymorphism.</p>
+                        <h4>Basic Inheritance</h4>
+                        <pre><code class="language-objectscript">Class Sample.Shape Extends %RegisteredObject
+{
+    Property Color As %String;
+
+    Method Describe() As %String
+    {
+        Return &quot;A shape of color &quot; _ ..Color
+    }
+
+    Method Area() As %Numeric
+    {
+        Return 0
+    }
+}</code></pre>
+                        <p>A subclass inherits all methods automatically:</p>
+                        <pre><code class="language-objectscript">Class Sample.Circle Extends Sample.Shape
+{
+    Property Radius As %Numeric;
+
+    /// Override Area to compute circle area
+    Method Area() As %Numeric
+    {
+        Return $ZPI * (..Radius ** 2)
+    }
+
+    /// Override Describe
+    Method Describe() As %String
+    {
+        Return &quot;A circle of radius &quot; _ ..Radius _ &quot; and color &quot; _ ..Color
+    }
+}</code></pre>
+                        <h4>Polymorphic Behavior</h4>
+                        <pre><code class="language-objectscript">ClassMethod PrintShapeInfo(shape As Sample.Shape)
+{
+    // Calls the appropriate version based on actual object type
+    Write shape.Describe(), !
+    Write &quot;Area: &quot;, shape.Area(), !
+}
+
+// Works with any Shape subclass
+Set c = ##class(Sample.Circle).%New()
+Set c.Radius = 5
+Set c.Color = &quot;Red&quot;
+Do ##class(Sample.Util).PrintShapeInfo(c)
+// Output: A circle of radius 5 and color Red
+// Area: 78.5398...</code></pre>
+                        <h4>The Final Keyword</h4>
+                        <p>Marking a method as <code>Final</code> prevents subclasses from overriding it:</p>
+                        <pre><code class="language-objectscript">Class Sample.Base Extends %RegisteredObject
+{
+    /// This method cannot be overridden
+    Method Validate() As %Status [ Final ]
+    {
+        // Validation logic that must not be changed
+        Return $$$OK
+    }
+}</code></pre>
+                        <p>Attempting to override a Final method in a subclass causes a compiler error.</p>
+                        <h4>Overriding Rules</h4>
+                        <ul>
+                            <li>The overriding method should have the same argument types and return type</li>
+                            <li>An instance method can only be overridden by an instance method (same for ClassMethod)</li>
+                            <li>If the parent method is Final, it cannot be overridden</li>
+                            <li>The overriding method can call the parent implementation using <code>##super()</code></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_classes_inheritance" target="_blank">Inheritance</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=ROBJ_method" target="_blank">Method Keywords</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="section-8" class="knowledge-item">
+                <h2>8. Determines when to use ##super for calling superclass methods <button class="subsection-report-btn" onclick="openReportModal('section-8', 'Section 8')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>##super()</strong> calls the superclass implementation of the current method</li>
+                        <li>Use ##super when you want to <strong>extend</strong> parent behavior, not replace it entirely</li>
+                        <li>Common pattern: call ##super first for initialization, then add custom logic</li>
+                        <li>##super follows the <strong>inheritance chain</strong> (calls the next class in MRO)</li>
+                        <li>Critical in %OnNew(), %OnOpen(), %OnValidateObject(), and other callback methods</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Overview</h4>
+                        <p>When overriding a method, you often want to keep the parent's behavior and add to it rather than completely replacing it. The <code>##super()</code> macro calls the parent class's version of the method. This is especially important in callback methods where the parent class performs essential setup.</p>
+                        <h4>Basic ##super Usage</h4>
+                        <pre><code class="language-objectscript">Class Sample.Employee Extends Sample.Person
+{
+    Property Department As %String;
+
+    Method Describe() As %String
+    {
+        // Get the parent description first
+        Set desc = ##super()
+        // Extend it with employee-specific info
+        Return desc _ &quot; (Dept: &quot; _ ..Department _ &quot;)&quot;
+    }
+}</code></pre>
+                        <h4>##super in Callback Methods</h4>
+                        <p>Callback methods like <code>%OnNew()</code>, <code>%OnValidateObject()</code>, and <code>%OnAfterSave()</code> are defined in system classes. When you override them, you should typically call <code>##super()</code> to ensure the system's behavior is preserved:</p>
+                        <pre><code class="language-objectscript">Class Sample.AuditedRecord Extends %Persistent
+{
+    Property CreatedBy As %String;
+    Property CreatedDate As %Date;
+    Property ModifiedDate As %Date;
+
+    Method %OnNew(initvalue As %String) As %Status
+    {
+        // Call parent&#x27;s %OnNew first
+        Set sc = ##super(initvalue)
+        If $$$ISERR(sc) Return sc
+
+        // Add custom initialization
+        Set ..CreatedBy = $USERNAME
+        Set ..CreatedDate = +$HOROLOG
+        Set ..ModifiedDate = +$HOROLOG
+        Return $$$OK
+    }
+
+    Method %OnBeforeSave(insert As %Boolean) As %Status
+    {
+        Set sc = ##super(insert)
+        If $$$ISERR(sc) Return sc
+
+        // Update modified date on every save
+        Set ..ModifiedDate = +$HOROLOG
+        Return $$$OK
+    }
+}</code></pre>
+                        <h4>When to Use ##super</h4>
+                        <table class="detail-table">
+                            <thead><tr><th>Scenario</th><th>Use ##super?</th><th>Reason</th></tr></thead>
+                            <tbody>
+                            <tr><td>Extending parent behavior</td><td>Yes</td><td>Preserve parent logic, add your own</td></tr>
+                            <tr><td>Completely replacing behavior</td><td>No</td><td>Parent logic not needed</td></tr>
+                            <tr><td>Callback methods (%OnNew, etc.)</td><td>Usually yes</td><td>Parent may perform essential setup</td></tr>
+                            <tr><td>Abstract method override</td><td>No</td><td>Parent has no implementation</td></tr>
+                            <tr><td>Multiple inheritance</td><td>Yes (carefully)</td><td>##super follows the MRO chain</td></tr>
+                            </tbody>
+                        </table>
+                        <h4>##super with Arguments</h4>
+                        <p>Pass the same arguments through to the parent:</p>
+                        <pre><code class="language-objectscript">Method Process(data As %String, options As %String = &quot;&quot;) As %Status
+{
+    // Pre-processing
+    Set data = $ZSTRIP(data, &quot;&lt;&gt;W&quot;)
+
+    // Call parent with the modified data
+    Set sc = ##super(data, options)
+    If $$$ISERR(sc) Return sc
+
+    // Post-processing
+    Do ..LogActivity(&quot;Processed: &quot; _ data)
+    Return $$$OK
+}</code></pre>
+                        <h4>##super in Multiple Inheritance</h4>
+                        <p>With multiple inheritance, <code>##super()</code> calls the next class in the method resolution order, not necessarily the "parent" in a single-inheritance sense:</p>
+                        <pre><code class="language-objectscript">Class MyApp.C Extends (MyApp.A, MyApp.B)
+{
+    Method Init() As %Status
+    {
+        // Calls MyApp.A&#x27;s Init (leftmost superclass)
+        Return ##super()
+    }
+}</code></pre>
+                        <h4>Common Pitfall: Forgetting ##super</h4>
+                        <p>Forgetting to call <code>##super()</code> in <code>%OnNew()</code> or <code>%OnValidateObject()</code> can break parent class initialization or validation. Always consider whether the parent has logic you need to preserve.</p>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_classes_inheritance" target="_blank">##super</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_classes_inheritance" target="_blank">Overriding Methods</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <div class="exam-prep">
+                <h2>Exam Preparation Summary</h2>
+                <h3>Critical Concepts to Master:</h3>
+                <ol>
+                    <li>Instance methods use `..` syntax; class methods cannot access instance properties</li>
+                    <li>`..#ParameterName` works in both instance and class methods</li>
+                    <li>Parameters are resolved at compile time and can be overridden in subclasses</li>
+                    <li>`Output` vs `ByRef`: Output does not pass initial value in; ByRef does</li>
+                    <li>`ByRef` and `Output` in signatures are purely indicative — the <strong>caller's dot (.) prefix</strong> is what actually controls pass-by-reference</li>
+                    <li>Always use dot (.) prefix at the call site for ByRef and Output parameters</li>
+                    <li>Objects passed to methods share the reference; modifying properties affects the original</li>
+                    <li>Reassigning the parameter variable does not affect the caller unless ByRef is used</li>
+                    <li>Multidimensional arrays must be passed by reference to include subscripts</li>
+                    <li>`##super()` calls the parent implementation; essential in callback methods</li>
+                    <li>Forgetting `##super()` in %OnNew or %OnValidateObject can break inherited behavior</li>
+                </ol>
+                <h3>Common Exam Scenarios:</h3>
+                <ul>
+                    <li>Identifying whether a method should be Method or ClassMethod</li>
+                    <li>Predicting the output when a variable is passed with or without the dot prefix</li>
+                    <li>Determining which parameter value is used when subclass overrides a parameter</li>
+                    <li>Predicting behavior when an object is passed to a method and its properties are modified</li>
+                    <li>Deciding whether ##super() should be called in a method override</li>
+                </ul>
+                <h3>Hands-On Practice Recommendations:</h3>
+                <ul>
+                    <li>Create a class hierarchy with instance and class methods; test `..` syntax</li>
+                    <li>Write methods with ByRef and Output parameters; test with and without the dot prefix</li>
+                    <li>Pass objects to methods and verify that property modifications are visible to the caller</li>
+                    <li>Build and iterate over multidimensional arrays passed by reference</li>
+                    <li>Override callback methods with and without ##super() and observe the differences</li>
+                </ul>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <a href="../quiz.html?file=quizzes/T1.3-quiz.json" class="take-quiz-btn">Take the Quiz</a>
+        </footer>
+    </div>
+
+    <div id="reportModal" class="report-modal">
+        <div class="report-content">
+            <h3>Report an Issue</h3>
+            <label for="issueType">Issue Type</label>
+            <select id="issueType">
+                <option value="confusing">Confusing Content</option>
+                <option value="wrong_answer">Incorrect Information</option>
+                <option value="outdated">Outdated Content</option>
+                <option value="formatting">Formatting Issue</option>
+                <option value="typo">Typo</option>
+                <option value="other">Other</option>
+            </select>
+            <label for="issueDescription">Description</label>
+            <textarea id="issueDescription" placeholder="Please describe the issue..."></textarea>
+            <div style="display: flex; align-items: center; gap: 10px; margin: 15px 0;">
+                <input type="checkbox" id="wantEmailNotification" style="width: 18px; height: 18px;">
+                <label for="wantEmailNotification" style="margin: 0; cursor: pointer;">
+                    Notify me by email when resolved
+                </label>
+            </div>
+            <div class="report-actions">
+                <button class="report-cancel" onclick="closeReportModal()">Cancel</button>
+                <button class="report-submit" onclick="submitReport()">Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../../js/config.js"></script>
+    <script src="../../../js/auth.js"></script>
+    <script src="../../../js/api.js"></script>
+    <script>
+        const CERTIFICATION_NAME = 'ObjectScript-Specialist';
+        const TOPIC_REF = 'T1.3';
+
+        document.addEventListener('DOMContentLoaded', function() {
+            updateAuthUI();
+            trackKnowledgeView();
+        });
+
+        function updateAuthUI() {
+            const loginBtn = document.getElementById('loginBtn');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const userInfo = document.getElementById('userInfo');
+            const userAvatar = document.getElementById('userAvatar');
+            const userName = document.getElementById('userName');
+
+            if (typeof Auth !== 'undefined' && Auth.isAuthenticated()) {
+                const user = Auth.getUser();
+                loginBtn.style.display = 'none';
+                logoutBtn.style.display = 'inline-block';
+                userInfo.style.display = 'flex';
+                if (user) {
+                    const initial = (user.name || user.email || '?')[0].toUpperCase();
+                    userAvatar.textContent = initial;
+                    userName.textContent = user.name || user.email || 'User';
+                }
+            } else {
+                loginBtn.style.display = 'inline-block';
+                logoutBtn.style.display = 'none';
+                userInfo.style.display = 'none';
+            }
+        }
+
+        async function trackKnowledgeView() {
+            if (typeof Auth === 'undefined' || !Auth.isAuthenticated()) {
+                return;
+            }
+
+            try {
+                await Api.trackKnowledge(CERTIFICATION_NAME, TOPIC_REF);
+                console.log('Knowledge view tracked:', TOPIC_REF);
+            } catch (error) {
+                console.log('View tracking skipped:', error.message);
+            }
+        }
+
+        function openReportModal(sectionId, sectionTitle) {
+            if (typeof Auth === 'undefined' || !Auth.isAuthenticated()) {
+                alert('Please sign in to report issues.');
+                return;
+            }
+            // Store section context
+            window.currentReportSection = {
+                id: sectionId || 'general',
+                title: sectionTitle || 'General'
+            };
+            // Update modal header to show section
+            const modalHeader = document.querySelector('#reportModal h3');
+            if (modalHeader && sectionTitle) {
+                modalHeader.textContent = 'Report Issue: ' + sectionTitle;
+            } else if (modalHeader) {
+                modalHeader.textContent = 'Report an Issue';
+            }
+            document.getElementById('wantEmailNotification').checked = false;
+            document.getElementById('reportModal').classList.add('active');
+        }
+
+        function closeReportModal() {
+            document.getElementById('reportModal').classList.remove('active');
+            document.getElementById('issueType').value = 'confusing';
+            document.getElementById('issueDescription').value = '';
+        }
+
+        async function submitReport() {
+            const issueType = document.getElementById('issueType').value;
+            const description = document.getElementById('issueDescription').value.trim();
+            const wantEmailNotification = document.getElementById('wantEmailNotification').checked;
+            const sectionContext = window.currentReportSection || { id: 'general', title: 'General' };
+
+            if (!description) {
+                alert('Please provide a description of the issue.');
+                return;
+            }
+
+            // Build content reference with section context
+            const contentRef = sectionContext.id !== 'general'
+                ? `${TOPIC_REF} (${sectionContext.title})`
+                : TOPIC_REF;
+
+            try {
+                await Api.reportProblem({
+                    certificationName: CERTIFICATION_NAME,
+                    contentType: 'knowledge',
+                    contentReference: contentRef,
+                    issueType: issueType,
+                    description: description,
+                    wantEmailNotification: wantEmailNotification
+                });
+                alert('Thank you! Your report has been submitted.');
+                closeReportModal();
+            } catch (error) {
+                if (error.status === 429) {
+                    const retryMinutes = Math.ceil((error.data?.retryAfter || 3600) / 60);
+                    alert(`You've submitted too many reports recently. Please wait ${retryMinutes} minutes before submitting another report.`);
+                } else {
+                    alert('Failed to submit report: ' + error.message);
+                }
+            }
+        }
+
+        document.querySelectorAll('.detailed-notes h3').forEach(h3 => {
+            h3.style.cursor = 'pointer';
+        });
+    </script>
+    <script src="../../../js/consent.js"></script>
+    <script src="../../../js/analytics.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            CookieConsent.init();
+            Analytics.init();
+        });
+    </script>
+</body>
+</html>

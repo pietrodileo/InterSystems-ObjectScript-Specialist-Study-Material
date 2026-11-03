@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Study guide for T1.2: Creates Properties and Indexes - part of the InterSystems ObjectScript Specialist certification. Learn key concepts, best practices, and exam preparation tips.">
+    <meta name="keywords" content="InterSystems certification, ObjectScript Specialist, T1.2: Creates Properties and Indexes, exam preparation, practice quiz">
+    <meta name="author" content="exam-prep.es">
+    <meta name="robots" content="index, follow">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://exam-prep.es/exams/objectscript/knowledge/T1.2.html">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://exam-prep.es/exams/objectscript/knowledge/T1.2.html">
+    <meta property="og:title" content="T1.2: Creates Properties and Indexes - InterSystems ObjectScript Specialist Study Guide">
+    <meta property="og:description" content="Study guide for T1.2: Creates Properties and Indexes - part of the InterSystems ObjectScript Specialist certification. Learn key concepts, best practices, and exam preparation tips.">
+    <meta property="og:image" content="https://exam-prep.es/images/og-image.png">
+    <meta property="og:site_name" content="InterSystems Certification Prep">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://exam-prep.es/exams/objectscript/knowledge/T1.2.html">
+    <meta name="twitter:title" content="T1.2: Creates Properties and Indexes - InterSystems ObjectScript Specialist Study Guide">
+    <meta name="twitter:description" content="Study guide for T1.2: Creates Properties and Indexes - part of the InterSystems ObjectScript Specialist certification. Learn key concepts, best practices, and exam preparation tips.">
+    <meta name="twitter:image" content="https://exam-prep.es/images/og-image.png">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+    <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+
+    <!-- hreflang Tags -->
+    <link rel="alternate" hreflang="en" href="https://exam-prep.es/exams/objectscript/knowledge/T1.2.html" />
+    <link rel="alternate" hreflang="es" href="https://exam-prep.es/exams/objectscript/knowledge/es/T1.2.html" />
+    <link rel="alternate" hreflang="x-default" href="https://exam-prep.es/exams/objectscript/knowledge/T1.2.html" />
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../colors.css">
+    <link rel="stylesheet" href="../../../css/common.css">
+    <link rel="stylesheet" href="../../../css/consent.css">
+
+    <title>T1.2: Creates Properties and Indexes - InterSystems ObjectScript Specialist Study Guide | exam-prep.es</title>
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "T1.2: Creates Properties and Indexes - InterSystems ObjectScript Specialist Study Guide",
+    "description": "Study guide for T1.2: Creates Properties and Indexes - part of the InterSystems ObjectScript Specialist certification. Learn key concepts, best practices, and exam preparation tips.",
+    "author": {
+        "@type": "Organization",
+        "name": "exam-prep.es"
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "InterSystems Certification Prep",
+        "url": "https://exam-prep.es"
+    },
+    "inLanguage": "en",
+    "about": {
+        "@type": "Course",
+        "name": "InterSystems ObjectScript Specialist"
+    }
+}
+    </script>
+</head>
+<body>
+    <div class="container">
+        <nav class="nav-bar">
+            <a href="../index.html" class="back-link">&#8592; Back to Topics</a>
+            <div class="lang-toggle">
+                <a href="T1.2.html" class="lang-btn active">EN</a>
+                <a href="es/T1.2.html" class="lang-btn">ES</a>
+            </div>
+            <a href="../quiz.html?file=quizzes/T1.2-quiz.json" class="quiz-link">Take Quiz &#8594;</a>
+            <div class="auth-bar">
+                <button id="loginBtn" class="auth-btn login-btn" onclick="Auth.login()">Sign In</button>
+                <div id="userInfo" class="user-info">
+                    <div id="userAvatar" class="user-avatar">?</div>
+                    <span id="userName" class="user-name">User</span>
+                </div>
+                <button id="logoutBtn" class="auth-btn logout-btn" onclick="Auth.logout()">Sign Out</button>
+            </div>
+        </nav>
+
+        <header class="header">
+            <h1>T1.2: Creates Properties and Indexes</h1>
+            <p>Knowledge Review - InterSystems ObjectScript Specialist</p>
+        </header>
+
+        <nav class="toc">
+            <h3>Contents</h3>
+            <ol>
+                <li><a href="#section-1">Sets max length for string properties (MAXLEN parameter, TRUNCATE)</a></li>
+                <li><a href="#section-2">Uses stream properties for large data sets (%Stream.GlobalCharacter, %Stream.FileBinary)</a></li>
+                <li><a href="#section-3">Creates properties that calculate values dynamically or are auto-updated (Calculated, SqlComputed, SqlComputeOnChange)</a></li>
+                <li><a href="#section-4">Creates and validates class member parameters and attributes (Required, InitialExpression, parameter keywords)</a></li>
+                <li><a href="#section-5">Selects appropriate index type based on data distribution (standard, bitmap, bitslice)</a></li>
+                <li><a href="#section-6">Uses unique index methods (unique index, %ExistsId)</a></li>
+                <li><a href="#section-7">Recalls how foreign keys enforce referential integrity (ForeignKey, OnDelete, NoAction, Cascade)</a></li>
+            </ol>
+        </nav>
+
+        <main class="content">
+            <section id="section-1" class="knowledge-item">
+                <h2>1. Sets max length for string properties (MAXLEN parameter, TRUNCATE) <button class="subsection-report-btn" onclick="openReportModal('section-1', 'Section 1')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>MAXLEN</strong> parameter controls the maximum length of a %String property (default is 50 characters)</li>
+                        <li>Setting `MAXLEN = ""` sets the limit to the maximum IRIS string length (~3.6 million characters)</li>
+                        <li><strong>TRUNCATE</strong> parameter determines whether values exceeding MAXLEN are silently truncated or rejected</li>
+                        <li>MAXLEN affects SQL column definitions (VARCHAR size)</li>
+                        <li>Always set MAXLEN explicitly when the default of 50 is insufficient</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Overview</h4>
+                        <p>String properties in InterSystems IRIS have a default maximum length of 50 characters, which is often insufficient for real-world data. The <code>MAXLEN</code> parameter controls this limit and directly affects both object validation and the SQL column definition.</p>
+                        <h4>Setting MAXLEN</h4>
+                        <pre><code class="language-objectscript">Class Sample.Patient Extends %Persistent
+{
+    /// Name with explicit max length
+    Property Name As %String(MAXLEN = 200);
+
+    /// Description with maximum IRIS string length (~3.6 MB)
+    Property Notes As %String(MAXLEN = &quot;&quot;);
+
+    /// Uses the default MAXLEN of 50
+    Property Code As %String;
+}</code></pre>
+                        <p>In SQL, <code>MAXLEN</code> maps to the <code>VARCHAR</code> size:</p>
+                        <ul>
+                            <li><code>Property Name As %String(MAXLEN = 200)</code> becomes <code>VARCHAR(200)</code></li>
+                            <li><code>Property Notes As %String(MAXLEN = &quot;&quot;)</code> becomes <code>VARCHAR(MAXVAL)</code> (maximum IRIS string length, ~3.6 million characters)</li>
+                        </ul>
+                        <h4>The TRUNCATE Parameter</h4>
+                        <p>The <code>TRUNCATE</code> parameter controls what happens when a value exceeds MAXLEN:</p>
+                        <ul>
+                            <li><strong>TRUNCATE = 0</strong> (default): The value is rejected, and <code>%Save()</code> returns an error status</li>
+                            <li><strong>TRUNCATE = 1</strong>: The value is silently truncated to MAXLEN characters</li>
+                        </ul>
+                        <pre><code class="language-objectscript">Property ShortCode As %String(MAXLEN = 5, TRUNCATE = 1);</code></pre>
+                        <p>With TRUNCATE = 1, setting <code>ShortCode</code> to <code>&quot;ABCDEFGH&quot;</code> would silently store <code>&quot;ABCDE&quot;</code>.</p>
+                        <h4>Practical Considerations</h4>
+                        <ul>
+                            <li>Always verify MAXLEN is sufficient for production data; the default of 50 is a common source of data truncation bugs</li>
+                            <li>For properties that store variable-length text (descriptions, notes, addresses), consider using <code>MAXLEN = &quot;&quot;</code></li>
+                            <li>When data may exceed the maximum IRIS string length (~3.6 million characters / ~3.6 MB) — such as large PDFs, images, or documents — use a stream property instead</li>
+                            <li>Changing MAXLEN on an existing property may require rebuilding indices that include that property</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_datatypes" target="_blank">String Data Type</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=ROBJ_property" target="_blank">Property Parameters</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="section-2" class="knowledge-item">
+                <h2>2. Uses stream properties for large data sets (%Stream.GlobalCharacter, %Stream.FileBinary) <button class="subsection-report-btn" onclick="openReportModal('section-2', 'Section 2')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>Streams</strong> handle data too large for standard string properties (documents, images, files)</li>
+                        <li><strong>%Stream.GlobalCharacter</strong>: Character data stored in globals (most common for text); <strong>automatically compressed</strong> by IRIS</li>
+                        <li><strong>%Stream.GlobalBinary</strong>: Binary data stored in globals (images, PDFs stored in database); <strong>automatically compressed</strong> by IRIS</li>
+                        <li><strong>%Stream.FileCharacter</strong>: Character data stored in external files on the file system (not compressed by default, but compressed subclasses exist)</li>
+                        <li><strong>%Stream.FileBinary</strong>: Binary data stored in external files on the file system (not compressed by default, but compressed subclasses like `%Stream.FileBinaryGzip` exist)</li>
+                        <li><strong>Global-based streams are compressed automatically</strong> — this is the recommended choice when IRIS compression is desired</li>
+                        <li>Streams use `Write()`, `Read()`, `Rewind()`, and `MoveToEnd()` methods instead of direct assignment</li>
+                        <li><strong>`WriteLine()`</strong> is only available on character streams — it appends data followed by a line terminator</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Overview</h4>
+                        <p>When data exceeds the practical limits of a string property (or when handling binary content like images or documents), stream properties provide a chunked storage mechanism. Streams are read and written sequentially, making them suitable for large data that doesn't need random access.</p>
+                        <h4>Types of Streams</h4>
+                        <table class="detail-table">
+                            <thead><tr><th>Stream Class</th><th>Content Type</th><th>Storage Location</th><th>Compressed by IRIS</th></tr></thead>
+                            <tbody>
+                            <tr><td>%Stream.GlobalCharacter</td><td>Text (character)</td><td>Database globals</td><td>Yes</td></tr>
+                            <tr><td>%Stream.GlobalBinary</td><td>Binary</td><td>Database globals</td><td>Yes</td></tr>
+                            <tr><td>%Stream.FileCharacter</td><td>Text (character)</td><td>External file system</td><td>No (by default)</td></tr>
+                            <tr><td>%Stream.FileBinary</td><td>Binary</td><td>External file system</td><td>No (by default)</td></tr>
+                            </tbody>
+                        </table>
+                        <h4>Declaring Stream Properties</h4>
+                        <pre><code class="language-objectscript">Class Sample.Document Extends %Persistent
+{
+    Property Title As %String(MAXLEN = 200);
+
+    /// Large text content stored in globals
+    Property Content As %Stream.GlobalCharacter;
+
+    /// PDF file stored in the database
+    Property Attachment As %Stream.GlobalBinary;
+}</code></pre>
+                        <h4>Writing to Streams</h4>
+                        <pre><code class="language-objectscript">Set doc = ##class(Sample.Document).%New()
+Set doc.Title = &quot;My Report&quot;
+
+// Write text to the character stream
+Do doc.Content.Write(&quot;This is the first paragraph of the report. &quot;)
+Do doc.Content.Write(&quot;This is the second paragraph.&quot;)
+Do doc.Content.WriteLine(&quot;&quot;)  // adds a line with newline
+
+// Save the object (stream data is saved with the object)
+Set sc = doc.%Save()</code></pre>
+                        <h4>Reading from Streams</h4>
+                        <pre><code class="language-objectscript">Set doc = ##class(Sample.Document).%OpenId(1)
+
+// Rewind to the beginning
+Do doc.Content.Rewind()
+
+// Read in chunks
+While &#x27;doc.Content.AtEnd {
+    Set chunk = doc.Content.Read(32000)
+    Write chunk
+}</code></pre>
+                        <h4>Key Stream Methods</h4>
+                        <ul>
+                            <li><strong>Write(data)</strong>: Appends data to the stream (all stream types)</li>
+                            <li><strong>WriteLine(data)</strong>: Appends data followed by a line terminator (character streams only)</li>
+                            <li><strong>Read(len)</strong>: Reads up to <code>len</code> characters/bytes from the current position</li>
+                            <li><strong>ReadLine()</strong>: Reads one line of text</li>
+                            <li><strong>Rewind()</strong>: Resets the read position to the beginning</li>
+                            <li><strong>MoveToEnd()</strong>: Positions at the end for appending</li>
+                            <li><strong>Clear()</strong>: Removes all content from the stream</li>
+                            <li><strong>Size</strong>: Property that returns the total size of the stream</li>
+                            <li><strong>AtEnd</strong>: Property that indicates whether the read position is at the end</li>
+                        </ul>
+                        <h4>File-Based Streams</h4>
+                        <pre><code class="language-objectscript">// Write to an external file
+Set fileStream = ##class(%Stream.FileCharacter).%New()
+Set fileStream.Filename = &quot;/tmp/output.txt&quot;
+Do fileStream.Write(&quot;Content for external file&quot;)
+Set sc = fileStream.%Save()</code></pre>
+                        <h4>Copying Between Streams</h4>
+                        <pre><code class="language-objectscript">// Copy one stream to another
+Do targetStream.CopyFrom(sourceStream)</code></pre>
+                        <h4>Stream Compression</h4>
+                        <p>Global-based streams (<code>%Stream.GlobalCharacter</code> and <code>%Stream.GlobalBinary</code>) are <strong>automatically compressed by IRIS</strong> when stored in the database. This compression is transparent — data is compressed on write and decompressed on read without any additional code. This makes global-based streams the recommended choice when you want IRIS to handle compression automatically.</p>
+                        <p>File-based streams (<code>%Stream.FileCharacter</code> and <code>%Stream.FileBinary</code>) are stored as regular files on the operating system's file system and are <strong>not compressed by default</strong>. However, IRIS provides compressed subclasses such as <code>%Stream.FileBinaryGzip</code> that store the file in gzip format.</p>
+                        <p><strong>Exam tip</strong>: When a question asks about storing large data that "should be automatically compressed by IRIS if possible," choose a global-based stream class (<code>%Stream.GlobalCharacter</code> for text, <code>%Stream.GlobalBinary</code> for binary data).</p>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_propstream" target="_blank">Stream Classes</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_propstream" target="_blank">%Stream.GlobalCharacter</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="section-3" class="knowledge-item">
+                <h2>3. Creates properties that calculate values dynamically or are auto-updated (Calculated, SqlComputed, SqlComputeOnChange) <button class="subsection-report-btn" onclick="openReportModal('section-3', 'Section 3')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>Calculated</strong> properties have no storage; their value is computed each time via a custom Get method</li>
+                        <li><strong>SqlComputed</strong> properties have a SQL compute code expression that provides the value in SQL context</li>
+                        <li><strong>SqlComputeOnChange</strong> specifies which properties trigger recalculation on INSERT or UPDATE</li>
+                        <li>Calculated properties without SqlComputed will appear as NULL in SQL queries</li>
+                        <li><strong>Transient</strong> properties exist in memory only (not stored) but differ from Calculated in that they can be set</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Overview</h4>
+                        <p>InterSystems IRIS provides several mechanisms for properties whose values are derived from other data rather than stored independently. Choosing the right mechanism depends on whether the value needs to be available in SQL, whether it should be stored for indexing, and when it should be recalculated.</p>
+                        <h4>Calculated Properties</h4>
+                        <p>A Calculated property has no storage. Each time the property is accessed, the system calls the property's Get method to compute the value.</p>
+                        <pre><code class="language-objectscript">Class Sample.Person Extends %Persistent
+{
+    Property FirstName As %String;
+    Property LastName As %String;
+
+    /// Full name computed on access
+    Property FullName As %String [ Calculated, SqlComputeCode = {
+        Set {*} = {FirstName} _ &quot; &quot; _ {LastName}
+    }, SqlComputed ];
+
+    Method FullNameGet() As %String
+    {
+        Return ..FirstName _ &quot; &quot; _ ..LastName
+    }
+}</code></pre>
+                        <p>Key characteristics:</p>
+                        <ul>
+                            <li>No storage allocated for the property</li>
+                            <li><code>Get</code> method is called every time the property is accessed in ObjectScript</li>
+                            <li>Cannot be SET directly (no <code>Set</code> method)</li>
+                            <li>Must also specify <code>SqlComputed</code> and <code>SqlComputeCode</code> if the value should be visible in SQL</li>
+                        </ul>
+                        <h4>SqlComputed Properties</h4>
+                        <p><code>SqlComputed</code> provides a value in the SQL context. Combined with storage, the value can be indexed.</p>
+                        <pre><code class="language-objectscript">Property AgeGroup As %String [ SqlComputeCode = {
+    Set {*} = $Select({Age}&lt;18:&quot;Minor&quot;, {Age}&lt;65:&quot;Adult&quot;, 1:&quot;Senior&quot;)
+}, SqlComputed, SqlComputeOnChange = Age ];</code></pre>
+                        <p>In the <code>SqlComputeCode</code>:</p>
+                        <ul>
+                            <li><code>{*}</code> refers to the property being computed</li>
+                            <li><code>{PropertyName}</code> refers to other properties in the same class</li>
+                            <li><code>{%%INSERT}</code> is true during INSERT operations</li>
+                            <li><code>{%%UPDATE}</code> is true during UPDATE operations</li>
+                        </ul>
+                        <h4>SqlComputeOnChange</h4>
+                        <p>This keyword specifies which property changes should trigger recalculation:</p>
+                        <pre><code class="language-objectscript">Property TotalPrice As %Numeric [ SqlComputeCode = {
+    Set {*} = {Quantity} * {UnitPrice}
+}, SqlComputed, SqlComputeOnChange = (Quantity, UnitPrice) ];</code></pre>
+                        <ul>
+                            <li>When <code>Quantity</code> or <code>UnitPrice</code> changes (via INSERT or UPDATE), <code>TotalPrice</code> is automatically recomputed</li>
+                            <li>Specify <code>%%INSERT</code> to only compute on new records</li>
+                            <li>Specify multiple trigger properties in parentheses</li>
+                            <li>Without <code>SqlComputeOnChange</code>, the value is computed on every INSERT and UPDATE</li>
+                        </ul>
+                        <h4>Stored Computed vs Calculated</h4>
+                        <table class="detail-table">
+                            <thead><tr><th>Feature</th><th>Calculated + SqlComputed</th><th>SqlComputed (not Calculated)</th></tr></thead>
+                            <tbody>
+                            <tr><td>Value stored on disk</td><td>No</td><td>Yes</td></tr>
+                            <tr><td>Can be indexed</td><td>No</td><td>Yes</td></tr>
+                            <tr><td>SQL visibility</td><td>Computed on each query</td><td>Stored, fast retrieval</td></tr>
+                            <tr><td>Object access</td><td>Via Get method</td><td>Direct from storage</td></tr>
+                            </tbody>
+                        </table>
+                        <h4>Transient Properties</h4>
+                        <p>Transient properties are in-memory only (not stored) but unlike Calculated properties, they can be set:</p>
+                        <pre><code class="language-objectscript">Property TempResult As %String [ Transient ];</code></pre>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_datatypes" target="_blank">Calculated Properties</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_tables" target="_blank">SqlComputed Properties</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="section-4" class="knowledge-item">
+                <h2>4. Creates and validates class member parameters and attributes (Required, InitialExpression, parameter keywords) <button class="subsection-report-btn" onclick="openReportModal('section-4', 'Section 4')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>Required</strong> keyword ensures a property must have a value before %Save() succeeds</li>
+                        <li><strong>InitialExpression</strong> sets a default value when %New() creates an object</li>
+                        <li><strong>Property parameters</strong> (MAXLEN, MINVAL, MAXVAL, VALUELIST, etc.) constrain allowed values</li>
+                        <li><strong>Class parameters</strong> define constants accessible throughout the class via `..#ParamName`</li>
+                        <li>Validation occurs during %Save() and respects all constraints</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Overview</h4>
+                        <p>Class members in InterSystems IRIS can be configured with various keywords and parameters that control validation, default values, and behavior. These attributes are essential for building robust data models that enforce business rules at the object level.</p>
+                        <h4>The Required Keyword</h4>
+                        <p>When a property is marked <code>Required</code>, <code>%Save()</code> will fail if the property has no value:</p>
+                        <pre><code class="language-objectscript">Class Sample.Order Extends %Persistent
+{
+    Property OrderNumber As %String [ Required ];
+    Property CustomerName As %String [ Required ];
+    Property OrderDate As %Date [ InitialExpression = {+$HOROLOG} ];
+    Property Status As %String [ InitialExpression = &quot;NEW&quot; ];
+}</code></pre>
+                        <p>Attempting to save without setting <code>OrderNumber</code> or <code>CustomerName</code> returns a <code>%Status</code> error.</p>
+                        <h4>InitialExpression</h4>
+                        <p><code>InitialExpression</code> provides a default value assigned when <code>%New()</code> creates an instance:</p>
+                        <pre><code class="language-objectscript">Property CreatedDate As %Date [ InitialExpression = {+$HOROLOG} ];
+Property Active As %Boolean [ InitialExpression = 1 ];
+Property Counter As %Integer [ InitialExpression = 0 ];</code></pre>
+                        <p>Note: Expressions within <code>{ }</code> are evaluated at runtime. Without braces, the value is a literal constant.</p>
+                        <h4>Common Property Parameters</h4>
+                        <pre><code class="language-objectscript">Class Sample.Product Extends %Persistent
+{
+    /// String with constrained length
+    Property Name As %String(MAXLEN = 100, MINLEN = 1);
+
+    /// Numeric with range constraints
+    Property Price As %Numeric(MAXVAL = 99999.99, MINVAL = 0, SCALE = 2);
+
+    /// Enumerated values
+    Property Category As %String(VALUELIST = &quot;,Electronics,Clothing,Food,Other&quot;);
+
+    /// Display values for the enumeration
+    Property Priority As %String(
+        VALUELIST = &quot;,H,M,L&quot;,
+        DISPLAYLIST = &quot;,High,Medium,Low&quot;
+    );
+
+    /// Pattern-matched string
+    Property ZipCode As %String(PATTERN = &quot;5N.1(1&quot;&quot;-&quot;&quot;4N)&quot;);
+}</code></pre>
+                        <h4>Class Parameters</h4>
+                        <p>Class parameters define constants for the entire class:</p>
+                        <pre><code class="language-objectscript">Class Sample.Config Extends %Persistent
+{
+    Parameter DEFAULTCATEGORY = &quot;General&quot;;
+    Parameter MAXRETRIES As %Integer = 3;
+    Parameter TABLENAME = &quot;Products&quot;;
+
+    Method GetCategory() As %String
+    {
+        Return ..#DEFAULTCATEGORY
+    }
+}</code></pre>
+                        <p>Parameters can be overridden in subclasses:</p>
+                        <pre><code class="language-objectscript">Class Sample.SpecialConfig Extends Sample.Config
+{
+    Parameter DEFAULTCATEGORY = &quot;Special&quot;;
+}</code></pre>
+                        <h4>Validation Behavior</h4>
+                        <p>Validation occurs at several points: 1. <strong>Property Set</strong>: Type checking happens when a property value is set 2. <strong>%Save()</strong>: Required checks, VALUELIST validation, MAXLEN/MINLEN checks 3. <strong>%ValidateObject()</strong>: Can be called explicitly to validate without saving 4. <strong>SQL INSERT/UPDATE</strong>: Same validation applies through SQL operations</p>
+                        <pre><code class="language-objectscript">Set order = ##class(Sample.Order).%New()
+// OrderNumber is Required but not set
+Set sc = order.%Save()
+// sc contains an error - Required field missing
+If $$$ISERR(sc) {
+    Do $System.Status.DisplayError(sc)
+    // Displays: &quot;ERROR #7201: Property &#x27;OrderNumber&#x27; required&quot;
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=ROBJ_property" target="_blank">Property Keywords</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_classes_parameters" target="_blank">Class Parameters</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="section-5" class="knowledge-item">
+                <h2>5. Selects appropriate index type based on data distribution (standard, bitmap, bitslice) <button class="subsection-report-btn" onclick="openReportModal('section-5', 'Section 5')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>Standard index</strong> (B-tree): Best for high-cardinality data (many unique values); supports equality and range queries</li>
+                        <li><strong>Bitmap index</strong>: Best for low-cardinality data (few distinct values); excellent for complex AND/OR queries</li>
+                        <li><strong>Bitslice index</strong>: Specialized for aggregate operations (SUM, COUNT, AVG) on numeric data</li>
+                        <li>Index type selection depends on data distribution, query patterns, and update frequency</li>
+                        <li>Bitmap indexes require a positive integer ID (system-assigned, not custom)</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Overview</h4>
+                        <p>Indexes dramatically improve query performance, but choosing the wrong index type can waste storage and slow down write operations. Understanding the characteristics of each index type and matching them to data patterns is crucial.</p>
+                        <h4>Standard (B-tree) Indexes</h4>
+                        <p>Standard indexes organize data in a balanced tree structure, making them efficient for:</p>
+                        <ul>
+                            <li>Equality lookups (<code>WHERE Name = &#x27;Smith&#x27;</code>)</li>
+                            <li>Range queries (<code>WHERE Age &gt; 30 AND Age &lt; 50</code>)</li>
+                            <li>Sorting operations (<code>ORDER BY</code>)</li>
+                            <li>High-cardinality columns (many unique values like names, dates, IDs)</li>
+                        </ul>
+                        <pre><code class="language-objectscript">Index NameIdx On Name;
+Index DOBIdx On DOB;
+Index CompoundIdx On (LastName, FirstName);</code></pre>
+                        <h4>Bitmap Indexes</h4>
+                        <p>Bitmap indexes use bit strings where each bit represents a row. They are extremely efficient for:</p>
+                        <ul>
+                            <li>Low-cardinality columns (gender, status, category, state codes)</li>
+                            <li>Complex queries combining multiple conditions with AND/OR</li>
+                            <li>COUNT operations</li>
+                        </ul>
+                        <pre><code class="language-objectscript">Index GenderIdx On Gender [ Type = bitmap ];
+Index StatusIdx On Status [ Type = bitmap ];
+Index StateIdx On State [ Type = bitmap ];</code></pre>
+                        <p>Requirements and limitations:</p>
+                        <ul>
+                            <li>The class must use system-assigned positive integer IDs (default behavior)</li>
+                            <li>Not suitable for high-cardinality data (would create huge bit strings)</li>
+                            <li>INSERT/UPDATE/DELETE operations are somewhat slower due to bit manipulation</li>
+                            <li>Cannot be used on properties that exceed ~3.6M distinct values</li>
+                        </ul>
+                        <p>A query like <code>SELECT COUNT(*) FROM Patients WHERE Gender = &#x27;F&#x27; AND State = &#x27;CA&#x27;</code> performs a fast bitwise AND on two bitmap indexes.</p>
+                        <h4>Bitslice Indexes</h4>
+                        <p>Bitslice indexes decompose numeric values into their binary representation, storing each bit position separately. They accelerate:</p>
+                        <ul>
+                            <li>SUM aggregation</li>
+                            <li>COUNT with conditions on the indexed value</li>
+                            <li>AVG computations (derived from SUM/COUNT)</li>
+                        </ul>
+                        <pre><code class="language-objectscript">Index AmountBSIdx On Amount [ Type = bitslice ];</code></pre>
+                        <p>A query like <code>SELECT SUM(Amount) FROM Orders WHERE Status = &#x27;Shipped&#x27;</code> can combine a bitmap index on Status with a bitslice index on Amount for extremely fast execution.</p>
+                        <h4>Index Selection Decision Matrix</h4>
+                        <table class="detail-table">
+                            <thead><tr><th>Data Characteristic</th><th>Recommended Index Type</th></tr></thead>
+                            <tbody>
+                            <tr><td>High cardinality (names, dates, IDs)</td><td>Standard</td></tr>
+                            <tr><td>Low cardinality (gender, status, type)</td><td>Bitmap</td></tr>
+                            <tr><td>Numeric aggregation (amounts, quantities)</td><td>Bitslice</td></tr>
+                            <tr><td>Frequent equality + range queries</td><td>Standard</td></tr>
+                            <tr><td>Complex AND/OR filtering</td><td>Bitmap (on multiple properties)</td></tr>
+                            <tr><td>Rarely updated reference data</td><td>Bitmap (ideal)</td></tr>
+                            <tr><td>Frequently updated data</td><td>Standard (lower write overhead)</td></tr>
+                            </tbody>
+                        </table>
+                        <h4>Building and Rebuilding Indexes</h4>
+                        <pre><code class="language-objectscript">// Rebuild all indexes for a class
+Do ##class(Sample.Person).%BuildIndices()
+
+// Rebuild specific index
+Do ##class(Sample.Person).%BuildIndices($ListBuild(&quot;NameIdx&quot;))
+
+// Purge and rebuild
+Do ##class(Sample.Person).%PurgeIndices()
+Do ##class(Sample.Person).%BuildIndices()</code></pre>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSOD_indexes" target="_blank">Index Definitions</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSOD_indexes" target="_blank">Bitmap Indexes</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="section-6" class="knowledge-item">
+                <h2>6. Uses unique index methods (unique index, %ExistsId) <button class="subsection-report-btn" onclick="openReportModal('section-6', 'Section 6')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li>A <strong>unique index</strong> enforces that no two objects can have the same value for the indexed property</li>
+                        <li>Unique indexes automatically generate `Exists` methods for checking existence</li>
+                        <li><strong>%ExistsId(id)</strong> checks if an object with a given ID exists without opening it</li>
+                        <li>Unique indexes project as SQL UNIQUE constraints</li>
+                        <li>The <strong>IdKey</strong> index type makes the indexed properties the object ID</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Overview</h4>
+                        <p>Unique indexes enforce data integrity by preventing duplicate values. They also provide efficient existence-checking methods. Understanding unique indexes is important for both data modeling and performance optimization.</p>
+                        <h4>Defining a Unique Index</h4>
+                        <pre><code class="language-objectscript">Class Sample.Employee Extends %Persistent
+{
+    Property EmployeeID As %String [ Required ];
+    Property SSN As %String [ Required ];
+    Property Email As %String;
+
+    /// Ensure no duplicate EmployeeIDs
+    Index EmployeeIDIdx On EmployeeID [ Unique ];
+
+    /// Ensure no duplicate SSNs
+    Index SSNIdx On SSN [ Unique ];
+
+    /// Compound unique index
+    Index NameDOBIdx On (LastName, FirstName, DOB) [ Unique ];
+}</code></pre>
+                        <p>If you attempt to save an object with a duplicate value in a unique-indexed property, <code>%Save()</code> returns an error.</p>
+                        <h4>Generated Existence Methods</h4>
+                        <p>For each unique index, the class compiler generates an <code>Exists</code> method:</p>
+                        <pre><code class="language-objectscript">// Check if an employee with EmployeeID &quot;E12345&quot; exists
+If ##class(Sample.Employee).EmployeeIDIdxExists(&quot;E12345&quot;, .id) {
+    Write &quot;Employee exists with ID: &quot;, id, !
+}</code></pre>
+                        <p>The <code>Exists</code> method:</p>
+                        <ul>
+                            <li>Takes the indexed property value(s) as input</li>
+                            <li>Returns a boolean (1 = exists, 0 = does not exist)</li>
+                            <li>Optionally returns the object ID via an output parameter</li>
+                        </ul>
+                        <h4>%ExistsId() for ID-Based Checks</h4>
+                        <p>The <code>%ExistsId()</code> class method checks if an object with a specific ID exists without opening it:</p>
+                        <pre><code class="language-objectscript">If ##class(Sample.Employee).%ExistsId(42) {
+    Write &quot;Object 42 exists&quot;, !
+} Else {
+    Write &quot;Object 42 does not exist&quot;, !
+}</code></pre>
+                        <p>This is much more efficient than opening the object to check existence, as it only checks the global node without loading data into memory.</p>
+                        <h4>IdKey Indexes</h4>
+                        <p>An <code>IdKey</code> index makes the indexed properties the actual object identifier instead of the system-assigned integer:</p>
+                        <pre><code class="language-objectscript">Class Sample.Country Extends %Persistent
+{
+    Property Code As %String(MAXLEN = 3);
+    Property Name As %String(MAXLEN = 100);
+
+    Index CodeIdx On Code [ IdKey ];
+}</code></pre>
+                        <p>With an IdKey index:</p>
+                        <ul>
+                            <li><code>Code</code> becomes the object ID: <code>Set country = ##class(Sample.Country).%OpenId(&quot;USA&quot;)</code></li>
+                            <li>No system-assigned integer ID</li>
+                            <li>Bitmap indexes cannot be used (IDs are not positive integers)</li>
+                            <li>The IdKey property cannot be modified after saving</li>
+                        </ul>
+                        <h4>Unique Index vs Primary Key in SQL</h4>
+                        <p>A unique index projects as a SQL UNIQUE constraint. An <code>IdKey</code> index projects as the PRIMARY KEY. A class can have multiple unique indexes but only one IdKey.</p>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSOD_indexes" target="_blank">Unique Indexes</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_storage" target="_blank">%ExistsId</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="section-7" class="knowledge-item">
+                <h2>7. Recalls how foreign keys enforce referential integrity (ForeignKey, OnDelete, NoAction, Cascade) <button class="subsection-report-btn" onclick="openReportModal('section-7', 'Section 7')">Report Issue</button></h2>
+
+                <div class="key-points">
+                    <h3>Key Points</h3>
+                    <ul>
+                        <li><strong>ForeignKey</strong> defines a relationship between two persistent classes, enforcing that references are valid</li>
+                        <li><strong>OnDelete</strong> controls behavior when the referenced object is deleted: NoAction, Cascade, SetNull</li>
+                        <li><strong>OnUpdate</strong> controls behavior when the referenced key changes (rarely used since IDs are immutable)</li>
+                        <li>Foreign keys are validated during %Save() and enforced in SQL operations</li>
+                        <li>Foreign keys reference a <strong>unique index or IdKey</strong> in the target class</li>
+                    </ul>
+                </div>
+
+                <div class="detailed-notes">
+                    <h3 onclick="this.parentElement.classList.toggle('collapsed')">Detailed Notes</h3>
+                    <div class="notes-content">
+                        <h4>Overview</h4>
+                        <p>Foreign keys enforce referential integrity by ensuring that relationships between objects remain valid. When a class declares a foreign key, it guarantees that the referenced object exists in the target class before the referencing object can be saved.</p>
+                        <h4>Defining Foreign Keys</h4>
+                        <pre><code class="language-objectscript">Class Sample.Order Extends %Persistent
+{
+    Property OrderDate As %Date;
+    Property CustomerID As %Integer;
+
+    /// Foreign key referencing the Customer class
+    ForeignKey CustomerFK(CustomerID)
+        References Sample.Customer(CustomerIDIdx);
+}
+
+Class Sample.Customer Extends %Persistent
+{
+    Property CustomerID As %Integer;
+    Property Name As %String;
+
+    Index CustomerIDIdx On CustomerID [ Unique ];
+}</code></pre>
+                        <p>The foreign key declaration specifies: 1. A name for the constraint (<code>CustomerFK</code>) 2. The local property(ies) (<code>CustomerID</code>) 3. The referenced class and unique index (<code>Sample.Customer(CustomerIDIdx)</code>)</p>
+                        <h4>OnDelete Actions</h4>
+                        <p>The <code>OnDelete</code> keyword controls what happens when a referenced (parent) object is deleted:</p>
+                        <pre><code class="language-objectscript">ForeignKey CustomerFK(CustomerID)
+    References Sample.Customer(CustomerIDIdx)
+    [ OnDelete = cascade ];</code></pre>
+                        <table class="detail-table">
+                            <thead><tr><th>OnDelete Value</th><th>Behavior</th></tr></thead>
+                            <tbody>
+                            <tr><td><strong>noaction</strong> (default)</td><td>Deletion fails if referencing objects exist</td></tr>
+                            <tr><td><strong>cascade</strong></td><td>Referencing objects are automatically deleted</td></tr>
+                            <tr><td><strong>setnull</strong></td><td>Foreign key property in referencing objects is set to NULL</td></tr>
+                            <tr><td><strong>setdefault</strong></td><td>Foreign key property is set to its default value</td></tr>
+                            </tbody>
+                        </table>
+                        <h4>NoAction Example</h4>
+                        <pre><code class="language-objectscript">// With NoAction (default), this fails if orders reference the customer
+Set sc = ##class(Sample.Customer).%DeleteId(1)
+// Returns error: &quot;Foreign key constraint violation&quot;</code></pre>
+                        <h4>Cascade Example</h4>
+                        <pre><code class="language-objectscript">// With Cascade, deleting a customer also deletes all their orders
+ForeignKey CustomerFK(CustomerID)
+    References Sample.Customer(CustomerIDIdx)
+    [ OnDelete = cascade ];
+
+// Deleting customer 1 also deletes all orders where CustomerID = 1
+Set sc = ##class(Sample.Customer).%DeleteId(1)</code></pre>
+                        <h4>Insert Validation</h4>
+                        <p>Foreign keys are checked on INSERT/SAVE. Attempting to save an order with a CustomerID that doesn't exist in the Customer table returns an error:</p>
+                        <pre><code class="language-objectscript">Set order = ##class(Sample.Order).%New()
+Set order.CustomerID = 9999  // No such customer
+Set sc = order.%Save()
+// Error: foreign key constraint violation</code></pre>
+                        <h4>Compound Foreign Keys</h4>
+                        <p>Foreign keys can reference compound (multi-property) unique indexes:</p>
+                        <pre><code class="language-objectscript">ForeignKey LocationFK(Country, City)
+    References Sample.Location(CountryCityIdx);</code></pre>
+                        <h4>Important Considerations</h4>
+                        <ul>
+                            <li>Foreign keys add overhead to INSERT, UPDATE, and DELETE operations</li>
+                            <li>They are enforced at both the object level (%Save) and SQL level</li>
+                            <li>The referenced index must be a unique index or IdKey</li>
+                            <li>Foreign keys project as SQL FOREIGN KEY constraints</li>
+                            <li>Use them judiciously: they improve data integrity but impact write performance</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="references">
+                    <h3>Documentation References</h3>
+                    <ul>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=ROBJ_foreignkey" target="_blank">Foreign Keys</a></li>
+                        <li><a href="https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_foreignkeys" target="_blank">Referential Integrity</a></li>
+                    </ul>
+                </div>
+            </section>
+
+            <div class="exam-prep">
+                <h2>Exam Preparation Summary</h2>
+                <h3>Critical Concepts to Master:</h3>
+                <ol>
+                    <li>Default MAXLEN for %String is 50; always set it explicitly for real-world properties</li>
+                    <li>TRUNCATE = 1 silently cuts data; TRUNCATE = 0 (default) returns an error</li>
+                    <li>Stream types: GlobalCharacter/GlobalBinary (database), FileCharacter/FileBinary (filesystem)</li>
+                    <li>Stream I/O: Write(), Read(), Rewind(), AtEnd, Size</li>
+                    <li>Calculated vs SqlComputed: Calculated has no storage; SqlComputed can be stored and indexed</li>
+                    <li>SqlComputeOnChange determines when recomputation occurs</li>
+                    <li>Required keyword causes %Save() to fail if property is empty</li>
+                    <li>InitialExpression values in braces are evaluated at runtime</li>
+                    <li>Standard indexes for high cardinality, bitmap for low cardinality, bitslice for aggregates</li>
+                    <li>Bitmap indexes require positive integer IDs</li>
+                    <li>Unique indexes generate Exists methods; %ExistsId() checks by ID</li>
+                    <li>Foreign key OnDelete: noaction (default blocks delete), cascade (deletes children), setnull</li>
+                </ol>
+                <h3>Common Exam Scenarios:</h3>
+                <ul>
+                    <li>Choosing between MAXLEN adjustment and a stream property for large data</li>
+                    <li>Identifying whether a computed property will be visible in SQL (needs SqlComputed + SqlComputeCode)</li>
+                    <li>Selecting the correct index type given a description of the data distribution</li>
+                    <li>Predicting what happens when you delete a parent object with foreign key constraints</li>
+                    <li>Determining if %Save() will succeed given Required properties and validation parameters</li>
+                </ul>
+                <h3>Hands-On Practice Recommendations:</h3>
+                <ul>
+                    <li>Create properties with various MAXLEN settings and test boundary conditions</li>
+                    <li>Build a class with stream properties and practice Write/Read/Rewind operations</li>
+                    <li>Create Calculated and SqlComputed properties and query them via SQL to see the difference</li>
+                    <li>Set up bitmap and standard indexes, then compare query plans</li>
+                    <li>Define foreign keys with different OnDelete actions and test deletion behavior</li>
+                </ul>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <a href="../quiz.html?file=quizzes/T1.2-quiz.json" class="take-quiz-btn">Take the Quiz</a>
+        </footer>
+    </div>
+
+    <div id="reportModal" class="report-modal">
+        <div class="report-content">
+            <h3>Report an Issue</h3>
+            <label for="issueType">Issue Type</label>
+            <select id="issueType">
+                <option value="confusing">Confusing Content</option>
+                <option value="wrong_answer">Incorrect Information</option>
+                <option value="outdated">Outdated Content</option>
+                <option value="formatting">Formatting Issue</option>
+                <option value="typo">Typo</option>
+                <option value="other">Other</option>
+            </select>
+            <label for="issueDescription">Description</label>
+            <textarea id="issueDescription" placeholder="Please describe the issue..."></textarea>
+            <div style="display: flex; align-items: center; gap: 10px; margin: 15px 0;">
+                <input type="checkbox" id="wantEmailNotification" style="width: 18px; height: 18px;">
+                <label for="wantEmailNotification" style="margin: 0; cursor: pointer;">
+                    Notify me by email when resolved
+                </label>
+            </div>
+            <div class="report-actions">
+                <button class="report-cancel" onclick="closeReportModal()">Cancel</button>
+                <button class="report-submit" onclick="submitReport()">Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../../js/config.js"></script>
+    <script src="../../../js/auth.js"></script>
+    <script src="../../../js/api.js"></script>
+    <script>
+        const CERTIFICATION_NAME = 'ObjectScript-Specialist';
+        const TOPIC_REF = 'T1.2';
+
+        document.addEventListener('DOMContentLoaded', function() {
+            updateAuthUI();
+            trackKnowledgeView();
+        });
+
+        function updateAuthUI() {
+            const loginBtn = document.getElementById('loginBtn');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const userInfo = document.getElementById('userInfo');
+            const userAvatar = document.getElementById('userAvatar');
+            const userName = document.getElementById('userName');
+
+            if (typeof Auth !== 'undefined' && Auth.isAuthenticated()) {
+                const user = Auth.getUser();
+                loginBtn.style.display = 'none';
+                logoutBtn.style.display = 'inline-block';
+                userInfo.style.display = 'flex';
+                if (user) {
+                    const initial = (user.name || user.email || '?')[0].toUpperCase();
+                    userAvatar.textContent = initial;
+                    userName.textContent = user.name || user.email || 'User';
+                }
+            } else {
+                loginBtn.style.display = 'inline-block';
+                logoutBtn.style.display = 'none';
+                userInfo.style.display = 'none';
+            }
+        }
+
+        async function trackKnowledgeView() {
+            if (typeof Auth === 'undefined' || !Auth.isAuthenticated()) {
+                return;
+            }
+
+            try {
+                await Api.trackKnowledge(CERTIFICATION_NAME, TOPIC_REF);
+                console.log('Knowledge view tracked:', TOPIC_REF);
+            } catch (error) {
+                console.log('View tracking skipped:', error.message);
+            }
+        }
+
+        function openReportModal(sectionId, sectionTitle) {
+            if (typeof Auth === 'undefined' || !Auth.isAuthenticated()) {
+                alert('Please sign in to report issues.');
+                return;
+            }
+            // Store section context
+            window.currentReportSection = {
+                id: sectionId || 'general',
+                title: sectionTitle || 'General'
+            };
+            // Update modal header to show section
+            const modalHeader = document.querySelector('#reportModal h3');
+            if (modalHeader && sectionTitle) {
+                modalHeader.textContent = 'Report Issue: ' + sectionTitle;
+            } else if (modalHeader) {
+                modalHeader.textContent = 'Report an Issue';
+            }
+            document.getElementById('wantEmailNotification').checked = false;
+            document.getElementById('reportModal').classList.add('active');
+        }
+
+        function closeReportModal() {
+            document.getElementById('reportModal').classList.remove('active');
+            document.getElementById('issueType').value = 'confusing';
+            document.getElementById('issueDescription').value = '';
+        }
+
+        async function submitReport() {
+            const issueType = document.getElementById('issueType').value;
+            const description = document.getElementById('issueDescription').value.trim();
+            const wantEmailNotification = document.getElementById('wantEmailNotification').checked;
+            const sectionContext = window.currentReportSection || { id: 'general', title: 'General' };
+
+            if (!description) {
+                alert('Please provide a description of the issue.');
+                return;
+            }
+
+            // Build content reference with section context
+            const contentRef = sectionContext.id !== 'general'
+                ? `${TOPIC_REF} (${sectionContext.title})`
+                : TOPIC_REF;
+
+            try {
+                await Api.reportProblem({
+                    certificationName: CERTIFICATION_NAME,
+                    contentType: 'knowledge',
+                    contentReference: contentRef,
+                    issueType: issueType,
+                    description: description,
+                    wantEmailNotification: wantEmailNotification
+                });
+                alert('Thank you! Your report has been submitted.');
+                closeReportModal();
+            } catch (error) {
+                if (error.status === 429) {
+                    const retryMinutes = Math.ceil((error.data?.retryAfter || 3600) / 60);
+                    alert(`You've submitted too many reports recently. Please wait ${retryMinutes} minutes before submitting another report.`);
+                } else {
+                    alert('Failed to submit report: ' + error.message);
+                }
+            }
+        }
+
+        document.querySelectorAll('.detailed-notes h3').forEach(h3 => {
+            h3.style.cursor = 'pointer';
+        });
+    </script>
+    <script src="../../../js/consent.js"></script>
+    <script src="../../../js/analytics.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            CookieConsent.init();
+            Analytics.init();
+        });
+    </script>
+</body>
+</html>

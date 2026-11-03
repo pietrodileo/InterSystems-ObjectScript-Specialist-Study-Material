@@ -1,0 +1,209 @@
+{
+  "quiz": {
+    "title": "T4.6: Uses Object and Class APIs",
+    "description": "Scenario-based questions on $METHOD/$CLASSMETHOD for dynamic dispatch, %IsA/%ClassName for type checking, $ISOBJECT, $PROPERTY, and %Dictionary classes for class introspection in ObjectScript.",
+    "version": "2.2",
+    "publishedDate": "2026-09-17",
+    "questions": [
+      {
+        "id": 1,
+        "type": "single",
+        "question": "Consider the following class definitions:\n\nClass Sample.Person Extends %Persistent\n{\n  //Omitted\n}\n\nClass Sample.Patient Extends Sample.Person\n{\n  //Omitted\n}\n\nYou are writing code that accepts an object reference, and would like to check whether the caller correctly passed an instance of Sample.Person or a subclass.\n\nWhich of the following code blocks accomplishes that?",
+        "options": [
+          "ClassMethod ProcessPatient(oref As Sample.Person)\n{\n  if oref.%ClassName() '= \"Sample.Person\" return \"Wrong Class\"\n}",
+          "ClassMethod ProcessPatient(oref As Sample.Person)\n{\n    if 'oref.%IsA(\"Sample.Person\") return \"Wrong Class\"\n}",
+          "ClassMethod ProcessPatient(oref As Sample.Person)\n{\n    if $CLASSNAME(oref) '= \"Sample.Person\" return \"Wrong Class\"\n}",
+          "ClassMethod ProcessPatient(oref As Sample.Patient)\n{\n    if oref.%TypeOf() '= \"Sample.Person\" return \"Wrong Class\"\n}"
+        ],
+        "correct": [1],
+        "explanation": "Option (b) uses %IsA, which returns 1 if the object is an instance of the specified class OR any subclass. Since Sample.Patient extends Sample.Person, a Patient object passes the %IsA(\"Sample.Person\") check. Option (a) fails because %ClassName() without argument 1 returns only the short name, and it would reject Patient objects. Option (c) uses $CLASSNAME which does not exist. Option (d) uses %TypeOf which does not exist. (Reference: InterSystems Practice Q19; https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_misa)"
+      },
+      {
+        "id": 2,
+        "type": "single",
+        "question": "You need to inspect the class of an object at runtime. Consider:\n\nset obj = ##class(MyApp.Invoice).%New()\nwrite obj.%ClassName(0), \" / \", obj.%ClassName(1)\n\nWhat is the output?",
+        "options": [
+          "MyApp.Invoice / Invoice",
+          "Invoice / MyApp.Invoice",
+          "MyApp / Invoice",
+          "Invoice / MyApp"
+        ],
+        "correct": [1],
+        "explanation": "%ClassName(0) returns the short (unqualified) class name: \"Invoice\". %ClassName(1) returns the full package-qualified class name: \"MyApp.Invoice\". The argument controls whether the package prefix is included. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_mclassname)"
+      },
+      {
+        "id": 3,
+        "type": "single",
+        "question": "A plugin system needs to call class methods dynamically based on configuration. Consider:\n\nset className = \"App.Plugins.EmailNotifier\"\nset methodName = \"Send\"\nset sc = $CLASSMETHOD(className, methodName, \"Hello\", \"user@test.com\")\n\nWhich statement best describes this code?",
+        "options": [
+          "It calls the instance method Send on a new object of App.Plugins.EmailNotifier",
+          "It calls the class method Send on App.Plugins.EmailNotifier with two arguments",
+          "It creates an instance of App.Plugins.EmailNotifier and stores it in sc",
+          "It throws an error because $CLASSMETHOD requires an object reference"
+        ],
+        "correct": [1],
+        "explanation": "$CLASSMETHOD dynamically invokes a class method. First argument is the class name, second is the method name, followed by any arguments. This is equivalent to ##class(App.Plugins.EmailNotifier).Send(\"Hello\", \"user@test.com\") but allows the class and method names to be variables. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fclassmethod)"
+      },
+      {
+        "id": 4,
+        "type": "single",
+        "question": "You need to dynamically invoke an instance method. Consider:\n\nset obj = ##class(App.Calculator).%New()\nset methodName = \"Add\"\nset result = $METHOD(obj, methodName, 10, 20)\nwrite result\n\nAssuming Add returns the sum of its arguments, what is the output?",
+        "options": [
+          "30",
+          "\"Add\"",
+          "An <UNDEFINED> error",
+          "A <METHOD DOES NOT EXIST> error"
+        ],
+        "correct": [0],
+        "explanation": "$METHOD dynamically invokes an instance method by name. $METHOD(obj, \"Add\", 10, 20) is equivalent to obj.Add(10, 20). Since Add returns the sum, the result is 30. This is useful when the method name is determined at runtime (e.g., from configuration). (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fmethod)"
+      },
+      {
+        "id": 5,
+        "type": "single",
+        "question": "You are writing a factory method that creates objects dynamically. Consider:\n\nset className = \"User.Person\"\nset obj = $CLASSMETHOD(className, \"%New\")\nwrite obj.%ClassName(1)\n\nWhat is the output?",
+        "options": [
+          "User.Person",
+          "Person",
+          "%New",
+          "An <UNDEFINED> error"
+        ],
+        "correct": [0],
+        "explanation": "$CLASSMETHOD(className, \"%New\") dynamically calls %New on the User.Person class, creating a new instance. obj.%ClassName(1) then returns the full package-qualified class name \"User.Person\". This pattern is essential for factory methods and plugin architectures. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fclassmethod)"
+      },
+      {
+        "id": 6,
+        "type": "single",
+        "question": "You are validating input and need to check if a variable holds an object reference. Consider:\n\nset x = \"Hello\"\nset y = ##class(%ArrayOfDataTypes).%New()\nwrite $ISOBJECT(x), \" \", $ISOBJECT(y)\n\nWhat is the output?",
+        "options": [
+          "1 1",
+          "0 1",
+          "1 0",
+          "0 0"
+        ],
+        "correct": [1],
+        "explanation": "$ISOBJECT returns 1 if the variable contains a valid object reference (OREF) and 0 otherwise. \"Hello\" is a string, not an OREF, so $ISOBJECT returns 0. The %ArrayOfDataTypes instance is a valid OREF, so $ISOBJECT returns 1. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fisobject)"
+      },
+      {
+        "id": 7,
+        "type": "single",
+        "question": "You are building a generic data exporter that reads property values dynamically. Consider:\n\nset obj = ##class(User.Person).%New()\nset obj.Name = \"Alice\"\nset propName = \"Name\"\nwrite $PROPERTY(obj, propName)\n\nWhat is the output?",
+        "options": [
+          "Alice",
+          "Name",
+          "\"Name\"",
+          "A <PROPERTY DOES NOT EXIST> error"
+        ],
+        "correct": [0],
+        "explanation": "$PROPERTY(obj, propName) dynamically accesses a property by name. Since propName=\"Name\", this is equivalent to obj.Name, which returns \"Alice\". This is useful for generic code that processes different classes with different property names. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fproperty)"
+      },
+      {
+        "id": 8,
+        "type": "single",
+        "question": "You need to introspect a class definition at runtime. Which code correctly opens the class definition for User.Person?",
+        "options": [
+          "set def = ##class(%Dictionary.ClassDefinition).%New(\"User.Person\")",
+          "set def = ##class(%Dictionary.ClassDefinition).%OpenId(\"User.Person\")",
+          "set def = $SYSTEM.OBJ.GetClassDef(\"User.Person\")",
+          "set def = ##class(%Dictionary.ClassDefinition).%Get(\"User.Person\")"
+        ],
+        "correct": [1],
+        "explanation": "%Dictionary.ClassDefinition is a persistent class where the ID is the class name. Use %OpenId(\"User.Person\") to open the existing definition. %New would create a new, empty definition rather than opening the existing one. There is no %Get or $SYSTEM.OBJ.GetClassDef method. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=ROBJ_classdef)"
+      },
+      {
+        "id": 9,
+        "type": "single",
+        "question": "You are building a documentation generator that lists all properties of a class. Consider:\n\nset def = ##class(%Dictionary.ClassDefinition).%OpenId(\"User.Person\")\nset count = def.Properties.Count()\nfor i = 1:1:count {\n  set prop = def.Properties.GetAt(i)\n  write prop.Name, !\n}\n\nWhat does this code do?",
+        "options": [
+          "Lists all methods of the User.Person class",
+          "Lists all properties defined in the User.Person class",
+          "Lists all indexes of the User.Person class",
+          "Lists all parameters of the User.Person class"
+        ],
+        "correct": [1],
+        "explanation": "The code opens the class definition, accesses the Properties collection, and iterates through each %Dictionary.PropertyDefinition object, printing its Name. This is a standard introspection pattern. Similarly, def.Methods would iterate method definitions. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=ROBJ_classdef)"
+      },
+      {
+        "id": 10,
+        "type": "multiple",
+        "question": "Which of the following are valid ways to check the type or class of an object in ObjectScript? (Select all that apply)",
+        "options": [
+          "obj.%ClassName(1) to get the full class name",
+          "obj.%IsA(\"ClassName\") to test inheritance",
+          "$CLASSNAME(obj) to get the class name",
+          "$ISOBJECT(obj) to verify it is an object reference",
+          "obj.%Extends(\"ClassName\") to test inheritance",
+          "obj.%IsClass(\"ClassName\") to test class membership"
+        ],
+        "correct": [0, 1, 2, 3, 4],
+        "explanation": "%ClassName(1) returns the fully qualified class name, %IsA() tests the primary inheritance chain, $CLASSNAME() returns the class of an instance, $ISOBJECT() confirms a value is an object reference, and %Extends() tests inheritance including secondary superclasses. There is no %IsClass() method -- calling it raises <METHOD DOES NOT EXIST>. The two real inheritance tests are %IsA() and %Extends(), and the difference between them is which superclasses they follow. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=ROBJ)",
+        "revised": true
+      },
+      {
+        "id": 11,
+        "type": "single",
+        "question": "A class hierarchy has three levels. Consider:\n\nClass Base.Entity Extends %Persistent { }\nClass App.Person Extends Base.Entity { }\nClass App.Employee Extends App.Person { }\n\nset emp = ##class(App.Employee).%New()\nwrite emp.%IsA(\"Base.Entity\"), \" \"\nwrite emp.%IsA(\"App.Person\"), \" \"\nwrite emp.%IsA(\"%Library.Persistent\")\n\nWhat is the output?",
+        "options": [
+          "1 1 1",
+          "1 1 0",
+          "0 1 0",
+          "0 0 1"
+        ],
+        "correct": [0],
+        "explanation": "%IsA checks the entire inheritance chain. App.Employee extends App.Person, which extends Base.Entity, which extends %Persistent (which is %Library.Persistent). So the Employee object %IsA all of these classes, returning 1 for each check. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_misa)"
+      },
+      {
+        "id": 12,
+        "type": "single",
+        "question": "You need to dynamically set a property on an object. Consider:\n\nset obj = ##class(App.Config).%New()\nset propName = \"Timeout\"\nset $PROPERTY(obj, propName) = 30\nwrite obj.Timeout\n\nWhat is the output?",
+        "options": [
+          "30",
+          "Timeout",
+          "An <UNDEFINED> error",
+          "A <SYNTAX> error"
+        ],
+        "correct": [0],
+        "explanation": "SET $PROPERTY(obj, propName) = value dynamically sets a property by name, similar to how SET $PIECE modifies a string. Since propName=\"Timeout\", this is equivalent to SET obj.Timeout = 30. Reading obj.Timeout then returns 30. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fproperty)"
+      },
+      {
+        "id": 13,
+        "type": "single",
+        "question": "Which %Dictionary class would you use to inspect the compiled methods of a class, including inherited methods?",
+        "options": [
+          "%Dictionary.ClassDefinition",
+          "%Dictionary.MethodDefinition",
+          "%Dictionary.PropertyDefinition",
+          "%Dictionary.CompiledMethod"
+        ],
+        "correct": [3],
+        "explanation": "%Dictionary.CompiledMethod contains information about compiled methods, including both directly defined and inherited methods. %Dictionary.MethodDefinition contains only the source definitions (not inherited). For inspecting the full set of available methods at runtime, %Dictionary.CompiledMethod is the correct choice. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=ROBJ_classdef)"
+      },
+      {
+        "id": 14,
+        "type": "multiple",
+        "question": "Which properties are available on a %Dictionary.PropertyDefinition object for introspection? (Select all that apply)",
+        "options": [
+          "Name - the property name",
+          "Type - the data type of the property",
+          "Required - whether the property is required",
+          "SqlFieldName - the SQL column name",
+          "Value - the current runtime value of the property"
+        ],
+        "correct": [0, 1, 2, 3],
+        "explanation": "%Dictionary.PropertyDefinition contains metadata about a property's definition: Name, Type, Required, SqlFieldName, Collection, and many others. It does NOT have a Value property - it describes the class structure (schema), not instance data. Instance data is accessed through object references. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_properties)"
+      },
+      {
+        "id": 15,
+        "type": "single",
+        "question": "A routing engine dispatches requests to handler classes. Consider:\n\nset handlers(\"email\") = \"App.EmailHandler\"\nset handlers(\"sms\") = \"App.SmsHandler\"\n\nset type = \"email\"\nset className = handlers(type)\nset result = $CLASSMETHOD(className, \"Process\", \"Hello World\")\n\nWhich statement best describes what happens?",
+        "options": [
+          "It calls ##class(App.EmailHandler).Process(\"Hello World\") dynamically",
+          "It creates a new App.EmailHandler object and calls Process on it",
+          "It throws an error because $CLASSMETHOD cannot use array lookups",
+          "It calls Process on all handler classes in the array"
+        ],
+        "correct": [0],
+        "explanation": "$CLASSMETHOD takes a class name (string) and method name, then invokes the class method. The class name can come from any expression, including an array lookup. className resolves to \"App.EmailHandler\", so this is equivalent to ##class(App.EmailHandler).Process(\"Hello World\"). This pattern enables flexible plugin/routing architectures. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fclassmethod)"
+      }
+    ]
+  }
+}

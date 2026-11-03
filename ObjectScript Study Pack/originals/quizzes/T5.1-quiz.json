@@ -1,0 +1,211 @@
+{
+  "quiz": {
+    "title": "T5.1: Troubleshooting Tools",
+    "description": "Diagnose compilation errors, use performance monitoring tools, and interpret diagnostic output in InterSystems IRIS",
+    "version": "2.3",
+    "publishedDate": "2026-09-17",
+    "questions": [
+      {
+        "id": 1,
+        "type": "single",
+        "question": "Consider the following class:\n\nClass Sample.Person Extends %RegisteredObject\n{\nClassMethod ProcessAddress(Address As %String)\n{\n    #Include Sample.AreaCodes\n    set code = $$$FindAreaCode($P(Address, \" \"))\n    set phoneNumber = code _ \" \" _ $P(Address, \" \", 6)\n}\n}\n\nIn the past, the class compiled successfully. However, after a recent edit you receive:\n\nERROR: Sample.Person.cls\nERROR:  Sample.Person.1(5) : MPP5610 : Referenced macro not defined: 'FindAreaCode'\n TEXT:   set code = $$$FindAreaCode($P(Address, \" \"))\nERROR: Sample.Person.cls(ProcessAddress+3) #1002: Invalid character in tag\n\nWhich of the following is the most likely source of the error?",
+        "options": [
+          "The new code has a syntax error in the $Piece call",
+          "The FindAreaCode macro was removed by an IRIS system update",
+          "The new code modified the Address string so the macro rejects it",
+          "There is no include file -- #Include inside a method body is not recognized at class level"
+        ],
+        "correct": [3],
+        "explanation": "When #Include is placed inside a method body rather than at the class level (before the Class keyword or at the top of the class block), the preprocessor cannot locate the include file during compilation. The MPP5610 error 'Referenced macro not defined' indicates the preprocessor never loaded the macro definitions. Moving '#Include Sample.AreaCodes' to the class level fixes the issue. This matches InterSystems practice question Q21. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_macros)"
+      },
+      {
+        "id": 2,
+        "type": "single",
+        "question": "A developer compiles a class and receives the following error:\n\nERROR #5475: Error compiling class 'App.Processor'\nERROR:  App.Processor.1(8) : MPP5610 : Referenced macro not defined: 'LogError'\n\nThe class definition is:\n\nInclude AppMacros\nClass App.Processor Extends %RegisteredObject\n{\nClassMethod Run()\n{\n    $$$LogError(\"Starting process\")\n}\n}\n\nThe file AppMacros.inc exists and defines $$$LogInfo but NOT $$$LogError. What is the most likely cause?",
+        "options": [
+          "The Include directive must use parentheses: Include(AppMacros)",
+          "The AppMacros.inc file does not define the LogError macro",
+          "The Include directive must use the #Include preprocessor syntax instead of the class keyword",
+          "The Include must be placed inside the class definition block"
+        ],
+        "correct": [1],
+        "explanation": "The MPP5610 error means the preprocessor found the include file but could not locate the specific macro 'LogError' within it. Since AppMacros.inc defines LogInfo but not LogError, the macro is simply missing from the include file. The developer needs to add a #Define LogError directive to AppMacros.inc. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_macros)",
+        "revised": true
+      },
+      {
+        "id": 3,
+        "type": "single",
+        "question": "A developer wants to measure the execution time of a data transformation. They write:\n\nSet start = $ZH\nDo ##class(App.Transform).Run(data)\nSet elapsed = $ZH - start\nWrite \"Elapsed: \", elapsed, \" seconds\",!\n\nWhat will the elapsed variable contain?",
+        "options": [
+          "An integer number of whole seconds",
+          "A fractional number of seconds with high (sub-second) precision",
+          "A string in the format \"HH:MM:SS\"",
+          "The value will be negative because $ZH values cannot be subtracted"
+        ],
+        "correct": [1],
+        "explanation": "$ZH ($ZHOROLOG) returns a high-resolution timestamp in seconds with fractional precision (e.g., 1234567.045823). Subtracting two $ZH values yields the elapsed time as a decimal number of seconds, making it ideal for benchmarking code blocks. Unlike $HOROLOG (which uses date,seconds format) or $ZTIMESTAMP (UTC date format), $ZH can be directly subtracted. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_vzhorolog)"
+      },
+      {
+        "id": 4,
+        "type": "single",
+        "question": "A developer benchmarks two approaches for processing 100,000 records:\n\nSet start = $HOROLOG\nFor i=1:1:100000 { Do ##class(App.Record).Process(i) }\nSet elapsed = $HOROLOG - start\nWrite \"Elapsed: \", elapsed\n\nThe output shows: Elapsed: 66818. Why is this value unexpected?",
+        "options": [
+          "$HOROLOG is in date,seconds format and cannot be subtracted directly to get meaningful elapsed time",
+          "$HOROLOG only measures CPU time, not wall-clock time",
+          "$HOROLOG returns time in milliseconds, so the result needs to be divided by 1000",
+          "$HOROLOG is always 0 inside a loop"
+        ],
+        "correct": [0],
+        "explanation": "$HOROLOG returns a value in the format 'days,seconds' (e.g., '66818,45123'). When ObjectScript subtracts two such values, it treats them as numbers, truncating at the comma. The result is meaningless for timing purposes. The developer should use $ZH instead, which returns a single numeric value in seconds with fractional precision. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_vhorolog)"
+      },
+      {
+        "id": 5,
+        "type": "single",
+        "question": "Which of the following is a valid way to start the ^PERFMON performance monitoring utility (must be run from the %SYS namespace)?",
+        "options": [
+          "Do ^PERFMON from a Terminal session in %SYS",
+          "Navigate to System Operation > System Dashboard in the Management Portal",
+          "Call $SYSTEM.Performance.Start() from any method",
+          "Run ##class(%SYS.PTools).Start() from a Terminal"
+        ],
+        "correct": [0],
+        "explanation": "^PERFMON (no leading %) is a Terminal-based utility that ships with IRIS and lives in the %SYS namespace. It is started by switching to %SYS and typing `Do ^PERFMON`. The Management Portal's System Dashboard displays system metrics but is a separate tool — it does not start or interact with ^PERFMON directly. $SYSTEM.Performance.Start() and %SYS.PTools.Start() are not valid entry points. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCM_perfmon)",
+        "revised": true
+      },
+      {
+        "id": 6,
+        "type": "single",
+        "question": "A developer compiles a class and receives:\n\nERROR #5373: Property 'PatientName' in 'App.Record' is not a valid type\n\nThe property is defined as:\n\nProperty PatientName As %Strig;\n\nWhat is the problem?",
+        "options": [
+          "PatientName is a reserved word in ObjectScript",
+          "The data type %Strig is misspelled -- it should be %String",
+          "Properties cannot reference types from the % package",
+          "The As keyword must be lowercase"
+        ],
+        "correct": [1],
+        "explanation": "The type name '%Strig' is a typo for '%String'. The compiler reports 'not a valid type' because it cannot find a class named %Strig. This is a common compilation error caused by misspelling data type names in property definitions. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_properties)"
+      },
+      {
+        "id": 7,
+        "type": "single",
+        "question": "A developer compiles several classes and one fails with:\n\nERROR #5501: Superclass 'App.Base.Record' does not exist\n\nThe App.Base.Record source file is present. What should the developer do?",
+        "options": [
+          "Delete and recreate the App.Base.Record class from scratch",
+          "Compile App.Base.Record first, then recompile the dependent subclass",
+          "Add the Deployed keyword to App.Base.Record",
+          "Move App.Base.Record into the same package as the subclass"
+        ],
+        "correct": [1],
+        "explanation": "When a superclass has not yet been compiled, subclasses that depend on it fail with 'does not exist' errors. The solution is to compile in dependency order -- superclasses first. Using the /orderby=d qualifier or compiling with the 'dependencies' option automates this. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_classes_compile)"
+      },
+      {
+        "id": 8,
+        "type": "single",
+        "question": "What does the %SYS.PTools SQL Performance Tools class help diagnose?",
+        "options": [
+          "Network latency between IRIS instances",
+          "SQL query performance including execution plans and runtime statistics",
+          "Memory allocation for ObjectScript routines",
+          "Journal file write throughput"
+        ],
+        "correct": [1],
+        "explanation": "%SYS.PTools provides SQL performance analysis, including examining query execution plans, collecting runtime statistics, and identifying slow-running queries. It is specifically designed for SQL performance troubleshooting. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_queries)"
+      },
+      {
+        "id": 9,
+        "type": "single",
+        "question": "Consider the following snippet of SQL performance metrics:\n\nAverage SQL Execution Time  0.018s\nP50 SQL Execution Time      0.014s\nP90 SQL Execution Time      0.061s\nP99 SQL Execution Time      1.042s\n\nWhich of the following best explains why the P99 value is orders of magnitude higher than the rest?",
+        "options": [
+          "The SQL query gathers table statistics on every execution",
+          "P99 queries use embedded SQL while others use dynamic SQL",
+          "The query cache is occasionally purged, so a small subset of queries run uncached and must be recompiled",
+          "The query optimizer randomly picks different plans 1% of the time"
+        ],
+        "correct": [2],
+        "explanation": "When the query cache is purged, the next execution must recompile the query plan, which takes significantly longer than executing a cached plan. This accounts for the occasional spike at the P99 level while most executions (P50, P90) run quickly from cache. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_queries)"
+      },
+      {
+        "id": 10,
+        "revised": true,
+        "type": "single",
+        "question": "A developer writes the following class method and compiles it successfully:\n\nClassMethod Calculate(x As %Integer, y As %Integer) As %Integer\n{\n  Return x + y\n}\n\nWhich of the following statements about the Return keyword is TRUE?",
+        "options": [
+          "Return is case-insensitive in ObjectScript; Return, return, and RETURN all compile and execute identically",
+          "Return only compiles in lowercase; Return and RETURN produce compilation errors",
+          "Return must be replaced with Quit; Return is not a valid ObjectScript keyword",
+          "Return is only valid inside methods of classes that extend %RegisteredObject"
+        ],
+        "correct": [0],
+        "explanation": "ObjectScript commands are case-insensitive — `Return`, `return`, and `RETURN` all compile and execute identically, as do `Quit`/`quit`/`QUIT`. `Return expr` is the modern idiom for returning a value from a method; `Quit expr` is the traditional equivalent and remains valid. Neither is restricted to a particular base class. Verified on IRIS 2025.1 (all three case variants loaded and executed as part of the test for this fix). (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_creturn)"
+      },
+      {
+        "id": 11,
+        "type": "single",
+        "question": "A developer needs to compile a set of interdependent classes where superclasses must compile before subclasses. Which approach ensures classes compile in the correct dependency order?",
+        "options": [
+          "Compile classes in alphabetical order using $SYSTEM.OBJ.CompileAll()",
+          "Use the 'r' (recursive) flag, e.g., $SYSTEM.OBJ.CompileList(classList, \"ckr\"), which compiles all dependency predecessors before the listed classes",
+          "Manually list classes in the correct order and compile them one by one",
+          "Use the /sort=dependency qualifier to reorder the compile list"
+        ],
+        "correct": [1],
+        "explanation": "The 'r' (Recursive) flag instructs the compiler to compile all classes that are dependency predecessors before compiling the listed classes — ensuring superclasses, include files, and other referenced classes are built first. Verified via `do ##class(%SYSTEM.OBJ).ShowFlags()` on IRIS 2025.1: 'r - Recursive. Compile all the classes that are dependency predecessors.' (Note: 'd' is the Display flag, NOT Dependencies; 'b' includes subclasses; 'y' includes SQL-related classes.) CompileAll() does not guarantee a specific order, manual ordering is error-prone, and /sort=dependency is not a valid qualifier. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_classes_compile)",
+        "revised": true
+      },
+      {
+        "id": 12,
+        "type": "multiple",
+        "question": "A class compilation fails with multiple MPP (Macro Pre-Processor) errors. Which of the following could cause MPP errors? (Select two)",
+        "options": [
+          "Referencing an undefined macro with $$$MacroName in the code",
+          "Having too many properties defined in the class",
+          "A syntax error inside an #If preprocessor directive",
+          "Defining a method with more than 10 arguments",
+          "Including an .inc file that exists but defines no macros"
+        ],
+        "correct": [0, 2],
+        "explanation": "MPP errors come from the preprocessing phase, before the compiler proper: referencing a macro that was never defined ($$$MacroName with no #Define, MPP5610), or a syntax error inside a preprocessor directive such as #If. The property count and argument count are compiler-level concerns and neither is an MPP error. Including an .inc file that happens to define no macros is not an error at all -- an empty include is legal, and it simply contributes nothing.",
+        "revised": true
+      },
+      {
+        "id": 13,
+        "type": "single",
+        "question": "A developer has an include file AppMacros.inc:\n\n#Define LogMsg(%msg) Write \"[LOG] \" _ %msg, !\n#Define AppVersion \"2.5\"\n\nAnd a class:\n\nInclude AppMacros\nClass App.Main Extends %RegisteredObject\n{\nClassMethod Run()\n{\n    $$$LogMsg(\"Starting version \" _ $$$AppVersion)\n    // ...\n}\n}\n\nCompilation succeeds but at runtime the output shows:\n[LOG] Starting version 2.5\n\nThe developer now adds a new method that uses $$$DbName, but has not defined it in AppMacros.inc:\n\nClassMethod Info()\n{\n    Write \"Database: \", $$$DbName, !\n}\n\nWhat happens when the class is compiled?",
+        "options": [
+          "Compilation succeeds; $$$DbName evaluates to empty string at runtime",
+          "Compilation fails with MPP5610: Referenced macro not defined: 'DbName'",
+          "Compilation succeeds but throws <UNDEFINED> at runtime",
+          "Compilation fails with ERROR #5501: Superclass does not exist"
+        ],
+        "correct": [1],
+        "explanation": "Macros are resolved at compile time by the Macro Pre-Processor (MPP). If a macro referenced with $$$ is not defined in any included file, the compiler raises MPP5610. Unlike variables, macros do not silently evaluate to empty -- they must be explicitly defined. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_macros)"
+      },
+      {
+        "id": 14,
+        "type": "single",
+        "question": "A system administrator notices high response times. In the Management Portal under System Operation > System Dashboard, they observe:\n\nGlobal References/sec: 2,450,000\nRoutine Commands/sec:    180,000\nCache Efficiency:           150\n\nWhich metric most directly suggests the system is experiencing excessive disk I/O?",
+        "options": [
+          "The high global references/sec value",
+          "The low routine commands/sec value",
+          "The low cache efficiency of 150, indicating many global references require disk reads",
+          "None of these metrics relate to disk I/O"
+        ],
+        "correct": [2],
+        "explanation": "Cache Efficiency is a ratio (not a percentage) representing how many global references are served from the database cache per physical disk read. The higher the value, the better. Values above 1000 are considered healthy. A value of 150 means on average only 150 global references are served from cache per disk read, which is well below the healthy threshold. With 2.45 million refs/sec, that means roughly 16,300 disk reads/sec -- a significant I/O load. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCM_dashboard)"
+      },
+      {
+        "id": 15,
+        "type": "single",
+        "question": "A developer needs to profile the performance of individual lines in a routine to find bottlenecks. Which tool is most appropriate?\n\na) ^%PERFMON global monitoring utility\nb) $ZH timing around suspect code blocks\nc) %SYS.PTools SQL Performance Tools\nd) The line-by-line routine profiler ^%SYS.MONLBL",
+        "options": [
+          "^%PERFMON -- provides global-level metrics that can identify slow lines",
+          "$ZH timing -- measures elapsed time between any two points in code",
+          "%SYS.PTools -- provides execution plans for any ObjectScript routine",
+          "^%SYS.MONLBL -- profiles execution time and hit counts for each line in a routine"
+        ],
+        "correct": [3],
+        "explanation": "^%SYS.MONLBL (Monitor by Line) is the line-by-line profiler that tracks how many times each line executes and how long each line takes. This is the most targeted tool for finding bottlenecks within a routine. ^%PERFMON provides system-wide metrics, $ZH is manual and only measures between two chosen points, and %SYS.PTools is for SQL queries only. (Reference: https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCM_monlbl)"
+      }
+    ]
+  }
+}
