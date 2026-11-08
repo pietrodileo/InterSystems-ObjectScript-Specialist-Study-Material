@@ -1,18 +1,52 @@
 // Examples are keyed by chapter and concept number, or by chapter and diagram title.
 export const studyExamples = {
   'T1.1/1': [
-    ['Choose which objects need their own stored records', `Class Tutor.PriceTools Extends %RegisteredObject
+    ['Choose the right class for a patient, an address, request state, and a calculation', `Class Tutor.Address Extends %SerialObject
 {
-    ClassMethod Total(price As %Numeric, tax As %Numeric) As %Numeric
+    Property Street As %String;
+    Property City As %String;
+    Property PostalCode As %String;
+}
+
+Class Tutor.Patient Extends %Persistent
+{
+    Property Name As %String;
+    Property HomeAddress As Tutor.Address;
+}
+
+Class Tutor.RequestContext Extends %RegisteredObject
+{
+    Property CorrelationId As %String;
+}
+
+Class Tutor.NumberTools
+{
+    ClassMethod Double(value As %Integer) As %Integer
     {
-        return price * (1 + tax)
+        return value * 2
     }
 }
 
-Class Tutor.Invoice Extends %Persistent
-{
-    Property Total As %Numeric;
-}`, 'Put the two definitions in separate class files. PriceTools can calculate a total without storing an object. Invoice can keep that total as a record with its own ID.'],
+// Run inside a compiled method after compiling the four classes.
+set patient = ##class(Tutor.Patient).%New()
+set patient.Name = "Ada Lovelace"
+set patient.HomeAddress.Street = "12 Example Street"
+set patient.HomeAddress.City = "London"
+set patient.HomeAddress.PostalCode = "N1 2AB"
+set sc = patient.%Save()
+if $SYSTEM.Status.IsError(sc) {
+    write $SYSTEM.Status.GetErrorText(sc), !
+    quit
+}
+set id = patient.%Id()
+set savedPatient = ##class(Tutor.Patient).%OpenId(id)
+write savedPatient.HomeAddress.City, !
+
+set context = ##class(Tutor.RequestContext).%New()
+set context.CorrelationId = "req-42"
+write context.CorrelationId, !
+
+write ##class(Tutor.NumberTools).Double(21), !`, 'Compile Address first, then Patient, RequestContext, and NumberTools in separate class files. The method saves the patient and reads it back by ID; the first output is London. The address is stored through the patient and has no separate ID. RequestContext stays in memory and is not saved. NumberTools is called as a class method without creating an instance; the last output is 42. With the default SQL projection, you can also query the address through HomeAddress_City in Tutor.Patient.'],
   ],
   'T1.1/2': [
     ['Save an object and read its ID', `set person = ##class(Sample.Person).%New()
