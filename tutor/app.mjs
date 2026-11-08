@@ -8,14 +8,10 @@ const courseMenu = document.querySelector('#course-menu');
 const sidebar = document.querySelector('#course');
 const sidebarToggle = document.querySelector('#sidebar-toggle');
 const sidebarChevron = document.querySelector('#sidebar-chevron');
-const drawer = document.querySelector('#course-drawer');
-const pinnedHeader = document.querySelector('#pinned-header');
-const unpin = document.querySelector('#sidebar-unpin');
 const exportProgress = document.querySelector('#export-progress');
 const importProgress = document.querySelector('#import-progress');
 const progressFile = document.querySelector('#progress-file');
 const transferStatus = document.querySelector('#progress-transfer-status');
-const mobile = window.matchMedia('(max-width: 720px)');
 const storageKey = 'objectscript-tutor-v1';
 const phases = { theory: 'Study', quiz: 'Practice', cases: 'Apply' };
 const escape = value => String(value).replace(/[&<>"']/g, char => ({
@@ -58,14 +54,9 @@ function save() {
   }
 }
 
-const useDrawer = () => mobile.matches && !state.sidebarPinned;
-
 function updateSidebarToggle() {
-  const drawerMode = useDrawer();
-  const open = drawerMode ? drawer.open : !sidebar.hidden;
-  const label = drawerMode
-    ? (open ? 'Close course index' : 'Open course index')
-    : (open ? 'Collapse course index' : 'Expand course index');
+  const open = !sidebar.hidden;
+  const label = open ? 'Collapse course index' : 'Expand course index';
   sidebarToggle.setAttribute('aria-expanded', String(open));
   sidebarToggle.setAttribute('aria-label', label);
   sidebarToggle.title = label;
@@ -73,54 +64,16 @@ function updateSidebarToggle() {
 }
 
 function placeSidebar() {
-  pinnedHeader.hidden = !state.sidebarPinned;
-  if (useDrawer()) {
-    drawer.append(sidebar);
-    sidebar.hidden = false;
-    sidebarToggle.setAttribute('aria-controls', drawer.id);
-    sidebarToggle.setAttribute('aria-haspopup', 'dialog');
-  } else {
-    drawer.close();
-    lesson.before(sidebar);
-    sidebar.hidden = !(state.sidebarOpen ?? true);
-    sidebarToggle.setAttribute('aria-controls', sidebar.id);
-    sidebarToggle.removeAttribute('aria-haspopup');
-  }
+  sidebar.hidden = !(state.sidebarOpen ?? true);
   updateSidebarToggle();
 }
 
 placeSidebar();
-mobile.addEventListener('change', placeSidebar);
 sidebarToggle.addEventListener('click', () => {
-  if (useDrawer()) {
-    if (drawer.open) drawer.close();
-    else drawer.showModal();
-  } else {
-    state.sidebarOpen = sidebar.hidden;
-    sidebar.hidden = !state.sidebarOpen;
-    save();
-  }
-  updateSidebarToggle();
-});
-document.querySelector('#drawer-close').addEventListener('click', () => drawer.close());
-document.querySelector('#drawer-pin').addEventListener('click', () => {
-  state.sidebarPinned = true;
-  state.sidebarOpen = true;
-  placeSidebar();
+  state.sidebarOpen = sidebar.hidden;
+  sidebar.hidden = !state.sidebarOpen;
   save();
-  unpin.focus();
-});
-unpin.addEventListener('click', () => {
-  state.sidebarPinned = false;
-  placeSidebar();
-  if (useDrawer()) drawer.showModal();
-  else sidebarToggle.focus();
   updateSidebarToggle();
-  save();
-});
-drawer.addEventListener('close', updateSidebarToggle);
-drawer.addEventListener('click', event => {
-  if (event.target === drawer) drawer.close();
 });
 
 function renderNavigation() {
@@ -682,14 +635,12 @@ nav.addEventListener('toggle', event => {
 nav.addEventListener('click', event => {
   const button = event.target.closest('[data-topic]');
   if (!button) return;
-  if (drawer.open) drawer.close();
   openChapter(chapters.find(item => item.topic === button.dataset.topic));
 });
 
 courseMenu.addEventListener('click', event => {
   const button = event.target.closest('[data-course]');
   if (!button) return;
-  if (drawer.open) drawer.close();
   openCourse(button.dataset.course);
 });
 
@@ -772,7 +723,7 @@ const backupFormat = 'objectscript-certification-tutor-progress';
 const backupVersion = 1;
 
 function progressSnapshot() {
-  const keys = ['results', 'studied', 'worked', 'history', 'assessments', 'openTopics', 'topic', 'phase', 'assessmentIndex', 'final', 'sidebarOpen', 'sidebarPinned'];
+  const keys = ['results', 'studied', 'worked', 'history', 'assessments', 'openTopics', 'topic', 'phase', 'assessmentIndex', 'final', 'sidebarOpen'];
   return Object.fromEntries(keys.filter(key => Object.hasOwn(state, key)).map(key => [key, state[key]]));
 }
 
@@ -824,9 +775,8 @@ function validateProgressBackup(backup) {
   if (saved.phase !== undefined && !['theory', 'quiz', 'cases', 'roadmap', 'review', 'final', 'past'].includes(saved.phase)) return null;
   if (saved.assessmentIndex !== undefined && (!Number.isInteger(saved.assessmentIndex) || saved.assessmentIndex < 0 || saved.assessmentIndex >= saved.assessments.length)) return null;
   if (saved.sidebarOpen !== undefined && typeof saved.sidebarOpen !== 'boolean') return null;
-  if (saved.sidebarPinned !== undefined && typeof saved.sidebarPinned !== 'boolean') return null;
 
-  return Object.fromEntries(['results', 'studied', 'worked', 'history', 'assessments', 'openTopics', 'topic', 'phase', 'assessmentIndex', 'final', 'sidebarOpen', 'sidebarPinned']
+  return Object.fromEntries(['results', 'studied', 'worked', 'history', 'assessments', 'openTopics', 'topic', 'phase', 'assessmentIndex', 'final', 'sidebarOpen']
     .filter(key => Object.hasOwn(saved, key)).map(key => [key, saved[key]]));
 }
 
