@@ -317,3 +317,30 @@ export const caseFocus = {
     'Calculate the average under two policies for missing scores. Explain which values contribute to the total and which records contribute to the denominator.',
   ],
 };
+
+
+// Short, chapter-specific orientation shown above the concept sections.
+export const chapterSummaries = {
+  "T1.1": "Build a clear picture of IRIS classes: when to use persistent objects, how IDs and storage work, and what inheritance changes when methods are resolved.",
+  "T1.2": "Choose property constraints, computed values, streams, and indexes to fit your data; use uniqueness and foreign keys to protect consistency.",
+  "T1.3": "Trace ObjectScript method calls from caller to implementation, including argument passing, object references, and inherited methods.",
+  "T1.4": "Work with JSON using dynamic objects and arrays, then follow how stream objects read, write, and keep their position.",
+  "T2.1": "See how transactions, rollbacks, and locks work together to keep concurrent updates consistent.",
+  "T2.2": "Track what an application does by finding its globals, recording useful log entries, and measuring performance with metrics.",
+  "T2.3": "Protect an application by controlling access to variables, globals, and SQL, and by binding query values safely.",
+  "T3.1": "Compare local variables, process-private globals, temporary globals, and shared globals by who can access them and how long they last.",
+  "T3.2": "Connect ObjectScript and SQL through typing, macros, object projection, query modes, and SQL result variables.",
+  "T3.3": "Understand why an undefined value, an empty string, $CHAR(0), and SQL NULL behave differently in ObjectScript and SQL.",
+  "T3.4": "Follow a schema change from class definition through stored data, indexes, cached queries, and query planning.",
+  "T3.5": "Read basic query plans and table statistics to identify where a query spends time, then measure the effect of an optimization.",
+  "T4.1": "Trace how $ORDER walks an array or global, how subscripts sort, and how $DATA distinguishes values from descendants.",
+  "T4.2": "Build and edit $LIST values, retrieve their elements, and see when converting a list to a string can lose information.",
+  "T4.3": "Choose the right string operation for a task: select fields or substrings, transform characters, match patterns, and handle encodings.",
+  "T4.4": "Work out numeric and logical expressions, then convert and calculate dates and times without mixing their units.",
+  "T4.5": "Follow decision and loop logic through post-conditionals, Boolean evaluation, and the different exits provided by QUIT and RETURN.",
+  "T4.6": "Call methods by name at runtime, check an object’s class, and inspect class metadata with %Dictionary.",
+  "T4.7": "Use IRIS APIs for files and external communication, including HTTP, FTP, and email.",
+  "T5.1": "Use performance tools and compiler diagnostics to find slow code and understand why an IRIS class fails to compile.",
+  "T5.2": "Handle runtime failures with TRY/CATCH, exceptions, status codes, logging, and stack information.",
+  "T5.3": "Diagnose common ObjectScript errors by tracing messages about subscripts, permissions, variables, object references, classes, methods, properties, and syntax."
+};
