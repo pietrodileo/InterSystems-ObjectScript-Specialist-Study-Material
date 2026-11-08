@@ -233,6 +233,75 @@ function renderDiagrams(diagrams, label) {
   }).join('')}</div>`;
 }
 
+
+function renderStudyNotes(markdown) {
+  if (!markdown?.trim()) return '';
+  const lines = markdown.trim().split(/\r?\n/);
+  const html = [];
+  const inline = value => escape(value)
+    .replace(/\x60([^\x60]+)\x60/g, '<code translate="no">$1</code>')
+    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*([^*]+)\*/g, '<em>$1</em>')
+    .replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g,
+      (_, label, url) => '<a href="' + escape(url) + '" target="_blank" rel="noopener">' + escape(label) + ' ↗</a>');
+  const cells = line => line.trim().replace(/^\|/, '').replace(/\|$/, '').split('|').map(cell => cell.trim());
+  const tableSeparator = line => /^\|.*\|$/.test(line.trim()) &&
+    cells(line).every(cell => /^:?-{3,}:?$/.test(cell));
+  const isBlockStart = index => /^(\x60{3}|#{1,6}\s|[-*]\s|\d+\.\s|\|.*\|$)/.test(lines[index].trim());
+  for (let i = 0; i < lines.length;) {
+    const line = lines[i].trim();
+    if (!line) { i++; continue; }
+    if (line.startsWith('\x60\x60\x60')) {
+      const code = [];
+      i++;
+      while (i < lines.length && !lines[i].trim().startsWith('\x60\x60\x60')) code.push(lines[i++]);
+      if (i < lines.length) i++;
+      html.push('<pre><code translate="no">' + escape(code.join('\n')) + '</code></pre>');
+      continue;
+    }
+    const heading = line.match(/^(#{1,6})\s+(.+)$/);
+    if (heading) {
+      const tag = heading[1].length >= 4 ? 'h4' : 'h3';
+      html.push('<' + tag + '>' + inline(heading[2]) + '</' + tag + '>');
+      i++;
+      continue;
+    }
+    if (i + 1 < lines.length && /^\|.*\|$/.test(line) && tableSeparator(lines[i + 1])) {
+      const header = cells(line);
+      i += 2;
+      const rows = [];
+      while (i < lines.length && /^\|.*\|$/.test(lines[i].trim())) rows.push(cells(lines[i++]));
+      html.push('<div class="study-table-wrap"><table><thead><tr>' +
+        header.map(cell => '<th scope="col">' + inline(cell) + '</th>').join('') +
+        '</tr></thead><tbody>' + rows.map(row =>
+          '<tr>' + row.map(cell => '<td>' + inline(cell) + '</td>').join('') + '</tr>').join('') +
+        '</tbody></table></div>');
+      continue;
+    }
+    if (/^[-*]\s+/.test(line)) {
+      const items = [];
+      while (i < lines.length && /^\s*[-*]\s+/.test(lines[i])) {
+        items.push('<li>' + inline(lines[i++].trim().replace(/^[-*]\s+/, '')) + '</li>');
+      }
+      html.push('<ul>' + items.join('') + '</ul>');
+      continue;
+    }
+    if (/^\d+\.\s+/.test(line)) {
+      const items = [];
+      while (i < lines.length && /^\s*\d+\.\s+/.test(lines[i])) {
+        items.push('<li>' + inline(lines[i++].trim().replace(/^\d+\.\s+/, '')) + '</li>');
+      }
+      html.push('<ol>' + items.join('') + '</ol>');
+      continue;
+    }
+    const paragraphLines = [line];
+    i++;
+    while (i < lines.length && lines[i].trim() && !isBlockStart(i)) paragraphLines.push(lines[i++].trim());
+    html.push('<p>' + inline(paragraphLines.join(' ')) + '</p>');
+  }
+  return '<div class="study-notes">' + html.join('') + '</div>';
+}
+
 function renderCodeExamples(examples) {
   return examples.map(([title, code, observation]) => `
     <figure class="code-example">
@@ -256,8 +325,9 @@ function renderTheory(panel) {
         </span></summary>
         <div class="disclosure-body">
           <p>${markdownText(section.prose)}</p>
-          ${renderCodeExamples(examples)}
           <ul>${section.points.map(point => `<li>${markdownText(point)}</li>`).join('')}</ul>
+          ${renderStudyNotes(section.detail)}
+          ${renderCodeExamples(examples)}
           <div class="documentation">
             <h3>Official documentation</h3>
             <ul>${section.references.map(({ url, label }) => `<li>${link(url, label)}</li>`).join('')}</ul>
