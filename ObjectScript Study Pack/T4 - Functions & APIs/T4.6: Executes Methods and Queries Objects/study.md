@@ -35,6 +35,8 @@ Saved 2 November 2026 from [exam-prep.es](https://exam-prep.es/exams/objectscrip
 
 $CLASSMETHOD and $METHOD allow you to invoke methods where the class name, method name, or both are determined at runtime (stored in variables). This is ObjectScript's mechanism for dynamic dispatch, analogous to reflection-based method invocation in Java or Python's getattr().
 
+Use `$METHOD(object, methodName)` for an instance method and `$CLASSMETHOD(className, methodName)` for a class method. A serializer might choose `ToJSON` from a small approved list of operations. Keep the method name allowlisted: dynamic dispatch should not let external input select arbitrary methods.
+
 #### $CLASSMETHOD: Dynamic Class Method Calls
 
 ```objectscript
@@ -138,6 +140,8 @@ $CLASSMETHOD and $METHOD allow you to invoke methods where the class name, metho
 #### Overview
 
 %IsA and %ClassName are methods inherited from %Library.RegisteredObject (the root class for all registered objects). They enable runtime type inspection, which is useful for polymorphic code, validation, and debugging.
+
+`%ClassName()` reports the object's actual class, while `%IsA("Tutor.Employee")` checks whether it is an instance of that class or a subclass. A `Tutor.Specialist` object can therefore report its own class and still pass the `Tutor.Employee` check. If the input might not be an object, check it with `$ISOBJECT` before calling these instance methods.
 
 #### %IsA: Checking Class Hierarchy
 
@@ -246,6 +250,8 @@ $CLASSMETHOD and $METHOD allow you to invoke methods where the class name, metho
 #### Overview
 
 The %Dictionary package provides classes that represent class definitions as persistent objects. You can open any class definition and inspect its properties, methods, parameters, indices, and more. This is ObjectScript's reflection/introspection mechanism.
+
+`%Dictionary` describes compiled class definitions, not individual business records. For example, metadata can tell a tool that a property is a `%Date` or show a method's definition; `%OpenId()` is what you use to read a saved patient. Use dictionary classes when code needs to inspect or adapt to the schema at runtime.
 
 #### Opening a Class Definition
 
