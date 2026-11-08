@@ -1,6 +1,6 @@
 # ObjectScript Study Pack
 
-[Tutor di certificazione](../README.md#tutor-di-certificazione) — percorso interattivo per studiare, esercitarti e ripassare gli errori.
+[Certification tutor](../README.md#certification-tutor) — interactive English study plan, practice, and answer review.
 
 [Approfondimenti dagli esercizi](approfondimenti-esercizi.md) — casi commentati, varianti e nuovi schemi.
 
