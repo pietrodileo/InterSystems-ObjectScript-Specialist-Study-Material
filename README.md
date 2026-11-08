@@ -8,6 +8,8 @@ Open **Study plan** and choose **Start study plan**. The English tutor guides yo
 
 Use the numbered buttons to jump to any question in a chapter quiz or in the final assessment. In chapter quizzes, **Check answer** records an attempt. In the final assessment, your choices save as you go and you can change them until you choose **Finish assessment**.
 
+Choose **Pin index** in the course drawer to keep navigation open while you study. On phones, the pinned index sits above the lesson. Use **Unpin** to return to the drawer on smaller screens.
+
 Progress and submitted choices are saved in the current browser at the URL where you study. Results from older tutor versions still count, with answer choices available from new submissions onward.
 
 From the repository root, run:

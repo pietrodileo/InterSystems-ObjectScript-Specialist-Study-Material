@@ -88,6 +88,15 @@ const codeStarts = [
 export function quizBlocks(text) {
   return text.trim().split(/\r?\n[ \t]*\r?\n+/).flatMap(block => {
     const lines = block.split(/\r?\n/);
+    // The pack uses pipe-delimited Markdown tables with a header separator.
+    if (lines.length >= 3 && lines.every(line => /^\s*\|.*\|\s*$/.test(line))) {
+      const [head, separator, ...rows] = lines.map(line => line.trim().slice(1, -1)
+        .split(/(?<!\\)\|/).map(cell => cell.trim().replaceAll('\\|', '|')));
+      if (separator.every(cell => /^:?-{3,}:?$/.test(cell)) &&
+          [separator, ...rows].every(row => row.length === head.length)) {
+        return [{ text: block, table: { head, rows } }];
+      }
+    }
     const firstCode = lines.findIndex(line => {
       const start = line.trim().replace(/^[A-D][.)]\s+/i, '');
       return codeStarts.some(pattern => pattern.test(start));

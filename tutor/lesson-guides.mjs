@@ -203,3 +203,117 @@ export const variations = {
     ['The scores are 10, 20, missing, and 40. How does the average change if you count the missing score as zero?', 'Ignoring it gives 70/3. Counting it as zero gives 70/4. Choose which rule the report should use.'],
   ],
 };
+
+// One study objective for each worked case, in chapter order.
+export const caseFocus = {
+  'T1.1': [
+    'You are tracing an index from a class definition to storage. Identify which setting names the index global, then ask what namespace information you would need to locate the physical database.',
+    'A lookup starts with a message ID from the application. Follow it to the stored record, then decide what the internal IDs can tell you about how many records exist.',
+    'Follow the object from construction to persistence. At each call, identify what comes back and what evidence you have that the row was saved.',
+  ],
+  'T1.2': [
+    'This record has several validation rules. Check each field against its own rule and work out which errors the caller needs to see.',
+    'The report needs orders that satisfy two filters at once. Compare the candidate IDs for each filter, then ask whether the index covers all the fields the report needs.',
+    'Choose a property type for each kind of content. Consider both the size of the value and whether the application must preserve text or raw bytes.',
+  ],
+  'T1.3': [
+    'Trace what the caller can see after a method changes an array or an object. Draw the caller’s variables separately from the object they point to.',
+    'Follow the counter through several calls. Record the value held by each instance after every call, including the call that omits its argument.',
+    'Trace a validation call into the parent class and back. Decide when the subclass should proceed with its own check and what it should return if the parent fails.',
+  ],
+  'T1.4': [
+    'Look at where each occurrence of true appears. Decide whether the parser is reading JSON or evaluating an ordinary ObjectScript expression.',
+    'Two variables refer to the same dynamic array. Predict which element changes and what each variable sees after the update.',
+    'Track two facts after each read: the cursor position and the total size. Then predict what a rewind changes.',
+  ],
+  'T2.1': [
+    'Write down the transaction level after each command. Then trace which order fields survive the rollback and which reach the outer commit.',
+    'Follow both workers as they approach the same resource. Compare a worker that requests the lock with one that writes without participating in the locking protocol.',
+    'Keep a running list of the locks the process holds. Compare the effect of an incremental acquisition with that of a simple LOCK.',
+  ],
+  'T2.2': [
+    'Look at the node itself and its children separately. Use those two observations to predict what the application sees when it tests the node.',
+    'Imagine investigating the batch after its process has exited. Work out which fields identify an event and where to keep the record so it is still available.',
+    'You have elapsed time and an operation count. Calculate the average, then ask what that number can tell you about a slow individual operation.',
+  ],
+  'T2.3': [
+    'The application needs to check access for a named role or resource. Work through what happens if the caller has a role with a similar name.',
+    'Follow user input from the request to SQL. Identify which parts belong in the prepared statement and which values should be passed when it executes.',
+    'The code already handles SQL values safely. Examine the separate question of whose permissions determine whether the statement may run.',
+  ],
+  'T3.1': [
+    'Pick storage for data with different lifetimes. Compare who needs to read it, how long it should live, and whether it needs to survive a restart.',
+    'Follow two requests from the same browser through different IRIS processes. Decide which values the second request can see from the first.',
+    'Trace the allocation of an ID and the later write of its payload. Ask what another process can infer from the counter if the writer exits between those steps.',
+  ],
+  'T3.2': [
+    'The operands stay the same while the operator changes. Predict when ObjectScript treats them as numbers and when it keeps their text.',
+    'Follow the tax rate from the macro definition into compiled code. Decide which step must happen again after the macro changes.',
+    'Trace a cursor over a normal row, the end of results, and an error. At each step, decide whether the application should read the host variables or stop.',
+  ],
+  'T3.3': [
+    'Compare a variable that was never set, a variable containing an empty string, and a variable containing one NUL character. Work out what each test is actually measuring.',
+    'Start with a set of scores that includes NULL. Work out which rows each aggregate considers before calculating the result.',
+    'Predict how a WHERE clause treats records with unknown cities. Then decide how to express that those records should be included.',
+  ],
+  'T3.4': [
+    'The application can see a new property name, but old records still use their storage layout. Trace how you would verify that existing data is accessible after the change.',
+    'Follow a new index from its declaration to a query against existing rows. Identify what to verify before assuming the index is ready.',
+    'An index or the statistics change while the application is already using a query. Decide what to inspect to learn whether the query is still using the same plan.',
+  ],
+  'T3.5': [
+    'Trace the query from matching index keys to returning the selected columns. Ask which fields can come from the index and when the engine must read the underlying rows.',
+    'Compare two queries from the caller’s perspective. Count the time to execute the query and the time to fetch its results.',
+    'Turn a slow-query observation into one measurable change. Decide what to keep constant so the next measurement can tell you whether that change helped.',
+  ],
+  'T4.1': [
+    'Predict the traversal order from the subscripts before looking at the values. Then read the values in that order to see what the loop prints.',
+    'Inspect a node that has both its own value and children. Decide when a direct read is safe and when the application should use a default.',
+    'Walk a sparse array until the traversal signals that it is done. Decide where the end test belongs and when to reset a cursor for a nested loop.',
+  ],
+  'T4.2': [
+    'Compare an omitted list element, an explicitly empty element, and a position beyond the list. Predict what the retrieval call returns for each.',
+    'Follow the iterator from its initial pointer through the last element. Check what tells you an element was visited and what signals the end.',
+    'Join two values with a delimiter that already occurs in one of them. Ask whether the resulting text gives the reader enough information to recover the original list.',
+  ],
+  'T4.3': [
+    'Decide whether the requested value is a whole field or a range of character positions. That choice determines how to locate the boundaries.',
+    'Apply each transformation to the same input. Track whether it searches for a substring or maps individual characters.',
+    'Decide what the output must preserve before changing the text. Spaces inside a name and markup displayed as text have different rules from disposable padding.',
+  ],
+  'T4.4': [
+    'Work through the expression in ObjectScript evaluation order. Then add the parentheses and compare each intermediate result.',
+    'Split an item count into complete groups and leftovers. Test both a count with a remainder and one that divides exactly.',
+    'Decide whether you need a local calendar time, a UTC timestamp, or a duration. Choose the clock that answers that question before doing arithmetic.',
+  ],
+  'T4.5': [
+    'Try the same IF with two nonempty strings. Compare testing whether a value is true with testing whether it contains text.',
+    'Trace the loop after each control command. Identify whether execution moves to the next iteration, leaves the loop, or returns to the caller.',
+    'Test the boundary value before trusting the branches on either side. Decide what the expression or routine should return when the value is exactly on the boundary.',
+  ],
+  'T4.6': [
+    'A variable may contain an object, or it may hold something else. Decide which check you can perform safely before inspecting its class or inheritance.',
+    'The method or property name arrives at runtime. Trace how the code chooses an allowed member and what happens after it invokes or updates it.',
+    'Choose where to look for a member that may be inherited. Compare the class source with the metadata available after compilation.',
+  ],
+  'T4.7': [
+    'Choose a stream by deciding where the data belongs and how it must be represented. Then trace where the next read starts after a rewind.',
+    'Follow one request through the returned status, the HTTP response, and the body. Decide which checks must pass before the application can use the body.',
+    'Follow a message from composition through SMTP submission. Identify what the send result tells the application and what it cannot say about delivery.',
+  ],
+  'T5.1': [
+    'Start with where the failure appears. Decide whether to inspect macro expansion, the compiler diagnostic, or what the running code received.',
+    'Pick a timer for the duration of a block. Keep track of the unit so you can explain the result in both seconds and milliseconds.',
+    'Decide which part of the workload is slow enough to investigate. Match the tool to the evidence you need about the system, a query, or a line of code.',
+  ],
+  'T5.2': [
+    'Follow the caller down two paths: a method that returns a status and a method that throws. Identify when the caller has to check a value and when control moves to CATCH.',
+    'Decide what the caller should see after you catch and log a failure. Work out whether the operation can recover or whether the failure needs to continue outward.',
+    'Several independent checks can fail in one operation. Decide how to keep their structured status values and when to turn them into readable messages.',
+  ],
+  'T5.3': [
+    'When a read fails, identify exactly what is missing. Compare a misspelled variable, an exhausted traversal, and a failed object lookup.',
+    'Trace each operation until you find the condition that should stop it. Test what happens at the recursive base case, in a cycle, or when there are no scores to average.',
+    'Calculate the average under two policies for missing scores. Explain which values contribute to the total and which records contribute to the denominator.',
+  ],
+};

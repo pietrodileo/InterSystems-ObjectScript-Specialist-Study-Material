@@ -3,7 +3,7 @@ import { open, readFile } from 'node:fs/promises';
 import test from 'node:test';
 import { assessmentAnswered, assessmentComplete, chapterStep, correctSelection, finalQuestionRefs, loadCourse, packPath, passedAnswer, practiceQueue, quizBlocks, recordPractice, reviewItems } from './content.mjs';
 
-import { guides, variations } from './lesson-guides.mjs';
+import { caseFocus, guides, variations } from './lesson-guides.mjs';
 import { diagramExamples, studyExamples } from './code-examples.mjs';
 
 test('the real study pack supplies every lesson, question, and worked case', async () => {
@@ -33,6 +33,8 @@ test('the real study pack supplies every lesson, question, and worked case', asy
   for (const ref of final) assert.ok(chapters.find(chapter => chapter.topic === ref.topic).quiz.some(q => q.id === ref.id));
   for (const chapter of chapters) {
     assert.ok(guides[chapter.topic].every(Boolean));
+    assert.equal(caseFocus[chapter.topic].length, chapter.cases.length);
+    assert.ok(caseFocus[chapter.topic].every(context => context.trim()));
     assert.equal(variations[chapter.topic].length, chapter.cases.length);
     assert.ok(variations[chapter.topic].every(pair => pair.length === 2 && pair.every(Boolean)));
     assert.equal(chapter.panels.length, 7);
@@ -55,6 +57,18 @@ test('the real study pack supplies every lesson, question, and worked case', asy
       const question = chapter.quiz.find(item => item.id === 2);
       assert.deepEqual(quizBlocks(question.options[0]), [{ text: question.options[0], code: true }]);
     }
+    if (chapter.topic === 'T3.1') {
+      const { question } = chapter.quiz.find(item => item.id === 15);
+      const { table } = quizBlocks(question).find(block => block.table);
+      assert.deepEqual(table.head, ['Feature', 'Local Var', 'PPG (^||)', 'Temp Global (^IRIS.Temp.*)', 'Persistent Global']);
+      assert.deepEqual(table.rows.map(row => row.at(-1)), ['Database', 'All processes', '?', '?']);
+    }
+    if (chapter.topic === 'T3.5') {
+      const { question } = chapter.quiz.find(item => item.id === 8);
+      const blocks = quizBlocks(question);
+      assert.ok(blocks.some(block => block.code && block.text.includes('%SYS.PTools')));
+      assert.deepEqual(blocks.find(block => block.table).table.rows[0], ['JOIN step', '250,000', '500,000']);
+    }
     for (const { file, width, height } of [...chapter.diagrams, ...chapter.exerciseDiagrams]) {
       const image = await open(packFile(file));
       try {
@@ -74,6 +88,7 @@ test('quiz blocks distinguish code and prose even without a blank line', () => {
     { text: 'What happens next?', code: false },
   ]);
   assert.equal(quizBlocks('Write the result to a log.')[0].code, false);
+  assert.equal(quizBlocks('| A | B |\n| one | two |\n| three | four |')[0].table, undefined);
 });
 
 test('assessment answers can be saved out of order and require explicit submission', () => {

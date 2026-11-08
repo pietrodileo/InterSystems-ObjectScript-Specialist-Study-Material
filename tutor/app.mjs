@@ -1,5 +1,5 @@
 import { assessmentAnswered, assessmentComplete, chapterStep, correctSelection, finalQuestionRefs, loadCourse, packPath, passedAnswer, practiceQueue, quizBlocks, recordPractice, reviewItems, topics } from './content.mjs';
-import { guides, variations } from './lesson-guides.mjs';
+import { caseFocus, guides, variations } from './lesson-guides.mjs';
 import { diagramExamples, studyExamples } from './code-examples.mjs';
 
 const lesson = document.querySelector('#lesson');
@@ -8,6 +8,8 @@ const courseMenu = document.querySelector('#course-menu');
 const sidebar = document.querySelector('#course');
 const sidebarToggle = document.querySelector('#sidebar-toggle');
 const drawer = document.querySelector('#course-drawer');
+const pinnedHeader = document.querySelector('#pinned-header');
+const unpin = document.querySelector('#sidebar-unpin');
 const compact = window.matchMedia('(max-width: 1040px)');
 const storageKey = 'objectscript-tutor-v1';
 const phases = { theory: 'Study', quiz: 'Practice', cases: 'Apply' };
@@ -51,14 +53,17 @@ function save() {
   }
 }
 
+const useDrawer = () => compact.matches && !state.sidebarPinned;
+
 function updateSidebarToggle() {
-  const open = compact.matches ? drawer.open : !sidebar.hidden;
+  const open = useDrawer() ? drawer.open : !sidebar.hidden;
   sidebarToggle.setAttribute('aria-expanded', String(open));
-  sidebarToggle.textContent = compact.matches ? 'Course index' : open ? 'Hide course index' : 'Show course index';
+  sidebarToggle.textContent = useDrawer() ? 'Course index' : open ? 'Hide course index' : 'Show course index';
 }
 
 function placeSidebar() {
-  if (compact.matches) {
+  pinnedHeader.hidden = !state.sidebarPinned;
+  if (useDrawer()) {
     drawer.append(sidebar);
     sidebar.hidden = false;
     sidebarToggle.setAttribute('aria-controls', drawer.id);
@@ -76,7 +81,7 @@ function placeSidebar() {
 placeSidebar();
 compact.addEventListener('change', placeSidebar);
 sidebarToggle.addEventListener('click', () => {
-  if (compact.matches) {
+  if (useDrawer()) {
     drawer.showModal();
   } else {
     state.sidebarOpen = sidebar.hidden;
@@ -86,6 +91,21 @@ sidebarToggle.addEventListener('click', () => {
   updateSidebarToggle();
 });
 document.querySelector('#drawer-close').addEventListener('click', () => drawer.close());
+document.querySelector('#drawer-pin').addEventListener('click', () => {
+  state.sidebarPinned = true;
+  state.sidebarOpen = true;
+  placeSidebar();
+  save();
+  unpin.focus();
+});
+unpin.addEventListener('click', () => {
+  state.sidebarPinned = false;
+  placeSidebar();
+  if (useDrawer()) drawer.showModal();
+  else sidebarToggle.focus();
+  updateSidebarToggle();
+  save();
+});
 drawer.addEventListener('close', updateSidebarToggle);
 drawer.addEventListener('click', event => {
   if (event.target === drawer) drawer.close();
@@ -120,12 +140,12 @@ function renderNavigation() {
     </details>`).join('');
 }
 
-function openChapter(item, nextPhase = step(item) ?? 'theory', mode = 'learn') {
+function openChapter(item, nextPhase = step(item) ?? 'theory', mode = 'learn', questionId) {
   chapter = item;
   phase = nextPhase;
   practiceMode = mode;
-  const first = practiceQueue(chapter.quiz, results(chapter), mode)[0];
-  cursor = first ? chapter.quiz.indexOf(first) : 0;
+  const first = questionId ?? practiceQueue(chapter.quiz, results(chapter), mode)[0]?.id;
+  cursor = Math.max(0, chapter.quiz.findIndex(question => question.id === first));
   drafts = new Map();
   checked = new Map();
   const area = chapter.topic.split('.')[0];
@@ -306,7 +326,7 @@ function answerDetails(item, question, attempts) {
   return `<details class="reading">
     <summary>Q${question.id} · ${outcome}${recovered ? ' on retry' : ''} · ${escape(prompt)}</summary>
     <div class="disclosure-body">
-      <div class="prompt quiz-text">${quizText(question.question)}</div>
+      <div class="prompt quiz-text">${quizText(question.question, true)}</div>
       <h3>Your answers</h3>
       <ol class="attempts">${attempts.map(attempt => `<li>
         <strong class="${passedAnswer(attempt) ? 'correct-text' : 'incorrect-text'}">${passedAnswer(attempt) ? 'Correct' : 'Incorrect'}</strong>
@@ -358,12 +378,23 @@ function renderReview() {
     </section>`;
 }
 
-function quizText(text) {
+function quizInline(text) {
+  const parts = text.split(/(##class\([^)]+\)(?:\.[%\w]+)*|(?:\${1,3}|%|\^(?:\|\|)?|\.\.?#?)[A-Za-z]\w*(?:\.\w+)*\*?|<[A-Z]+>)/g);
+  return parts.map((part, i) => i % 2 ? `<code translate="no">${escape(part)}</code>` : escape(part)).join('');
+}
+
+function quizText(text, allowTables = false) {
   return quizBlocks(text).map(block => {
+    if (allowTables && block.table) {
+      const { head, rows } = block.table;
+      return `<div class="quiz-table" role="region" aria-label="Question table" tabindex="0"><table>
+        <thead><tr>${head.map(cell => `<th scope="col">${quizInline(cell)}</th>`).join('')}</tr></thead>
+        <tbody>${rows.map(([label, ...cells]) => `<tr><th scope="row">${quizInline(label)}</th>
+          ${cells.map(cell => `<td>${quizInline(cell)}</td>`).join('')}</tr>`).join('')}</tbody>
+      </table></div>`;
+    }
     if (block.code) return `<code class="quiz-code" translate="no">${escape(block.text)}</code>`;
-    const parts = block.text.split(/(##class\([^)]+\)(?:\.[%\w]+)*|(?:\${1,3}|%|\^(?:\|\|)?|\.\.?#?)[A-Za-z]\w*(?:\.\w+)*\*?|<[A-Z]+>)/g);
-    return `<span class="quiz-prose">${parts.map((part, i) =>
-      i % 2 ? `<code translate="no">${escape(part)}</code>` : escape(part)).join('')}</span>`;
+    return `<span class="quiz-prose">${quizInline(block.text)}</span>`;
   }).join('');
 }
 
@@ -431,7 +462,7 @@ function renderQuiz(panel, final = null) {
       <h2 tabindex="-1">Question ${final ? index + 1 : id}</h2>
       ${!final && practiceMode !== 'review' && missed(chapter) ? '<button type="button" data-phase="quiz" data-mode="review">Retry missed questions</button>' : ''}
     </div>
-    <div class="question-prompt quiz-text">${quizText(question.question)}</div>
+    <div class="question-prompt quiz-text">${quizText(question.question, true)}</div>
     <form autocomplete="off">
       <fieldset ${graded ? 'disabled' : ''}>
         <legend>${type === 'multiple' ? 'Select all correct answers.' : 'Select one answer.'}</legend>
@@ -559,7 +590,7 @@ function renderCases(panel) {
       return `<details class="reading" ${i === 0 ? 'open' : ''}>
         <summary>Case ${i + 1}. ${escape(item.title)}</summary>
         <div class="disclosure-body">
-          <p class="muted">Related quiz questions · ${item.qs.map(id => `Q${id}`).join(', ')}</p>
+          <p>${markdownText(caseFocus[chapter.topic][i])}</p>
           ${item.code ? `<pre><code translate="no">${escape(item.code)}</code></pre>` : ''}
           <details class="reading inset"><summary>Worked example and explanation</summary>
             <div class="disclosure-body">
@@ -576,6 +607,13 @@ function renderCases(panel) {
             <input type="checkbox" data-case="${i}" ${state.worked[chapter.topic]?.[item.file] ? 'checked' : ''}>
             <span>Mark case complete</span>
           </label>
+          <div class="case-quiz">
+            <h3>Practice the same skill in the quiz</h3>
+            <p>Use these questions to check whether you can apply the skill you just practiced.</p>
+            <div class="case-questions">${item.qs.map(id => `
+              <button type="button" data-case-question="${id}" aria-label="Open question ${id} in Practice">Q${id}</button>
+            `).join('')}</div>
+          </div>
         </div>
       </details>`;
     }).join('')}
@@ -644,6 +682,9 @@ lesson.addEventListener('click', event => {
     continueCourse();
   } else if (button.hasAttribute('data-review-next')) {
     openChapter(chapters.find(missed), 'quiz', 'review');
+  } else if (button.dataset.caseQuestion !== undefined) {
+    openChapter(chapter, 'quiz', 'learn', Number(button.dataset.caseQuestion));
+    focusQuestion(document.querySelector('#panel'));
   } else if (button.dataset.question !== undefined) {
     const panel = document.querySelector('#panel');
     const index = Number(button.dataset.question);
