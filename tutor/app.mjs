@@ -1,5 +1,5 @@
 import { assessmentAnswered, assessmentComplete, chapterStep, correctSelection, finalQuestionRefs, loadCourse, packPath, passedAnswer, practiceQueue, quizBlocks, recordPractice, reviewItems, topics } from './content.mjs';
-import { caseFocus, chapterSummaries, guides, variations } from './lesson-guides.mjs';
+import { caseFocus, chapterSummaries, examAreaDescriptions, guides, variations } from './lesson-guides.mjs';
 import { diagramExamples, studyExamples } from './code-examples.mjs';
 
 const lesson = document.querySelector('#lesson');
@@ -206,7 +206,12 @@ function renderCourse() {
       <h2>The five exam areas</h2>
       <ul class="exam-areas">${Object.entries(topics).map(([code, name]) => {
         const group = chapters.filter(item => item.topic.startsWith(`${code}.`));
-        return `<li><span class="topic-code">${code}</span> <strong>${name}</strong> <span class="muted">${group.filter(item => !step(item)).length}/${group.length} chapters complete</span></li>`;
+        return `<li>
+          <span class="topic-code">${escape(code)}</span>
+          <strong>${escape(name)}</strong>
+          <span class="muted">${group.filter(item => !step(item)).length}/${group.length} chapters complete</span>
+          <span class="muted exam-area-description">${escape(examAreaDescriptions[code])}</span>
+        </li>`;
       }).join('')}</ul>
       <h2>How each chapter works</h2>
       <ol class="roadmap">
