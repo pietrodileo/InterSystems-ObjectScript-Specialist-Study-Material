@@ -10,7 +10,7 @@ Saved from https://exam-prep.es/exams/objectscript/index.html on 2 November 2026
 - 93 numbered section folders, matching each topic's Contents list.
 - 358 practice questions with the source answers and explanations.
 - Each subtopic has `index.md`, its full `study.md`, `quiz.md`, and numbered content folders containing `study.md`.
-- `originals/` preserves the downloaded source HTML and quiz JSON; use the main index for offline reading.
+- `originals/quizzes/` contains the downloaded quiz JSON. Use the main index for offline reading.
 - `manifest.json` records sources, counts, and guide checksums.
 
 The original exam index advertises 357 practice questions; the downloaded quiz files contain 358 questions.
@@ -18,7 +18,7 @@ The site warns that this new exam's study content and quizzes are still being re
 
 Folder hierarchy: `T1 - Manages Data Model/T1.1: Uses Classes/01 - …/study.md` (and similarly through T5).
 
-Study files preserve explanations, code examples, tables, and documentation links. Quiz files include every question, answer choices, correct answer letters, and explanations. Generated HTML reading pages were replaced with Markdown; downloaded original HTML and quiz JSON remain in `originals/` for provenance.
+Study files preserve explanations, code examples, tables, and documentation links. Quiz files include every question, answer choices, correct answer letters, and explanations.
 
 ## Illustrated study guides
 
