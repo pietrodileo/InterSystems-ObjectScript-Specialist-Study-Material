@@ -38,33 +38,33 @@ Related question analyses: [Q12](<Domanda per domanda/Q12.md>), [Q13](<Domanda p
 
 ### Panel 1 — Version check race
 
-**Example or flow:** A and B both read v=7 before either writes; both pass separate checks
+**Example or flow:** Two workers read version 7 of the same order. Both compare it with their expected version of 7 and pass. If each then writes separately, the second can overwrite the first even though both checked the version.
 
-**Reasoning:** A check followed by a separate write is not atomic. Use a suitable atomic conditional update or a coherent protected section.
+**Reasoning:** Make the comparison and the write one operation. For example, update the row only where its version is still 7, bump the version in that update, and check whether a row was affected.
 
 Related question analyses: [Q10](<Domanda per domanda/Q10.md>).
 
 ### Panel 2 — Rollback is not success
 
-**Example or flow:** Error → rollback changes → report failure
+**Example or flow:** A checkout writes an order and then fails to write its receipt. The error path rolls back the order. If it reports success afterward, the caller can show a confirmation for a checkout that never completed.
 
-**Reasoning:** Restoring data does not complete the requested operation. Trap: returning OK after the catch hides the failure.
+**Reasoning:** Track the state of the data and the outcome reported to the caller separately. After rollback, return the error status or propagate the exception according to the method's contract.
 
 Related question analyses: [Q11](<Domanda per domanda/Q11.md>), [Q18](<Domanda per domanda/Q18.md>).
 
 ### Panel 3 — Nested levels
 
-**Example or flow:** 0 → TSTART → 1 → TSTART → 2 → TCOMMIT → 1 → TCOMMIT → 0
+**Example or flow:** Start at $TLEVEL 0 and issue TSTART twice. The level is now 2. One TCOMMIT takes it back to 1, and another takes it to 0. A rollback before the outer commit can still undo work from the inner block.
 
-**Reasoning:** The inner commit is not an independent durable commit. Full rollback may also undo the caller's transaction.
+**Reasoning:** Record the level on entry before opening a transaction inside a helper. A full rollback may undo the caller's work as well. Decide which level your method owns.
 
 Related question analyses: [Q02](<Domanda per domanda/Q02.md>), [Q03](<Domanda per domanda/Q03.md>), [Q14](<Domanda per domanda/Q14.md>), [Q15](<Domanda per domanda/Q15.md>).
 
 ### Panel 4 — No-wait lock attempt
 
-**Example or flow:** Timeout 0 → $TEST=1 acquired; $TEST=0 unavailable
+**Example or flow:** One worker holds the lock for order 42. Another issues LOCK +^TutorOrder(42):0 and checks $TEST immediately. In this simple conflict it gets 0. If the lock is available it gets 1 and can enter the protected section.
 
-**Reasoning:** Do not write on the failure branch. Retry through another acquisition attempt or report busy.
+**Reasoning:** Branch on $TEST before touching the protected data. When the acquisition fails, report that the order is busy or retry the lock. Release a successful acquisition when the protected work ends.
 
 Related question analyses: [Q06](<Domanda per domanda/Q06.md>), [Q07](<Domanda per domanda/Q07.md>), [Q16](<Domanda per domanda/Q16.md>).
 

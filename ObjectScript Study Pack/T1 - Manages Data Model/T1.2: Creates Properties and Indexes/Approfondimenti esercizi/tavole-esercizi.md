@@ -38,33 +38,33 @@ Related question analyses: [Q02](<Domanda per domanda/Q02.md>), [Q04](<Domanda p
 
 ### Panel 1 — Independent constraints
 
-**Example or flow:** Missing Name + Category=Toys → Required and VALUELIST violations
+**Example or flow:** Suppose Name is required and Category accepts only Books or Tools. An item with no name, Category set to Toys, and Price set to 15 still has two invalid fields. Try correcting only the category and predict what validation will report next.
 
-**Reasoning:** A valid Price does not compensate for two invalid properties. Check the save status rather than assuming assignments were accepted.
+**Reasoning:** Check each constraint against its own property. Assigning values in memory does not prove the object can be saved. The validation or save status is where the caller checks the outcome.
 
 Related question analyses: [Q01](<Domanda per domanda/Q01.md>), [Q03](<Domanda per domanda/Q03.md>), [Q16](<Domanda per domanda/Q16.md>).
 
 ### Panel 2 — Defaults are initial values
 
-**Example or flow:** %New → Role=Viewer, LoginCount=0, CreatedAt=current time
+**Example or flow:** Create two accounts without supplying a role or login count. Both start as Viewer with a count of zero. If CreatedAt is initialized from a clock, the two objects can also receive the same timestamp.
 
-**Reasoning:** Two objects created close together can share the same timestamp. Trap: creation time is not a uniqueness guarantee.
+**Reasoning:** A default answers what value an object starts with. If an attribute must uniquely identify a row, enforce that requirement separately with an ID or a unique key.
 
 Related question analyses: [Q10](<Domanda per domanda/Q10.md>), [Q13](<Domanda per domanda/Q13.md>), [Q17](<Domanda per domanda/Q17.md>), [Q18](<Domanda per domanda/Q18.md>).
 
 ### Panel 3 — Virtual versus maintained
 
-**Example or flow:** FullName: calculate on read; TotalAmount: maintain stored calculation
+**Example or flow:** Consider FullName, built from FirstName and LastName whenever you read it. Compare it with a stored TotalAmount calculated from quantity and unit price. Change quantity and ask when each reader, including SQL, will see the new total.
 
-**Reasoning:** The formula is not the whole contract. Define when the value is recomputed and whether it is stored.
+**Reasoning:** Two definitions can use the same formula and behave differently. For a stored result, inspect the events and fields that trigger recomputation. For a calculated value, check when the getter runs.
 
 Related question analyses: [Q04](<Domanda per domanda/Q04.md>), [Q05](<Domanda per domanda/Q05.md>), [Q12](<Domanda per domanda/Q12.md>).
 
 ### Panel 4 — Relationships and composite keys
 
-**Example or flow:** Employee.DeptCode → Department; index (SensorId,ReadingTime)
+**Example or flow:** An employee with DeptCode set to ENG needs a department that satisfies the foreign key. A separate query that filters one SensorId and reads a range of ReadingTime values can benefit from an index ordered by sensor and then time.
 
-**Reasoning:** A foreign key needs an existing parent. The composite index first narrows the sensor, then the time range.
+**Reasoning:** A foreign key checks the relationship between rows. A composite index arranges keys for lookup. Read its leading column first to see which part of the query can narrow the search.
 
 Related question analyses: [Q07](<Domanda per domanda/Q07.md>), [Q09](<Domanda per domanda/Q09.md>), [Q11](<Domanda per domanda/Q11.md>).
 

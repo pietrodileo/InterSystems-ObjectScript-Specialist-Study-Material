@@ -38,33 +38,33 @@ Related question analyses: [Q04](<Domanda per domanda/Q04.md>), [Q12](<Domanda p
 
 ### Panel 1 — Uncovered boundary
 
-**Example or flow:** x>5 → big; x<5 → small; x=5 → no assignment
+**Example or flow:** One condition sets a label to big when x is greater than 5. A second sets it to small when x is less than 5. Trace x equal to 5: neither condition assigns anything, so the label can still hold an earlier value or be undefined.
 
-**Reasoning:** Two conditions do not automatically cover every input. Initialize the result or define the missing branch.
+**Reasoning:** Test the boundary along with values on either side. Define the equality case explicitly or initialize the result to the intended default before the checks.
 
 Related question analyses: [Q01](<Domanda per domanda/Q01.md>), [Q04](<Domanda per domanda/Q04.md>), [Q07](<Domanda per domanda/Q07.md>).
 
 ### Panel 2 — Three exit scopes
 
-**Example or flow:** CONTINUE → next iteration; plain QUIT in this FOR → after loop; RETURN → caller
+**Example or flow:** Imagine searching a list for the first match. CONTINUE skips the current item and resumes the loop. A plain QUIT inside the shown FOR stops scanning and resumes after the loop. RETURN exits the method with its result.
 
-**Reasoning:** Choose the exit according to the scope you want to leave. QUIT with an argument inside the shown FOR is not a method return.
+**Reasoning:** Find the point where execution should resume before choosing the command. To stop the scan and perform work afterward, leave the loop, then return from the method when that work is done.
 
 Related question analyses: [Q05](<Domanda per domanda/Q05.md>), [Q06](<Domanda per domanda/Q06.md>), [Q08](<Domanda per domanda/Q08.md>), [Q09](<Domanda per domanda/Q09.md>), [Q11](<Domanda per domanda/Q11.md>), [Q15](<Domanda per domanda/Q15.md>).
 
 ### Panel 3 — First true SELECT branch
 
-**Example or flow:** cat→Meow; final 1:Unknown covers other values
+**Example or flow:** A $SELECT expression checks for cat and returns Meow. If neither that nor any later condition matches, a final 1:"Unknown" provides the fallback. If multiple conditions match, the first matching branch wins.
 
-**Reasoning:** The first true condition wins. Without any true branch SELECT raises an error; decide whether a default is semantically correct.
+**Reasoning:** Place more specific tests before broad ones. If all conditions can be false, decide whether the caller needs a default or an error before writing the expression.
 
 Related question analyses: [Q12](<Domanda per domanda/Q12.md>), [Q13](<Domanda per domanda/Q13.md>).
 
 ### Panel 4 — Truthy is not nonempty
 
-**Example or flow:** "abc" → numeric 0 → false; "1abc" → 1 → true
+**Example or flow:** ObjectScript interprets abc as zero in a numeric truth test, while 1abc begins with a nonzero number and tests true. Both strings contain characters.
 
-**Reasoning:** For nonempty text, compare explicitly with the empty string. For positive quantity, use an explicit >0 test.
+**Reasoning:** Write the condition that matches the requirement. Compare a text value with the empty string to check for content. Validate a quantity and compare it with zero when you need a positive number.
 
 Related question analyses: [Q02](<Domanda per domanda/Q02.md>), [Q03](<Domanda per domanda/Q03.md>), [Q10](<Domanda per domanda/Q10.md>), [Q14](<Domanda per domanda/Q14.md>).
 

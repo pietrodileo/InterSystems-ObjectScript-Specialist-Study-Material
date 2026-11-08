@@ -38,33 +38,33 @@ Related question analyses: [Q02](<Domanda per domanda/Q02.md>), [Q07](<Domanda p
 
 ### Panel 1 — Zero is a valid key
 
-**Example or flow:** Numeric keys -3,-1,0,2 are visited in that order
+**Example or flow:** An array has numeric keys -3, -1, 0, and 2. A forward $ORDER walk visits 0 after -1. If the loop quits whenever the key evaluates to false, it stops there and misses both 0 and 2.
 
-**Reasoning:** Do not terminate a loop with a generic numeric false test on the key. Compare against the documented empty-string sentinel.
+**Reasoning:** Compare the returned key with the empty-string end marker. A numeric zero is a valid subscript and must survive that test.
 
 Related question analyses: [Q01](<Domanda per domanda/Q01.md>), [Q03](<Domanda per domanda/Q03.md>), [Q05](<Domanda per domanda/Q05.md>), [Q06](<Domanda per domanda/Q06.md>), [Q08](<Domanda per domanda/Q08.md>), [Q10](<Domanda per domanda/Q10.md>), [Q13](<Domanda per domanda/Q13.md>), [Q18](<Domanda per domanda/Q18.md>).
 
 ### Panel 2 — Two levels need two cursors
 
-**Example or flow:** Outer key selects branch → reset inner cursor → visit that branch's children
+**Example or flow:** Walk stock(region,item) for two regions. For north, the inner loop visits that region's items. When the outer cursor moves to south, initialize the item cursor before taking its first step.
 
-**Reasoning:** Leaving the inner cursor at its old position can skip children in the next branch.
+**Reasoning:** Each $ORDER call advances one subscript level. Reset the inner cursor for every branch so that it starts from the beginning regardless of where the previous branch ended.
 
 Related question analyses: [Q02](<Domanda per domanda/Q02.md>), [Q16](<Domanda per domanda/Q16.md>).
 
 ### Panel 3 — Default is not a write
 
-**Example or flow:** $GET(node,30) → value 30 when node has no value
+**Example or flow:** If limit("daily") has no value, $GET(limit("daily"),30) returns 30. Now check $DATA(limit("daily")) again. A completely absent node is still absent, and a node with only children still has no value.
 
-**Reasoning:** The returned default does not create the node. $DATA(node)#2 tests value presence; # is modulo.
+**Reasoning:** Use $GET to supply a read-time default. If you need the value stored, assign it explicitly. To check whether a value is present, $DATA(node)#2 isolates the value flag.
 
 Related question analyses: [Q04](<Domanda per domanda/Q04.md>), [Q09](<Domanda per domanda/Q09.md>), [Q12](<Domanda per domanda/Q12.md>), [Q14](<Domanda per domanda/Q14.md>), [Q17](<Domanda per domanda/Q17.md>).
 
 ### Panel 4 — Read only after the end test
 
-**Example or flow:** Advance key → key empty? stop : read value
+**Example or flow:** An empty array returns the empty string on the first $ORDER call. A nonempty array returns it after the last key. If you read array(key) first, the code attempts to use that marker as a subscript.
 
-**Reasoning:** Using the end sentinel as a data key is a control-flow mistake, even if a configuration permits null subscripts.
+**Reasoning:** Use the same order on every pass: advance, check the marker, then read. An array that permits an empty subscript still needs a traversal that treats the documented return value correctly.
 
 Related question analyses: [Q11](<Domanda per domanda/Q11.md>), [Q15](<Domanda per domanda/Q15.md>).
 

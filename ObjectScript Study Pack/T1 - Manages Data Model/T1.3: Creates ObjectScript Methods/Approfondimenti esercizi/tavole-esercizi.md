@@ -38,33 +38,33 @@ Related question analyses: [Q07](<Domanda per domanda/Q07.md>), [Q09](<Domanda p
 
 ### Panel 1 — Execution context
 
-**Example or flow:** Instance Method → current object; ClassMethod → no implicit instance
+**Example or flow:** An instance method AddOne() can update the counter on the object it was called on. A class method called on the Counter class has no current object, so it can read a class parameter or work with an object passed as an argument.
 
-**Reasoning:** Class methods can call other class methods and read class parameters. They do not implicitly own instance property state.
+**Reasoning:** For every use of an instance property, ask which object owns the value. In an instance method that can be the current object. In a class method the caller or the method body has to supply the reference.
 
 Related question analyses: [Q01](<Domanda per domanda/Q01.md>), [Q02](<Domanda per domanda/Q02.md>), [Q03](<Domanda per domanda/Q03.md>).
 
 ### Panel 2 — Output does not clear
 
-**Example or flow:** Before: result=old; call with .result; no assignment → result remains old
+**Example or flow:** Set result to old and pass .result to a method with an Output argument. If the method returns early without assigning the argument, read result again. It still contains old.
 
-**Reasoning:** The dot passes the caller variable by reference. Output documents intent; the method must explicitly initialize or assign its promised result.
+**Reasoning:** The dot gives the callee access to the caller's variable. Trace every return path before trusting the value. A method that promises an output should assign it on the paths covered by that promise, and the caller should check the returned status.
 
 Related question analyses: [Q04](<Domanda per domanda/Q04.md>), [Q08](<Domanda per domanda/Q08.md>), [Q15](<Domanda per domanda/Q15.md>).
 
 ### Panel 3 — Inherited algorithm
 
-**Example or flow:** Base.Process → Child.FetchData returns raw text → Base.Process uppercases it
+**Example or flow:** A base Process() method calls FetchData() and uppercases the returned text. The child overrides FetchData() to return hello. Call Process() on the child and trace where hello becomes HELLO.
 
-**Reasoning:** The base defines the sequence while the child supplies a step. Trap: the uppercase conversion belongs to Process in this example.
+**Reasoning:** Follow the outer method and the overridable step separately. The child supplies the text, then execution returns to the base method for the transformation.
 
 Related question analyses: [Q07](<Domanda per domanda/Q07.md>), [Q13](<Domanda per domanda/Q13.md>), [Q16](<Domanda per domanda/Q16.md>).
 
 ### Panel 4 — Parent validation and Final
 
-**Example or flow:** Parent error → return it; parent OK → child checks
+**Example or flow:** A child validator calls ##super() first. If the parent reports an invalid ID, the child returns that status. If the parent accepts it, the child checks its own rule, such as a required department.
 
-**Reasoning:** Use ##super() to extend the parent method. Final prevents further overrides at compile time; calling ##super() does not bypass Final.
+**Reasoning:** This pattern keeps the parent's checks in effect while adding new ones. A method marked Final cannot be overridden in a subclass, so check that constraint before planning the extension.
 
 Related question analyses: [Q09](<Domanda per domanda/Q09.md>), [Q12](<Domanda per domanda/Q12.md>), [Q18](<Domanda per domanda/Q18.md>).
 

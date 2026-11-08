@@ -38,33 +38,33 @@ Related question analyses: [Q08](<Domanda per domanda/Q08.md>), [Q09](<Domanda p
 
 ### Panel 1 — Validity before identity
 
-**Example or flow:** $ISOBJECT → valid oref? → then class name or inheritance test
+**Example or flow:** A variable contains a string that looks like an object reference printed in a log. Before calling a method, use $ISOBJECT to check for a usable object reference. Then inspect its class name or test inheritance as needed.
 
-**Reasoning:** Text that looks like a printed reference is not an object. $CLASSNAME is a real function; short names can collide.
+**Reasoning:** Reference validity and object type are separate checks. When identifying an exact class, use its qualified name so that two classes from different packages with the same short name stay distinct.
 
 Related question analyses: [Q02](<Domanda per domanda/Q02.md>), [Q05](<Domanda per domanda/Q05.md>), [Q06](<Domanda per domanda/Q06.md>).
 
 ### Panel 2 — Inheritance contract
 
-**Example or flow:** %IsA: primary-superclass chain; %Extends: includes secondary superclasses
+**Example or flow:** A specialized invoice extends the invoice class as its primary superclass and adds an export adapter as a secondary superclass. An exact class-name comparison identifies the specialized class. %IsA() checks the primary chain, while %Extends() can check a secondary superclass.
 
-**Reasoning:** Do not use exact concrete class-name equality when subclasses should be accepted. Check the intended inheritance relation.
+**Reasoning:** Choose the check according to the contract. Code that accepts any invoice should use a suitable inheritance check. Code that needs the adapter must check for that secondary superclass too.
 
 Related question analyses: [Q01](<Domanda per domanda/Q01.md>), [Q10](<Domanda per domanda/Q10.md>), [Q11](<Domanda per domanda/Q11.md>).
 
 ### Panel 3 — Metadata versus instance data
 
-**Example or flow:** PropertyDefinition → name,type,Required,SQL name; object instance → current value
+**Example or flow:** A class dictionary can tell you that a patient's Email property is required, what type it uses, and how it is projected to SQL. To read the address of patient 42, open that patient record and read its value.
 
-**Reasoning:** The schema does not contain a particular patient's field value. Source definitions and compiled inherited members also serve different questions.
+**Reasoning:** Use dictionary metadata for questions about definitions. When inheritance matters, check whether the dictionary view describes source declarations or includes compiled inherited members.
 
 Related question analyses: [Q08](<Domanda per domanda/Q08.md>), [Q09](<Domanda per domanda/Q09.md>), [Q13](<Domanda per domanda/Q13.md>), [Q14](<Domanda per domanda/Q14.md>).
 
 ### Panel 4 — Dynamic dispatch needs boundaries
 
-**Example or flow:** Configured handler name → allowed class/method → compatible call
+**Example or flow:** A setting chooses a handler named preview or export. Map those options to allowed methods and check what arguments each accepts. If the setting names an unrecognized handler, reject it before attempting the call.
 
-**Reasoning:** The ability to call a runtime string is not permission to call every member. Validate targets, arguments and error contracts.
+**Reasoning:** Dynamic dispatch chooses what runs at runtime. An allowlist limits that choice to intended operations, and the caller still needs to handle the chosen method's status or exception contract.
 
 Related question analyses: [Q03](<Domanda per domanda/Q03.md>), [Q04](<Domanda per domanda/Q04.md>), [Q07](<Domanda per domanda/Q07.md>), [Q12](<Domanda per domanda/Q12.md>), [Q15](<Domanda per domanda/Q15.md>).
 
