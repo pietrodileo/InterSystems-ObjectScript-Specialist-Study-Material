@@ -38,33 +38,33 @@ Related question analyses: [Q05](<Domanda per domanda/Q05.md>), [Q08](<Domanda p
 
 ### Panel 1 — Dependency versus symbol
 
-**Example or flow:** Include file exists → does it define the exact requested macro?
+**Example or flow:** A routine includes a file that defines LogInfo but calls LogError. The compiler can find the file and still report an unresolved macro because the requested definition is absent.
 
-**Reasoning:** LogInfo is not LogError. Check syntax, context and exact definitions before changing unrelated runtime code.
+**Reasoning:** Check the exact macro name and which include makes it available. Fix the compile-time dependency before investigating the runtime path.
 
 Related question analyses: [Q01](<Domanda per domanda/Q01.md>), [Q02](<Domanda per domanda/Q02.md>), [Q06](<Domanda per domanda/Q06.md>), [Q07](<Domanda per domanda/Q07.md>), [Q11](<Domanda per domanda/Q11.md>), [Q12](<Domanda per domanda/Q12.md>), [Q13](<Domanda per domanda/Q13.md>).
 
 ### Panel 2 — Keywords versus variable names
 
-**Example or flow:** RETURN and return: same command; city and City: different variables
+**Example or flow:** Set city to Paris and then read City. With no assignment to City, the read can raise UNDEFINED. Changing the case of the WRITE command does not change that result.
 
-**Reasoning:** Command case-insensitivity does not extend to application identifiers. A case mismatch can produce UNDEFINED.
+**Reasoning:** When a variable is undefined, trace the exact identifier from assignment to use. Command keywords can be written in different cases, but those two variable names are distinct.
 
 Related question analyses: [Q10](<Domanda per domanda/Q10.md>).
 
 ### Panel 3 — Performance metrics need context
 
-**Example or flow:** High hit count ≠ high total time; cache-efficiency ratio ≠ percentage
+**Example or flow:** Line A runs a million times and spends 0.2 seconds in total. Line B runs once and spends two seconds. A ranking by hit count puts A first, while a ranking by elapsed time puts B first.
 
-**Reasoning:** Compare duration, frequency, logical references and physical I/O against a representative workload.
+**Reasoning:** Choose the measure that matches the question. Compare time, frequency, and I/O separately, and check how the tool defines a ratio before reading it as a percentage.
 
 Related question analyses: [Q05](<Domanda per domanda/Q05.md>), [Q08](<Domanda per domanda/Q08.md>), [Q14](<Domanda per domanda/Q14.md>), [Q15](<Domanda per domanda/Q15.md>).
 
 ### Panel 4 — P99 needs corroboration
 
-**Example or flow:** Slow tail → inspect compilation events, waits and I/O during slow samples
+**Example or flow:** After a maintenance window, almost all calls remain fast but some become slower. A cache purge could make early calls recompile. Lock waits or storage delays during that same window could also explain the tail.
 
-**Reasoning:** A purge can explain some slow calls. The percentile alone does not prove that cause.
+**Reasoning:** Match timestamps for slow calls with compilation events, waits, and I/O measurements. A percentile locates the slowdown in the distribution. It does not identify the cause.
 
 Related question analyses: [Q03](<Domanda per domanda/Q03.md>), [Q04](<Domanda per domanda/Q04.md>), [Q09](<Domanda per domanda/Q09.md>).
 

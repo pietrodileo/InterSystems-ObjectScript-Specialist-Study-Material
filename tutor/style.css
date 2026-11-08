@@ -283,6 +283,8 @@ figcaption { font-size: .8rem; color: var(--muted); padding-top: .35rem; }
 .code-example p { margin: .5rem 0 0; }
 .diagram-example + .diagram-example { border-top: 1px solid var(--line); margin-top: 1.25rem; padding-top: 1rem; }
 .diagram-example h3 { margin-top: 0; }
+.diagram-example h4 { font-size: .9rem; }
+.diagram-example h4 + p { margin: .25rem 0 0; max-width: 72ch; }
 .question-meta { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: .4rem; margin-bottom: .75rem; }
 .question-meta h2 { margin: 0; }
 .question-picker { margin-bottom: 1rem; }

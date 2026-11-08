@@ -38,33 +38,33 @@ Related question analyses: [Q09](<Domanda per domanda/Q09.md>), [Q10](<Domanda p
 
 ### Panel 1 — Pieces versus protocol fields
 
-**Example or flow:** PID segment name is piece 1 in the raw string
+**Example or flow:** Split the sample segment `PID||12345` on pipes. Piece 1 is PID, piece 2 is empty, and piece 3 is 12345. In a PID segment, the segment name precedes numbered fields, so the third raw piece represents field 2.
 
-**Reasoning:** Protocol field numbering and raw $PIECE positions can differ. Count empty pieces instead of dropping them.
+**Reasoning:** Map the protocol's numbering to raw string positions before extracting a value. Keep empty pieces in the count so later fields stay aligned.
 
 Related question analyses: [Q01](<Domanda per domanda/Q01.md>), [Q02](<Domanda per domanda/Q02.md>), [Q03](<Domanda per domanda/Q03.md>), [Q04](<Domanda per domanda/Q04.md>), [Q05](<Domanda per domanda/Q05.md>), [Q15](<Domanda per domanda/Q15.md>), [Q17](<Domanda per domanda/Q17.md>).
 
 ### Panel 2 — Character map with missing targets
 
-**Example or flow:** $TRANSLATE("Hello","aeiou","*") → Hll
+**Example or flow:** In $TRANSLATE("Hello","aeiou","*"), the first source character a maps to the first target character *. The other source vowels have no corresponding target, so the e and o in Hello are removed and the output is Hll.
 
-**Reasoning:** Only a maps to the one target character. Other listed vowels have no counterpart and are deleted, not replaced by stars.
+**Reasoning:** Line up source and target characters by position. To replace every listed vowel with a star, supply a star for each one.
 
 Related question analyses: [Q07](<Domanda per domanda/Q07.md>), [Q08](<Domanda per domanda/Q08.md>), [Q18](<Domanda per domanda/Q18.md>).
 
 ### Panel 3 — Trim versus erase whitespace
 
-**Example or flow:** "  Hello World  " → edge trim: "Hello World"; remove all whitespace: "HelloWorld"
+**Example or flow:** Start with Hello World surrounded by two spaces at each end. Trimming the ends gives Hello World with its word separator intact. Removing all spaces gives HelloWorld.
 
-**Reasoning:** Internal whitespace may carry meaning. A stronger cleanup can merge values that used to be distinct.
+**Reasoning:** Choose a cleanup rule based on which spaces carry meaning. Removing internal spaces can make values that were distinct become identical.
 
 Related question analyses: [Q09](<Domanda per domanda/Q09.md>), [Q10](<Domanda per domanda/Q10.md>), [Q11](<Domanda per domanda/Q11.md>), [Q13](<Domanda per domanda/Q13.md>).
 
 ### Panel 4 — Encoding depends on output context
 
-**Example or flow:** HTML text escaping → displays markup as text in the intended context
+**Example or flow:** A comment contains the literal text <b>hello</b>. In an HTML text node, escaping the angle brackets makes the browser display the tags as text. Putting that value in a script or URL means a different parser will read it.
 
-**Reasoning:** HTML encoding is not universal protection for JavaScript, URLs, CSS or SQL. Choose the encoding for the actual destination.
+**Reasoning:** Identify where the string goes before choosing how to encode it. HTML text escaping solves the HTML text case. Use the appropriate API or binding for other contexts.
 
 Related question analyses: [Q06](<Domanda per domanda/Q06.md>), [Q12](<Domanda per domanda/Q12.md>), [Q14](<Domanda per domanda/Q14.md>), [Q16](<Domanda per domanda/Q16.md>).
 

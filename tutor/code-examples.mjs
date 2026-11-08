@@ -489,6 +489,26 @@ write payload.%ClassName(), !`, 'The first run prints Expected an object. Replac
 };
 
 export const diagramExamples = {
+  'T3.1/A browser session can span multiple IRIS processes': [
+    ['Try the same key from two IRIS processes', `// Terminal A:
+set ^||TutorCart("session42") = "book"
+write $JOB, " ", $get(^||TutorCart("session42"), "missing"), !
+
+// Terminal B, a separate IRIS process in the same namespace:
+write $JOB, " ", $get(^||TutorCart("session42"), "missing"), !
+
+// Terminal A, after the check:
+kill ^||TutorCart("session42")`, 'Use two fresh Terminal sessions in a scratch namespace. The process IDs printed by $JOB differ. A prints book and B prints missing, even though both use session42.'],
+  ],
+  'T3.1/A reserved queue ID can have no message': [
+    ['Reserve a key without writing a message', `// Use a disposable local array to model a producer stopping early.
+kill queueDemo
+set reserved = $increment(queueDemo("last"))
+set stored = $increment(queueDemo("last"))
+set queueDemo("entry",stored) = "ready"
+write reserved, " ", $data(queueDemo("entry",reserved)), !
+write stored, " ", $get(queueDemo("entry",stored)), !`, 'The first line prints 1 0 because the first reservation has no payload. The second prints 2 ready. The local array makes the two steps visible without changing a shared queue.'],
+  ],
   'T4.1/Zero is a valid key': [
     ['Walk an array whose first key is zero', `kill item
 set item(0) = "start", item(4) = "finish"

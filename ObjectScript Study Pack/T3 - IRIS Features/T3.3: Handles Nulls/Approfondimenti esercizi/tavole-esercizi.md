@@ -38,33 +38,33 @@ Related question analyses: [Q05](<Domanda per domanda/Q05.md>), [Q08](<Domanda p
 
 ### Panel 1 — Keep the representation layer explicit
 
-**Example or flow:** ObjectScript empty string → SQL NULL; ObjectScript $CHAR(0) → SQL empty string ''
+**Example or flow:** Compare two ObjectScript values passed to SQL: an empty string and $CHAR(0). In the conversion shown here, SQL receives NULL for the first and its zero-length string for the second. In ObjectScript, the two inputs have lengths zero and one.
 
-**Reasoning:** NUL is one character; an ObjectScript empty string has length zero. Invisible does not mean absent.
+**Reasoning:** Name the side of the interface before talking about empty values. Looking blank on the screen gives you no way to tell a missing SQL value from an actual string.
 
 Related question analyses: [Q01](<Domanda per domanda/Q01.md>), [Q02](<Domanda per domanda/Q02.md>), [Q03](<Domanda per domanda/Q03.md>), [Q04](<Domanda per domanda/Q04.md>), [Q05](<Domanda per domanda/Q05.md>), [Q08](<Domanda per domanda/Q08.md>), [Q09](<Domanda per domanda/Q09.md>), [Q10](<Domanda per domanda/Q10.md>), [Q12](<Domanda per domanda/Q12.md>), [Q14](<Domanda per domanda/Q14.md>).
 
 ### Panel 2 — Average over which population?
 
-**Example or flow:** 10,20,30,NULL,NULL → SUM=60; COUNT(Score)=3; AVG=20; COUNT(*)=5
+**Example or flow:** A table has five scores: 10, 20, 30, NULL, and NULL. The sum is 60, COUNT(Score) is 3, and AVG(Score) is 20. COUNT(*) still counts all five rows.
 
-**Reasoning:** Replacing NULLs with zeros changes the average to 60/5=12. This changes the meaning, not just the display.
+**Reasoning:** If you replace missing scores with zero, the average becomes 12. Use that calculation only when a missing score counts as zero under the reporting rules.
 
 Related question analyses: [Q07](<Domanda per domanda/Q07.md>).
 
 ### Panel 3 — COALESCE keeps SQL empty strings
 
-**Example or flow:** Phone='' is not NULL → selected before Email
+**Example or flow:** Suppose Phone contains SQL's empty string and Email contains an address. COALESCE(Phone, Email) stops at Phone because it has a value. If Phone is NULL, the same expression returns the email address.
 
-**Reasoning:** If the domain treats blank or whitespace as absent, normalize explicitly before choosing a fallback.
+**Reasoning:** Decide whether a blank phone should be treated as missing. If so, normalize blanks before COALESCE, including whitespace if your rules consider it missing.
 
 Related question analyses: [Q06](<Domanda per domanda/Q06.md>), [Q09](<Domanda per domanda/Q09.md>), [Q11](<Domanda per domanda/Q11.md>).
 
 ### Panel 4 — Fallback text can be real data
 
-**Example or flow:** A='none', B=NULL → COALESCE(A,B,'none')='none'
+**Example or flow:** One row has A equal to the literal text none and B equal to NULL. Another row has NULL in both columns. COALESCE(A,B,'none') displays none for both rows, even though the first row supplied that value.
 
-**Reasoning:** Matching the fallback text does not prove both inputs were NULL. Test A IS NULL AND B IS NULL when that is the question.
+**Reasoning:** Check A IS NULL AND B IS NULL if you need to know whether both values were missing. Comparing the formatted result with the fallback text cannot distinguish the two rows.
 
 Related question analyses: [Q15](<Domanda per domanda/Q15.md>).
 

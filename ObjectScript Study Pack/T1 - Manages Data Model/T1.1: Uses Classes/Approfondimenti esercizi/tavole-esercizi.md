@@ -38,33 +38,33 @@ Related question analyses: [Q03](<Domanda per domanda/Q03.md>), [Q06](<Domanda p
 
 ### Panel 1 — Inherited behavior
 
-**Example or flow:** Truck + Vehicle → PickupTruck
+**Example or flow:** Suppose Vehicle defines a Color property and a Describe() method. PickupTruck inherits both. If PickupTruck defines its own Describe(), calling it on a PickupTruck runs the local implementation, which can still read the inherited Color.
 
-**Reasoning:** The subclass inherits properties and behavior. A local override supplies the chosen implementation. Trap: inherited state is not limited to locally declared properties.
+**Reasoning:** Separate the members available on the object from the implementation that runs. An override changes one member and leaves the rest of the inherited contract in place.
 
 Related question analyses: [Q04](<Domanda per domanda/Q04.md>), [Q15](<Domanda per domanda/Q15.md>).
 
 ### Panel 2 — Creation and persistence
 
-**Example or flow:** %New → %OnNew → in-memory oref; successful %Save → %Status
+**Example or flow:** Call %New() on a persistent class, then set a property on the returned object reference. The object is usable in memory at this point. Call %Save() and check its %Status before treating the object as saved.
 
-**Reasoning:** Construction initializes the object. It does not alone create a saved row. An outer transaction still needs its own commit.
+**Reasoning:** Read the problem in three stages: construction, successful save, and commit. If the caller has an outer transaction, the save can succeed and assign an ID while the transaction can still roll back.
 
 Related question analyses: [Q03](<Domanda per domanda/Q03.md>), [Q06](<Domanda per domanda/Q06.md>), [Q09](<Domanda per domanda/Q09.md>), [Q12](<Domanda per domanda/Q12.md>), [Q14](<Domanda per domanda/Q14.md>).
 
 ### Panel 3 — Deletion semantics
 
-**Example or flow:** %DeleteExtent: deletes instances with the callbacks defined by its contract
+**Example or flow:** Imagine clearing a disposable table between test runs. %DeleteExtent() targets the stored instances, so the class and its SQL table definition are still available for the next run.
 
-**Reasoning:** Choose according to required application effects. Trap: deleting rows is different from dropping the table definition. Do not invent callback ordering.
+**Reasoning:** Before choosing a deletion API, check which callbacks and application side effects it promises. If deleting a customer must also send an audit event, verify that the path you chose invokes the code that sends it.
 
 Related question analyses: [Q07](<Domanda per domanda/Q07.md>).
 
 ### Panel 4 — Utilities and documentation
 
-**Example or flow:** ClassMethod: no implicit instance; ///: member description
+**Example or flow:** A tax calculator that takes an amount and a rate can expose Total() as a ClassMethod. The caller can use it directly on the class without creating an object. A /// comment above the method can explain whether the rate is a fraction and how the result is rounded.
 
-**Reasoning:** A stateless helper needs no persistence. Documentation belongs with the declaration and explains inputs, outputs and constraints.
+**Reasoning:** Ask whether the operation needs state from an individual object. If all inputs are arguments or class parameters, a class method gives the caller a direct entry point.
 
 Related question analyses: [Q08](<Domanda per domanda/Q08.md>), [Q17](<Domanda per domanda/Q17.md>).
 

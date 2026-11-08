@@ -38,33 +38,33 @@ Related question analyses: [Q12](<Domanda per domanda/Q12.md>), [Q13](<Domanda p
 
 ### Panel 1 — Read is a chunk contract
 
-**Example or flow:** Rewind → read while not AtEnd → consume blocks
+**Example or flow:** Write ABCDEF into a temporary character stream and rewind it. With a read size of two, successive reads return AB, CD, and EF. The position advances after each read.
 
-**Reasoning:** A tiny Hello World example may fit one Read. Do not assume one Read returns a whole large document.
+**Reasoning:** Start at the position you intend to read from, process each block, and check the read status and end of stream. A single read only requests a block of the given size.
 
 Related question analyses: [Q01](<Domanda per domanda/Q01.md>), [Q02](<Domanda per domanda/Q02.md>), [Q03](<Domanda per domanda/Q03.md>), [Q04](<Domanda per domanda/Q04.md>), [Q05](<Domanda per domanda/Q05.md>), [Q06](<Domanda per domanda/Q06.md>), [Q07](<Domanda per domanda/Q07.md>).
 
 ### Panel 2 — HTTP has multiple outcomes
 
-**Example or flow:** Request %Status → response HTTP StatusCode → parse body stream
+**Example or flow:** A request to /users/42 returns a successful transport status and an HTTP 404. IRIS received a response, but the server reports that the user was not found. Even a 200 response can carry malformed JSON.
 
-**Reasoning:** Transport success does not make 404 a successful user lookup. Content-Type does not repair malformed JSON.
+**Reasoning:** Check the request status before using the response, then branch on the HTTP status. If the application expects JSON on the success path, parse and validate the response body separately.
 
 Related question analyses: [Q08](<Domanda per domanda/Q08.md>), [Q09](<Domanda per domanda/Q09.md>), [Q10](<Domanda per domanda/Q10.md>), [Q11](<Domanda per domanda/Q11.md>).
 
 ### Panel 3 — Email has multiple stages
 
-**Example or flow:** MailMessage content → SMTP.Send acceptance → later delivery → reading
+**Example or flow:** Build a message and submit it to an SMTP relay. The relay can accept the submission and later fail to deliver it to the recipient's server. A successful delivery also gives you no evidence that a person read it.
 
-**Reasoning:** A send result does not prove final delivery or that a person read the message. These are separate events.
+**Reasoning:** Report what the application actually observed. Use the SMTP result for submission and separate evidence, such as a delivery or bounce event, for later outcomes.
 
 Related question analyses: [Q12](<Domanda per domanda/Q12.md>), [Q13](<Domanda per domanda/Q13.md>), [Q14](<Domanda per domanda/Q14.md>).
 
 ### Panel 4 — TLS is configuration
 
-**Example or flow:** Https selects TLS; SSLConfiguration supplies the client configuration
+**Example or flow:** An HTTPS request points to a test host and enables TLS. The named SSLConfiguration supplies client settings such as trust for the certificates presented by the server. An untrusted certificate can stop the request before any HTTP response arrives.
 
-**Reasoning:** Hostname and an HTTPS flag do not replace certificate trust, protocol settings and the required client configuration.
+**Reasoning:** Check the client configuration and trust settings when diagnosing a handshake failure. HTTP response handling begins only after the connection is established and a response is available.
 
 Related question analyses: [Q15](<Domanda per domanda/Q15.md>).
 

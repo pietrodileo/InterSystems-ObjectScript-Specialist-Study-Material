@@ -38,33 +38,33 @@ Related question analyses: [Q07](<Domanda per domanda/Q07.md>), [Q10](<Domanda p
 
 ### Panel 1 — Coercion is not validation
 
-**Example or flow:** 10abc20 + 5 → 10 + 5 → 15
+**Example or flow:** Evaluate "10abc20" + 5. ObjectScript interprets the leading numeric part as 10 and the result is 15. If the value comes from a quantity field, that result can look reasonable even though the input contains letters.
 
-**Reasoning:** Arithmetic uses the numeric prefix rather than searching all digits. A plausible answer does not prove valid numeric input.
+**Reasoning:** Check the entire input against the format your application accepts before doing arithmetic. A result from implicit conversion only tells you how ObjectScript interpreted the value.
 
 Related question analyses: [Q01](<Domanda per domanda/Q01.md>), [Q04](<Domanda per domanda/Q04.md>), [Q11](<Domanda per domanda/Q11.md>), [Q15](<Domanda per domanda/Q15.md>).
 
 ### Panel 2 — Three SQL outcomes
 
-**Example or flow:** SQLCODE 0: successful operation; 100: no row; negative: error
+**Example or flow:** A SELECT INTO fetches a customer's name into a local variable. For an existing customer, SQLCODE is 0 and the result is available. For a missing customer it is 100. A negative value indicates an error such as an invalid table reference.
 
-**Reasoning:** After SELECT finds no row, do not present an old host-variable value as a fresh result.
+**Reasoning:** Branch on SQLCODE before reading the output variable. On the no-row path, any value left over from a previous fetch would belong to that earlier query.
 
 Related question analyses: [Q07](<Domanda per domanda/Q07.md>), [Q10](<Domanda per domanda/Q10.md>), [Q14](<Domanda per domanda/Q14.md>), [Q16](<Domanda per domanda/Q16.md>).
 
 ### Panel 3 — Values versus identifiers
 
-**Example or flow:** Status=? → bound value; variable table name → allowlisted identifier
+**Example or flow:** A status supplied by a form goes in a parameter for WHERE Status = ?. A report selector that chooses an SQL table is different: the table name has to be part of the statement before the query can run.
 
-**Reasoning:** A parameter protects a value. It does not validate other SQL text constructed from untrusted input.
+**Reasoning:** Bind data values and map report choices to a fixed set of known table names. The parameter handles only its own value and does not make other assembled parts of the SQL safe.
 
 Related question analyses: [Q13](<Domanda per domanda/Q13.md>), [Q17](<Domanda per domanda/Q17.md>).
 
 ### Panel 4 — Macro dependencies
 
-**Example or flow:** Include definitions → expansion → compilation → execution
+**Example or flow:** A routine uses a macro named MaxRetries whose include file defines it as 3. Change the definition to 5 and run the routine that was compiled earlier. It can still use 3 because the old expansion is in the compiled code.
 
-**Reasoning:** Changing an include file does not automatically replace values already compiled into dependent code.
+**Reasoning:** Trace the dependency through compilation. Recompile the dependent routine or class to put the new expansion into its executable code, then check the result.
 
 Related question analyses: [Q03](<Domanda per domanda/Q03.md>), [Q06](<Domanda per domanda/Q06.md>), [Q12](<Domanda per domanda/Q12.md>).
 

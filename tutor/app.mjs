@@ -310,7 +310,7 @@ function questionExplanation(item, question) {
     <h3>Why this answer is correct</h3>
     <p class="quiz-text">${quizText(question.explanation.replace(/\s*\(Reference:[^)]+\)/g, ''))}</p>
     ${panels.length ? `<details class="reading inset"><summary>Related examples and mistakes</summary>
-      <div class="disclosure-body">${panels.map(panel => `<h4>${escape(panel.title)}</h4>${paragraph(panel.reason)}`).join('')}</div>
+      <div class="disclosure-body">${panels.map(panel => `<h4>${escape(panel.title)}</h4><p>${markdownText(panel.reason)}</p>`).join('')}</div>
     </details>` : ''}
     <h3>Chapter note</h3>
     <p>${markdownText(guides[item.topic][1])}</p>`;
@@ -629,8 +629,10 @@ function renderCases(panel) {
       <div class="disclosure-body">
         ${additionalPanels.map((item, i) => `<section class="diagram-example">
           <h3>${escape(item.title)}</h3>
-          ${paragraph(item.example)}
-          ${paragraph(item.reason)}
+          <h4>Walkthrough</h4>
+          <p>${markdownText(item.example)}</p>
+          <h4>How to reason it through</h4>
+          <p>${markdownText(item.reason)}</p>
           ${renderCodeExamples(extraExamples[i])}
         </section>`).join('')}
       </div>

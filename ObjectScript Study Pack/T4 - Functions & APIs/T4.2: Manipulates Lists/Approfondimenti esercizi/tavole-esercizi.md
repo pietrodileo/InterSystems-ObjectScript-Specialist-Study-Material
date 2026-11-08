@@ -38,33 +38,33 @@ Related question analyses: [Q02](<Domanda per domanda/Q02.md>), [Q04](<Domanda p
 
 ### Panel 1 — Structural validity first
 
-**Example or flow:** $LISTVALID(input) → valid encoding? → then validate record fields
+**Example or flow:** A valid encoded list contains the fields "Ada" and "unknown". If a record requires a name, a numeric age, and a city, it still fails the application checks even though $LISTVALID accepts the encoding.
 
-**Reasoning:** A valid list can still contain the wrong number of elements or invalid domain values.
+**Reasoning:** Check the list format first. Once you know it can be decoded, check its element count and validate each field against the record's rules.
 
 Related question analyses: [Q12](<Domanda per domanda/Q12.md>), [Q13](<Domanda per domanda/Q13.md>), [Q14](<Domanda per domanda/Q14.md>).
 
 ### Panel 2 — Opaque cursor versus position
 
-**Example or flow:** $LISTGET: 1-based position; $LISTNEXT: pointer starts at 0 and is updated internally
+**Example or flow:** $LISTGET(list,2) addresses the second element directly. For a sequential walk, initialize the $LISTNEXT cursor to 0 and call the function repeatedly with that same cursor variable. The function updates it as the walk progresses.
 
-**Reasoning:** Do not increment the opaque pointer as if it were an element index. Keep a separate counter if needed.
+**Reasoning:** Treat the cursor as an internal position. If you also want to display element numbers, keep a separate counter. Incrementing the cursor yourself can move it to an invalid position.
 
 Related question analyses: [Q01](<Domanda per domanda/Q01.md>), [Q02](<Domanda per domanda/Q02.md>), [Q03](<Domanda per domanda/Q03.md>), [Q06](<Domanda per domanda/Q06.md>), [Q08](<Domanda per domanda/Q08.md>), [Q09](<Domanda per domanda/Q09.md>), [Q11](<Domanda per domanda/Q11.md>).
 
 ### Panel 3 — List versus delimited text
 
-**Example or flow:** Elements "A|B" and "C" → text "A|B|C" loses original boundaries
+**Example or flow:** Take the two values A|B and C. Joining them with a pipe produces A|B|C. Splitting that text on every pipe yields three values, so the original two-element list cannot be recovered from the text alone.
 
-**Reasoning:** A delimiter conversion is not always reversible. CSV quoting and escaping require an appropriate parser.
+**Reasoning:** Before converting an encoded list, check whether values can contain the delimiter. If they can, use a format that preserves boundaries or a parser that follows the format's quoting rules.
 
 Related question analyses: [Q04](<Domanda per domanda/Q04.md>), [Q05](<Domanda per domanda/Q05.md>), [Q07](<Domanda per domanda/Q07.md>).
 
 ### Panel 4 — Exact membership
 
-**Example or flow:** Roles [Admin,Editor,Viewer] → $LISTFIND(Viewer)=3; absent→0
+**Example or flow:** Look for Viewer in an encoded list containing Admin, Editor, and Viewer. $LISTFIND returns 3. Replace Viewer with SuperViewer and the same lookup returns 0.
 
-**Reasoning:** A full element match differs from substring contains. SuperViewer is not the element Viewer.
+**Reasoning:** For role membership, look for the complete value as a list element. A substring search would also accept SuperViewer when you asked about Viewer.
 
 Related question analyses: [Q10](<Domanda per domanda/Q10.md>), [Q15](<Domanda per domanda/Q15.md>).
 

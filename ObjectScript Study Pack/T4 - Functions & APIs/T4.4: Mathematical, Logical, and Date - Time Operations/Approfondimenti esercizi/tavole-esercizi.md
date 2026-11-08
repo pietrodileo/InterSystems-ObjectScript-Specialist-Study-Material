@@ -38,33 +38,33 @@ Related question analyses: [Q07](<Domanda per domanda/Q07.md>), [Q08](<Domanda p
 
 ### Panel 1 — Parentheses express intent
 
-**Example or flow:** 2+3*4 → 5*4 → 20; 2+(3*4) → 14
+**Example or flow:** Trace 2+3*4 in ObjectScript: add 2 and 3, then multiply by 4 to get 20. In 2+(3*4), the parentheses group the multiplication first, giving 14.
 
-**Reasoning:** Trace the written arithmetic expression left to right outside parentheses. Do not import another language's precedence.
+**Reasoning:** Work from left to right within each group. When the formula depends on a particular order, use parentheses to write that intent explicitly.
 
 Related question analyses: [Q01](<Domanda per domanda/Q01.md>), [Q02](<Domanda per domanda/Q02.md>), [Q03](<Domanda per domanda/Q03.md>), [Q11](<Domanda per domanda/Q11.md>), [Q13](<Domanda per domanda/Q13.md>).
 
 ### Panel 2 — Quotient versus remainder
 
-**Example or flow:** 47 divided by 10: four full groups, remainder seven; offset 47 → page 5 for 1-based pages of 10
+**Example or flow:** With ten rows per page and a zero-based offset of 47, there are four full groups of ten before the row and seven more rows into its group. That places offset 47 on page 5 if page numbers start at 1.
 
-**Reasoning:** Clarify offset base and page base. Integer quotient and human page number are different values.
+**Reasoning:** Use the integer quotient for the number of full groups and the remainder for the position within a group. Check both numbering conventions before converting an offset into a page number.
 
 Related question analyses: [Q04](<Domanda per domanda/Q04.md>), [Q05](<Domanda per domanda/Q05.md>), [Q06](<Domanda per domanda/Q06.md>).
 
 ### Panel 3 — Date is not full timestamp
 
-**Example or flow:** $HOROLOG: day,seconds; extracting day+7 → a day number only
+**Example or flow:** Suppose $HOROLOG contains 67000,45000. The first part is the day count and the second is the time of day in seconds. Adding seven to the extracted day gives 67007. It does not carry the 45000 seconds along.
 
-**Reasoning:** The numeric prefix trick does not preserve time of day. Make the conversion explicit.
+**Reasoning:** Decide whether the result is a date or a full timestamp. If the time matters, keep it separately and reconstruct or format the result with both components.
 
 Related question analyses: [Q07](<Domanda per domanda/Q07.md>), [Q09](<Domanda per domanda/Q09.md>), [Q10](<Domanda per domanda/Q10.md>), [Q12](<Domanda per domanda/Q12.md>), [Q14](<Domanda per domanda/Q14.md>).
 
 ### Panel 4 — Midnight is valid zero
 
-**Example or flow:** 0 seconds since midnight → 00:00:00
+**Example or flow:** One record specifies midnight and another leaves the time missing. Midnight is represented as zero seconds since the start of the day. A numeric truth test would skip that valid value.
 
-**Reasoning:** A numerically false time value can be perfectly valid. A truth test does not establish whether the field was provided.
+**Reasoning:** Test presence using the field's actual missing-value rule, then format the time. Treat zero as a legitimate time when the field is present.
 
 Related question analyses: [Q08](<Domanda per domanda/Q08.md>), [Q15](<Domanda per domanda/Q15.md>).
 
