@@ -2,7 +2,7 @@
 
 ## Certification tutor
 
-Open **Study plan** and choose **Start study plan**. The English tutor guides you through all 22 chapters. Read the chapter overview, diagrams, and concept explanations, then answer the quiz and work through the three cases. Every concept section links to relevant InterSystems documentation. **Resume study plan** takes you to the first unfinished step. Use **Hide sidebar** or **Show sidebar** to adjust the layout.
+Open **Study plan** and choose **Start study plan**. The English tutor guides you through all 22 chapters. Read the chapter overview, diagrams, and concept explanations, then answer the quiz and work through the three cases. Every concept section links to relevant InterSystems documentation. **Resume study plan** takes you to the first unfinished step. Use **Course index** to find a chapter or switch to Answer review or the final assessment.
 
 **Answer review** shows your choices and expected answers, tracks retries, and puts chapters with the most current errors first. The **Final assessment** draws one question per chapter and shows answers and results by area after you finish. Completed assessments remain available in **Answer review** when you start a new one.
 

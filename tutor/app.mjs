@@ -6,7 +6,8 @@ const nav = document.querySelector('#chapters');
 const courseMenu = document.querySelector('#course-menu');
 const sidebar = document.querySelector('#course');
 const sidebarToggle = document.querySelector('#sidebar-toggle');
-const narrow = window.matchMedia('(max-width: 720px)');
+const drawer = document.querySelector('#course-drawer');
+const compact = window.matchMedia('(max-width: 1040px)');
 const storageKey = 'objectscript-tutor-v1';
 const phases = { theory: 'Study', quiz: 'Practice', cases: 'Apply' };
 const escape = value => String(value).replace(/[&<>"']/g, char => ({
@@ -49,17 +50,44 @@ function save() {
   }
 }
 
-function showSidebar(open) {
-  sidebar.hidden = !open;
+function updateSidebarToggle() {
+  const open = compact.matches ? drawer.open : !sidebar.hidden;
   sidebarToggle.setAttribute('aria-expanded', String(open));
-  sidebarToggle.textContent = open ? 'Hide sidebar' : 'Show sidebar';
+  sidebarToggle.textContent = compact.matches ? 'Course index' : open ? 'Hide course index' : 'Show course index';
 }
 
-showSidebar(state.sidebarOpen ?? !narrow.matches);
+function placeSidebar() {
+  if (compact.matches) {
+    drawer.append(sidebar);
+    sidebar.hidden = false;
+    sidebarToggle.setAttribute('aria-controls', drawer.id);
+    sidebarToggle.setAttribute('aria-haspopup', 'dialog');
+  } else {
+    drawer.close();
+    lesson.before(sidebar);
+    sidebar.hidden = !(state.sidebarOpen ?? true);
+    sidebarToggle.setAttribute('aria-controls', sidebar.id);
+    sidebarToggle.removeAttribute('aria-haspopup');
+  }
+  updateSidebarToggle();
+}
+
+placeSidebar();
+compact.addEventListener('change', placeSidebar);
 sidebarToggle.addEventListener('click', () => {
-  state.sidebarOpen = sidebar.hidden;
-  showSidebar(state.sidebarOpen);
-  save();
+  if (compact.matches) {
+    drawer.showModal();
+  } else {
+    state.sidebarOpen = sidebar.hidden;
+    sidebar.hidden = !state.sidebarOpen;
+    save();
+  }
+  updateSidebarToggle();
+});
+document.querySelector('#drawer-close').addEventListener('click', () => drawer.close());
+drawer.addEventListener('close', updateSidebarToggle);
+drawer.addEventListener('click', event => {
+  if (event.target === drawer) drawer.close();
 });
 
 function renderNavigation() {
@@ -138,7 +166,7 @@ function render() {
     <header class="lesson-header">
       <h1 tabindex="-1">${escape(chapter.title.split(': ')[1])}</h1>
       <p class="chapter-location">${escape(topics[chapter.topic.split('.')[0]])} / ${chapter.topic} / Chapter ${number} of ${chapters.length}</p>
-      <p class="lead">${markdownText(guides[chapter.topic][0])}</p>
+      ${phase === 'theory' ? `<p class="lead">${markdownText(guides[chapter.topic][0])}</p>` : ''}
     </header>
     <nav class="phases" aria-label="Chapter steps">
       ${Object.entries(phases).map(([id, label], i) => `
@@ -176,26 +204,31 @@ function renderCourse() {
   lesson.innerHTML = `
     <header class="lesson-header">
       <h1 tabindex="-1">InterSystems ObjectScript Specialist</h1>
-      <p class="lead">Study the five exam areas chapter by chapter, then test what you remember with a final assessment.</p>
+      <p class="lead">${chapters.length} chapters on classes, SQL, ObjectScript APIs, and more, followed by a practice assessment.</p>
     </header>
-    <section class="panel">
-      <h2 tabindex="-1">How to use the tutor</h2>
-      <ol class="roadmap">
-        <li><strong>Study.</strong> Read the chapter and use the diagrams to explain the concepts in your own words.</li>
-        <li><strong>Practice.</strong> Answer the quiz questions and read the explanation after each one.</li>
-        <li><strong>Apply.</strong> Try each case before opening the solution. Check off each case you finish.</li>
-        <li><strong>Assess.</strong> Take the final assessment, then use Answer review to pick what to study again.</li>
-      </ol>
+    <section class="study-start">
+      <div>
+        <h2>${next ? escape(next.title) : 'Ready for the final assessment'}</h2>
+        ${next ? `<p class="muted">Chapter ${chapters.indexOf(next) + 1} of ${chapters.length} · ${phases[step(next)]}</p>` : ''}
+      </div>
       <div class="actions">
         <button type="button" class="primary" data-continue>${next ? (started ? 'Resume study plan' : 'Start study plan') : 'Go to final assessment'}</button>
-        ${next ? `<span class="muted">Next step · ${next.topic} · ${phases[step(next)]}</span>` : ''}
-        <button type="button" data-course="review">Open answer review</button>
       </div>
-      <h3>The five exam areas</h3>
-      <ul class="roadmap">${Object.entries(topics).map(([code, name]) => {
+    </section>
+    <section class="panel study-outline">
+      <h2>The five exam areas</h2>
+      <ul class="exam-areas">${Object.entries(topics).map(([code, name]) => {
         const group = chapters.filter(item => item.topic.startsWith(`${code}.`));
-        return `<li><strong>${code} · ${name}</strong> <span class="muted">${group.filter(item => !step(item)).length}/${group.length} chapters complete</span></li>`;
+        return `<li><span class="topic-code">${code}</span> <strong>${name}</strong> <span class="muted">${group.filter(item => !step(item)).length}/${group.length} chapters complete</span></li>`;
       }).join('')}</ul>
+      <h2>How each chapter works</h2>
+      <ol class="roadmap">
+        <li><strong>Study.</strong> Use the diagrams to explain each concept in your own words.</li>
+        <li><strong>Practice.</strong> Answer the quiz questions and read the explanations.</li>
+        <li><strong>Apply.</strong> Try the cases before opening their solutions. Check off each case you finish.</li>
+      </ol>
+      <p>After the final assessment, use Answer review to decide what to revisit.</p>
+      <div class="actions"><button type="button" data-course="review">Open answer review</button></div>
     </section>`;
 }
 
@@ -382,7 +415,7 @@ function renderQuiz(panel, final = null) {
       <h2 tabindex="-1">Question ${final ? index + 1 : id}</h2>
       ${!final && practiceMode !== 'review' && missed(chapter) ? '<button type="button" data-phase="quiz" data-mode="review">Retry missed questions</button>' : ''}
     </div>
-    <div class="prompt quiz-text">${quizText(question.question)}</div>
+    <div class="question-prompt quiz-text">${quizText(question.question)}</div>
     <form autocomplete="off">
       <fieldset ${graded ? 'disabled' : ''}>
         <legend>${type === 'multiple' ? 'Select all correct answers.' : 'Select one answer.'}</legend>
@@ -567,14 +600,14 @@ nav.addEventListener('toggle', event => {
 nav.addEventListener('click', event => {
   const button = event.target.closest('[data-topic]');
   if (!button) return;
-  if (narrow.matches) showSidebar(false);
+  if (drawer.open) drawer.close();
   openChapter(chapters.find(item => item.topic === button.dataset.topic));
 });
 
 courseMenu.addEventListener('click', event => {
   const button = event.target.closest('[data-course]');
   if (!button) return;
-  if (narrow.matches) showSidebar(false);
+  if (drawer.open) drawer.close();
   openCourse(button.dataset.course);
 });
 

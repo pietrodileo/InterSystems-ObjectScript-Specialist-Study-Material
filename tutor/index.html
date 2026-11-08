@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f3f5fb">
+  <meta name="theme-color" content="#21328c">
   <title>ObjectScript Certification Tutor</title>
   <link rel="stylesheet" href="./style.css">
   <script type="module" src="./app.mjs"></script>
@@ -11,9 +11,9 @@
 <body>
   <a class="skip" href="#lesson">Skip to content</a>
   <header class="topbar">
-    <div class="brand" translate="no"><span class="monogram" aria-hidden="true">OS</span> ObjectScript <span class="brand-detail">Certification tutor</span></div>
+    <div class="brand"><span translate="no">ObjectScript</span> <span class="brand-detail">Certification tutor</span></div>
     <div class="header-links">
-      <button type="button" id="sidebar-toggle" aria-controls="course" aria-expanded="false">Show sidebar</button>
+      <button type="button" id="sidebar-toggle" aria-controls="course" aria-expanded="false">Course index</button>
       <a href="https://www.intersystems.com/certifications/intersystems-objectscript-specialist/">Official exam outline ↗</a>
     </div>
   </header>
@@ -23,14 +23,20 @@
       <p role="status">Loading the Study Pack… If you opened this file directly, follow the launch instructions in the README.</p>
     </main>
     <aside class="sidebar" id="course" aria-label="Study plan" hidden>
-      <div class="progress-card">
+      <nav id="course-menu" class="course-menu" aria-label="Course pages"></nav>
+      <div class="course-progress">
         <label for="progress">Your progress</label>
         <progress id="progress" max="358" value="0"></progress>
         <p id="progress-label" class="muted"></p>
-        <nav id="course-menu" class="course-menu" aria-label="Course pages"></nav>
       </div>
       <nav id="chapters" aria-label="Chapters"></nav>
     </aside>
   </div>
+  <dialog id="course-drawer" class="course-drawer" aria-labelledby="course-drawer-title">
+    <header class="drawer-header">
+      <h2 id="course-drawer-title">Course index</h2>
+      <button type="button" id="drawer-close" autofocus>Close</button>
+    </header>
+  </dialog>
 </body>
 </html>
