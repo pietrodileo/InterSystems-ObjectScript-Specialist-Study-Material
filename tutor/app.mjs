@@ -1,5 +1,6 @@
 import { assessmentAnswered, assessmentComplete, chapterStep, correctSelection, finalQuestionRefs, loadCourse, packPath, passedAnswer, practiceQueue, quizBlocks, recordPractice, reviewItems, topics } from './content.mjs';
 import { guides, variations } from './lesson-guides.mjs';
+import { diagramExamples, studyExamples } from './code-examples.mjs';
 
 const lesson = document.querySelector('#lesson');
 const nav = document.querySelector('#chapters');
@@ -241,23 +242,38 @@ function renderDiagrams(diagrams, label) {
   }).join('')}</div>`;
 }
 
+function renderCodeExamples(examples) {
+  return examples.map(([title, code, observation]) => `
+    <figure class="code-example">
+      <figcaption>${escape(title)}</figcaption>
+      <pre><code translate="no">${escape(code)}</code></pre>
+      <p>${escape(observation)}</p>
+    </figure>`).join('');
+}
+
 function renderTheory(panel) {
   panel.innerHTML = `
     <h2 tabindex="-1">Key concepts</h2>
-    <p>Start with the diagrams, then open a concept to read the explanation and find its InterSystems documentation.</p>
+    <p>Use the diagrams to orient yourself. Open a concept for the explanation, practical examples where available, and the relevant InterSystems documentation.</p>
     ${renderDiagrams(chapter.diagrams, 'Study diagram')}
-    <div class="sections">${chapter.sections.map((section, i) => `
+    <div class="sections">${chapter.sections.map((section, i) => {
+      const examples = studyExamples[`${chapter.topic}/${i + 1}`] ?? [];
+      return `
       <details class="reading" ${i === 0 ? 'open' : ''}>
-        <summary><span>${markdownText(section.title)}</span></summary>
+        <summary><span>${markdownText(section.title)}
+          ${examples.length ? `<small class="summary-note">Code: ${escape(examples[0][0])}</small>` : ''}
+        </span></summary>
         <div class="disclosure-body">
           <p>${markdownText(section.prose)}</p>
+          ${renderCodeExamples(examples)}
           <ul>${section.points.map(point => `<li>${markdownText(point)}</li>`).join('')}</ul>
           <div class="documentation">
             <h3>Official documentation</h3>
             <ul>${section.references.map(({ url, label }) => `<li>${link(url, label)}</li>`).join('')}</ul>
           </div>
         </div>
-      </details>`).join('')}</div>
+      </details>`;
+    }).join('')}</div>
     <div class="actions">
       <button type="button" class="primary" data-phase="quiz" data-study>${state.studied[chapter.topic] ? 'Go to quiz' : 'Mark as studied and start quiz'}</button>
       ${link(packPath(`${chapter.folder}/study.md`), 'Full notes and code examples (Markdown)')}
@@ -531,6 +547,9 @@ function renderAssessmentSummary(panel, final) {
 
 function renderCases(panel) {
   const errors = missed(chapter);
+  const additionalPanels = chapter.panels.slice(chapter.cases.length);
+  const extraExamples = additionalPanels.map(item => diagramExamples[`${chapter.topic}/${item.title}`] ?? []);
+  const codeCount = extraExamples.flat().length;
   panel.innerHTML = `
     <h2 tabindex="-1">Worked cases</h2>
     <p>Predict what the code will do before opening the worked example. Then try the follow-up on your own.</p>
@@ -538,7 +557,7 @@ function renderCases(panel) {
     ${chapter.cases.map((item, i) => {
       const [challenge, solution] = variations[chapter.topic][i];
       return `<details class="reading" ${i === 0 ? 'open' : ''}>
-        <summary>${escape(item.title)}</summary>
+        <summary>Case ${i + 1}. ${escape(item.title)}</summary>
         <div class="disclosure-body">
           <p class="muted">Related quiz questions · ${item.qs.map(id => `Q${id}`).join(', ')}</p>
           ${item.code ? `<pre><code translate="no">${escape(item.code)}</code></pre>` : ''}
@@ -562,9 +581,16 @@ function renderCases(panel) {
     }).join('')}
     <h3>Exercise diagrams</h3>
     ${renderDiagrams(chapter.exerciseDiagrams, 'Exercise diagram')}
-    <details class="reading"><summary>More examples from the diagrams</summary>
+    <details class="reading"><summary><span>Examples behind the diagrams
+      <small class="summary-note">${additionalPanels.length} explanations${codeCount ? ` and ${codeCount} code ${codeCount === 1 ? 'example' : 'examples'}` : ''}</small>
+    </span></summary>
       <div class="disclosure-body">
-        ${chapter.panels.slice(chapter.cases.length).map(item => `<h3>${escape(item.title)}</h3>${paragraph(item.example)}${paragraph(item.reason)}`).join('')}
+        ${additionalPanels.map((item, i) => `<section class="diagram-example">
+          <h3>${escape(item.title)}</h3>
+          ${paragraph(item.example)}
+          ${paragraph(item.reason)}
+          ${renderCodeExamples(extraExamples[i])}
+        </section>`).join('')}
       </div>
     </details>
     <details class="reading"><summary>Chapter note</summary>

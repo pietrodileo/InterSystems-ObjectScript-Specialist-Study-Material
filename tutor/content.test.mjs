@@ -4,6 +4,7 @@ import test from 'node:test';
 import { assessmentAnswered, assessmentComplete, chapterStep, correctSelection, finalQuestionRefs, loadCourse, packPath, passedAnswer, practiceQueue, quizBlocks, recordPractice, reviewItems } from './content.mjs';
 
 import { guides, variations } from './lesson-guides.mjs';
+import { diagramExamples, studyExamples } from './code-examples.mjs';
 
 test('the real study pack supplies every lesson, question, and worked case', async () => {
   const packFile = path => new URL(packPath(path), import.meta.url);
@@ -14,6 +15,18 @@ test('the real study pack supplies every lesson, question, and worked case', asy
   assert.equal(chapters.flatMap(chapter => chapter.cases).length, 66);
   assert.equal(chapters.flatMap(chapter => chapter.diagrams).length, 31);
   assert.equal(chapters.flatMap(chapter => chapter.exerciseDiagrams).length, 44);
+  const studyKeys = chapters.flatMap(chapter => chapter.sections.map((_, i) => `${chapter.topic}/${i + 1}`));
+  const diagramKeys = chapters.flatMap(chapter => chapter.panels.slice(chapter.cases.length)
+    .map(panel => `${chapter.topic}/${panel.title}`));
+  for (const [examples, keys] of [[studyExamples, studyKeys], [diagramExamples, diagramKeys]]) {
+    for (const [key, entries] of Object.entries(examples)) {
+      assert.ok(keys.includes(key), `Example has no visible section: ${key}`);
+      assert.ok(entries.length && entries.every(entry => entry.length === 3 && entry.every(text => text.trim())), key);
+    }
+  }
+  for (const chapter of chapters) {
+    assert.ok(studyKeys.some(key => key.startsWith(`${chapter.topic}/`) && studyExamples[key]), chapter.topic);
+  }
   const final = finalQuestionRefs(chapters);
   assert.deepEqual(new Set(final.map(ref => ref.topic)), new Set(chapters.map(chapter => chapter.topic)));
   assert.equal(final.length, chapters.length);
