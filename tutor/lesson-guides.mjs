@@ -1,7 +1,7 @@
 // Each introduction connects the chapter's concepts through a single exam scenario.
 export const guides = {
   'T1.1': [
-    'Take a patient record and its address. Which needs an ID of its own, which can live inside the patient, and which object only needs to exist while the code runs? Once you\'ve made those choices, trace what happens when you save: start with the object in memory, find its assigned ID, and read the storage definition. If the question gives you a custom map, use the locations in it.',
+    ''First, this chapter helps you choose the right kind of class for each object. A patient record may need its own lasting row and ID; its address might belong inside that record; a helper object may only be needed while a method runs. That is where `%Persistent`, `%SerialObject`, and `%RegisteredObject` come in. From there, you follow a persistent object through `%New()`, `%Save()`, and `%Id()`, then see how to open or delete it. The storage definition shows where IRIS keeps the data, IDs, and indexes, including what changes with `USEEXTENTSET` or a custom map. The chapter also explains how parent order affects inherited methods, and how `///` comments and `Description` document classes. To bring these ideas together, trace a patient from the object in memory to its saved ID and the global locations shown in the map.'',
     'An ID counter records allocations. It can have gaps even if nobody deleted a row. You also need to check the outer transaction before you can say that an assigned ID belongs to a committed row.',
   ],
   'T1.2': [
