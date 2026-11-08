@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -32,6 +33,15 @@
         <label for="progress">Your progress</label>
         <progress id="progress" max="358" value="0"></progress>
         <p id="progress-label" class="muted"></p>
+      </div>
+      <div class="progress-transfer">
+        <p class="muted">Move your progress between browsers with a backup file.</p>
+        <div class="progress-transfer-actions">
+          <button type="button" id="export-progress" disabled>Export</button>
+          <button type="button" id="import-progress" disabled>Import</button>
+          <input id="progress-file" type="file" accept=".json,application/json" hidden>
+        </div>
+        <p id="progress-transfer-status" class="muted" role="status" aria-live="polite"></p>
       </div>
       <nav id="chapters" aria-label="Chapters"></nav>
     </aside>
