@@ -1,6 +1,7 @@
 import { assessmentAnswered, assessmentComplete, chapterStep, correctSelection, finalQuestionRefs, loadCourse, packPath, passedAnswer, practiceQueue, quizBlocks, recordPractice, reviewItems, topics } from './content.mjs';
 import { caseFocus, examAreaDescriptions, guides, variations } from './lesson-guides.mjs';
 import { diagramExamples, studyExamples } from './code-examples.mjs';
+import './sidebar-controls.mjs';
 
 const lesson = document.querySelector('#lesson');
 const nav = document.querySelector('#chapters');
@@ -8,12 +9,6 @@ const courseMenu = document.querySelector('#course-menu');
 const sidebar = document.querySelector('#course');
 const sidebarToggle = document.querySelector('#sidebar-toggle');
 const sidebarChevron = document.querySelector('#sidebar-chevron');
-const themeToggle = document.querySelector('#theme-toggle');
-const themeModeLabel = document.querySelector('#theme-mode-label');
-const infoButton = document.querySelector('#info-button');
-const infoDialog = document.querySelector('#info-dialog');
-const closeInfo = document.querySelector('#close-info');
-const themeStorageKey = 'objectscript-tutor-theme';
 const exportProgress = document.querySelector('#export-progress');
 const importProgress = document.querySelector('#import-progress');
 const progressFile = document.querySelector('#progress-file');
@@ -71,7 +66,7 @@ function updateSidebarToggle() {
 }
 
 function placeSidebar() {
-  lesson.before(sidebar);
+  if (sidebar.nextElementSibling !== lesson) lesson.before(sidebar);
   sidebar.hidden = !(state.sidebarOpen ?? true);
   updateSidebarToggle();
 }
@@ -83,38 +78,6 @@ sidebarToggle.addEventListener('click', () => {
   save();
   updateSidebarToggle();
 });
-
-function applyTheme(theme) {
-  document.documentElement.dataset.theme = theme;
-  const nextTheme = theme === 'dark' ? 'light' : 'dark';
-  themeToggle.setAttribute('aria-pressed', String(theme === 'dark'));
-  themeToggle.setAttribute('aria-label', `Switch to ${nextTheme} mode`);
-  themeToggle.title = `Switch to ${nextTheme} mode`;
-  themeModeLabel.textContent = theme === 'dark' ? 'Light' : 'Dark';
-  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'dark' ? '#080f20' : '#21328c');
-}
-
-let savedTheme = 'light';
-try {
-  const storedTheme = localStorage.getItem(themeStorageKey);
-  if (storedTheme === 'dark' || storedTheme === 'light') savedTheme = storedTheme;
-} catch {}
-applyTheme(savedTheme);
-
-themeToggle.addEventListener('click', () => {
-  const nextTheme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
-  applyTheme(nextTheme);
-  try {
-    localStorage.setItem(themeStorageKey, nextTheme);
-  } catch {}
-});
-
-infoButton.addEventListener('click', () => infoDialog.showModal());
-closeInfo.addEventListener('click', () => infoDialog.close());
-infoDialog.addEventListener('click', event => {
-  if (event.target === infoDialog) infoDialog.close();
-});
-
 
 function renderNavigation() {
   const seen = chapters.reduce((sum, item) => sum + attempted(item), 0);
