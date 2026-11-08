@@ -151,6 +151,7 @@ progress { display: block; width: 100%; height: .75rem; margin: .45rem 0; accent
   padding-block: .6rem;
   border-bottom: 1px solid var(--line);
 }
+.exam-area-description { grid-column: 2 / -1; line-height: 1.45; }
 .roadmap { padding-left: 1.45rem; }
 .roadmap li { margin: .5rem 0; }
 .case-done { display: flex; align-items: start; gap: .5rem; margin-top: 1rem; padding-block: .55rem; font-weight: 650; cursor: pointer; }
