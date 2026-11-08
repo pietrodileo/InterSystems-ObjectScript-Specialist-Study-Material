@@ -1,31 +1,43 @@
-# InterSystems ObjectScript Specialist — Study Material
+# InterSystems ObjectScript Specialist Study Material
+
+Study for the InterSystems ObjectScript Specialist certification with a browser-based tutor and a Markdown study pack. Both follow the same 22 chapters, covering data modeling, basic programming, IRIS features, functions and APIs, and error handling.
+
+**[Open the tutor online](https://pietrodileo.github.io/InterSystems-ObjectScript-Specialist-Study-Material/tutor/)** · [Browse the study pack](ObjectScript%20Study%20Pack/README.md) · [Official exam outline](https://www.intersystems.com/certifications/intersystems-objectscript-specialist/)
 
 ## Certification tutor
 
-Open **Study plan** and choose **Start study plan**. The English tutor guides you through all 22 chapters. Read the chapter overview, diagrams, and concept explanations, then answer the quiz and work through the three cases. Every concept section links to relevant InterSystems documentation. **Resume study plan** takes you to the first unfinished step. Use **Course index** to find a chapter or switch to Answer review or the final assessment.
+Open **Study plan** and select **Start study plan** to work through the chapters in order. Each chapter has an illustrated lesson in English, a quiz, and three worked cases. The concept explanations link to relevant InterSystems documentation. When you come back, **Resume study plan** takes you to the first unfinished step.
 
-**Answer review** shows your choices and expected answers, tracks retries, and puts chapters with the most current errors first. The **Final assessment** draws one question per chapter and shows answers and results by area after you finish. Completed assessments remain available in **Answer review** when you start a new one.
+| Mode | What you can do |
+| --- | --- |
+| **Study plan** | Use **Check answer** to record each chapter quiz attempt. |
+| **Answer review** | Compare your choices with the expected answers, track retries, and see which chapters have the most current errors. You can also revisit completed final assessments. |
+| **Final assessment** | Answer one question per chapter. The tutor saves your selections as you go, and you can change them until you select **Finish assessment**. You'll then see the answers and your results by exam area. |
 
-Use the numbered buttons to jump to any question in a chapter quiz or in the final assessment. In chapter quizzes, **Check answer** records an attempt. In the final assessment, your choices save as you go and you can change them until you choose **Finish assessment**.
+<details>
+<summary>Navigation and saved progress</summary>
 
-Choose **Pin index** in the course drawer to keep navigation open while you study. On phones, the pinned index sits above the lesson. Use **Unpin** to return to the drawer on smaller screens.
+Open **Course index** to jump to a chapter or switch modes. Select **Pin index** to keep it visible. On phones, the pinned index appears above the lesson. Select **Unpin** to return to the drawer. In a quiz or assessment, use the numbered buttons to jump between questions.
 
-Progress and submitted choices are saved in the current browser at the URL where you study. Results from older tutor versions still count, with answer choices available from new submissions onward. Use Export to download a JSON backup and Import to restore it in another browser; importing replaces the progress saved there.
+The tutor saves progress and submitted choices in the browser you use to study. Older results still count. Individual choices appear in Answer review for submissions made since the tutor began recording them. To move your progress to another browser or between the online and local tutor, use **Export** to download a JSON backup, then **Import** at the destination. Importing replaces any progress already saved there.
 
-[Open the tutor online](https://pietrodileo.github.io/InterSystems-ObjectScript-Specialist-Study-Material/tutor/).
+</details>
 
-From the repository root, run:
+## Study Pack
+
+Use the Markdown files for offline reading or to look up a specific topic. The pack contains 93 study sections, 358 practice questions with answer explanations and individual analyses, 66 worked cases, and 75 diagrams. The source lessons, quiz questions, and diagrams are in English. The additional question-by-question commentary is in Italian.
+
+- [Topic index](ObjectScript%20Study%20Pack/index.md) for the full chapter list.
+- [Visual study index](ObjectScript%20Study%20Pack/visual-index.md) for the illustrated lesson guides.
+- [Exercise notes and worked cases](ObjectScript%20Study%20Pack/approfondimenti-esercizi.md) for the Italian commentary, worked variants, and exercise diagrams.
+- [Study Pack README](ObjectScript%20Study%20Pack/README.md) for source attribution, folder structure, and notes on content accuracy.
+
+## Run the tutor locally
+
+From the repository root, start a local server with Python 3.
 
 ```sh
 python3 -m http.server --bind 127.0.0.1 8000
 ```
 
-[Open the tutor in your browser](http://127.0.0.1:8000/tutor/). The tutor uses the local Study Pack for lessons, quizzes, and 75 diagrams. An internet connection is needed to open the InterSystems documentation and [official exam outline](https://www.intersystems.com/certifications/intersystems-objectscript-specialist/).
-
-## Study Pack
-
-[Open the complete study pack](ObjectScript%20Study%20Pack/README.md) or start from its [topic index](ObjectScript%20Study%20Pack/index.md).
-
-The pack follows the five exam topics and 22 chapters in order. It contains the source study material and quizzes, 358 question-by-question analyses, 66 additional worked exercise cases, and 75 diagrams. The source lessons and diagrams are in English. Additional question-by-question analyses in the pack are in Italian.
-
-See the pack README for source attribution, folder structure, and accuracy notes.
+[Open the local tutor](http://127.0.0.1:8000/tutor/) in your browser. It reads the lessons, quizzes, and diagrams from your local copy of the study pack. The linked InterSystems documentation and official exam outline require an internet connection.
