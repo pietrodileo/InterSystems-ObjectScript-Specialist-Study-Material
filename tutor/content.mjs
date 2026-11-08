@@ -18,9 +18,10 @@ export function studySections(markdown) {
     const prose = notes?.replace(/^```[^\n]*\n[\s\S]*?^```[^\n]*$/gm, '').trim().split(/\n\s*\n/)
       .find(block => /^[A-Za-z`*%$]/.test(block) && /[.!?:]$/.test(block));
     const detail = notes?.replace(prose ?? '', '').trim();
+    const noteExampleCount = Array.from((detail ?? '').matchAll(/^```[^\n]*\n[\s\S]*?^```[ \t]*$/gm)).length;
     const references = Array.from(body.matchAll(/^- \[([^\]]+)\]\((https:\/\/docs\.intersystems\.com\/[^\s)]+)\)/gm),
       ([, label, url]) => ({ label, url }));
-    return { title, prose, detail, references, points: points?.split(/\r?\n/).map(line => line.slice(2)) ?? [] };
+    return { title, prose, detail, noteExampleCount, references, points: points?.split(/\r?\n/).map(line => line.slice(2)) ?? [] };
   });
 }
 
@@ -159,7 +160,7 @@ export async function loadCourse(read) {
       });
     const panels = exercisePanels(illustrated);
     if (questions.length !== chapter.questions || sections.length !== chapter.sections ||
-        sections.some(section => !section.points.length || !section.prose || !section.references.length) ||
+        sections.some(section => !section.points.length || !section.prose || !section.detail || !section.noteExampleCount || !section.references.length) ||
         !exercise.cases.length || exerciseDiagrams.length !== 2 || panels.length < exercise.cases.length) {
       throw new Error(`Incomplete study material for ${chapter.topic}`);
     }
