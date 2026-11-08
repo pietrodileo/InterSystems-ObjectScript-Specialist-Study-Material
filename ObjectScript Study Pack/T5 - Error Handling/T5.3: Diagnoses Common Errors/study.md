@@ -41,6 +41,8 @@ Saved 2 November 2026 from [exam-prep.es](https://exam-prep.es/exams/objectscrip
 
 `<SUBSCRIPT>` errors occur when code attempts to use an invalid subscript to reference a global or local array node, or when `$LIST` operations reference positions that do not exist in a list structure. These are among the most common runtime errors in ObjectScript.
 
+A subscript error concerns the expression used to locate a node, not simply a missing record. For example, an empty `orderId` may be an invalid global subscript when null subscripts are disabled; validate it before evaluating `^Orders(orderId)`. For a valid key with no stored value, `$GET` can supply a default, but a default should not hide a malformed key.
+
 #### Accessing Undefined Subscript Nodes
 
 ```objectscript
@@ -182,6 +184,8 @@ ClassMethod ProcessItemsSafe(ByRef items)
 
 `<PROTECT>` errors occur when a process attempts an operation that violates security constraints or database access permissions. These errors are security-related and require understanding of the InterSystems IRIS security model: resources, roles, and database permissions.
 
+`<PROTECT>` indicates that IRIS blocked an operation because of access permissions, such as writing a global or updating a table without the required privileges. Reproduce the failure with the same user and namespace, then check the operation and permissions involved. A retry or a `CATCH` block can report the error, but it does not grant access.
+
 #### Writing to a Read-Only Database
 
 ```objectscript
@@ -294,6 +298,8 @@ ClassMethod CheckDatabaseAccess(namespace As %String) As %String
 #### Overview
 
 `<FRAMESTACK>` errors occur when the execution call stack overflows. Each method call, DO command, or XECUTE pushes a frame onto the stack. When the stack is exhausted (typically after thousands of nested calls), IRIS raises a `<FRAMESTACK>` error. The most common cause is infinite recursion.
+
+A recursive walk needs a base case, and each recursive call must make progress toward it. If `Walk(node)` calls `Walk(node)` again with the same input, the stack grows until IRIS raises `<FRAMESTACK>`. Trace a small input and confirm that every path either changes the input toward the base case or returns.
 
 #### Infinite Recursion - Direct
 
@@ -456,6 +462,8 @@ ClassMethod DeepRecursiveProcess(data As %String, depth As %Integer)
 #### Overview
 
 `<UNDEFINED>` is the most common runtime error in ObjectScript. It occurs when code attempts to read the value of a variable (local or global) that has no value assigned. The error message includes the variable name, making it relatively easy to diagnose. Prevention relies on defensive coding practices.
+
+`<UNDEFINED>` means code read a variable or global node that has no assigned value; it is different from a defined variable containing an empty string. For optional display data, `$GET(nickname,"guest")` supplies a fallback without defining `nickname`. For required data, find out why it is missing and report or repair that condition instead of silently substituting a default.
 
 #### Undefined Local Variable
 
