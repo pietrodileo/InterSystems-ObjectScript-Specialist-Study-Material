@@ -15,7 +15,7 @@ const exportProgress = document.querySelector('#export-progress');
 const importProgress = document.querySelector('#import-progress');
 const progressFile = document.querySelector('#progress-file');
 const transferStatus = document.querySelector('#progress-transfer-status');
-const compact = window.matchMedia('(max-width: 1040px)');
+const mobile = window.matchMedia('(max-width: 720px)');
 const storageKey = 'objectscript-tutor-v1';
 const phases = { theory: 'Study', quiz: 'Practice', cases: 'Apply' };
 const escape = value => String(value).replace(/[&<>"']/g, char => ({
@@ -58,14 +58,14 @@ function save() {
   }
 }
 
-const useDrawer = () => compact.matches && !state.sidebarPinned;
+const useDrawer = () => mobile.matches && !state.sidebarPinned;
 
 function updateSidebarToggle() {
   const drawerMode = useDrawer();
   const open = drawerMode ? drawer.open : !sidebar.hidden;
   const label = drawerMode
-    ? open ? 'Close course index' : 'Open course index'
-    : open ? 'Collapse course index' : 'Expand course index';
+    ? (open ? 'Close course index' : 'Open course index')
+    : (open ? 'Collapse course index' : 'Expand course index');
   sidebarToggle.setAttribute('aria-expanded', String(open));
   sidebarToggle.setAttribute('aria-label', label);
   sidebarToggle.title = label;
@@ -90,7 +90,7 @@ function placeSidebar() {
 }
 
 placeSidebar();
-compact.addEventListener('change', placeSidebar);
+mobile.addEventListener('change', placeSidebar);
 sidebarToggle.addEventListener('click', () => {
   if (useDrawer()) {
     if (drawer.open) drawer.close();
