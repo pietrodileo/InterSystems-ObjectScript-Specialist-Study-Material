@@ -37,6 +37,8 @@ Saved 2 November 2026 from [exam-prep.es](https://exam-prep.es/exams/objectscrip
 
 Post-conditionals are a distinctive ObjectScript feature that allows any command to be executed conditionally by appending a colon and a boolean expression directly after the command keyword. This produces concise, readable code for simple conditional operations without the overhead of full IF/ELSE blocks.
 
+A post-conditional applies only to the command on that line. `WRITE:count>0 "Items found"` either runs or skips that write; it does not condition later commands. If several statements must share the condition, use an `IF` block so the boundary is visible.
+
 #### Basic Post-Conditional Syntax
 
 ```objectscript
@@ -151,6 +153,8 @@ Post-conditionals are a distinctive ObjectScript feature that allows any command
 #### Overview
 
 QUIT and RETURN both exit code, but they differ in what they exit. QUIT exits the nearest enclosing context (loop or method), while RETURN always exits the method. This distinction is critical when you need to exit a method from inside a nested loop.
+
+Inside a `FOR` loop, `QUIT` stops the loop and execution continues after it; `RETURN value` exits the method and gives the caller a result. For a search method, `QUIT` can stop scanning when an item is found, then code after the loop can return the index. Use `RETURN` inside the loop when the method should finish immediately.
 
 #### QUIT in Loops vs Methods
 
@@ -272,6 +276,8 @@ QUIT and RETURN both exit code, but they differ in what they exit. QUIT exits th
 #### Overview
 
 ObjectScript does not have a dedicated boolean type. Instead, it uses numeric evaluation: zero is false, any nonzero value is true. When a string is evaluated as a boolean, it is first converted to its numeric value. Understanding this coercion is critical for writing correct conditions.
+
+ObjectScript evaluates values numerically when they are used as conditions, so a string that begins with a number can behave differently from an empty or nonnumeric string. If the requirement is “the field is not blank,” check that it is defined and compare it with `""` explicitly instead of relying on truthiness. The code examples show the difference between a condition check and numeric conversion.
 
 #### Truthiness Rules
 
