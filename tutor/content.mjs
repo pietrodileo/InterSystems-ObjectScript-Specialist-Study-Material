@@ -60,6 +60,12 @@ const codeComments = {
   'registrare nome, posizione e contesto utile': 'Log the error name, location, and relevant context',
 };
 
+const wideExerciseSizes = {
+  'T1.1': [1752, 897], 'T1.2': [1752, 897], 'T1.3': [1672, 941], 'T1.4': [1753, 897],
+  'T2.1': [1754, 897], 'T2.2': [2172, 724], 'T2.3': [1797, 875], 'T3.2': [1672, 941],
+  'T3.2-extra': [1672, 941], 'T3.3-extra': [1774, 887], 'T3.5-extra': [1752, 897],
+};
+
 export function correctSelection(correct, selected) {
   const chosen = new Set(selected);
   return chosen.size === correct.length && correct.every(value => chosen.has(value));
@@ -105,9 +111,12 @@ export async function loadCourse(read) {
     const { questions } = rawQuiz.quiz;
     const sections = studySections(study);
     const diagrams = Array.from(study.matchAll(/^!\[([^\]]+)\]\((visual-guide-[\w-]+\.png)\)$/gm),
-      ([, alt, file]) => ({ alt, file: `${chapter.folder}/${file}` }));
-    const exerciseDiagrams = Array.from(illustrated.matchAll(/^!\[([^\]]+)\]\(<(schema-esercizi[\w-]*\.png)>\)$/gm),
-      ([, alt, file]) => ({ alt, file: `${exercise.folder}/${file}` }));
+      ([, alt, file]) => ({ alt, file: `${chapter.folder}/${file}`, width: 1536, height: 1024 }));
+    const exerciseDiagrams = Array.from(illustrated.matchAll(/^!\[([^\]]+)\]\(<(schema-esercizi([\w-]*)\.png)>\)$/gm),
+      ([, alt, file, suffix]) => {
+        const [width, height] = wideExerciseSizes[chapter.topic + suffix] ?? [1536, 1024];
+        return { alt, file: `${exercise.folder}/${file}`, width, height };
+      });
     const panels = exercisePanels(illustrated);
     if (questions.length !== chapter.questions || sections.length !== chapter.sections ||
         sections.some(section => !section.points.length || !section.prose || !section.references.length) ||

@@ -14,7 +14,7 @@ const escape = value => String(value).replace(/[&<>"']/g, char => ({
 })[char]);
 const paragraph = text => `<p class="prose">${escape(text)}</p>`;
 const markdownText = value => escape(value.replaceAll('&lt;', '<').replaceAll('&gt;', '>'))
-  .replace(/`([^`]+)`/g, '<code>$1</code>').replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+  .replace(/`([^`]+)`/g, '<code translate="no">$1</code>').replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
 const link = (url, label) => `<a href="${escape(url)}" target="_blank" rel="noopener">${markdownText(label)} ↗</a>`;
 const letter = index => String.fromCharCode(65 + index);
 
@@ -30,6 +30,7 @@ state.studied ||= {};
 state.worked ||= {};
 state.history ||= {};
 state.assessments ||= [];
+state.openTopics ??= [state.topic?.split('.')[0] ?? 'T1'];
 
 let chapters, chapter, phase, queue, cursor, reviewing;
 const results = item => state.results[item.topic] ?? {};
@@ -70,22 +71,24 @@ function renderNavigation() {
   progress.max = total;
   progress.value = seen;
   document.querySelector('#progress-label').textContent =
-    `${done}/${chapters.length} chapters · ${seen}/${total} questions · ${errors} to review${storageWorks ? '' : ' · saving unavailable'}`;
+    `${done}/${chapters.length} chapters complete. ${seen}/${total} quiz questions answered.${errors ? ` ${errors} to review.` : ''}${storageWorks ? '' : ' Progress could not be saved in this browser.'}`;
   courseMenu.innerHTML = Object.entries({ roadmap: 'Study plan', review: 'Answer review', final: 'Final assessment' }).map(([page, label]) =>
     `<button type="button" data-course="${page}" ${phase === page ? 'aria-current="page"' : ''}>${label}</button>`).join('');
   nav.innerHTML = Object.entries(topics).map(([code, name]) => `
-    <section class="topic">
-      <h2><span>${code}</span> ${name}</h2>
-      ${chapters.filter(item => item.topic.startsWith(`${code}.`)).map(item => {
-        const selected = item === chapter ? ' aria-current="page"' : '';
-        const status = step(item) ? `${attempted(item)}/${item.quiz.length} questions` : 'Complete';
-        const errors = missed(item);
-        return `<button type="button" class="chapter-button" data-topic="${item.topic}"${selected}>
-          <span><b>${item.topic}</b> ${escape(item.title.split(': ')[1])}</span>
-          <small>${status}${errors ? `<span class="review-count"> · ${errors} to review</span>` : ''}</small>
-        </button>`;
-      }).join('')}
-    </section>`).join('');
+    <details class="topic" data-area="${code}" ${state.openTopics.includes(code) ? 'open' : ''}>
+      <summary><span class="topic-code">${code}</span> <span>${name}</span></summary>
+      <div class="topic-chapters">
+        ${chapters.filter(item => item.topic.startsWith(`${code}.`)).map(item => {
+          const selected = item === chapter ? ' aria-current="page"' : '';
+          const status = step(item) ? `${attempted(item)}/${item.quiz.length} questions` : 'Complete';
+          const errors = missed(item);
+          return `<button type="button" class="chapter-button" data-topic="${item.topic}"${selected}>
+            <span><b>${item.topic}</b> ${escape(item.title.split(': ')[1])}</span>
+            <small>${status}${errors ? `<span class="review-count"> · ${errors} to review</span>` : ''}</small>
+          </button>`;
+        }).join('')}
+      </div>
+    </details>`).join('');
 }
 
 function openChapter(item, nextPhase = step(item) ?? 'theory', mode = 'learn') {
@@ -94,6 +97,8 @@ function openChapter(item, nextPhase = step(item) ?? 'theory', mode = 'learn') {
   reviewing = mode === 'review';
   queue = practiceQueue(chapter.quiz, results(chapter), mode);
   cursor = 0;
+  const area = chapter.topic.split('.')[0];
+  if (state.topic !== chapter.topic && !state.openTopics.includes(area)) state.openTopics.push(area);
   state.topic = chapter.topic;
   state.phase = phase;
   save();
@@ -115,7 +120,7 @@ function continueCourse() {
 }
 
 function focusLesson() {
-  lesson.querySelector('h2')?.focus();
+  lesson.querySelector('h1')?.focus({ preventScroll: true });
   window.scrollTo(0, 0);
 }
 
@@ -129,9 +134,9 @@ function render() {
   const number = chapters.indexOf(chapter) + 1;
   lesson.innerHTML = `
     <header class="lesson-header">
-      <p class="eyebrow">CHAPTER ${number} OF ${chapters.length} <span>·</span> ${escape(topics[chapter.topic.split('.')[0]])}</p>
-      <h1>${escape(chapter.title)}</h1>
-      <p class="lead">${escape(guides[chapter.topic][0])}</p>
+      <h1 tabindex="-1">${escape(chapter.title.split(': ')[1])}</h1>
+      <p class="chapter-location">${escape(topics[chapter.topic.split('.')[0]])} / ${chapter.topic} / Chapter ${number} of ${chapters.length}</p>
+      <p class="lead">${markdownText(guides[chapter.topic][0])}</p>
     </header>
     <nav class="phases" aria-label="Chapter steps">
       ${Object.entries(phases).map(([id, label], i) => `
@@ -154,8 +159,7 @@ function renderCourse() {
   if (phase === 'final' || phase === 'past') {
     lesson.innerHTML = `
       <header class="lesson-header">
-        <p class="eyebrow">FINAL STEP</p>
-        <h1>Final assessment</h1>
+        <h1 tabindex="-1">Final assessment</h1>
         <p class="lead">Answer one question from each chapter in shuffled order. Review your answers when you finish.</p>
       </header>
       <section id="panel" class="panel"></section>`;
@@ -169,17 +173,16 @@ function renderCourse() {
   const started = chapters.some(item => attempted(item) || state.studied[item.topic] || completedCases(item));
   lesson.innerHTML = `
     <header class="lesson-header">
-      <p class="eyebrow">CERTIFICATION STUDY PLAN</p>
-      <h1>InterSystems ObjectScript Specialist</h1>
-      <p class="lead">Work through the exam topics one chapter at a time, then check your understanding with a final assessment.</p>
+      <h1 tabindex="-1">InterSystems ObjectScript Specialist</h1>
+      <p class="lead">Study the five exam areas chapter by chapter, then test what you remember with a final assessment.</p>
     </header>
     <section class="panel">
       <h2 tabindex="-1">How to use the tutor</h2>
       <ol class="roadmap">
-        <li><strong>Study.</strong> Read the chapter overview, explore the concepts and diagrams, and explain them in your own words.</li>
-        <li><strong>Practice.</strong> Answer the chapter questions and read the reasoning after each submission.</li>
-        <li><strong>Apply.</strong> Try each worked case before revealing its solution. Mark the cases you finish.</li>
-        <li><strong>Assess.</strong> Take the final assessment and use Answer review to decide what to revisit.</li>
+        <li><strong>Study.</strong> Read the chapter and use the diagrams to explain the concepts in your own words.</li>
+        <li><strong>Practice.</strong> Answer the quiz questions and read the explanation after each one.</li>
+        <li><strong>Apply.</strong> Try each case before opening the solution. Check off each case you finish.</li>
+        <li><strong>Assess.</strong> Take the final assessment, then use Answer review to pick what to study again.</li>
       </ol>
       <div class="actions">
         <button type="button" class="primary" data-continue>${next ? (started ? 'Resume study plan' : 'Start study plan') : 'Go to final assessment'}</button>
@@ -195,27 +198,29 @@ function renderCourse() {
 }
 
 function renderDiagrams(diagrams, label) {
-  return `<div class="diagrams">${diagrams.map(({ alt, file }, index) => {
+  return `<div class="diagrams">${diagrams.map(({ alt, file, width, height }, index) => {
     const url = escape(packPath(file));
     return `<figure><a href="${url}" target="_blank" rel="noopener" aria-label="Open ${label.toLowerCase()} ${index + 1} at full size">
-      <img src="${url}" alt="${escape(alt)}" loading="lazy">
-    </a><figcaption>${label} ${index + 1} · Open to enlarge</figcaption></figure>`;
+      <img src="${url}" alt="${escape(alt)}" width="${width}" height="${height}" loading="lazy">
+    </a><figcaption>${label} ${index + 1}. Open image at full size.</figcaption></figure>`;
   }).join('')}</div>`;
 }
 
 function renderTheory(panel) {
   panel.innerHTML = `
     <h2 tabindex="-1">Key concepts</h2>
-    <p>Use the diagrams to get oriented. Then open each section for an explanation, key points, and links to the relevant InterSystems documentation.</p>
+    <p>Start with the diagrams, then open a concept to read the explanation and find its InterSystems documentation.</p>
     ${renderDiagrams(chapter.diagrams, 'Study diagram')}
     <div class="sections">${chapter.sections.map((section, i) => `
       <details class="reading" ${i === 0 ? 'open' : ''}>
-        <summary>${markdownText(section.title)}</summary>
-        <p>${markdownText(section.prose)}</p>
-        <ul>${section.points.map(point => `<li>${markdownText(point)}</li>`).join('')}</ul>
-        <div class="documentation">
-          <h3>Official documentation</h3>
-          <ul>${section.references.map(({ url, label }) => `<li>${link(url, label)}</li>`).join('')}</ul>
+        <summary><span>${markdownText(section.title)}</span></summary>
+        <div class="disclosure-body">
+          <p>${markdownText(section.prose)}</p>
+          <ul>${section.points.map(point => `<li>${markdownText(point)}</li>`).join('')}</ul>
+          <div class="documentation">
+            <h3>Official documentation</h3>
+            <ul>${section.references.map(({ url, label }) => `<li>${link(url, label)}</li>`).join('')}</ul>
+          </div>
         </div>
       </details>`).join('')}</div>
     <div class="actions">
@@ -231,13 +236,13 @@ function answerOptions(question, selected) {
 function questionExplanation(item, question) {
   const panels = item.panels.filter(panel => panel.qs.includes(question.id));
   return `
-    <h3>Why this answer is expected</h3>
+    <h3>Why this answer is correct</h3>
     ${paragraph(question.explanation.replace(/\s*\(Reference:[^)]+\)/g, ''))}
-    ${panels.length ? `<details><summary>Related concepts and common traps</summary>
-      ${panels.map(panel => `<h3>${escape(panel.title)}</h3>${paragraph(panel.reason)}`).join('')}
+    ${panels.length ? `<details class="reading inset"><summary>Related examples and mistakes</summary>
+      <div class="disclosure-body">${panels.map(panel => `<h4>${escape(panel.title)}</h4>${paragraph(panel.reason)}`).join('')}</div>
     </details>` : ''}
-    <h3>Chapter caveat</h3>
-    ${paragraph(guides[item.topic][1])}`;
+    <h3>Chapter note</h3>
+    <p>${markdownText(guides[item.topic][1])}</p>`;
 }
 
 function answerDetails(item, question, attempts) {
@@ -249,15 +254,17 @@ function answerDetails(item, question, attempts) {
   const prompt = lines.findLast(line => line.includes('?'))?.trim() || 'Open question';
   return `<details class="reading">
     <summary>Q${question.id} · ${outcome}${recovered ? ' on retry' : ''} · ${escape(prompt)}</summary>
-    <p class="prompt prose">${escape(question.question)}</p>
-    <h3>Your answers</h3>
-    <ol class="attempts">${attempts.map(attempt => `<li>
-      <strong class="${passedAnswer(attempt) ? 'correct-text' : 'incorrect-text'}">${passedAnswer(attempt) ? 'Correct' : 'Incorrect'}</strong>
-      ${typeof attempt === 'boolean' ? ' · Earlier result. The selected options were not recorded.' : answerOptions(question, attempt.selected)}
-    </li>`).join('')}</ol>
-    <h3>Expected answer</h3>
-    ${answerOptions(question, question.correct)}
-    ${questionExplanation(item, question)}
+    <div class="disclosure-body">
+      <p class="prompt prose">${escape(question.question)}</p>
+      <h3>Your answers</h3>
+      <ol class="attempts">${attempts.map(attempt => `<li>
+        <strong class="${passedAnswer(attempt) ? 'correct-text' : 'incorrect-text'}">${passedAnswer(attempt) ? 'Correct' : 'Incorrect'}</strong>
+        ${typeof attempt === 'boolean' ? ' · Earlier result. The selected options were not recorded.' : answerOptions(question, attempt.selected)}
+      </li>`).join('')}</ol>
+      <h3>Expected answer</h3>
+      ${answerOptions(question, question.correct)}
+      ${questionExplanation(item, question)}
+    </div>
   </details>`;
 }
 
@@ -269,24 +276,25 @@ function renderReview() {
   const total = chapters.reduce((count, item) => count + item.quiz.length, 0);
   lesson.innerHTML = `
     <header class="lesson-header">
-      <p class="eyebrow">QUIZ PROGRESS</p>
-      <h1>Answer review</h1>
-      <p class="lead">See what you chose, compare it with the expected answer, and find the chapters to revisit.</p>
+      <h1 tabindex="-1">Answer review</h1>
+      <p class="lead">Compare your choices with the answers and see which chapters need another look.</p>
     </header>
     <section class="panel">
       <h2 tabindex="-1">Chapter quiz results</h2>
       <p class="result-line"><strong class="correct-text">${answered - errors} correct</strong>
         <strong class="incorrect-text">${errors} incorrect</strong><span>${total - answered} unanswered</span></p>
-      <p>Totals use your latest answer to each question. Chapters with the most current errors appear first. Open a question to see all its attempts.</p>
+      <p>The totals count your latest answer to each question. Chapters with the most mistakes appear first. Open any question to see every attempt.</p>
       ${!answered ? '<p>No quiz answers yet. Start a chapter quiz to build your review list.</p>' : ''}
       ${groups.filter(group => group.answers.length).map(({ item, answers, errors }) => `<details class="reading">
         <summary>${escape(item.title)} · ${answers.length - errors} correct · ${errors} incorrect · ${item.quiz.length - answers.length} unanswered</summary>
-        <div class="actions">
-          <button type="button" data-topic="${item.topic}" data-phase="theory">Review theory</button>
-          ${errors ? `<button type="button" data-topic="${item.topic}" data-phase="quiz" data-mode="review">Retry missed questions</button>` : ''}
+        <div class="disclosure-body">
+          <div class="actions">
+            <button type="button" data-topic="${item.topic}" data-phase="theory">Review theory</button>
+            ${errors ? `<button type="button" data-topic="${item.topic}" data-phase="quiz" data-mode="review">Retry missed questions</button>` : ''}
+          </div>
+          ${[...answers].sort((a, b) => Number(a.passed) - Number(b.passed))
+            .map(({ question, attempts }) => answerDetails(item, question, attempts)).join('')}
         </div>
-        ${[...answers].sort((a, b) => Number(a.passed) - Number(b.passed))
-          .map(({ question, attempts }) => answerDetails(item, question, attempts)).join('')}
       </details>`).join('')}
       <div class="actions">
         <button type="button" data-course="roadmap">Back to study plan</button>
@@ -325,14 +333,14 @@ function renderQuiz(panel, question = queue[cursor]) {
   const inputType = type === 'multiple' ? 'checkbox' : 'radio';
   panel.innerHTML = `
     <div class="question-meta">
-      <p class="eyebrow">${final ? 'FINAL ASSESSMENT' : reviewing ? 'REVIEW' : 'PRACTICE'} <span>·</span>
-        ${final ? final.answers.length + 1 : cursor + 1} / ${final ? final.refs.length : queue.length} IN SESSION
+      <p class="session-status">${final ? 'Assessment' : reviewing ? 'Retry' : 'Practice'}
+        (${final ? final.answers.length + 1 : cursor + 1} of ${final ? final.refs.length : queue.length})
       </p>
       ${!final && !reviewing && missed(chapter) ? '<button type="button" data-phase="quiz" data-mode="review">Retry missed questions</button>' : ''}
     </div>
     <h2 tabindex="-1">Question ${final ? final.answers.length + 1 : id}</h2>
     <p class="prompt prose">${escape(question.question)}</p>
-    <form>
+    <form autocomplete="off">
       <fieldset>
         <legend>${type === 'multiple' ? 'Select all correct answers.' : 'Select one answer.'}</legend>
         ${options.map((option, i) => `<label class="option">
@@ -340,8 +348,8 @@ function renderQuiz(panel, question = queue[cursor]) {
           <span class="letter">${letter(i)}</span><span class="prose">${escape(option)}</span>
         </label>`).join('')}
       </fieldset>
-      <div class="actions"><button type="submit" class="primary">${final ? 'Submit and continue' : 'Check answer'}</button></div>
       <p class="validation" role="alert"></p>
+      <div class="actions"><button type="submit" class="primary">${final ? 'Submit and continue' : 'Check answer'}</button></div>
     </form>
     <div id="feedback"></div>`;
 
@@ -373,13 +381,13 @@ function renderQuiz(panel, question = queue[cursor]) {
     const feedback = panel.querySelector('#feedback');
     feedback.innerHTML = `
       <section class="feedback ${passed ? 'passed' : 'retry'}">
-        <p class="eyebrow" tabindex="-1">${passed ? 'CORRECT' : 'INCORRECT'} · EXPECTED ${correct.map(letter).join(', ')}</p>
+        <p class="feedback-status" tabindex="-1">${passed ? 'Correct' : 'Incorrect'}. Expected ${correct.map(letter).join(', ')}.</p>
         ${questionExplanation(chapter, question)}
       </section>
       <div class="actions"><button type="button" class="primary" id="next">
         ${cursor + 1 < queue.length ? 'Next question' : 'See quiz summary'}
       </button></div>`;
-    feedback.querySelector('.eyebrow').focus();
+    feedback.querySelector('.feedback-status').focus();
     feedback.querySelector('#next').addEventListener('click', () => {
       cursor++;
       render();
@@ -392,7 +400,7 @@ function renderFinal(panel) {
   if (!final) {
     const left = chapters.filter(step).length;
     panel.innerHTML = `
-      <h2 tabindex="-1">Put your knowledge together</h2>
+      <h2 tabindex="-1">Before you start</h2>
       <p>${chapters.length} single- or multiple-answer questions from the Study Pack.
         At the end, review your results by exam area and compare your choices with the solutions.</p>
       ${left ? `<p>You have ${left} chapters left. Resume the study plan to pick up at the first unfinished step.</p>` : ''}
@@ -445,22 +453,26 @@ function renderCases(panel) {
   const errors = missed(chapter);
   panel.innerHTML = `
     <h2 tabindex="-1">Worked cases</h2>
-    <p>Predict the outcome before opening the worked example. Then try the follow-up and mark the case complete.</p>
+    <p>Predict what the code will do before opening the worked example. Then try the follow-up on your own.</p>
     <p id="case-progress" class="muted" role="status"></p>
     ${chapter.cases.map((item, i) => {
       const [challenge, solution] = variations[chapter.topic][i];
       return `<details class="reading" ${i === 0 ? 'open' : ''}>
         <summary>${escape(item.title)}</summary>
-        <div class="case">
+        <div class="disclosure-body">
           <p class="muted">Related quiz questions · ${item.qs.map(id => `Q${id}`).join(', ')}</p>
-          ${item.code ? `<pre><code>${escape(item.code)}</code></pre>` : ''}
-          <details><summary>Show the worked example and reasoning</summary>
-            ${paragraph(item.example)}
-            ${paragraph(item.reason)}
+          ${item.code ? `<pre><code translate="no">${escape(item.code)}</code></pre>` : ''}
+          <details class="reading inset"><summary>Worked example and explanation</summary>
+            <div class="disclosure-body">
+              ${paragraph(item.example)}
+              ${paragraph(item.reason)}
+            </div>
           </details>
           <h3>Try a variation</h3>
-          ${paragraph(challenge)}
-          <details><summary>Show the variation solution</summary>${paragraph(solution)}</details>
+          <p>${markdownText(challenge)}</p>
+          <details class="reading inset"><summary>Variation solution</summary>
+            <div class="disclosure-body"><p>${markdownText(solution)}</p></div>
+          </details>
           <label class="case-done">
             <input type="checkbox" data-case="${i}" ${state.worked[chapter.topic]?.[item.file] ? 'checked' : ''}>
             <span>Mark case complete</span>
@@ -470,10 +482,14 @@ function renderCases(panel) {
     }).join('')}
     <h3>Exercise diagrams</h3>
     ${renderDiagrams(chapter.exerciseDiagrams, 'Exercise diagram')}
-    <details class="reading"><summary>Further insights from the diagrams</summary>
-      ${chapter.panels.slice(chapter.cases.length).map(item => `<h3>${escape(item.title)}</h3>${paragraph(item.example)}${paragraph(item.reason)}`).join('')}
+    <details class="reading"><summary>More examples from the diagrams</summary>
+      <div class="disclosure-body">
+        ${chapter.panels.slice(chapter.cases.length).map(item => `<h3>${escape(item.title)}</h3>${paragraph(item.example)}${paragraph(item.reason)}`).join('')}
+      </div>
     </details>
-    <details class="reading"><summary>Chapter notes and quiz caveats</summary>${paragraph(guides[chapter.topic][1])}</details>
+    <details class="reading"><summary>Chapter note</summary>
+      <div class="disclosure-body"><p>${markdownText(guides[chapter.topic][1])}</p></div>
+    </details>
     <div class="actions">
       ${attempted(chapter) < chapter.quiz.length ? '<button type="button" class="primary" data-phase="quiz">Finish quiz</button>' : ''}
       ${errors ? '<button type="button" data-phase="quiz" data-mode="review">Retry missed questions</button>' : ''}
@@ -490,6 +506,16 @@ function renderCaseProgress() {
   button.hidden = completed < chapter.cases.length;
   button.textContent = next ? `Continue · ${next.topic} · ${phases[step(next)]}` : 'Go to final assessment';
 }
+
+nav.addEventListener('toggle', event => {
+  const area = event.target.dataset.area;
+  if (!area || !nav.contains(event.target)) return;
+  const open = state.openTopics.includes(area);
+  if (event.target.open === open) return;
+  if (open) state.openTopics = state.openTopics.filter(code => code !== area);
+  else state.openTopics.push(area);
+  save();
+}, true);
 
 nav.addEventListener('click', event => {
   const button = event.target.closest('[data-topic]');

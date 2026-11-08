@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { access, readFile } from 'node:fs/promises';
+import { open, readFile } from 'node:fs/promises';
 import test from 'node:test';
 import { chapterStep, correctSelection, finalQuestionRefs, loadCourse, packPath, passedAnswer, practiceQueue, recordPractice, reviewItems } from './content.mjs';
 
@@ -38,7 +38,15 @@ test('the real study pack supplies every lesson, question, and worked case', asy
       if (question.type === 'single') assert.equal(question.correct.length, 1);
       assert.ok(question.explanation.trim());
     }
-    for (const { file } of [...chapter.diagrams, ...chapter.exerciseDiagrams]) await access(packFile(file));
+    for (const { file, width, height } of [...chapter.diagrams, ...chapter.exerciseDiagrams]) {
+      const image = await open(packFile(file));
+      try {
+        const { buffer } = await image.read(Buffer.alloc(8), 0, 8, 16);
+        assert.deepEqual([width, height], [buffer.readUInt32BE(0), buffer.readUInt32BE(4)], file);
+      } finally {
+        await image.close();
+      }
+    }
   }
 });
 
