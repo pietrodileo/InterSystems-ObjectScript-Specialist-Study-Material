@@ -369,10 +369,9 @@ function renderTheory(panel) {
           <ul>${section.points.map(point => `<li>${markdownText(point)}</li>`).join('')}</ul>
           ${renderCodeExamples(examples)}
           <details class="reading inset" ${examples.length ? '' : 'open'}>
-            <summary>Full explanation and ${section.noteExampleCount} code examples</summary>
+            <summary>Full explanation and ${section.noteExampleCount} ${section.noteExampleCount === 1 ? 'code example' : 'code examples'}</summary>
             <div class="disclosure-body">${renderStudyNotes(section.detail)}</div>
           </details>
-          ${renderCodeExamples(examples)}
           <div class="documentation">
             <h3>Official documentation</h3>
             <ul>${section.references.map(({ url, label }) => `<li>${link(url, label)}</li>`).join('')}</ul>
