@@ -38,6 +38,8 @@ Saved 2 November 2026 from [exam-prep.es](https://exam-prep.es/exams/objectscrip
 
 TRY-CATCH is the recommended error handling mechanism in modern ObjectScript. It provides structured, readable, and maintainable error handling using exception objects that carry detailed information about what went wrong and where.
 
+Only a thrown exception enters `CATCH`; a method can also return an error `%Status` without throwing. Catch the exception object to inspect the failure, then decide whether to recover, convert it to a status, or rethrow it. Keep the protected operation inside `TRY`, and make sure required cleanup also happens when an exception interrupts the normal path.
+
 #### Basic TRY-CATCH Syntax
 
 ```objectscript
@@ -454,6 +456,8 @@ ClassMethod ProcessData()
 
 The `$STACK` special variable provides programmatic access to the execution call stack. During error handling, `$STACK` lets you capture a complete trace of the call chain that led to the error, which is invaluable for debugging.
 
+Read `$STACK` at the point where the failure is handled: it reports the current depth and the call information available at that moment. If a `CATCH` block needs those details, capture them before returning or rethrowing. The stack can show which calls led to the failing method, but it does not automatically write or preserve that trace in a log.
+
 #### Basic $STACK Usage
 
 ```objectscript
@@ -595,6 +599,8 @@ ClassMethod HandleError()
 
 `%Status` is a fundamental data type in InterSystems IRIS used throughout the class library to indicate success or failure of operations. Methods like `%Save()`, `%New()`, `%Open()`, and many others return `%Status` values. Understanding how to test, display, and create status values is essential.
 
+A `%Status` is a structured success or error value, not a message string. For example, save the result of `%Save()` in `sc`, test it with `$SYSTEM.Status.IsError(sc)`, and display `$SYSTEM.Status.GetErrorText(sc)` on failure. Returning the same status to the caller preserves the failure; printing it and continuing as if the save succeeded does not.
+
 #### Testing Status Values
 
 ```objectscript
@@ -734,6 +740,8 @@ ClassMethod RobustSave() As %Status
 #### Overview
 
 InterSystems IRIS uses two distinct error signaling patterns: `%Status` return values and exceptions. The `%Status` pattern is pervasive in the class library (e.g., `%Save()`, `%Open()`), while exceptions are used for runtime errors and modern structured error handling. Real-world code must bridge both patterns fluently.
+
+Returning an error `%Status` does not transfer control to `CATCH`; the caller must check it. For example, after `%Save()`, use `$$$ThrowOnError(sc)` if the method's contract is exception-based, or return `sc` if callers are expected to check statuses. Choose and document the contract at each method boundary so errors are not ignored or handled twice.
 
 #### The %Status Pattern
 
