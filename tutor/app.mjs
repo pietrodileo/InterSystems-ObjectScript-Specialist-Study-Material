@@ -1,5 +1,5 @@
 import { assessmentAnswered, assessmentComplete, chapterStep, correctSelection, finalQuestionRefs, loadCourse, packPath, passedAnswer, practiceQueue, quizBlocks, recordPractice, reviewItems, topics } from './content.mjs';
-import { caseFocus, guides, variations } from './lesson-guides.mjs';
+import { caseFocus, chapterSummaries, guides, variations } from './lesson-guides.mjs';
 import { diagramExamples, studyExamples } from './code-examples.mjs';
 
 const lesson = document.querySelector('#lesson');
@@ -286,7 +286,7 @@ function renderCodeExamples(examples) {
 function renderTheory(panel) {
   panel.innerHTML = `
     <h2 tabindex="-1">Key concepts</h2>
-    <p>Start with the diagrams, then open a concept to read about it. Where you see a code example, predict the result before reading the explanation below it.</p>
+    <p>${markdownText(chapterSummaries[chapter.topic])}</p>
     ${renderDiagrams(chapter.diagrams, 'Study diagram')}
     <div class="sections">${chapter.sections.map((section, i) => {
       const examples = studyExamples[`${chapter.topic}/${i + 1}`] ?? [];
