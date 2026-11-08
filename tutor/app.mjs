@@ -9,6 +9,7 @@ const sidebar = document.querySelector('#course');
 const sidebarToggle = document.querySelector('#sidebar-toggle');
 const sidebarChevron = document.querySelector('#sidebar-chevron');
 const themeToggle = document.querySelector('#theme-toggle');
+const themeModeLabel = document.querySelector('#theme-mode-label');
 const infoButton = document.querySelector('#info-button');
 const infoDialog = document.querySelector('#info-dialog');
 const closeInfo = document.querySelector('#close-info');
@@ -88,6 +89,7 @@ function applyTheme(theme) {
   themeToggle.setAttribute('aria-pressed', String(theme === 'dark'));
   themeToggle.setAttribute('aria-label', `Switch to ${nextTheme} mode`);
   themeToggle.title = `Switch to ${nextTheme} mode`;
+  themeModeLabel.textContent = theme === 'dark' ? 'Light' : 'Dark';
   document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'dark' ? '#080f20' : '#21328c');
 }
 
