@@ -271,6 +271,7 @@ h3 { font-size: 1.05rem; margin: 1.15rem 0 .35rem; }
 h4 { font-size: 1rem; margin: 1rem 0 .35rem; }
 .chapter-location, .session-status { color: var(--muted); font-weight: 650; font-size: .85rem; margin: 0; }
 .lead { color: var(--muted); margin: 0; max-width: 69ch; line-height: 1.65; }
+.lead + .lead { margin-top: .8rem; }
 .chapter-location + .lead { margin-top: .65rem; }
 .phases { display: flex; gap: .4rem; margin: 0 0 .8rem; border-bottom: 1px solid var(--line); }
 .phases button:not(.chapter-button) { background: transparent; border-color: transparent; border-radius: .4rem .4rem 0 0; }
