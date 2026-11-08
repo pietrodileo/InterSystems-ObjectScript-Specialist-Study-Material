@@ -1,5 +1,7 @@
 # ObjectScript Study Pack
 
+[Tutor di certificazione](../README.md#tutor-di-certificazione) — percorso interattivo per studiare, esercitarti e ripassare gli errori.
+
 [Approfondimenti dagli esercizi](approfondimenti-esercizi.md) — casi commentati, varianti e nuovi schemi.
 
 Open [index.md](index.md) to browse the material. Files are Markdown and can be read in Codex, VS Code, Obsidian, or any Markdown viewer.
