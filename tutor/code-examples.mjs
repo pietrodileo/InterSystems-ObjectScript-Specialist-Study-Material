@@ -1,52 +1,7 @@
 // Examples are keyed by chapter and concept number, or by chapter and diagram title.
 export const studyExamples = {
   'T1.1/1': [
-    ['Choose the right class for a patient, an address, request state, and a calculation', `Class Tutor.Address Extends %SerialObject
-{
-    Property Street As %String;
-    Property City As %String;
-    Property PostalCode As %String;
-}
-
-Class Tutor.Patient Extends %Persistent
-{
-    Property Name As %String;
-    Property HomeAddress As Tutor.Address;
-}
-
-Class Tutor.RequestContext Extends %RegisteredObject
-{
-    Property CorrelationId As %String;
-}
-
-Class Tutor.NumberTools
-{
-    ClassMethod Double(value As %Integer) As %Integer
-    {
-        return value * 2
-    }
-}
-
-// Run inside a compiled method after compiling the four classes.
-set patient = ##class(Tutor.Patient).%New()
-set patient.Name = "Ada Lovelace"
-set patient.HomeAddress.Street = "12 Example Street"
-set patient.HomeAddress.City = "London"
-set patient.HomeAddress.PostalCode = "N1 2AB"
-set sc = patient.%Save()
-if $SYSTEM.Status.IsError(sc) {
-    write $SYSTEM.Status.GetErrorText(sc), !
-    quit
-}
-set id = patient.%Id()
-set savedPatient = ##class(Tutor.Patient).%OpenId(id)
-write savedPatient.HomeAddress.City, !
-
-set context = ##class(Tutor.RequestContext).%New()
-set context.CorrelationId = "req-42"
-write context.CorrelationId, !
-
-write ##class(Tutor.NumberTools).Double(21), !`, 'Compile Address first, then Patient, RequestContext, and NumberTools in separate class files. The method saves the patient and reads it back by ID; the first output is London. The address is stored through the patient and has no separate ID. RequestContext stays in memory and is not saved. NumberTools is called as a class method without creating an instance; the last output is 42. With the default SQL projection, you can also query the address through HomeAddress_City in Tutor.Patient.'],
+    ["Compare persistent, serial, registered, and utility classes","Class Tutor.Address Extends %SerialObject\n{\n    Property City As %String;\n    Property PostalCode As %String(MAXLEN = 10);\n}\n\nClass Tutor.Person Extends %Persistent\n{\n    Property Name As %String;\n    Property HomeAddress As Tutor.Address;\n}\n\nClass Tutor.Calculator Extends %RegisteredObject\n{\n    Method Total(amount As %Numeric, tax As %Numeric) As %Numeric\n    {\n        return amount * (1 + tax)\n    }\n}\n\nClass Tutor.MathUtils\n{\n    ClassMethod Square(value As %Numeric) As %Numeric\n    {\n        return value * value\n    }\n}\n\n// In a compiled application method:\nset person = ##class(Tutor.Person).%New()\nset person.Name = \"Ada\"\nset person.HomeAddress = ##class(Tutor.Address).%New()\nset person.HomeAddress.City = \"Rome\"\nset sc = person.%Save()\nif $SYSTEM.Status.IsError(sc) {\n    write $SYSTEM.Status.GetErrorText(sc), !\n    quit\n}\nwrite \"Person ID: \", person.%Id(), !\n\nset calculator = ##class(Tutor.Calculator).%New()\nwrite calculator.Total(100, .22), !\nwrite ##class(Tutor.MathUtils).Square(3), !","Compile the class definitions in separate class files. Saving Person creates the persistent record and gives Person an ID. HomeAddress is a %SerialObject embedded in that record, so it has no independent ID. Calculator can be instantiated and used in memory but does not create a database row. MathUtils groups class methods and has no object superclass, so call Square() on the class instead of creating it with %New(). The example prints the person ID, 122, and 9."]
   ],
   'T1.1/2': [
     ['Save an object and read its ID', `set person = ##class(Sample.Person).%New()
