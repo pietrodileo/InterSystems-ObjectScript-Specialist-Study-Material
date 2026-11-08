@@ -267,6 +267,8 @@ For large lists, $LISTNEXT is significantly faster because it maintains an inter
 
 ObjectScript provides functions to convert between its native list format (created by $LISTBUILD) and delimited strings. This is essential when interfacing with external systems, displaying data, or processing delimited input files.
 
+Conversion is convenient for interchange, but it is not always a lossless round trip: if a field contains the chosen delimiter, converting back can split it into extra pieces. For example, `Ada^Lovelace^London` is unambiguous only if the fields do not contain `^`. Keep an encoded list when element boundaries or omitted positions must be preserved.
+
 #### $LISTTOSTRING: List to Delimited String
 
 ```objectscript
