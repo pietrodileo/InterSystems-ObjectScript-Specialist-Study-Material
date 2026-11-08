@@ -10,7 +10,7 @@ Use the numbered buttons to jump to any question in a chapter quiz or in the fin
 
 Choose **Pin index** in the course drawer to keep navigation open while you study. On phones, the pinned index sits above the lesson. Use **Unpin** to return to the drawer on smaller screens.
 
-Progress and submitted choices are saved in the current browser at the URL where you study. Results from older tutor versions still count, with answer choices available from new submissions onward.
+Progress and submitted choices are saved in the current browser at the URL where you study. Results from older tutor versions still count, with answer choices available from new submissions onward. Use Export to download a JSON backup and Import to restore it in another browser; importing replaces the progress saved there.
 
 [Open the tutor online](https://pietrodileo.github.io/InterSystems-ObjectScript-Specialist-Study-Material/tutor/).
 
