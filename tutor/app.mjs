@@ -64,6 +64,7 @@ function updateSidebarToggle() {
 }
 
 function placeSidebar() {
+  lesson.before(sidebar);
   sidebar.hidden = !(state.sidebarOpen ?? true);
   updateSidebarToggle();
 }
