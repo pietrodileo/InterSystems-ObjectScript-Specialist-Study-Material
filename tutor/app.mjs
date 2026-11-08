@@ -7,6 +7,7 @@ const nav = document.querySelector('#chapters');
 const courseMenu = document.querySelector('#course-menu');
 const sidebar = document.querySelector('#course');
 const sidebarToggle = document.querySelector('#sidebar-toggle');
+const sidebarChevron = document.querySelector('#sidebar-chevron');
 const drawer = document.querySelector('#course-drawer');
 const pinnedHeader = document.querySelector('#pinned-header');
 const unpin = document.querySelector('#sidebar-unpin');
@@ -60,9 +61,15 @@ function save() {
 const useDrawer = () => compact.matches && !state.sidebarPinned;
 
 function updateSidebarToggle() {
-  const open = useDrawer() ? drawer.open : !sidebar.hidden;
+  const drawerMode = useDrawer();
+  const open = drawerMode ? drawer.open : !sidebar.hidden;
+  const label = drawerMode
+    ? open ? 'Close course index' : 'Open course index'
+    : open ? 'Collapse course index' : 'Expand course index';
   sidebarToggle.setAttribute('aria-expanded', String(open));
-  sidebarToggle.textContent = useDrawer() ? 'Course index' : open ? 'Hide course index' : 'Show course index';
+  sidebarToggle.setAttribute('aria-label', label);
+  sidebarToggle.title = label;
+  sidebarChevron.setAttribute('d', open ? 'm15 9-3 3 3 3' : 'm12 9 3 3-3 3');
 }
 
 function placeSidebar() {
@@ -86,7 +93,8 @@ placeSidebar();
 compact.addEventListener('change', placeSidebar);
 sidebarToggle.addEventListener('click', () => {
   if (useDrawer()) {
-    drawer.showModal();
+    if (drawer.open) drawer.close();
+    else drawer.showModal();
   } else {
     state.sidebarOpen = sidebar.hidden;
     sidebar.hidden = !state.sidebarOpen;
