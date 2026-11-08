@@ -27,23 +27,6 @@
         <a href="https://www.intersystems.com/certifications/intersystems-objectscript-specialist/">Official exam outline ↗</a>
         <a href="https://exam-prep.es">Other exam preparation materials ↗</a>
       </nav>
-      <div class="header-controls">
-        <button type="button" id="theme-toggle" class="icon-button" aria-label="Switch to dark mode" aria-pressed="false" title="Switch to dark mode">
-          <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
-            <path d="M20.2 15.3A8.5 8.5 0 0 1 8.7 3.8 8.5 8.5 0 1 0 20.2 15.3Z"></path>
-          </svg>
-          <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
-            <circle cx="12" cy="12" r="4"></circle>
-            <path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"></path>
-          </svg>
-        </button>
-        <button type="button" id="info-button" class="icon-button" aria-label="About this website" title="About this website">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
-            <circle cx="12" cy="12" r="9"></circle>
-            <path d="M12 11v5m0-8h.01"></path>
-          </svg>
-        </button>
-      </div>
     </div>
   </header>
   <dialog id="info-dialog" class="info-dialog" aria-labelledby="info-title">
@@ -72,6 +55,7 @@
       <p role="status">Loading the Study Pack… If you opened this file directly, follow the launch instructions in the README.</p>
     </main>
     <aside class="sidebar" id="course" aria-label="Study plan" hidden>
+      <div class="sidebar-scroll-content">
       <nav id="course-menu" class="course-menu" aria-label="Course pages"></nav>
       <div class="course-progress">
         <label for="progress">Your progress</label>
@@ -88,6 +72,28 @@
         <p id="progress-transfer-status" class="muted" role="status" aria-live="polite"></p>
       </div>
       <nav id="chapters" aria-label="Chapters"></nav>
+      </div>
+      <div class="sidebar-footer">
+        <div class="sidebar-actions">
+          <button type="button" id="info-button" class="sidebar-action" aria-label="About this website" title="About this website">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+              <circle cx="12" cy="12" r="9"></circle>
+              <path d="M12 11v5m0-8h.01"></path>
+            </svg>
+            <span>About</span>
+          </button>
+          <button type="button" id="theme-toggle" class="sidebar-action" aria-label="Switch to dark mode" aria-pressed="false" title="Switch to dark mode">
+            <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+              <path d="M20.2 15.3A8.5 8.5 0 0 1 8.7 3.8 8.5 8.5 0 1 0 20.2 15.3Z"></path>
+            </svg>
+            <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+              <circle cx="12" cy="12" r="4"></circle>
+              <path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"></path>
+            </svg>
+            <span id="theme-mode-label">Dark</span>
+          </button>
+        </div>
+      </div>
     </aside>
   </div>
 </body>
