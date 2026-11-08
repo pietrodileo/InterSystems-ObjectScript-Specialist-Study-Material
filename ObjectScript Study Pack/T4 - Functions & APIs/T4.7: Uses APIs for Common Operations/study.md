@@ -38,6 +38,8 @@ Saved 2 November 2026 from [exam-prep.es](https://exam-prep.es/exams/objectscrip
 
 The %Stream classes provide ObjectScript's standard file I/O mechanism. Unlike traditional languages that use file handles, InterSystems IRIS uses stream objects that encapsulate the file, its position, and its encoding. Streams are also used extensively in web services, SQL BLOBs/CLOBs, and interoperability productions.
 
+Choose a stream class by the data: character streams handle text with an encoding, while binary streams preserve bytes such as a PDF. A stream's position advances as `Read()` consumes data; after `Rewind()`, the next read starts again at the beginning. Since `Read(n)` may return a shorter chunk near the end, loop until `AtEnd` instead of assuming one read returns the whole file.
+
 #### Writing a Text File
 
 ```objectscript
@@ -192,6 +194,8 @@ The %Stream classes provide ObjectScript's standard file I/O mechanism. Unlike t
 #### Overview
 
 The %Net package provides classes for common network protocols. %Net.HttpRequest handles HTTP communication (REST APIs, web services), %Net.FtpSession manages FTP file transfers, and %Net.SMTP sends email. These classes are essential for integrating InterSystems IRIS with external systems.
+
+Treat transport and application outcomes as separate checks. A failed `%Status` means the request did not complete successfully at the transport level; an HTTP response can still be 404 or 500, so inspect `HttpResponse.StatusCode` too. FTP and SMTP have their own server responses and configuration. A successful SMTP submission means the server accepted the message, not that it was later delivered or read.
 
 #### HTTP GET Request
 
