@@ -135,6 +135,8 @@ ObjectScript evaluates mathematical expressions strictly from left to right with
 
 ObjectScript logical operators also follow strict left-to-right evaluation. The language provides both short-circuit (&&, ||) and non-short-circuit (&, !) logical operators. The NOT operator is the apostrophe character ('), which can also prefix comparison operators.
 
+Short-circuit operators matter when evaluating the second expression could fail or waste work. For example, `(count > 0) && (total/count > 5)` checks the divisor before dividing; with the non-short-circuit `&`, both expressions are evaluated. The apostrophe (`'`) is ObjectScript's NOT operator, while `!` is OR—symbols that are easy to confuse with other languages.
+
 #### Logical Operators
 
 ```objectscript
@@ -369,6 +371,8 @@ InterSystems IRIS stores dates and times internally using $HOROLOG format: a two
 #### Overview
 
 Because $HOROLOG represents dates as integer day counts and times as integer seconds, date arithmetic is straightforward: add or subtract integers. For more complex calculations (months, years), use the $SYSTEM.SQL date functions.
+
+`$HOROLOG` stores a day number and seconds since midnight, so adding 1 to its date component moves forward one day and works across month and year boundaries. For example, one day after 29 February 2024 is 1 March 2024. Adding 30 days is not the same as adding one calendar month; use date-aware functions when the requirement is defined in months or years.
 
 #### Simple Date Arithmetic
 
