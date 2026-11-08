@@ -319,6 +319,15 @@ export const caseFocus = {
 };
 
 
+// Plain-language overviews for the five exam areas shown on the study plan.
+export const examAreaDescriptions = {
+  T1: "Learn how IRIS classes represent application data. Compare persistent objects, which IRIS stores with their own IDs, with serial objects stored inside another object. Then work with properties, indexes, methods, inheritance, JSON, and streams.",
+  T2: "See how to keep application data consistent and protected. Transactions and locks coordinate updates. Logging and metrics help you understand what an application is doing, while access controls and safe SQL protect data.",
+  T3: "Understand how ObjectScript data and SQL tables fit together in IRIS. Compare variable and global lifetimes, see how ObjectScript values differ from SQL NULL, and follow schema changes and query plans to understand performance.",
+  T4: "Build fluency with everyday ObjectScript operations. Traverse arrays and globals, handle lists, strings, numbers, and dates, write conditions and loops, inspect classes at runtime, and use file, HTTP, FTP, and email APIs.",
+  T5: "Find and handle errors from compilation through runtime. Use compiler diagnostics and performance tools, work with exceptions and status codes, and trace common error messages to the code or data behind them."
+};
+
 // Short, chapter-specific orientation shown above the concept sections.
 export const chapterSummaries = {
   "T1.1": "Build a clear picture of IRIS classes: when to use persistent objects, how IDs and storage work, and what inheritance changes when methods are resolved.",
