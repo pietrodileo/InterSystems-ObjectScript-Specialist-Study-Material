@@ -10,6 +10,10 @@ const sidebarToggle = document.querySelector('#sidebar-toggle');
 const drawer = document.querySelector('#course-drawer');
 const pinnedHeader = document.querySelector('#pinned-header');
 const unpin = document.querySelector('#sidebar-unpin');
+const exportProgress = document.querySelector('#export-progress');
+const importProgress = document.querySelector('#import-progress');
+const progressFile = document.querySelector('#progress-file');
+const transferStatus = document.querySelector('#progress-transfer-status');
 const compact = window.matchMedia('(max-width: 1040px)');
 const storageKey = 'objectscript-tutor-v1';
 const phases = { theory: 'Study', quiz: 'Practice', cases: 'Apply' };
@@ -754,4 +758,104 @@ try {
 } catch (error) {
   lesson.innerHTML = '<h1>Could not load the Study Pack</h1><p>Start the tutor from the repository root using the command in the README, then reload this page.</p>';
   console.error(error);
+}
+
+const backupFormat = 'objectscript-certification-tutor-progress';
+const backupVersion = 1;
+
+function progressSnapshot() {
+  const keys = ['results', 'studied', 'worked', 'history', 'assessments', 'openTopics', 'topic', 'phase', 'assessmentIndex', 'final', 'sidebarOpen', 'sidebarPinned'];
+  return Object.fromEntries(keys.filter(key => Object.hasOwn(state, key)).map(key => [key, state[key]]));
+}
+
+function isRecord(value) {
+  return value !== null && typeof value === 'object' && !Array.isArray(value);
+}
+
+function isValidAttempt(attempt, question) {
+  if (typeof attempt === 'boolean') return true;
+  return isRecord(attempt) && typeof attempt.passed === 'boolean' && Array.isArray(attempt.selected) &&
+    attempt.selected.length > 0 && attempt.selected.every(index => Number.isInteger(index) && index >= 0 && index < question.options.length) &&
+    new Set(attempt.selected).size === attempt.selected.length;
+}
+
+function validateProgressBackup(backup) {
+  if (!isRecord(backup) || backup.format !== backupFormat || backup.version !== backupVersion || !isRecord(backup.progress)) return null;
+  const saved = backup.progress;
+  if (!isRecord(saved.results) || !isRecord(saved.studied) || !isRecord(saved.worked) || !isRecord(saved.history) ||
+      !Array.isArray(saved.assessments) || !Array.isArray(saved.openTopics)) return null;
+
+  const byTopic = new Map(chapters.map(item => [item.topic, {
+    questions: new Map(item.quiz.map(question => [String(question.id), question])),
+    cases: new Set(item.cases.map(exercise => exercise.file)),
+  }]));
+  const validTopicMap = (value, validate) => isRecord(value) && Object.entries(value).every(([topic, entries]) => {
+    const known = byTopic.get(topic);
+    return Boolean(known && validate(entries, known));
+  });
+  const validResults = validTopicMap(saved.results, (entries, known) => isRecord(entries) && Object.entries(entries).every(([id, passed]) => known.questions.has(id) && typeof passed === 'boolean'));
+  const validHistory = validTopicMap(saved.history, (entries, known) => isRecord(entries) && Object.entries(entries).every(([id, attempts]) =>
+    known.questions.has(id) && Array.isArray(attempts) && attempts.every(attempt => isValidAttempt(attempt, known.questions.get(id)))));
+  const validStudied = validTopicMap(saved.studied, entries => isRecord(entries) && Object.values(entries).every(value => typeof value === 'boolean'));
+  const validWorked = validTopicMap(saved.worked, (entries, known) => isRecord(entries) && Object.entries(entries).every(([file, done]) => known.cases.has(file) && typeof done === 'boolean'));
+  if (!validResults || !validHistory || !validStudied || !validWorked || !saved.openTopics.every(topic => Object.hasOwn(topics, topic))) return null;
+
+  const validFinal = final => {
+    if (!isRecord(final) || !Array.isArray(final.refs) || !Array.isArray(final.answers) || final.refs.length !== final.answers.length ||
+        (final.submitted !== undefined && typeof final.submitted !== 'boolean') ||
+        (final.cursor !== undefined && (!Number.isInteger(final.cursor) || final.cursor < 0 || final.cursor >= final.refs.length))) return false;
+    return final.refs.every((ref, index) => {
+      if (!isRecord(ref) || typeof ref.topic !== 'string') return false;
+      const question = byTopic.get(ref.topic)?.questions.get(String(ref.id));
+      const answer = final.answers[index];
+      return Boolean(question && (answer === null || isValidAttempt(answer, question)));
+    });
+  };
+  if (!saved.assessments.every(validFinal) || (saved.final !== undefined && !validFinal(saved.final))) return null;
+  if (saved.topic !== undefined && !byTopic.has(saved.topic)) return null;
+  if (saved.phase !== undefined && !['theory', 'quiz', 'cases', 'roadmap', 'review', 'final', 'past'].includes(saved.phase)) return null;
+  if (saved.assessmentIndex !== undefined && (!Number.isInteger(saved.assessmentIndex) || saved.assessmentIndex < 0 || saved.assessmentIndex >= saved.assessments.length)) return null;
+  if (saved.sidebarOpen !== undefined && typeof saved.sidebarOpen !== 'boolean') return null;
+  if (saved.sidebarPinned !== undefined && typeof saved.sidebarPinned !== 'boolean') return null;
+
+  return Object.fromEntries(['results', 'studied', 'worked', 'history', 'assessments', 'openTopics', 'topic', 'phase', 'assessmentIndex', 'final', 'sidebarOpen', 'sidebarPinned']
+    .filter(key => Object.hasOwn(saved, key)).map(key => [key, saved[key]]));
+}
+
+exportProgress.addEventListener('click', () => {
+  const backup = { format: backupFormat, version: backupVersion, exportedAt: new Date().toISOString(), progress: progressSnapshot() };
+  const url = URL.createObjectURL(new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' }));
+  const anchor = document.createElement('a');
+  anchor.href = url;
+  anchor.download = 'objectscript-progress-' + new Date().toISOString().slice(0, 10) + '.json';
+  anchor.click();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  transferStatus.textContent = 'Progress backup downloaded. Keep the file somewhere safe.';
+});
+
+importProgress.addEventListener('click', () => progressFile.click());
+progressFile.addEventListener('change', async () => {
+  const file = progressFile.files?.[0];
+  if (!file) return;
+  transferStatus.textContent = '';
+  try {
+    if (file.size > 1_000_000) throw new Error();
+    const restored = validateProgressBackup(JSON.parse(await file.text()));
+    if (!restored) throw new Error();
+    if (!window.confirm('Importing this backup will replace the progress currently saved in this browser. Continue?')) {
+      transferStatus.textContent = 'Import cancelled.';
+      return;
+    }
+    localStorage.setItem(storageKey, JSON.stringify(restored));
+    window.location.reload();
+  } catch {
+    transferStatus.textContent = 'This file is not a valid progress backup, or the browser could not save it.';
+  } finally {
+    progressFile.value = '';
+  }
+});
+
+if (chapters) {
+  exportProgress.disabled = false;
+  importProgress.disabled = false;
 }
