@@ -12,6 +12,8 @@ Choose **Pin index** in the course drawer to keep navigation open while you stud
 
 Progress and submitted choices are saved in the current browser at the URL where you study. Results from older tutor versions still count, with answer choices available from new submissions onward.
 
+[Open the tutor online](https://pietrodileo.github.io/InterSystems-ObjectScript-Specialist-Study-Material/tutor/).
+
 From the repository root, run:
 
 ```sh
