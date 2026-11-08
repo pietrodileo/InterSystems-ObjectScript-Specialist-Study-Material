@@ -358,7 +358,7 @@ function renderTheory(panel) {
       const examples = studyExamples[`${chapter.topic}/${i + 1}`] ?? [];
       const exampleSummary = examples.length
         ? `${examples.length === 1 ? 'Worked example' : `${examples.length} worked examples`} · ${examples[0][0]} · ${section.noteExampleCount} in full notes`
-        : `${section.noteExampleCount} code examples in the full explanation`;
+        : `${section.noteExampleCount} code ${section.noteExampleCount === 1 ? 'example' : 'examples'} in the full explanation`;
       return `
       <details class="reading" ${i === 0 ? 'open' : ''}>
         <summary><span>${markdownText(section.title)}
