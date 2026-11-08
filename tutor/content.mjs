@@ -71,6 +71,36 @@ export function correctSelection(correct, selected) {
   return chosen.size === correct.length && correct.every(value => chosen.has(value));
 }
 
+export const assessmentAnswered = final => final.answers.filter(answer => answer != null).length;
+
+export const assessmentComplete = final =>
+  final.submitted ?? (assessmentAnswered(final) === final.refs.length);
+
+// shortcut: the source quiz has plain text. Prefer explicit markup if the pack gains it.
+const codeStarts = [
+  /^(?:Class\s+[\w%]+\.\w|(?:ClassMethod|Method)\s+\w+\(|(?:Property|Index)\s+\w+\s+(?:As|On)\b|Parameter\s+\w+\s*=|Storage\s+\w+$)/i,
+  /^(?:set\s+\S.*=|set:\S|(?:do|write|return|quit|throw|zwrite)\s+(?:[.$%^#"'0-9]|[\w.]+(?:\(|$))|(?:for|while|if)\s+.*\{)/i,
+  /^(?:TSTART|TCOMMIT|TROLLBACK)(?:\s+\d+)?$|^(?:LOCK|ZN)\s+[-+^"]/i,
+  /^(?:&sql\(|(?:SELECT|INSERT INTO|CREATE TABLE|GRANT)\s+|#(?:Include|Define)\b|Include\s+\w+\.\w|\/\/|ERROR\s*[#:])/i,
+  /^(?:\^[\w%|].*=|<\w+Location>|"[^"]*"\s*[+_-]|[\d(][\d()+*/#\\ .-]*[+*/#\\-]|\{\s*"|\[\s*[\d"])/,
+];
+
+export function quizBlocks(text) {
+  return text.trim().split(/\r?\n[ \t]*\r?\n+/).flatMap(block => {
+    const lines = block.split(/\r?\n/);
+    const firstCode = lines.findIndex(line => {
+      const start = line.trim().replace(/^[A-D][.)]\s+/i, '');
+      return codeStarts.some(pattern => pattern.test(start));
+    });
+    if (firstCode === -1) return [{ text: block, code: false }];
+    if (firstCode === 0) return [{ text: block, code: true }];
+    return [
+      { text: lines.slice(0, firstCode).join('\n'), code: false },
+      { text: lines.slice(firstCode).join('\n'), code: true },
+    ];
+  });
+}
+
 export function practiceQueue(questions, results, mode = 'learn') {
   if (mode === 'repeat') return questions;
   if (mode === 'review') return questions.filter(q => results[q.id] === false);

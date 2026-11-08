@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { open, readFile } from 'node:fs/promises';
 import test from 'node:test';
-import { chapterStep, correctSelection, finalQuestionRefs, loadCourse, packPath, passedAnswer, practiceQueue, recordPractice, reviewItems } from './content.mjs';
+import { assessmentAnswered, assessmentComplete, chapterStep, correctSelection, finalQuestionRefs, loadCourse, packPath, passedAnswer, practiceQueue, quizBlocks, recordPractice, reviewItems } from './content.mjs';
 
 import { guides, variations } from './lesson-guides.mjs';
 
@@ -38,6 +38,10 @@ test('the real study pack supplies every lesson, question, and worked case', asy
       if (question.type === 'single') assert.equal(question.correct.length, 1);
       assert.ok(question.explanation.trim());
     }
+    if (chapter.topic === 'T1.3') {
+      const question = chapter.quiz.find(item => item.id === 2);
+      assert.deepEqual(quizBlocks(question.options[0]), [{ text: question.options[0], code: true }]);
+    }
     for (const { file, width, height } of [...chapter.diagrams, ...chapter.exerciseDiagrams]) {
       const image = await open(packFile(file));
       try {
@@ -48,6 +52,32 @@ test('the real study pack supplies every lesson, question, and worked case', asy
       }
     }
   }
+});
+
+test('quiz blocks distinguish code and prose even without a blank line', () => {
+  assert.deepEqual(quizBlocks('The global contains:\n^Log(1) = "Started"\n\nWhat happens next?'), [
+    { text: 'The global contains:', code: false },
+    { text: '^Log(1) = "Started"', code: true },
+    { text: 'What happens next?', code: false },
+  ]);
+  assert.equal(quizBlocks('Write the result to a log.')[0].code, false);
+});
+
+test('assessment answers can be saved out of order and require explicit submission', () => {
+  const refs = [{}, {}, {}];
+  const answer = { passed: false, selected: [0] };
+  const final = { refs, answers: [], submitted: false };
+  final.answers[2] = answer;
+  const resumed = JSON.parse(JSON.stringify(final));
+  assert.equal(assessmentAnswered(resumed), 1);
+  assert.equal(assessmentComplete(resumed), false);
+  resumed.answers[0] = answer;
+  resumed.answers[1] = answer;
+  assert.equal(assessmentAnswered(resumed), 3);
+  assert.equal(assessmentComplete(resumed), false);
+  resumed.submitted = true;
+  assert.equal(assessmentComplete(resumed), true);
+  assert.equal(assessmentComplete({ refs, answers: [false, true, false] }), true);
 });
 
 test('multiple answers need an exact match in any order', () => {

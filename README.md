@@ -6,6 +6,8 @@ Open **Study plan** and choose **Start study plan**. The English tutor guides yo
 
 **Answer review** shows your choices and expected answers, tracks retries, and puts chapters with the most current errors first. The **Final assessment** draws one question per chapter and shows answers and results by area after you finish. Completed assessments remain available in **Answer review** when you start a new one.
 
+Use the numbered buttons to jump to any question in a chapter quiz or in the final assessment. In chapter quizzes, **Check answer** records an attempt. In the final assessment, your choices save as you go and you can change them until you choose **Finish assessment**.
+
 Progress and submitted choices are saved in the current browser at the URL where you study. Results from older tutor versions still count, with answer choices available from new submissions onward.
 
 From the repository root, run:

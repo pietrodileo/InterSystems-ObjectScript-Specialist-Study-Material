@@ -1,4 +1,4 @@
-import { chapterStep, correctSelection, finalQuestionRefs, loadCourse, packPath, passedAnswer, practiceQueue, recordPractice, reviewItems, topics } from './content.mjs';
+import { assessmentAnswered, assessmentComplete, chapterStep, correctSelection, finalQuestionRefs, loadCourse, packPath, passedAnswer, practiceQueue, quizBlocks, recordPractice, reviewItems, topics } from './content.mjs';
 import { guides, variations } from './lesson-guides.mjs';
 
 const lesson = document.querySelector('#lesson');
@@ -32,7 +32,7 @@ state.history ||= {};
 state.assessments ||= [];
 state.openTopics ??= [state.topic?.split('.')[0] ?? 'T1'];
 
-let chapters, chapter, phase, queue, cursor, reviewing;
+let chapters, chapter, phase, cursor, practiceMode, drafts, checked;
 const results = item => state.results[item.topic] ?? {};
 const attempted = item => item.quiz.filter(q => Object.hasOwn(results(item), q.id)).length;
 const missed = item => item.quiz.filter(q => results(item)[q.id] === false).length;
@@ -94,9 +94,11 @@ function renderNavigation() {
 function openChapter(item, nextPhase = step(item) ?? 'theory', mode = 'learn') {
   chapter = item;
   phase = nextPhase;
-  reviewing = mode === 'review';
-  queue = practiceQueue(chapter.quiz, results(chapter), mode);
-  cursor = 0;
+  practiceMode = mode;
+  const first = practiceQueue(chapter.quiz, results(chapter), mode)[0];
+  cursor = first ? chapter.quiz.indexOf(first) : 0;
+  drafts = new Map();
+  checked = new Map();
   const area = chapter.topic.split('.')[0];
   if (state.topic !== chapter.topic && !state.openTopics.includes(area)) state.openTopics.push(area);
   state.topic = chapter.topic;
@@ -230,14 +232,14 @@ function renderTheory(panel) {
 }
 
 function answerOptions(question, selected) {
-  return `<ul>${selected.map(index => `<li class="prose"><strong>${letter(index)}.</strong> ${escape(question.options[index])}</li>`).join('')}</ul>`;
+  return `<ul>${selected.map(index => `<li><strong>${letter(index)}.</strong> ${quizText(question.options[index])}</li>`).join('')}</ul>`;
 }
 
 function questionExplanation(item, question) {
   const panels = item.panels.filter(panel => panel.qs.includes(question.id));
   return `
     <h3>Why this answer is correct</h3>
-    ${paragraph(question.explanation.replace(/\s*\(Reference:[^)]+\)/g, ''))}
+    <p class="quiz-text">${quizText(question.explanation.replace(/\s*\(Reference:[^)]+\)/g, ''))}</p>
     ${panels.length ? `<details class="reading inset"><summary>Related examples and mistakes</summary>
       <div class="disclosure-body">${panels.map(panel => `<h4>${escape(panel.title)}</h4>${paragraph(panel.reason)}`).join('')}</div>
     </details>` : ''}
@@ -255,7 +257,7 @@ function answerDetails(item, question, attempts) {
   return `<details class="reading">
     <summary>Q${question.id} · ${outcome}${recovered ? ' on retry' : ''} · ${escape(prompt)}</summary>
     <div class="disclosure-body">
-      <p class="prompt prose">${escape(question.question)}</p>
+      <div class="prompt quiz-text">${quizText(question.question)}</div>
       <h3>Your answers</h3>
       <ol class="attempts">${attempts.map(attempt => `<li>
         <strong class="${passedAnswer(attempt) ? 'correct-text' : 'incorrect-text'}">${passedAnswer(attempt) ? 'Correct' : 'Incorrect'}</strong>
@@ -307,91 +309,136 @@ function renderReview() {
     </section>`;
 }
 
-function renderQuiz(panel, question = queue[cursor]) {
-  if (!question) {
-    const errors = missed(chapter);
-    const remaining = chapter.quiz.length - attempted(chapter);
-    panel.innerHTML = `
-      <h2 tabindex="-1">${reviewing ? 'Review session complete' : 'Chapter quiz complete'}</h2>
-      <p>${attempted(chapter)} questions answered out of ${chapter.quiz.length}.
-        ${errors ? `${errors} to review. Read the explanations and try them again.` : 'All of your latest answers are correct.'}
-      </p>
-      <div class="actions">
-        ${errors ? '<button type="button" class="primary" data-phase="quiz" data-mode="review">Retry missed questions</button>' : ''}
-        <button type="button" ${errors ? '' : 'class="primary"'} data-phase="cases">Open worked cases</button>
-        <button type="button" data-course="review">Open answer review</button>
-        ${remaining
-          ? '<button type="button" data-phase="quiz">Continue quiz</button>'
-          : '<button type="button" data-phase="quiz" data-mode="repeat">Retake full quiz</button>'}
-        ${reviewing && !errors && chapters.some(missed) ? '<button type="button" data-review-next>Review next chapter</button>' : ''}
-      </div>`;
-    return;
-  }
+function quizText(text) {
+  return quizBlocks(text).map(block => {
+    if (block.code) return `<code class="quiz-code" translate="no">${escape(block.text)}</code>`;
+    const parts = block.text.split(/(##class\([^)]+\)(?:\.[%\w]+)*|(?:\${1,3}|%|\^(?:\|\|)?|\.\.?#?)[A-Za-z]\w*(?:\.\w+)*\*?|<[A-Z]+>)/g);
+    return `<span class="quiz-prose">${parts.map((part, i) =>
+      i % 2 ? `<code translate="no">${escape(part)}</code>` : escape(part)).join('')}</span>`;
+  }).join('');
+}
 
-  const final = phase === 'final' ? state.final : null;
-  const { id, options, type, correct } = question;
-  const inputType = type === 'multiple' ? 'checkbox' : 'radio';
+function practiceAnswer(id) {
+  return checked.get(id) ?? (practiceMode === 'learn' ? state.history[chapter.topic]?.[id]?.at(-1) : undefined);
+}
+
+function renderQuestionNav(panel, final) {
+  const questions = final ? final.refs : chapter.quiz;
+  const index = final ? final.cursor : cursor;
+  const count = final ? assessmentAnswered(final) : attempted(chapter);
+  const errors = final ? 0 : missed(chapter);
+  panel.querySelector('.question-picker').innerHTML = `
+    <p class="session-status">${count} of ${questions.length} answered${errors ? ` · ${errors} to review` : ''}</p>
+    <div class="question-numbers">${questions.map((item, i) => {
+      const answered = final ? final.answers[i] != null : Object.hasOwn(results(chapter), item.id);
+      const needsReview = !final && results(chapter)[item.id] === false;
+      const number = final ? i + 1 : item.id;
+      const status = needsReview ? 'to review' : answered ? 'answered' : '';
+      return `<button type="button" data-question="${i}" ${i === index ? 'aria-current="step"' : ''}
+        class="${needsReview ? 'needs-review' : answered ? 'answered' : ''}" aria-label="Question ${number}${status ? `, ${status}` : ''}">${number}</button>`;
+    }).join('')}</div>`;
+  if (final) panel.querySelector('[data-finish-final]').disabled = count !== questions.length;
+}
+
+function renderQuizSummary(panel) {
+  const errors = missed(chapter);
+  const remaining = chapter.quiz.length - attempted(chapter);
   panel.innerHTML = `
+    <h2 tabindex="-1">Chapter quiz summary</h2>
+    <p>${attempted(chapter)} of ${chapter.quiz.length} questions answered.
+      ${errors ? `${errors} to review.` : remaining ? '' : 'All of your latest answers are correct.'}
+    </p>
+    <div class="actions">
+      <button type="button" class="primary" data-question="${cursor}">Back to questions</button>
+      ${errors ? '<button type="button" data-phase="quiz" data-mode="review">Retry missed questions</button>' : ''}
+      <button type="button" data-phase="cases">Open worked cases</button>
+      <button type="button" data-course="review">Open answer review</button>
+      ${!remaining ? '<button type="button" data-phase="quiz" data-mode="repeat">Retake full quiz</button>' : ''}
+      ${!errors && chapters.some(missed) ? '<button type="button" data-review-next>Review next chapter</button>' : ''}
+    </div>`;
+  focusQuestion(panel);
+}
+
+function focusQuestion(panel) {
+  const heading = panel.querySelector('h2');
+  heading.focus({ preventScroll: true });
+  panel.scrollIntoView({ block: 'start' });
+}
+
+function renderQuiz(panel, final = null) {
+  const index = final ? final.cursor : cursor;
+  const ref = final?.refs[index];
+  const item = ref ? chapters.find(candidate => candidate.topic === ref.topic) : chapter;
+  const question = ref ? item.quiz.find(q => q.id === ref.id) : item.quiz[index];
+  const { id, options, type, correct } = question;
+  const attempt = final ? final.answers[index] : drafts.has(id) ? undefined : practiceAnswer(id);
+  const selected = attempt?.selected ?? (final ? [] : drafts.get(id) ?? []);
+  const graded = !final && attempt !== undefined;
+  const inputType = type === 'multiple' ? 'checkbox' : 'radio';
+
+  panel.innerHTML = `
+    <nav class="question-picker" aria-label="Jump to question"></nav>
     <div class="question-meta">
-      <p class="session-status">${final ? 'Assessment' : reviewing ? 'Retry' : 'Practice'}
-        (${final ? final.answers.length + 1 : cursor + 1} of ${final ? final.refs.length : queue.length})
-      </p>
-      ${!final && !reviewing && missed(chapter) ? '<button type="button" data-phase="quiz" data-mode="review">Retry missed questions</button>' : ''}
+      <h2 tabindex="-1">Question ${final ? index + 1 : id}</h2>
+      ${!final && practiceMode !== 'review' && missed(chapter) ? '<button type="button" data-phase="quiz" data-mode="review">Retry missed questions</button>' : ''}
     </div>
-    <h2 tabindex="-1">Question ${final ? final.answers.length + 1 : id}</h2>
-    <p class="prompt prose">${escape(question.question)}</p>
+    <div class="prompt quiz-text">${quizText(question.question)}</div>
     <form autocomplete="off">
-      <fieldset>
+      <fieldset ${graded ? 'disabled' : ''}>
         <legend>${type === 'multiple' ? 'Select all correct answers.' : 'Select one answer.'}</legend>
         ${options.map((option, i) => `<label class="option">
-          <input type="${inputType}" name="option" value="${i}">
-          <span class="letter">${letter(i)}</span><span class="prose">${escape(option)}</span>
+          <input type="${inputType}" name="option" value="${i}" ${selected.includes(i) ? 'checked' : ''}>
+          <span class="letter">${letter(i)}</span><span class="quiz-text">${quizText(option)}</span>
         </label>`).join('')}
       </fieldset>
       <p class="validation" role="alert"></p>
-      <div class="actions"><button type="submit" class="primary">${final ? 'Submit and continue' : 'Check answer'}</button></div>
+      ${!final && !graded ? '<div class="actions"><button type="submit" class="primary">Check answer</button></div>' : ''}
     </form>
-    <div id="feedback"></div>`;
+    ${graded ? `<section class="feedback ${passedAnswer(attempt) ? 'passed' : 'retry'}">
+      <p class="feedback-status" tabindex="-1">${passedAnswer(attempt) ? 'Correct' : 'Incorrect'}. Expected ${correct.map(letter).join(', ')}.</p>
+      ${questionExplanation(item, question)}
+    </section>` : ''}
+    <div class="actions">
+      ${index > 0 ? `<button type="button" data-question="${index - 1}">Previous question</button>` : ''}
+      ${index + 1 < (final?.refs ?? chapter.quiz).length ? `<button type="button" data-question="${index + 1}">Next question</button>` : ''}
+      ${graded ? '<button type="button" data-edit-answer>Edit answer</button>' : ''}
+      ${final
+        ? '<button type="button" class="primary" data-finish-final>Finish assessment</button>'
+        : '<button type="button" data-quiz-summary>See quiz summary</button>'}
+    </div>
+    ${final ? '<p class="muted">Your choices save as you go. Answer every question to finish.</p>' : ''}`;
+  renderQuestionNav(panel, final);
 
   const form = panel.querySelector('form');
+  const selection = () => new FormData(form).getAll('option').map(Number);
+  form.addEventListener('change', () => {
+    const chosen = selection();
+    form.querySelector('.validation').textContent = '';
+    if (!final) {
+      drafts.set(id, chosen);
+      return;
+    }
+    final.answers[index] = chosen.length ? { passed: correctSelection(correct, chosen), selected: chosen } : null;
+    save();
+    renderQuestionNav(panel, final);
+  });
   form.addEventListener('submit', event => {
     event.preventDefault();
-    const selected = new FormData(form).getAll('option').map(Number);
-    const validation = form.querySelector('.validation');
-    if (!selected.length) {
-      validation.textContent = 'Select at least one answer before submitting.';
+    if (final || graded) return;
+    const chosen = selection();
+    if (!chosen.length) {
+      form.querySelector('.validation').textContent = 'Select at least one answer before submitting.';
       form.querySelector('input').focus();
       return;
     }
-
-    const passed = correctSelection(correct, selected);
-    const attempt = { passed, selected };
-    if (final) {
-      final.answers.push(attempt);
-      save();
-      render();
-      return;
-    }
-    recordPractice(state, chapter.topic, id, attempt);
+    const answer = { passed: correctSelection(correct, chosen), selected: chosen };
+    recordPractice(state, chapter.topic, id, answer);
+    drafts.delete(id);
+    checked.set(id, answer);
     save();
     renderNavigation();
-    validation.textContent = '';
-    form.querySelector('fieldset').disabled = true;
-    form.querySelector('button').hidden = true;
-    const feedback = panel.querySelector('#feedback');
-    feedback.innerHTML = `
-      <section class="feedback ${passed ? 'passed' : 'retry'}">
-        <p class="feedback-status" tabindex="-1">${passed ? 'Correct' : 'Incorrect'}. Expected ${correct.map(letter).join(', ')}.</p>
-        ${questionExplanation(chapter, question)}
-      </section>
-      <div class="actions"><button type="button" class="primary" id="next">
-        ${cursor + 1 < queue.length ? 'Next question' : 'See quiz summary'}
-      </button></div>`;
-    feedback.querySelector('.feedback-status').focus();
-    feedback.querySelector('#next').addEventListener('click', () => {
-      cursor++;
-      render();
-    });
+    renderQuiz(panel);
+    panel.querySelector('.feedback-status').focus();
   });
 }
 
@@ -412,10 +459,10 @@ function renderFinal(panel) {
     return;
   }
 
-  if (final.answers.length < final.refs.length) {
-    const ref = final.refs[final.answers.length];
-    const question = chapters.find(item => item.topic === ref.topic).quiz.find(q => q.id === ref.id);
-    renderQuiz(panel, question);
+  if (!assessmentComplete(final)) {
+    final.submitted ??= false;
+    final.cursor ??= Math.max(0, final.refs.findIndex((_, i) => final.answers[i] == null));
+    renderQuiz(panel, final);
     return;
   }
   renderAssessmentSummary(panel, final);
@@ -538,9 +585,32 @@ lesson.addEventListener('click', event => {
     continueCourse();
   } else if (button.hasAttribute('data-review-next')) {
     openChapter(chapters.find(missed), 'quiz', 'review');
+  } else if (button.dataset.question !== undefined) {
+    const panel = document.querySelector('#panel');
+    const index = Number(button.dataset.question);
+    const final = phase === 'final' ? state.final : null;
+    if (final) {
+      final.cursor = index;
+      save();
+    } else cursor = index;
+    renderQuiz(panel, final);
+    focusQuestion(panel);
+  } else if (button.hasAttribute('data-edit-answer')) {
+    const id = chapter.quiz[cursor].id;
+    drafts.set(id, practiceAnswer(id)?.selected ?? []);
+    const panel = document.querySelector('#panel');
+    renderQuiz(panel);
+    panel.querySelector('input:checked, input').focus();
+  } else if (button.hasAttribute('data-quiz-summary')) {
+    renderQuizSummary(document.querySelector('#panel'));
+  } else if (button.hasAttribute('data-finish-final')) {
+    if (assessmentAnswered(state.final) !== state.final.refs.length) return;
+    state.final.submitted = true;
+    save();
+    render();
   } else if (button.hasAttribute('data-start-final')) {
-    if (state.final && state.final.answers.length === state.final.refs.length) state.assessments.push(state.final);
-    state.final = { refs: finalQuestionRefs(chapters), answers: [] };
+    if (state.final && assessmentComplete(state.final)) state.assessments.push(state.final);
+    state.final = { refs: finalQuestionRefs(chapters), answers: [], submitted: false };
     openCourse('final');
   } else if (button.dataset.assessment !== undefined) {
     state.assessmentIndex = Number(button.dataset.assessment);
