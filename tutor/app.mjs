@@ -1,5 +1,5 @@
 import { assessmentAnswered, assessmentComplete, chapterStep, correctSelection, finalQuestionRefs, loadCourse, packPath, passedAnswer, practiceQueue, quizBlocks, recordPractice, reviewItems, topics } from './content.mjs';
-import { caseFocus, chapterSummaries, examAreaDescriptions, guides, variations } from './lesson-guides.mjs';
+import { caseFocus, examAreaDescriptions, guides, variations } from './lesson-guides.mjs';
 import { diagramExamples, studyExamples } from './code-examples.mjs';
 
 const lesson = document.querySelector('#lesson');
@@ -25,7 +25,7 @@ const escape = value => String(value).replace(/[&<>"']/g, char => ({
 const paragraph = text => `<p class="prose">${escape(text)}</p>`;
 const markdownText = value => escape(value.replaceAll('&lt;', '<').replaceAll('&gt;', '>'))
   .replace(/`([^`]+)`/g, '<code translate="no">$1</code>').replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
-const link = (url, label) => `<a href="${escape(url)}" target="_blank" rel="noopener">${markdownText(label)} ↗</a>`;
+const leadParagraphs = value => value.trim().split(/\n\s*\n/)\n  .map(block => `<p class=\"lead\">${markdownText(block.replace(/\s*\n\s*/g, ' '))}</p>`)\n  .join('');\nconst link = (url, label) => `<a href="${escape(url)}" target="_blank" rel="noopener">${markdownText(label)} ↗</a>`;
 const letter = index => String.fromCharCode(65 + index);
 
 let state = {};
@@ -189,7 +189,7 @@ function render() {
     <header class="lesson-header">
       <h1 tabindex="-1">${escape(chapter.title.split(': ')[1])}</h1>
       <p class="chapter-location">${escape(topics[chapter.topic.split('.')[0]])} / ${chapter.topic} / Chapter ${number} of ${chapters.length}</p>
-      ${phase === 'theory' ? `<p class="lead">${markdownText(guides[chapter.topic][0])}</p>` : ''}
+      ${phase === 'theory' ? leadParagraphs(guides[chapter.topic][0]) : ''}
     </header>
     <nav class="phases" aria-label="Chapter steps">
       ${Object.entries(phases).map(([id, label], i) => `
@@ -349,15 +349,17 @@ function renderCodeExamples(examples) {
 
 function renderTheory(panel) {
   panel.innerHTML = `
-    <h2 tabindex="-1">Key concepts</h2>
-    <p>${markdownText(chapterSummaries[chapter.topic])}</p>
+    <h2 tabindex="-1">Chapter diagrams</h2>
     ${renderDiagrams(chapter.diagrams, 'Study diagram')}
     <div class="sections">${chapter.sections.map((section, i) => {
       const examples = studyExamples[`${chapter.topic}/${i + 1}`] ?? [];
+      const exampleSummary = examples.length
+        ? `${examples.length === 1 ? 'Worked example' : `${examples.length} worked examples`} · ${examples[0][0]}`
+        : `${section.detailExampleCount} code examples in the full explanation`;
       return `
       <details class="reading" ${i === 0 ? 'open' : ''}>
         <summary><span>${markdownText(section.title)}
-          ${examples.length ? `<small class="summary-note">${examples.length === 1 ? 'Code example' : `${examples.length} code examples`} · ${escape(examples[0][0])}</small>` : ''}
+          <small class="summary-note">${escape(exampleSummary)}</small>
         </span></summary>
         <div class="disclosure-body">
           <p>${markdownText(section.prose)}</p>
