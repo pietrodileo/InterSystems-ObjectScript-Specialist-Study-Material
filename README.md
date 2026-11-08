@@ -2,7 +2,9 @@
 
 ## Tutor di certificazione
 
-Il tutor guida lo studio dei 22 capitoli. Per ciascuno, parti dai concetti chiave, rispondi al quiz in inglese e confronta il tuo ragionamento con la correzione in italiano. Poi prova i casi guidati e ripassa le domande che hai sbagliato. Il tutor salva l'avanzamento nel browser e riparte dalle domande ancora da affrontare.
+Apri **Percorso** e premi **Inizia il percorso**. Il tutor ti accompagna attraverso tutti i 22 capitoli: studia i concetti chiave, rispondi al quiz in inglese, leggi la correzione in italiano e segna i casi guidati che hai svolto. **Riprendi il percorso** indica il prossimo passo da completare. Gli errori restano disponibili per un ripasso mirato.
+
+La **Verifica finale** mescola una domanda dello Study Pack per ciascun capitolo e mostra le correzioni alla fine. Il riepilogo evidenzia i risultati per area e riporta alla teoria dei capitoli da ripassare. I progressi, compresa la verifica in corso, si salvano nel browser.
 
 Dalla cartella principale del repository, avvia il tutor con Python 3:
 

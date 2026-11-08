@@ -53,6 +53,25 @@ export function practiceQueue(questions, results, mode = 'learn') {
   return questions.filter(q => !Object.hasOwn(results, q.id));
 }
 
+export function chapterStep(chapter, progress) {
+  const topic = chapter.topic;
+  if (!progress.studied?.[topic]) return 'theory';
+  if (practiceQueue(chapter.quiz, progress.results?.[topic] ?? {}).length) return 'quiz';
+  if (chapter.cases.some(item => !progress.worked?.[topic]?.[item.file])) return 'cases';
+  return null;
+}
+
+export function finalQuestionRefs(chapters) {
+  const refs = chapters.map(({ topic, quiz }) => ({
+    topic, id: quiz[Math.floor(Math.random() * quiz.length)].id,
+  }));
+  for (let i = refs.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [refs[i], refs[j]] = [refs[j], refs[i]];
+  }
+  return refs;
+}
+
 export async function loadCourse(read) {
   const [manifest, comments, exercises] = await Promise.all([
     read('manifest.json').then(JSON.parse),
