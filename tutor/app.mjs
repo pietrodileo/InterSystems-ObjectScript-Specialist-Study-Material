@@ -26,7 +26,8 @@ const escape = value => String(value).replace(/[&<>"']/g, char => ({
 const paragraph = text => `<p class="prose">${escape(text)}</p>`;
 const markdownText = value => escape(value.replaceAll('&lt;', '<').replaceAll('&gt;', '>'))
   .replace(/`([^`]+)`/g, '<code translate="no">$1</code>').replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
-const leadParagraphs = value => value.trim().split(/\n\s*\n/)\n  .map(block => `<p class=\"lead\">${markdownText(block.replace(/\s*\n\s*/g, ' '))}</p>`)\n  .join('');\nconst link = (url, label) => `<a href="${escape(url)}" target="_blank" rel="noopener">${markdownText(label)} ↗</a>`;
+const leadParagraphs = value => value.trim().split(/\n\s*\n/).map(block => `<p class=\"lead\">${markdownText(block.replace(/\s*\n\s*/g, ' '))}</p>`).join('');
+const link = (url, label) => `<a href="${escape(url)}" target="_blank" rel="noopener">${markdownText(label)} ↗</a>`;
 const letter = index => String.fromCharCode(65 + index);
 
 let state = {};
@@ -357,7 +358,7 @@ function renderTheory(panel) {
       const examples = studyExamples[`${chapter.topic}/${i + 1}`] ?? [];
       const exampleSummary = examples.length
         ? `${examples.length === 1 ? 'Worked example' : `${examples.length} worked examples`} · ${examples[0][0]}`
-        : `${section.detailExampleCount} code examples in the full explanation`;
+        : `${section.noteExampleCount} code examples in the full explanation`;
       return `
       <details class="reading" ${i === 0 ? 'open' : ''}>
         <summary><span>${markdownText(section.title)}
