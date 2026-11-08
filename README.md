@@ -17,7 +17,7 @@ Open **Study plan** and select **Start study plan** to work through the chapters
 <details>
 <summary>Navigation and saved progress</summary>
 
-Use the button in the top bar to open or collapse the course index. On phones and tablets, it opens as a drawer; choose a chapter to continue studying. In a quiz or assessment, use the numbered buttons to jump between questions.
+Use the button in the top bar to open or collapse the course index. On narrow screens, it opens as a drawer; on wider screens, it expands beside the lesson. In a quiz or assessment, use the numbered buttons to jump between questions.
 
 The tutor saves progress and submitted choices in the browser you use to study. Older results still count. Individual choices appear in Answer review for submissions made since the tutor began recording them. To move your progress to another browser or between the online and local tutor, use **Export** to download a JSON backup, then **Import** at the destination. Importing replaces any progress already saved there.
 
