@@ -274,14 +274,14 @@ function renderCodeExamples(examples) {
 function renderTheory(panel) {
   panel.innerHTML = `
     <h2 tabindex="-1">Key concepts</h2>
-    <p>Use the diagrams to orient yourself. Open a concept for the explanation, practical examples where available, and the relevant InterSystems documentation.</p>
+    <p>Start with the diagrams, then open a concept to read about it. Where you see a code example, predict the result before reading the explanation below it.</p>
     ${renderDiagrams(chapter.diagrams, 'Study diagram')}
     <div class="sections">${chapter.sections.map((section, i) => {
       const examples = studyExamples[`${chapter.topic}/${i + 1}`] ?? [];
       return `
       <details class="reading" ${i === 0 ? 'open' : ''}>
         <summary><span>${markdownText(section.title)}
-          ${examples.length ? `<small class="summary-note">Code: ${escape(examples[0][0])}</small>` : ''}
+          ${examples.length ? `<small class="summary-note">${examples.length === 1 ? 'Code example' : `${examples.length} code examples`} · ${escape(examples[0][0])}</small>` : ''}
         </span></summary>
         <div class="disclosure-body">
           <p>${markdownText(section.prose)}</p>
@@ -472,21 +472,25 @@ function renderQuiz(panel, final = null) {
         </label>`).join('')}
       </fieldset>
       <p class="validation" role="alert"></p>
-      ${!final && !graded ? '<div class="actions"><button type="submit" class="primary">Check answer</button></div>' : ''}
-    </form>
-    ${graded ? `<section class="feedback ${passedAnswer(attempt) ? 'passed' : 'retry'}">
-      <p class="feedback-status" tabindex="-1">${passedAnswer(attempt) ? 'Correct' : 'Incorrect'}. Expected ${correct.map(letter).join(', ')}.</p>
-      ${questionExplanation(item, question)}
-    </section>` : ''}
-    <div class="actions">
-      ${index > 0 ? `<button type="button" data-question="${index - 1}">Previous question</button>` : ''}
-      ${index + 1 < (final?.refs ?? chapter.quiz).length ? `<button type="button" data-question="${index + 1}">Next question</button>` : ''}
-      ${graded ? '<button type="button" data-edit-answer>Edit answer</button>' : ''}
-      ${final
-        ? '<button type="button" class="primary" data-finish-final>Finish assessment</button>'
-        : '<button type="button" data-quiz-summary>See quiz summary</button>'}
-    </div>
-    ${final ? '<p class="muted">Your choices save as you go. Answer every question to finish.</p>' : ''}`;
+      ${graded ? `<section class="feedback ${passedAnswer(attempt) ? 'passed' : 'retry'}">
+        <p class="feedback-status" tabindex="-1">${passedAnswer(attempt) ? 'Correct' : 'Incorrect'}. Expected ${correct.map(letter).join(', ')}.</p>
+        ${questionExplanation(item, question)}
+      </section>` : ''}
+      <section class="quiz-controls" aria-labelledby="quiz-controls-title">
+        <h3 id="quiz-controls-title">${final ? 'Assessment controls' : 'Quiz controls'}</h3>
+        <div class="quiz-control-row">
+          ${final ? '<button type="button" class="primary" data-finish-final>Finish assessment</button>'
+            : graded ? '<button type="button" data-edit-answer>Edit answer</button>'
+            : '<button type="submit" class="primary">Check answer</button>'}
+          <nav class="quiz-control-row" aria-label="Question navigation">
+            ${index > 0 ? `<button type="button" data-question="${index - 1}">Previous question</button>` : ''}
+            ${index + 1 < (final?.refs ?? chapter.quiz).length ? `<button type="button" data-question="${index + 1}">Next question</button>` : ''}
+            ${final ? '' : '<button type="button" data-quiz-summary>Quiz summary</button>'}
+          </nav>
+        </div>
+        ${final ? '<p class="muted">Your choices save as you go. Answer every question to finish.</p>' : ''}
+      </section>
+    </form>`;
   renderQuestionNav(panel, final);
 
   const form = panel.querySelector('form');

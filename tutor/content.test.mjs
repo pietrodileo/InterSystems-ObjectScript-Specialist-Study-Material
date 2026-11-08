@@ -24,8 +24,10 @@ test('the real study pack supplies every lesson, question, and worked case', asy
       assert.ok(entries.length && entries.every(entry => entry.length === 3 && entry.every(text => text.trim())), key);
     }
   }
+  assert.ok(Object.keys(studyExamples).length > studyKeys.length / 2);
   for (const chapter of chapters) {
-    assert.ok(studyKeys.some(key => key.startsWith(`${chapter.topic}/`) && studyExamples[key]), chapter.topic);
+    const examples = chapter.sections.flatMap((_, i) => studyExamples[`${chapter.topic}/${i + 1}`] ?? []);
+    assert.ok(examples.length >= 2, `Expected at least two study examples in ${chapter.topic}`);
   }
   const final = finalQuestionRefs(chapters);
   assert.deepEqual(new Set(final.map(ref => ref.topic)), new Set(chapters.map(chapter => chapter.topic)));
