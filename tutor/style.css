@@ -110,39 +110,6 @@ button.primary:disabled { background: var(--quiet); border-color: var(--line); c
 }
 #lesson { min-width: 0; }
 .sidebar[hidden] { display: none; }
-.course-drawer {
-  position: fixed;
-  inset: 0 auto 0 0;
-  width: 22rem;
-  max-width: calc(100% - 2rem);
-  height: 100dvh;
-  max-height: none;
-  margin: 0;
-  padding: 0;
-  border: 0;
-  border-inline-end: 1px solid var(--line);
-  background: var(--white);
-  color: var(--ink);
-}
-.course-drawer[open] { display: flex; flex-direction: column; }
-.course-drawer::backdrop { background: rgb(24 35 70 / 32%); }
-body:has(.course-drawer[open]) { overflow: hidden; }
-.drawer-header {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: .75rem;
-  padding: .75rem 1rem;
-  border-bottom: 1px solid var(--line);
-}
-.drawer-header h2 { margin: 0; font-size: 1.2rem; }
-.drawer-header[hidden] { display: none; }
-.drawer-actions { display: flex; flex-wrap: wrap; gap: .4rem; }
-.drawer-header button { min-height: 2.75rem; }
-#pinned-header { padding: .35rem .1rem .75rem; margin-bottom: .5rem; }
-#pinned-header h2 { font-size: 1rem; }
-.course-drawer > .sidebar { flex: 1; padding: .75rem 1rem 1rem; overscroll-behavior: contain; }
 .course-progress { margin-top: .75rem; padding: .8rem .6rem; border-block: 1px solid var(--line); }
 .course-progress label { font-weight: 700; font-size: .88rem; }
 progress { display: block; width: 100%; height: .75rem; margin: .45rem 0; accent-color: var(--correct-ink); }
