@@ -607,6 +607,8 @@ ClassMethod ValidateRecord(record As Sample.Record, ByRef errors As %List) As %B
 
 Multidimensional variables (arrays) are a fundamental data structure in ObjectScript. They store data at multiple subscript levels within a single variable name. Passing arrays to methods requires by-reference passing to include all subscript levels.
 
+A multidimensional array can contain nodes such as `scores("Ada","Math")`. Passing `.scores` to a `ByRef` parameter lets the method read or change the whole tree, including its subscripts; passing `.scores("Ada")` refers only to that branch. After the method changes `scores("Ada","Math")`, the caller sees the new value. Use this pattern when a method fills or updates a caller-owned array.
+
 #### Multidimensional Variable Basics
 
 ```objectscript
