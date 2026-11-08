@@ -140,14 +140,56 @@ button.primary:disabled { background: var(--quiet); border-color: var(--line); c
   max-width: 83rem;
 }
 .sidebar {
-  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+.sidebar-scroll-content {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding-inline-end: .15rem;
   scrollbar-color: var(--open-line) transparent;
 }
+.sidebar-footer {
+  flex: 0 0 auto;
+  margin-top: .45rem;
+  padding: .65rem 0 .2rem;
+  border-top: 1px solid var(--line);
+  background: var(--page);
+}
+.sidebar-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .5rem;
+}
+.sidebar-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .4rem;
+  width: 100%;
+  min-width: 0;
+  min-height: 2.75rem;
+  padding: .45rem .35rem;
+  background: var(--quiet);
+  border-color: var(--line);
+  color: var(--ink);
+  font-size: .82rem;
+  font-weight: 650;
+  white-space: nowrap;
+}
+.sidebar-action:hover { background: var(--selected); }
+.sidebar-action svg { display: block; flex: 0 0 auto; width: 1.15rem; height: 1.15rem; }
+.sidebar-action span { overflow: hidden; text-overflow: ellipsis; }
 .layout > .sidebar {
   grid-area: 1 / 1;
   position: sticky;
   top: 1rem;
-  max-height: calc(100dvh - 2rem);
+  height: calc(100dvh - 10rem);
+  max-height: calc(100dvh - 8rem);
   padding: .2rem .9rem .2rem .2rem;
   border-inline-end: 1px solid var(--line);
 }
@@ -401,6 +443,7 @@ code { font-size: .9em; }
   .layout > .sidebar {
     grid-area: auto;
     position: static;
+    height: 43dvh;
     max-height: 43dvh;
     padding: .2rem .35rem .6rem .2rem;
     border-inline-end: 0;
@@ -447,7 +490,6 @@ code { font-size: .9em; }
 
 
 .header-tools { display: flex; align-items: center; gap: 1rem; }
-.header-controls { display: flex; align-items: center; gap: .45rem; }
 .icon-button {
   display: inline-grid;
   place-items: center;
@@ -457,15 +499,6 @@ code { font-size: .9em; }
   padding: .45rem;
 }
 .icon-button svg { display: block; width: 1.3rem; height: 1.3rem; }
-.header-controls button.icon-button {
-  background: transparent;
-  border-color: #8595cf;
-  color: var(--on-topbar);
-}
-.header-controls button.icon-button:hover {
-  border-color: var(--on-topbar);
-  background: rgb(255 255 255 / 10%);
-}
 .sun-icon { display: none; }
 :root[data-theme="dark"] .moon-icon { display: none; }
 :root[data-theme="dark"] .sun-icon { display: block; }
