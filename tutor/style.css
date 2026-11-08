@@ -392,3 +392,12 @@ code { font-size: .9em; }
 .progress-transfer-actions { display: flex; gap: .4rem; }
 .progress-transfer-actions button { flex: 1; padding: .4rem .5rem; font-size: .88rem; }
 #progress-transfer-status:empty { display: none; }
+
+
+.study-notes { max-width: 82ch; }
+.study-notes h3 { margin-top: 1.2rem; }
+.study-notes h4 { margin-top: 1rem; }
+.study-table-wrap { max-width: 100%; overflow-x: auto; margin: 1rem 0; }
+.study-notes table { border-collapse: collapse; min-width: min(100%, 32rem); }
+.study-notes th, .study-notes td { border: 1px solid var(--line); padding: .45rem .6rem; text-align: left; vertical-align: top; }
+.study-notes th { background: var(--quiet); }
