@@ -17,9 +17,10 @@ export function studySections(markdown) {
     const notes = body.split(/^### Detailed Notes$/m)[1]?.split(/^### Documentation References$/m)[0];
     const prose = notes?.replace(/^```[^\n]*\n[\s\S]*?^```[^\n]*$/gm, '').trim().split(/\n\s*\n/)
       .find(block => /^[A-Za-z`*%$]/.test(block) && /[.!?:]$/.test(block));
+    const detail = notes?.replace(prose ?? '', '').trim();
     const references = Array.from(body.matchAll(/^- \[([^\]]+)\]\((https:\/\/docs\.intersystems\.com\/[^\s)]+)\)/gm),
       ([, label, url]) => ({ label, url }));
-    return { title, prose, references, points: points?.split(/\r?\n/).map(line => line.slice(2)) ?? [] };
+    return { title, prose, detail, references, points: points?.split(/\r?\n/).map(line => line.slice(2)) ?? [] };
   });
 }
 
