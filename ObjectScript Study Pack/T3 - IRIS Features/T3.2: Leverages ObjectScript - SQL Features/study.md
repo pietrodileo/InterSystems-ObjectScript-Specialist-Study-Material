@@ -533,6 +533,8 @@ WRITE "Logical: ", dobLogical, !    // 66841
 
 After executing any SQL statement in InterSystems IRIS, several status variables are set to indicate the result. Understanding these variables and their values is critical for writing correct SQL-consuming code.
 
+Read `SQLCODE` before interpreting the other values: a negative value is an error, `0` is success, and `100` on a fetch means there is no row or the result set has ended. After an update, `%ROWCOUNT = 0` can mean the statement matched no rows without being an SQL error. For data-changing statements, `%ROWID` identifies the last row affected; check the statement status before relying on it.
+
 #### SQLCODE Values
 
 ```objectscript
