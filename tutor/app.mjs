@@ -8,6 +8,11 @@ const courseMenu = document.querySelector('#course-menu');
 const sidebar = document.querySelector('#course');
 const sidebarToggle = document.querySelector('#sidebar-toggle');
 const sidebarChevron = document.querySelector('#sidebar-chevron');
+const themeToggle = document.querySelector('#theme-toggle');
+const infoButton = document.querySelector('#info-button');
+const infoDialog = document.querySelector('#info-dialog');
+const closeInfo = document.querySelector('#close-info');
+const themeStorageKey = 'objectscript-tutor-theme';
 const exportProgress = document.querySelector('#export-progress');
 const importProgress = document.querySelector('#import-progress');
 const progressFile = document.querySelector('#progress-file');
@@ -76,6 +81,37 @@ sidebarToggle.addEventListener('click', () => {
   save();
   updateSidebarToggle();
 });
+
+function applyTheme(theme) {
+  document.documentElement.dataset.theme = theme;
+  const nextTheme = theme === 'dark' ? 'light' : 'dark';
+  themeToggle.setAttribute('aria-pressed', String(theme === 'dark'));
+  themeToggle.setAttribute('aria-label', `Switch to ${nextTheme} mode`);
+  themeToggle.title = `Switch to ${nextTheme} mode`;
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'dark' ? '#080f20' : '#21328c');
+}
+
+let savedTheme = 'light';
+try {
+  const storedTheme = localStorage.getItem(themeStorageKey);
+  if (storedTheme === 'dark' || storedTheme === 'light') savedTheme = storedTheme;
+} catch {}
+applyTheme(savedTheme);
+
+themeToggle.addEventListener('click', () => {
+  const nextTheme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+  applyTheme(nextTheme);
+  try {
+    localStorage.setItem(themeStorageKey, nextTheme);
+  } catch {}
+});
+
+infoButton.addEventListener('click', () => infoDialog.showModal());
+closeInfo.addEventListener('click', () => infoDialog.close());
+infoDialog.addEventListener('click', event => {
+  if (event.target === infoDialog) infoDialog.close();
+});
+
 
 function renderNavigation() {
   const seen = chapters.reduce((sum, item) => sum + attempted(item), 0);
