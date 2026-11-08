@@ -22,11 +22,50 @@
       </button>
       <span translate="no">ObjectScript</span> <span class="brand-detail">Certification tutor</span>
     </div>
-    <div class="header-links">
-      <a href="https://www.intersystems.com/certifications/intersystems-objectscript-specialist/">Official exam outline ↗</a>
-      <a href="https://exam-prep.es">Other exam preparation materials ↗</a>
+    <div class="header-tools">
+      <nav class="header-links" aria-label="Reference links">
+        <a href="https://www.intersystems.com/certifications/intersystems-objectscript-specialist/">Official exam outline ↗</a>
+        <a href="https://exam-prep.es">Other exam preparation materials ↗</a>
+      </nav>
+      <div class="header-controls">
+        <button type="button" id="theme-toggle" class="icon-button" aria-label="Switch to dark mode" aria-pressed="false" title="Switch to dark mode">
+          <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+            <path d="M20.2 15.3A8.5 8.5 0 0 1 8.7 3.8 8.5 8.5 0 1 0 20.2 15.3Z"></path>
+          </svg>
+          <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"></path>
+          </svg>
+        </button>
+        <button type="button" id="info-button" class="icon-button" aria-label="About this website" title="About this website">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+            <circle cx="12" cy="12" r="9"></circle>
+            <path d="M12 11v5m0-8h.01"></path>
+          </svg>
+        </button>
+      </div>
     </div>
   </header>
+  <dialog id="info-dialog" class="info-dialog" aria-labelledby="info-title">
+    <div class="info-dialog-header">
+      <h2 id="info-title">About this tutor</h2>
+      <button type="button" id="close-info" class="icon-button info-dialog-close" aria-label="Close information">×</button>
+    </div>
+    <div class="info-dialog-content">
+      <p>This is an independent study companion for the InterSystems ObjectScript Specialist exam. It turns the Study Pack into a guided set of chapters you can work through at your own pace.</p>
+      <ul>
+        <li>Study the explanations and examples, then check your understanding with practice questions.</li>
+        <li>Apply the ideas in worked cases and track your progress as you go.</li>
+        <li>Use the final assessment to review your answers by exam area.</li>
+      </ul>
+      <p>Your progress is saved in this browser. The course index includes options to export it to a backup file or import it in another browser.</p>
+      <p>This is an independent learning resource and is not an official InterSystems website or certification resource. Check the official exam outline for current exam information.</p>
+      <nav class="info-dialog-links" aria-label="Related websites">
+        <a href="https://www.intersystems.com/certifications/intersystems-objectscript-specialist/" target="_blank" rel="noopener">Official exam outline ↗</a>
+        <a href="https://exam-prep.es" target="_blank" rel="noopener">Other exam preparation materials ↗</a>
+      </nav>
+    </div>
+  </dialog>
   <div class="layout">
     <main id="lesson" tabindex="-1">
       <noscript>Enable JavaScript to use the tutor.</noscript>
