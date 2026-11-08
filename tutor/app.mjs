@@ -357,7 +357,7 @@ function renderTheory(panel) {
     <div class="sections">${chapter.sections.map((section, i) => {
       const examples = studyExamples[`${chapter.topic}/${i + 1}`] ?? [];
       const exampleSummary = examples.length
-        ? `${examples.length === 1 ? 'Worked example' : `${examples.length} worked examples`} · ${examples[0][0]} · ${section.noteExampleCount} in full notes`
+        ? `${examples.length === 1 ? 'Worked example' : `${examples.length} worked examples`} · ${examples[0][0]} · full notes and examples`
         : `${section.noteExampleCount} code ${section.noteExampleCount === 1 ? 'example' : 'examples'} in the full explanation`;
       return `
       <details class="reading" ${i === 0 ? 'open' : ''}>
