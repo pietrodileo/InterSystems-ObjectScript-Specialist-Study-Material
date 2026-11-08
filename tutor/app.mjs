@@ -296,7 +296,7 @@ function renderTheory(panel) {
     }).join('')}</div>
     <div class="actions">
       <button type="button" class="primary" data-phase="quiz" data-study>${state.studied[chapter.topic] ? 'Go to quiz' : 'Mark as studied and start quiz'}</button>
-      ${link(packPath(`${chapter.folder}/study.md`), 'Full notes and code examples (Markdown)')}
+      <a href="${escape(packPath(`${chapter.folder}/study.md`))}" download="${escape(chapter.topic)}-study-notes.md">Download chapter notes (.md)</a>
     </div>`;
 }
 
