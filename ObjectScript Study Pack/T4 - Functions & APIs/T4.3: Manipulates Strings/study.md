@@ -39,6 +39,8 @@ Saved 2 November 2026 from [exam-prep.es](https://exam-prep.es/exams/objectscrip
 
 $PIECE is one of the most frequently used ObjectScript functions. It works with delimited strings, extracting or replacing segments based on a specified delimiter. Unlike lists, $PIECE works on plain strings without any special encoding.
 
+Piece numbering starts at 1. With `A-12-Rome`, `$PIECE(value,"-",3)` returns `Rome`; adjacent delimiters represent an empty piece, so do not collapse them if field positions matter. Use `$PIECE` for delimiter-based records and `$EXTRACT` for fixed character positions.
+
 #### Basic Extraction
 
 ```objectscript
@@ -143,6 +145,8 @@ $PIECE is one of the most frequently used ObjectScript functions. It works with 
 
 $EXTRACT works at the character level, extracting or replacing individual characters or substrings by position. Unlike $PIECE which works with delimiters, $EXTRACT uses numeric positions within the string.
 
+`$EXTRACT` positions start at 1, and the start and end positions are inclusive. In `ORD00042USD`, `$EXTRACT(code,4,8)` returns `00042`; replacing positions 9–11 changes only the currency suffix. Use `$PIECE` when fields are separated by a delimiter, and `$EXTRACT` when the input is a fixed-width record.
+
 #### Basic Character Extraction
 
 ```objectscript
@@ -241,6 +245,8 @@ $EXTRACT works at the character level, extracting or replacing individual charac
 #### Overview
 
 These three functions handle different string transformation needs: $REPLACE for substring replacement, $TRANSLATE for character-level mapping, and $ZSTRIP for removing categories of characters.
+
+Choose based on what the data looks like: `$REPLACE` targets a complete substring (for example, change `12` to `18` in `A-12-Rome`), `$TRANSLATE` maps individual characters (every hyphen can become a slash), and `$ZSTRIP` removes characters according to its mode. They are not interchangeable: `$TRANSLATE` works character by character, while `$REPLACE` can target a multi-character string.
 
 #### $REPLACE: Substring Replacement
 
@@ -356,6 +362,8 @@ These three functions handle different string transformation needs: $REPLACE for
 
 ObjectScript uses the underscore character (_) as its string concatenation operator. There is no string interpolation or template literal syntax -- all string building uses explicit concatenation.
 
+`_` joins values exactly as supplied; it does not add spaces or separators for you. For example, `first _ " " _ last` produces `Ada Lovelace`, while `first _ last` produces `AdaLovelace`. Add separators explicitly, and format dates or numbers before concatenating them when the output needs a particular representation.
+
 #### Basic Concatenation
 
 ```objectscript
@@ -450,6 +458,8 @@ ObjectScript uses the underscore character (_) as its string concatenation opera
 #### Overview
 
 ObjectScript offers two pattern matching systems: ICU regular expressions ($MATCH, $LOCATE) and the native ObjectScript pattern match operator (?). Regular expressions are more powerful and flexible; the native operator is simpler for basic validation.
+
+Use `$MATCH` when the whole value must satisfy a format, such as two uppercase letters followed by three digits; use `$LOCATE` to find the first matching substring inside longer text. The `?` operator uses ObjectScript pattern syntax, so a regular expression such as `[A-Z]{2}\\d{3}` is not interchangeable with a pattern such as `2U3N`.
 
 #### $MATCH: Full String Match
 
@@ -549,6 +559,8 @@ ObjectScript offers two pattern matching systems: ICU regular expressions ($MATC
 #### Overview
 
 $ZCONVERT (abbreviated $ZCVT) is a versatile function used for case conversion and encoding/decoding strings for various output formats. It is essential for web development, data integration, and security (preventing injection attacks).
+
+Use the conversion mode to distinguish encoding text for an output representation from decoding incoming bytes; case conversion uses separate modes. For example, encode text as UTF-8 before writing bytes to a file, then decode those bytes as UTF-8 when reading them back. Encoding does not replace HTML or SQL escaping: each destination still has its own rules.
 
 #### Case Conversion
 
@@ -652,6 +664,8 @@ $ZCONVERT (abbreviated $ZCVT) is a versatile function used for case conversion a
 #### Overview
 
 ObjectScript strings are delimited by double quotes. To include special characters within strings, you either double the quote character or use $CHAR to generate characters by their code point. There are no backslash escape sequences like in C or JavaScript.
+
+Inside ObjectScript source, include a quotation mark by doubling it: `Set text = "He said ""hello"""` produces `He said "hello"`. Use `$CHAR(13,10)` to add a line ending without a backslash escape. When placing the value in HTML or JSON, use that format's encoder; quoting an ObjectScript literal does not make the output safe for another language.
 
 #### Doubling Quotes
 
