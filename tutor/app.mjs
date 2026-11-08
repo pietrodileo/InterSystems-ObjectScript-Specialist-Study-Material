@@ -254,9 +254,9 @@ function renderCourse() {
       }).join('')}</ul>
       <h2>How each chapter works</h2>
       <ol class="roadmap">
-        <li><strong>Study.</strong> Use the diagrams to explain each concept in your own words.</li>
-        <li><strong>Practice.</strong> Answer the quiz questions and read the explanations.</li>
-        <li><strong>Apply.</strong> Try the cases before opening their solutions. Check off each case you finish.</li>
+        <li><strong>Study.</strong> Read the chapter overview, use the diagrams, and open concepts for explanations, code examples, and official references.</li>
+        <li><strong>Practice.</strong> Answer the chapter quiz, read why each answer is right or wrong, and retry missed questions from Answer review.</li>
+        <li><strong>Apply.</strong> Work through each case and try its variation before opening the solution. Check off the case when you finish.</li>
       </ol>
       <p>After the final assessment, use Answer review to decide what to revisit.</p>
       <div class="actions"><button type="button" data-course="review">Open answer review</button></div>
@@ -357,7 +357,7 @@ function renderTheory(panel) {
     <div class="sections">${chapter.sections.map((section, i) => {
       const examples = studyExamples[`${chapter.topic}/${i + 1}`] ?? [];
       const exampleSummary = examples.length
-        ? `${examples.length === 1 ? 'Worked example' : `${examples.length} worked examples`} · ${examples[0][0]}`
+        ? `${examples.length === 1 ? 'Worked example' : `${examples.length} worked examples`} · ${examples[0][0]} · ${section.noteExampleCount} in full notes`
         : `${section.noteExampleCount} code examples in the full explanation`;
       return `
       <details class="reading" ${i === 0 ? 'open' : ''}>
@@ -367,7 +367,11 @@ function renderTheory(panel) {
         <div class="disclosure-body">
           <p>${markdownText(section.prose)}</p>
           <ul>${section.points.map(point => `<li>${markdownText(point)}</li>`).join('')}</ul>
-          ${renderStudyNotes(section.detail)}
+          ${renderCodeExamples(examples)}
+          <details class="reading inset" ${examples.length ? '' : 'open'}>
+            <summary>Full explanation and ${section.noteExampleCount} code examples</summary>
+            <div class="disclosure-body">${renderStudyNotes(section.detail)}</div>
+          </details>
           ${renderCodeExamples(examples)}
           <div class="documentation">
             <h3>Official documentation</h3>
