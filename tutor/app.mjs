@@ -378,6 +378,38 @@ function answerOptions(question, selected) {
   return `<ul>${selected.map(index => `<li><strong>${letter(index)}.</strong> ${quizText(question.options[index])}</li>`).join('')}</ul>`;
 }
 
+function questionPrompt(question) {
+  const lines = question.question.trim().split('\n');
+  return lines.findLast(line => line.includes('?'))?.trim() || 'Open question';
+}
+
+function renderPracticeReferences() {
+  const exampleCount = chapter.quiz.filter(question => question.feedback.example).length;
+  const diagramCount = chapter.quiz.filter(question => question.feedback.diagram).length;
+  const questions = chapter.quiz.map(question => {
+    const { explanation, example, references, diagram } = question.feedback;
+    const text = explanation.split('\n\n').map(part => '<p>' + quizInline(part) + '</p>').join('');
+    const code = example ? renderCodeExamples([[example.title, example.code, example.note]]) : '';
+    const docs = references.map(({ label, url }) => '<li>' + link(url, label) + '</li>').join('');
+    const image = diagram ? '<h4>Related diagram</h4>' + renderDiagrams([diagram], 'Practice diagram') : '';
+    return '<details class="reading inset apply-question-reference" data-apply-reference="' + question.id + '">' +
+      '<summary>Q' + question.id + ' · ' + escape(questionPrompt(question)) + '</summary>' +
+      '<div class="disclosure-body">' +
+        '<h4>Why the answer is correct</h4>' + text + code +
+        '<h4>Official documentation</h4><ul>' + docs + '</ul>' + image +
+      '</div></details>';
+  }).join('');
+  const counts = chapter.quiz.length + ' questions' +
+    (exampleCount ? ' · ' + exampleCount + ' code examples' : '') +
+    (diagramCount ? ' · ' + diagramCount + ' diagrams' : '');
+  return '<details class="reading apply-question-reference-group">' +
+    '<summary><span>Practice explanations, examples and sources<small class="summary-note">' + counts + '</small></span></summary>' +
+    '<div class="disclosure-body">' +
+      '<p>Question-by-question explanations from Practice are collected here for review. Open a question to see why the answer is correct, its code example when available, links to the official documentation, and its related diagram.</p>' +
+      questions +
+    '</div></details>';
+}
+
 function questionExplanation(question) {
   const { explanation, example, references, diagram } = question.feedback;
   return `
@@ -397,8 +429,7 @@ function answerDetails(question, attempts) {
   const passed = passedAnswer(last);
   const outcome = passed ? 'Correct' : 'Incorrect';
   const recovered = passed && attempts.some(attempt => !passedAnswer(attempt));
-  const lines = question.question.trim().split('\n');
-  const prompt = lines.findLast(line => line.includes('?'))?.trim() || 'Open question';
+  const prompt = questionPrompt(question);
   return `<details class="reading">
     <summary>Q${question.id} · ${outcome}${recovered ? ' on retry' : ''} · ${escape(prompt)}</summary>
     <div class="disclosure-body">
@@ -411,6 +442,7 @@ function answerDetails(question, attempts) {
       <h3>Expected answer</h3>
       ${answerOptions(question, question.correct)}
       ${questionExplanation(question)}
+      ${chapter && chapter.quiz.includes(question) ? '<p class="muted">This explanation is also collected in Apply.</p><button type="button" data-phase="cases" data-apply-question="' + question.id + '">Find this explanation in Apply</button>' : ''}
     </div>
   </details>`;
 }
@@ -697,6 +729,7 @@ function renderCases(panel) {
         </div>
       </details>`;
     }).join('')}
+    ${renderPracticeReferences()}
     <h3>Exercise diagrams</h3>
     ${renderDiagrams(chapter.exerciseDiagrams, 'Exercise diagram')}
     <details class="reading"><summary><span>Examples behind the diagrams
@@ -760,7 +793,19 @@ courseMenu.addEventListener('click', event => {
 lesson.addEventListener('click', event => {
   const button = event.target.closest('button');
   if (!button) return;
-  if (button.hasAttribute('data-continue')) {
+  if (button.dataset.applyQuestion !== undefined) {
+    const targetChapter = chapter;
+    const questionId = Number(button.dataset.applyQuestion);
+    openChapter(targetChapter, 'cases');
+    const reference = lesson.querySelector('[data-apply-reference="' + questionId + '"]');
+    const group = reference?.closest('.apply-question-reference-group');
+    if (group) group.open = true;
+    if (reference) {
+      reference.open = true;
+      reference.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      reference.querySelector('summary')?.focus({ preventScroll: true });
+    }
+  } else if (button.hasAttribute('data-continue')) {
     continueCourse();
   } else if (button.hasAttribute('data-review-next')) {
     openChapter(chapters.find(missed), 'quiz', 'review');
