@@ -70,14 +70,22 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
   outline: 3px solid var(--focus);
   outline-offset: 3px;
 }
-button:not(.chapter-button) {
+button:not(.chapter-button), .button-link {
   border: 1px solid var(--line);
   border-radius: .55rem;
   padding: .55rem .85rem;
   background: var(--white);
   color: var(--ink);
 }
-button:not(.chapter-button):hover { border-color: var(--accent); }
+button:not(.chapter-button):hover, .button-link:hover { border-color: var(--accent); }
+.button-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  text-decoration: none;
+}
+.button-link:hover { color: var(--ink); }
 button.primary {
   background: var(--button-accent);
   border-color: var(--button-accent);
@@ -421,18 +429,18 @@ legend { font-weight: 650; margin-bottom: .45rem; }
 .letter { font-weight: 750; color: var(--muted); }
 .validation { color: var(--error-ink); margin: .35rem 0; }
 .validation:empty { display: none; }
-.quiz-controls {
+.controls-panel {
   margin-top: 1.25rem;
   padding: .85rem 1rem 1rem;
   border: 1px solid var(--open-line);
   border-radius: .75rem;
   background: var(--quiet);
 }
-.quiz-controls h3 { margin: 0 0 .6rem; font-size: .9rem; }
-.quiz-controls p { margin: .65rem 0 0; font-size: .875rem; }
-.quiz-control-row { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; }
-.quiz-controls > .quiz-control-row { justify-content: space-between; }
-.quiz-controls button:not(.chapter-button) { min-height: 2.75rem; padding-inline: .7rem; font-size: .9rem; }
+.controls-panel h3 { margin: 0 0 .6rem; font-size: .9rem; }
+.controls-panel p { margin: .65rem 0 0; font-size: .875rem; }
+.controls-row { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; }
+.controls-panel > .controls-row { justify-content: space-between; }
+.controls-panel :is(button:not(.chapter-button), .button-link) { min-height: 2.75rem; padding-inline: .7rem; font-size: .9rem; }
 .feedback { padding: 1rem; margin-top: 1rem; border-radius: .65rem; background: var(--correct-surface); }
 .feedback.retry { background: var(--warning-surface); }
 .feedback-status { color: var(--correct-ink); font-weight: 750; margin-top: 0; }
@@ -481,8 +489,8 @@ code { font-size: .9em; }
 @media (max-width: 450px) {
   .exam-areas li { grid-template-columns: 1.7rem minmax(0, 1fr); row-gap: .05rem; }
   .exam-areas li .muted { grid-column: 2; }
-  .quiz-controls > .quiz-control-row > * { width: 100%; }
-  .quiz-controls nav button { flex: 1 0 auto; }
+  .controls-panel > .controls-row > * { width: 100%; }
+  .controls-panel nav button { flex: 1 0 auto; }
 }
 
 .documentation { font-size: .9rem; border-top: 1px solid var(--line); }

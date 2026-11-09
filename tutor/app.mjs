@@ -358,10 +358,13 @@ function renderTheory(panel) {
         </div>
       </details>`;
     }).join('')}</div>
-    <div class="actions">
-      <button type="button" class="primary" data-phase="quiz" data-study>${state.studied[chapter.topic] ? 'Go to quiz' : 'Mark as studied and start quiz'}</button>
-      <a href="${escape(packPath(`${chapter.folder}/study.md`))}" download="${escape(chapter.topic)}-study-notes.md">Download chapter notes (.md)</a>
-    </div>`;
+    <section class="controls-panel" aria-labelledby="chapter-controls-title">
+      <h3 id="chapter-controls-title">Chapter controls</h3>
+      <div class="controls-row">
+        <button type="button" class="primary" data-phase="quiz" data-study>${state.studied[chapter.topic] ? 'Go to quiz' : 'Mark as studied and start quiz'}</button>
+        <a class="button-link" href="${escape(packPath(`${chapter.folder}/study.md`))}" download="${escape(chapter.topic)}-study-notes.md">Download chapter notes (.md)</a>
+      </div>
+    </section>`;
 }
 
 function answerOptions(question, selected) {
@@ -540,13 +543,13 @@ function renderQuiz(panel, final = null) {
         <p class="feedback-status" tabindex="-1">${passedAnswer(attempt) ? 'Correct' : 'Incorrect'}. Expected ${correct.map(letter).join(', ')}.</p>
         ${questionExplanation(item, question)}
       </section>` : ''}
-      <section class="quiz-controls" aria-labelledby="quiz-controls-title">
+      <section class="controls-panel" aria-labelledby="quiz-controls-title">
         <h3 id="quiz-controls-title">${final ? 'Assessment controls' : 'Quiz controls'}</h3>
-        <div class="quiz-control-row">
+        <div class="controls-row">
           ${final ? '<button type="button" class="primary" data-finish-final>Finish assessment</button>'
             : graded ? '<button type="button" data-edit-answer>Edit answer</button>'
             : '<button type="submit" class="primary">Check answer</button>'}
-          <nav class="quiz-control-row" aria-label="Question navigation">
+          <nav class="controls-row" aria-label="Question navigation">
             ${index > 0 ? `<button type="button" data-question="${index - 1}">Previous question</button>` : ''}
             ${index + 1 < (final?.refs ?? chapter.quiz).length ? `<button type="button" data-question="${index + 1}">Next question</button>` : ''}
             ${final ? '' : '<button type="button" data-quiz-summary>Quiz summary</button>'}
