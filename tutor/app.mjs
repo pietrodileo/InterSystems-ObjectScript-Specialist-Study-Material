@@ -285,7 +285,12 @@ function renderCourse() {
         <p class="muted profile-note">These details are saved in this browser, personalize the home page, and are included in your backup.</p>
         <div class="actions">
           <button type="submit" class="primary">Save profile</button>
-          <button type="button" data-course="roadmap">Back to home</button>
+          <button type="button" data-course="roadmap">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -0.125em" aria-hidden="true" focusable="false">
+              <path d="m3 10 9-7 9 7M5 9v11h5v-6h4v6h5V9"></path>
+            </svg>
+            Back to home
+          </button>
         </div>
         <p class="profile-status" role="status" aria-live="polite">${escape(profileStatus)}</p>
       </form>`;
