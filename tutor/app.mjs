@@ -283,7 +283,10 @@ function renderCourse() {
           </label>
         </div>
         <p class="muted profile-note">These details are saved in this browser, personalize the home page, and are included in your backup.</p>
-        <div class="actions"><button type="submit" class="primary">Save profile</button></div>
+        <div class="actions">
+          <button type="submit" class="primary">Save profile</button>
+          <button type="button" data-course="roadmap">Back to home</button>
+        </div>
         <p class="profile-status" role="status" aria-live="polite">${escape(profileStatus)}</p>
       </form>`;
     return;
