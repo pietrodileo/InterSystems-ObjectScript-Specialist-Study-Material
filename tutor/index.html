@@ -6,9 +6,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#21328c">
   <title>ObjectScript Certification Tutor</title>
-  <link rel="stylesheet" href="./style.css?v=sidebar-controls-2">
+  <link rel="stylesheet" href="./style.css?v=image-viewer-1">
   <script type="module" src="./sidebar-controls.mjs"></script>
-  <script type="module" src="./app.mjs?v=sidebar-controls-2"></script>
+  <script type="module" src="./image-viewer.mjs"></script>
+  <script type="module" src="./app.mjs?v=image-viewer-1"></script>
 </head>
 <body>
   <a class="skip" href="#lesson">Skip to content</a>
@@ -48,6 +49,32 @@
         <a href="https://www.intersystems.com/certifications/intersystems-objectscript-specialist/" target="_blank" rel="noopener">Official exam outline ↗</a>
         <a href="https://exam-prep.es" target="_blank" rel="noopener">Other exam preparation materials ↗</a>
       </nav>
+    </div>
+  </dialog>
+  <dialog id="image-viewer" class="image-viewer" aria-labelledby="image-viewer-title">
+    <div class="image-viewer-toolbar">
+      <h2 id="image-viewer-title">Diagram viewer</h2>
+      <div class="image-viewer-actions">
+        <button type="button" id="image-zoom-out" class="image-viewer-control" aria-label="Zoom out" title="Zoom out" disabled>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg>
+        </button>
+        <output id="image-zoom-level" aria-label="Zoom level">100%</output>
+        <button type="button" id="image-zoom-in" class="image-viewer-control" aria-label="Zoom in" title="Zoom in" disabled>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-7-7v14"/></svg>
+        </button>
+        <a id="image-download" class="image-viewer-control" download aria-label="Download original image" title="Download original image">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-4-4 4 4 4-4M5 16v4h14v-4"/></svg>
+        </a>
+        <button type="button" id="image-close" class="image-viewer-control" aria-label="Close image viewer" title="Close image viewer" autofocus>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
+        </button>
+      </div>
+    </div>
+    <div id="image-viewport" class="image-viewer-viewport" tabindex="0" role="region" aria-label="Diagram">
+      <div class="image-viewer-canvas">
+        <img alt="" hidden>
+        <p id="image-viewer-message" role="status" hidden></p>
+      </div>
     </div>
   </dialog>
   <div class="layout">

@@ -532,6 +532,77 @@ code { font-size: .9em; }
 }
 .info-dialog-close { font-size: 1.35rem; line-height: 1; }
 
+.diagrams a[data-image-viewer] { display: block; cursor: zoom-in; }
+html:has(.image-viewer[open]) { overflow: hidden; }
+.image-viewer {
+  width: calc(100% - 1.5rem);
+  height: calc(100vh - 1.5rem);
+  height: calc(100dvh - 1.5rem);
+  max-width: none;
+  max-height: none;
+  margin: auto;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: .85rem;
+  background: var(--white);
+  color: var(--ink);
+  box-shadow: 0 1rem 3rem rgb(5 12 30 / 30%);
+  overflow: hidden;
+}
+.image-viewer[open] { display: grid; grid-template-rows: auto minmax(0, 1fr); }
+.image-viewer::backdrop { background: rgb(9 17 38 / 75%); }
+.image-viewer-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: .25rem 1rem;
+  padding: .4rem .75rem;
+  border-bottom: 1px solid var(--line);
+}
+.image-viewer-toolbar h2 { margin: 0; font-size: .95rem; }
+.image-viewer-actions { display: flex; align-items: center; gap: .25rem; margin-inline-start: auto; }
+.image-viewer-actions output {
+  min-width: 3.25rem;
+  text-align: center;
+  color: var(--muted);
+  font-size: .85rem;
+  font-variant-numeric: tabular-nums;
+}
+.image-viewer-actions .image-viewer-control {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: .55rem;
+  background: transparent;
+  color: var(--ink);
+}
+.image-viewer-actions .image-viewer-control:not(:disabled):hover { border-color: var(--line); background: var(--quiet); }
+.image-viewer-actions .image-viewer-control:disabled { opacity: .45; cursor: default; }
+.image-viewer-control svg {
+  width: 1.125rem;
+  height: 1.125rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.image-viewer-viewport { overflow: auto; overscroll-behavior: contain; background: var(--quiet); }
+.image-viewer-viewport:focus-visible { outline: 3px solid var(--focus); outline-offset: -3px; }
+.image-viewer-canvas {
+  display: grid;
+  place-items: center;
+  width: max-content;
+  min-width: 100%;
+  min-height: 100%;
+}
+.image-viewer-canvas img { max-width: none; height: auto; }
+.image-viewer-canvas p { margin: 1rem; color: var(--muted); }
+
 @media (max-width: 720px) {
   .header-tools { width: 100%; justify-content: space-between; gap: .5rem; }
   .header-links { flex: 1; }

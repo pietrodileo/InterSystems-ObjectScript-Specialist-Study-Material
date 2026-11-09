@@ -229,9 +229,9 @@ function renderCourse() {
 function renderDiagrams(diagrams, label) {
   return `<div class="diagrams">${diagrams.map(({ alt, file, width, height }, index) => {
     const url = escape(packPath(file));
-    return `<figure><a href="${url}" target="_blank" rel="noopener" aria-label="Open ${label.toLowerCase()} ${index + 1} at full size">
+    return `<figure><a href="${url}" target="_blank" rel="noopener" data-image-viewer aria-haspopup="dialog" aria-controls="image-viewer" aria-label="Open ${label.toLowerCase()} ${index + 1}">
       <img src="${url}" alt="${escape(alt)}" width="${width}" height="${height}" loading="lazy">
-    </a><figcaption>${label} ${index + 1}. Open image at full size.</figcaption></figure>`;
+    </a><figcaption>${label} ${index + 1}. Select the image to zoom or download it.</figcaption></figure>`;
   }).join('')}</div>`;
 }
 
