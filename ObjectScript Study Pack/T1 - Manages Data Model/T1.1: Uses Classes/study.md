@@ -175,6 +175,7 @@ A useful design check is to ask what should happen to the data after the current
 - **Callbacks** let a class initialize, validate, or react to changes at specific points in the object lifecycle. IRIS calls them automatically if the class defines them.
 - **SQL triggers** react to INSERT, UPDATE, or DELETE. A trigger declared with `Foreach = row/object` can also run for corresponding changes made through the object API.
 - **%OpenId(id)** retrieves a previously saved object from disk by its ID
+- **Generated index methods** let you use a key such as `MessageId` to check for a matching object or open it by a unique index.
 
 ### Detailed Notes
 
@@ -289,6 +290,58 @@ Both calls identify the same saved `Sample.Person` and return an OREF on success
 
 The concurrency argument controls how IRIS locks the record during the open. When IRIS loads the record into an instance, `%OnOpen()` can perform an additional check. An error status from the callback prevents the open from succeeding.
 
+#### Open or Find an Object by Index Key
+
+Suppose you know the message code `JTE810`. That is a value of `MessageId`. The object also has a system-assigned ID, which you get from `%Id()`. An ordinary `[ Unique ]` index lets you look up the object by its message code while keeping its system-assigned ID.
+
+```objectscript
+Class Tutor.IndexedMessage Extends %Persistent
+{
+    Property MessageId As %String(COLLATION = "EXACT") [ Required ];
+    Index MIIdx On MessageId [ Unique ];
+}
+```
+
+IRIS generates class methods whose names start with the **index name**, `MIIdx`. Use `%ExistsId(id)` or `%OpenId(id)` when you already have the object ID.
+
+| Call | Result |
+| --- | --- |
+| `MIIdxExists(key, .id)` | Returns `1` for a match and `0` otherwise. On a match, the optional `.id` receives the object's ID. |
+| `MIIdxOpen(key, , .sc)` | Returns an OREF on success. The empty argument uses the default concurrency setting and `.sc` receives the `%Status`. |
+| `MIIdxDelete(key)` | Deletes the object by its unique key and returns a `%Status`. See section 3 for the delete example. |
+
+Compile the class in a practice namespace where `JTE810` is unused. Run the example from an ObjectScript method to save the test record, find its ID and reopen it.
+
+```objectscript
+Set message = ##class(Tutor.IndexedMessage).%New()
+Set message.MessageId = "JTE810"
+Set sc = message.%Save()
+If $SYSTEM.Status.IsError(sc) {
+    Do $SYSTEM.Status.DisplayError(sc)
+    Quit
+}
+Set message = ""
+
+Set found = ##class(Tutor.IndexedMessage).MIIdxExists("JTE810", .id)
+If 'found {
+    Write "Message not found", !
+    Quit
+}
+Write "Object ID: ", id, !
+
+Set message = ##class(Tutor.IndexedMessage).MIIdxOpen("JTE810", , .sc)
+If $SYSTEM.Status.IsError(sc) {
+    Do $SYSTEM.Status.DisplayError(sc)
+    Quit
+}
+Write "MessageId: ", message.MessageId, !
+Set message = ""
+```
+
+Pass one argument per indexed property, in the order of the index declaration. For example, an index named `AccountIdx` on `(TenantCode, ExternalCode)` uses `AccountIdxOpen(tenant, code, , .sc)`. Key comparisons follow the index collation. The example sets `EXACT` on `MessageId` so that matching is case-sensitive.
+
+`Open` and `Delete` require an index that identifies one object, such as a unique index. `Exists` can also check for matches on a standard non-unique index. Bitmap indexes are outside this lookup pattern.
+
 #### Complete Lifecycle Example
 
 ```objectscript
@@ -314,6 +367,7 @@ Set sc = person2.%Save()
 
 - [Saving Objects](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_persobj_saving)
 - [Opening Objects](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_persobj_opening)
+- [Index Open, Exists, and Delete Methods](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSOD_indexes)
 - [Identifiers for Saved Objects](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_persobj_intro)
 - [Defining Callback Methods](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_callbacks)
 - [Using SQL Triggers](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_TRIGGERS)
@@ -323,6 +377,7 @@ Set sc = person2.%Save()
 ### Key Points
 
 - **%DeleteId(id)** deletes a single object by its ID and returns a %Status
+- **`<IndexName>Delete(key)`** deletes a single object identified by a unique index key and returns a `%Status`.
 - **%OnDelete(oid)** is the class callback that can reject an object deletion before IRIS removes its data.
 - **%DeleteExtent()** deletes all instances of a class (all rows in the SQL table)
 - **%KillExtent()** is a faster but less safe alternative that directly kills the storage globals
@@ -353,6 +408,22 @@ Key behaviors:
 - Calls `%OnDelete()` before the deletion and `%OnAfterDelete()` after the data is removed, if implemented
 - Respects foreign key constraints (deletion may fail if referenced by other objects)
 - Can run eligible `DELETE` triggers, such as a `Foreach = row/object` trigger
+
+#### Delete an Object by Unique Index Key
+
+In question 2, `Sample.EmailMessage` declares `Index MIIdx On MessageId [ Unique ];`. The argument `"JTE810"` is the indexed `MessageId`, so the matching call is `##class(Sample.EmailMessage).MIIdxDelete("JTE810")`. `%DeleteId(id)` takes the object ID, and `%Delete(oid)` takes the OID.
+
+Continue with the `Tutor.IndexedMessage` object saved in section 2. This call removes the object and its index entries.
+
+```objectscript
+Set sc = ##class(Tutor.IndexedMessage).MIIdxDelete("JTE810")
+If $SYSTEM.Status.IsError(sc) {
+    Do $SYSTEM.Status.DisplayError(sc)
+    Quit
+}
+Write ##class(Tutor.IndexedMessage).MIIdxExists("JTE810"), !
+// 0
+```
 
 #### Deleting All Objects with %DeleteExtent()
 
@@ -422,6 +493,7 @@ An ordinary SQL `DELETE` uses the SQL trigger path. If a deletion rule must cove
 ### Documentation References
 
 - [Deleting Objects](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_persobj_deleting)
+- [Index Open, Exists, and Delete Methods](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSOD_indexes)
 - [Foreign Keys](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=ROBJ_foreignkey)
 - [Defining Callback Methods](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_callbacks)
 - [Using SQL Triggers](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_TRIGGERS)

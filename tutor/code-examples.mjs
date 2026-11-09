@@ -12,6 +12,29 @@ if $SYSTEM.Status.IsError(sc) {
     quit
 }
 write person.%Id(), !`, 'Use a scratch namespace with a compiled Sample.Person class. Read %Id() after checking %Save(). If an outer transaction is open, an assigned ID does not prove it has committed.'],
+    ['Check for a message and open it by its unique key', `Set found = ##class(Tutor.IndexedMessage).MIIdxExists("JTE810", .id)
+If 'found {
+    Write "Message not found", !
+    Quit
+}
+Write "Object ID: ", id, !
+
+Set message = ##class(Tutor.IndexedMessage).MIIdxOpen("JTE810", , .sc)
+If $SYSTEM.Status.IsError(sc) {
+    Do $SYSTEM.Status.DisplayError(sc)
+    Quit
+}
+Write "MessageId: ", message.MessageId, !
+Set message = ""`, 'Compile Tutor.IndexedMessage and save the sample row from the full explanation. MIIdxExists returns a Boolean and can also give you the object ID. MIIdxOpen returns an object reference and can report errors through the status argument.'],
+  ],
+  'T1.1/3': [
+    ['Delete a message by its unique key', `Set sc = ##class(Tutor.IndexedMessage).MIIdxDelete("JTE810")
+If $SYSTEM.Status.IsError(sc) {
+    Do $SYSTEM.Status.DisplayError(sc)
+    Quit
+}
+Write ##class(Tutor.IndexedMessage).MIIdxExists("JTE810"), !
+// 0`, 'Continue with the sample row from section 2. MIIdx is the index name and JTE810 is a MessageId value. MIIdxDelete uses that key to delete the object. Check the returned status before testing whether the key is still present.'],
   ],
   'T1.1/4': [
     ['Find the location for one named index', `<Storage name="Default">
