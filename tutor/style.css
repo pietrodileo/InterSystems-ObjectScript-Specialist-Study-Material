@@ -279,6 +279,29 @@ progress { display: block; width: 100%; height: .75rem; margin: .45rem 0; accent
 .profile-role { grid-column: 1 / -1; }
 .profile-note { margin: .9rem 0; }
 .profile-status:empty { display: none; }
+.home-chapters { margin-top: .35rem; }
+.home-chapters > h2 { margin-bottom: .35rem; }
+.home-chapters > .muted { margin: 0 0 .8rem; }
+.home-area { margin-top: 1rem; padding-top: .75rem; border-top: 1px solid var(--line); }
+.home-area h3 { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: .25rem 1rem; margin: 0 0 .4rem; }
+.home-area h3 small { color: var(--muted); font-size: .8rem; font-weight: 500; }
+.home-chapter-list { display: grid; gap: .35rem; }
+.home-chapter-card {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: .15rem .7rem;
+  width: 100%;
+  padding: .6rem .75rem;
+  text-align: left;
+}
+.home-chapter-card:hover { background: var(--quiet); border-color: var(--accent); }
+.home-chapter-code { color: var(--accent); font-weight: 750; font-variant-numeric: tabular-nums; }
+.home-chapter-title { font-size: .95rem; }
+.home-chapter-open { color: var(--accent); font-size: .84rem; font-weight: 650; }
+.home-chapter-status { grid-column: 2 / -1; color: var(--muted); font-size: .8rem; }
+.home-all-complete { margin-top: .8rem; padding: 1rem; border-radius: .65rem; background: var(--quiet); }
+.home-all-complete p { margin: 0 0 .75rem; }
 .study-start {
   display: flex;
   flex-wrap: wrap;
@@ -538,6 +561,8 @@ code { font-size: .9em; }
   .phases button { flex: 1; padding-inline: .35rem; }
 }
 @media (max-width: 450px) {
+  .home-chapter-card { grid-template-columns: auto minmax(0, 1fr); }
+  .home-chapter-open { display: none; }
   .area-chapter-card { grid-template-columns: minmax(0, 1fr); }
   .profile-fields { grid-template-columns: minmax(0, 1fr); }
   .profile-role { grid-column: auto; }

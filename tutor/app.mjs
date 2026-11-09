@@ -200,6 +200,39 @@ function render() {
   focusLesson();
 }
 
+function renderHomeChapters() {
+  const sections = Object.entries(topics).map(([code, name]) => {
+    const group = chapters.filter(item => item.topic.startsWith(`${code}.`));
+    const unfinished = group.filter(item => step(item));
+    if (!unfinished.length) return '';
+    const completedCount = group.length - unfinished.length;
+    return `<section class="home-area">
+      <h3>${escape(code)} · ${escape(name)} <small>${completedCount}/${group.length} complete</small></h3>
+      <div class="home-chapter-list">
+        ${unfinished.map(item => {
+          const currentStep = step(item);
+          const answered = attempted(item);
+          const casesDone = completedCases(item);
+          const title = item.title.split(': ').slice(1).join(': ');
+          return `<button type="button" class="home-chapter-card" data-topic="${escape(item.topic)}">
+            <span class="home-chapter-code">${escape(item.topic)}</span>
+            <strong class="home-chapter-title">${escape(title)}</strong>
+            <span class="home-chapter-open" aria-hidden="true">Open →</span>
+            <small class="home-chapter-status">${phases[currentStep]} · ${answered}/${item.quiz.length} questions answered · ${casesDone}/${item.cases.length} cases complete</small>
+          </button>`;
+        }).join('')}
+      </div>
+    </section>`;
+  }).join('');
+  const allComplete = chapters.every(item => !step(item));
+  return `<section class="home-chapters">
+    <h2>Chapters to complete</h2>
+    <p class="muted">All unfinished chapters are listed here. Choose any one to work on its current step.</p>
+    ${allComplete
+      ? `<div class="home-all-complete"><p>All chapters are complete. The final assessment is ready.</p><button type="button" class="primary" data-course="final">Start final assessment</button></div>`
+      : sections}
+  </section>`;
+}
 function renderCourse() {
   if (phase === 'area' && Object.hasOwn(topics, state.area)) {
     const code = state.area;
@@ -264,8 +297,6 @@ function renderCourse() {
     return;
   }
 
-  const next = nextChapter();
-  const started = chapters.some(item => attempted(item) || state.studied[item.topic] || completedCases(item));
   lesson.innerHTML = `
     <header class="lesson-header home-header">
       <div class="home-heading">
@@ -281,15 +312,7 @@ function renderCourse() {
         ? `Your InterSystems ObjectScript Specialist course is ready when you are. Role: ${escape(profile.role)}.`
         : `Your InterSystems ObjectScript Specialist course is ready whenever you are.`}</p>
     </header>
-    <section class="study-start">
-      <div>
-        <h2>${next ? escape(next.title) : 'Ready for the final assessment'}</h2>
-        ${next ? `<p class="muted">Chapter ${chapters.indexOf(next) + 1} of ${chapters.length} · ${phases[step(next)]}</p>` : ''}
-      </div>
-      <div class="actions">
-        <button type="button" class="primary" data-continue>${next ? (started ? 'Continue learning' : 'Start learning') : 'Go to final assessment'}</button>
-      </div>
-    </section>
+    ${renderHomeChapters()}
     <section class="panel study-outline">
       <h2>The five exam areas</h2>
       <ul class="exam-areas">${Object.entries(topics).map(([code, name]) => {
