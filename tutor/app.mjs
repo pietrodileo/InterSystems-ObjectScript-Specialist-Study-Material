@@ -208,8 +208,8 @@ function renderCourse() {
           <label>First name
             <input name="firstName" type="text" autocomplete="given-name" maxlength="60" value="${escape(profile.firstName ?? '')}" required>
           </label>
-          <label>Last name
-            <input name="lastName" type="text" autocomplete="family-name" maxlength="60" value="${escape(profile.lastName ?? '')}" required>
+          <label>Last name <span class="muted">(optional)</span>
+            <input name="lastName" type="text" autocomplete="family-name" maxlength="60" value="${escape(profile.lastName ?? '')}">
           </label>
           <label class="profile-role">Role <span class="muted">(optional)</span>
             <input name="role" type="text" autocomplete="organization-title" maxlength="80" value="${escape(profile.role ?? '')}" placeholder="e.g. Software engineer">
