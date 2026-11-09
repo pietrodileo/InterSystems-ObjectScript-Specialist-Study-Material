@@ -206,8 +206,12 @@ function renderHomeChapters() {
     const unfinished = group.filter(item => step(item));
     if (!unfinished.length) return '';
     const completedCount = group.length - unfinished.length;
-    return `<section class="home-area">
-      <h3>${escape(code)} · ${escape(name)} <small>${completedCount}/${group.length} complete</small></h3>
+    const isOpen = state.openTopics.includes(code);
+    return `<details class="home-area" data-home-area="${escape(code)}" ${isOpen ? 'open' : ''}>
+      <summary class="home-area-summary">
+        <span class="home-area-title">${escape(code)} · ${escape(name)}</span>
+        <small>${completedCount}/${group.length} complete</small>
+      </summary>
       <div class="home-chapter-list">
         ${unfinished.map(item => {
           const currentStep = step(item);
@@ -222,7 +226,7 @@ function renderHomeChapters() {
           </button>`;
         }).join('')}
       </div>
-    </section>`;
+    </details>`;
   }).join('');
   const allComplete = chapters.every(item => !step(item));
   return `<section class="home-chapters">
@@ -246,9 +250,13 @@ function renderCourse() {
       <section class="area-chapter-list" aria-label="${escape(topics[code])} chapters">
         ${group.map(item => {
           const number = chapters.indexOf(item) + 1;
-          const status = step(item) ? phases[step(item)] : 'Complete';
+          const currentStep = step(item);
+          const completed = currentStep === null;
+          const status = completed
+            ? '<span class="completion-badge"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3 8 3 3 7-7"></path></svg>Completed</span>'
+            : phases[currentStep];
           const title = item.title.split(': ').slice(1).join(': ');
-          return `<button type="button" class="area-chapter-card" data-topic="${escape(item.topic)}">
+          return `<button type="button" class="area-chapter-card${completed ? ' is-complete' : ''}" data-topic="${escape(item.topic)}">
             <span class="area-chapter-heading"><b>${escape(item.topic)}</b><strong>${escape(title)}</strong></span>
             <span class="area-chapter-status">Chapter ${number} of ${chapters.length} · ${status}</span>
           </button>`;
@@ -312,7 +320,6 @@ function renderCourse() {
         ? `Your InterSystems ObjectScript Specialist course is ready when you are. Role: ${escape(profile.role)}.`
         : `Your InterSystems ObjectScript Specialist course is ready whenever you are.`}</p>
     </header>
-    ${renderHomeChapters()}
     <section class="panel study-outline">
       <h2>The five exam areas</h2>
       <ul class="exam-areas">${Object.entries(topics).map(([code, name]) => {
@@ -324,6 +331,7 @@ function renderCourse() {
           <span class="muted exam-area-description">${escape(examAreaDescriptions[code])}</span>
         </li>`;
       }).join('')}</ul>
+      ${renderHomeChapters()}
       <h2>How each chapter works</h2>
       <ol class="roadmap">
         <li><strong>Study.</strong> Read the chapter overview, use the diagrams, and open concepts for explanations, code examples, and official references.</li>
@@ -859,6 +867,16 @@ function renderCaseProgress() {
   button.hidden = completed < chapter.cases.length;
   button.textContent = next ? `Continue · ${next.topic} · ${phases[step(next)]}` : 'Go to final assessment';
 }
+
+lesson.addEventListener('toggle', event => {
+  const details = event.target;
+  if (!details.matches?.('details[data-home-area]')) return;
+  const code = details.dataset.homeArea;
+  if (details.open) {
+    if (!state.openTopics.includes(code)) state.openTopics.push(code);
+  } else state.openTopics = state.openTopics.filter(area => area !== code);
+  save();
+}, true);
 
 nav.addEventListener('click', event => {
   const button = event.target.closest('[data-area]');
