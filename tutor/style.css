@@ -125,6 +125,8 @@ button.primary:disabled { background: var(--quiet); border-color: var(--line); c
   color: var(--on-topbar);
 }
 .sidebar-toggle svg { display: block; width: 1.25rem; height: 1.25rem; }
+.sidebar-toggle .mobile-menu-label,
+.sidebar-toggle .mobile-menu-chevron { display: none; }
 .sidebar-toggle:hover { border-color: var(--on-topbar); }
 .layout {
   display: grid;
@@ -447,8 +449,8 @@ code { font-size: .9em; }
   .layout > .sidebar {
     grid-area: auto;
     position: static;
-    height: 43dvh;
-    max-height: 43dvh;
+    height: auto;
+    max-height: 55dvh;
     padding: .2rem .35rem .6rem .2rem;
     border-inline-end: 0;
     border-bottom: 1px solid var(--line);
@@ -456,6 +458,23 @@ code { font-size: .9em; }
   .brand-detail { display: none; }
   .topbar { gap: .2rem .6rem; padding-block: .55rem; }
   .header-links { gap: .6rem; }
+  .topbar > button.sidebar-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: .3rem;
+    padding: .45rem .75rem;
+    background: transparent;
+    border-color: #8595cf;
+    color: var(--on-topbar);
+    font-size: .9rem;
+    font-weight: 650;
+  }
+  .sidebar-toggle .sidebar-toggle-icon { display: none; }
+  .sidebar-toggle .mobile-menu-label,
+  .sidebar-toggle .mobile-menu-chevron { display: block; }
+  .sidebar-toggle[aria-expanded="true"] .mobile-menu-chevron { transform: rotate(180deg); }
   .phases { gap: .3rem; }
   .phases button { flex: 1; padding-inline: .35rem; }
 }

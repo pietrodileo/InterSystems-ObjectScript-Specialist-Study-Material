@@ -9,6 +9,9 @@ const courseMenu = document.querySelector('#course-menu');
 const sidebar = document.querySelector('#course');
 const sidebarToggle = document.querySelector('#sidebar-toggle');
 const sidebarChevron = document.querySelector('#sidebar-chevron');
+const sidebarBrand = sidebarToggle.parentElement;
+const sidebarHeader = sidebarBrand.parentElement;
+const mobileMenu = window.matchMedia('(max-width: 720px)');
 const exportProgress = document.querySelector('#export-progress');
 const importProgress = document.querySelector('#import-progress');
 const progressFile = document.querySelector('#progress-file');
@@ -56,27 +59,40 @@ function save() {
   }
 }
 
-function updateSidebarToggle() {
-  const open = !sidebar.hidden;
+function setSidebarOpen(open) {
+  sidebar.hidden = !open;
   const label = open ? 'Collapse course index' : 'Expand course index';
   sidebarToggle.setAttribute('aria-expanded', String(open));
-  sidebarToggle.setAttribute('aria-label', label);
-  sidebarToggle.title = label;
+  if (mobileMenu.matches) {
+    sidebarToggle.removeAttribute('aria-label');
+    sidebarToggle.removeAttribute('title');
+  } else {
+    sidebarToggle.setAttribute('aria-label', label);
+    sidebarToggle.title = label;
+  }
   sidebarChevron.setAttribute('d', open ? 'm15 9-3 3 3 3' : 'm12 9 3 3-3 3');
 }
 
-function placeSidebar() {
-  if (sidebar.nextElementSibling !== lesson) lesson.before(sidebar);
-  sidebar.hidden = !(state.sidebarOpen ?? true);
-  updateSidebarToggle();
+function syncSidebarLayout() {
+  const open = !mobileMenu.matches && (state.sidebarOpen ?? true);
+  const focused = document.activeElement;
+  if (mobileMenu.matches) sidebarHeader.append(sidebarToggle);
+  else sidebarBrand.prepend(sidebarToggle);
+  setSidebarOpen(open);
+  if (focused === sidebarToggle || (!open && sidebar.contains(focused))) {
+    sidebarToggle.focus({ preventScroll: true });
+  }
 }
 
-placeSidebar();
+syncSidebarLayout();
+mobileMenu.addEventListener('change', syncSidebarLayout);
 sidebarToggle.addEventListener('click', () => {
-  state.sidebarOpen = sidebar.hidden;
-  sidebar.hidden = !state.sidebarOpen;
-  save();
-  updateSidebarToggle();
+  const open = sidebar.hidden;
+  setSidebarOpen(open);
+  if (!mobileMenu.matches) {
+    state.sidebarOpen = open;
+    save();
+  }
 });
 
 function renderNavigation() {
@@ -718,12 +734,14 @@ nav.addEventListener('toggle', event => {
 nav.addEventListener('click', event => {
   const button = event.target.closest('[data-topic]');
   if (!button) return;
+  if (mobileMenu.matches) setSidebarOpen(false);
   openChapter(chapters.find(item => item.topic === button.dataset.topic));
 });
 
 courseMenu.addEventListener('click', event => {
   const button = event.target.closest('[data-course]');
   if (!button) return;
+  if (mobileMenu.matches) setSidebarOpen(false);
   openCourse(button.dataset.course);
 });
 

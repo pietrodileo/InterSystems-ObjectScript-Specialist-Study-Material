@@ -6,20 +6,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#21328c">
   <title>ObjectScript Certification Tutor</title>
-  <link rel="stylesheet" href="./style.css?v=image-viewer-1">
+  <link rel="stylesheet" href="./style.css?v=course-menu-1">
   <script type="module" src="./sidebar-controls.mjs"></script>
   <script type="module" src="./image-viewer.mjs"></script>
-  <script type="module" src="./app.mjs?v=image-viewer-1"></script>
+  <script type="module" src="./app.mjs?v=course-menu-1"></script>
 </head>
 <body>
   <a class="skip" href="#lesson">Skip to content</a>
   <header class="topbar">
     <div class="brand">
       <button type="button" id="sidebar-toggle" class="sidebar-toggle" aria-controls="course" aria-expanded="true" aria-label="Collapse course index" title="Collapse course index">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+        <svg class="sidebar-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
           <rect x="3" y="4" width="18" height="16" rx="2"></rect>
           <path d="M9 4v16"></path>
           <path id="sidebar-chevron" d="m15 9-3 3 3 3"></path>
+        </svg>
+        <span class="mobile-menu-label">Course menu</span>
+        <svg class="mobile-menu-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+          <path d="m6 9 6 6 6-6"></path>
         </svg>
       </button>
       <span translate="no">ObjectScript</span> <span class="brand-detail">Certification tutor</span>
