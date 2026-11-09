@@ -6,10 +6,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#21328c">
   <title>ObjectScript Certification Tutor</title>
-  <link rel="stylesheet" href="./style.css?v=profile-sidebar-icon-1">
+  <link rel="stylesheet" href="./style.css?v=home-areas-1">
   <script type="module" src="./sidebar-controls.mjs"></script>
   <script type="module" src="./image-viewer.mjs"></script>
-  <script type="module" src="./app.mjs?v=practice-question-context-1"></script>
+  <script type="module" src="./app.mjs?v=home-areas-1"></script>
 </head>
 <body>
   <a class="skip" href="#lesson">Skip to content</a>
@@ -48,7 +48,7 @@
         <li>Apply the ideas in worked cases and track your progress as you go.</li>
         <li>Use the final assessment to review your answers by exam area.</li>
       </ul>
-      <p>Your progress is saved in this browser. The course index includes options to export it to a backup file or import it in another browser.</p>
+      <p>Your profile and course progress are saved in this browser. The course index includes options to export them to a backup file or import them in another browser.</p>
       <p>This is an independent learning resource and is not an official InterSystems website or certification resource. Check the official exam outline for current exam information.</p>
       <nav class="info-dialog-links" aria-label="Related websites">
         <a href="https://www.intersystems.com/certifications/intersystems-objectscript-specialist/" target="_blank" rel="noopener">Official exam outline ↗</a>
@@ -84,7 +84,7 @@
     </div>
   </dialog>
   <div class="layout">
-    <aside class="sidebar" id="course" aria-label="Study plan">
+    <aside class="sidebar" id="course" aria-label="Course navigation">
       <div class="sidebar-actions">
         <button type="button" id="theme-toggle" class="sidebar-action" aria-label="Switch to dark mode" title="Switch to dark mode">
           <svg class="moon-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
@@ -107,13 +107,14 @@
       </div>
       <div class="sidebar-scroll-content">
       <nav id="course-menu" class="course-menu" aria-label="Course pages"></nav>
+      <nav id="chapters" class="area-navigation" aria-label="Exam areas"></nav>
       <div class="course-progress">
         <label for="progress">Your progress</label>
         <progress id="progress" max="358" value="0"></progress>
         <p id="progress-label" class="muted"></p>
       </div>
       <div class="progress-transfer">
-        <p class="muted">Move your progress between browsers with a backup file.</p>
+        <p class="muted">Move your profile and course progress between browsers with a backup file.</p>
         <div class="progress-transfer-actions">
           <button type="button" id="export-progress" disabled>Export</button>
           <button type="button" id="import-progress" disabled>Import</button>
@@ -121,7 +122,6 @@
         </div>
         <p id="progress-transfer-status" class="muted" role="status" aria-live="polite"></p>
       </div>
-      <nav id="chapters" aria-label="Chapters"></nav>
       </div>
     </aside>
     <main id="lesson" tabindex="-1">

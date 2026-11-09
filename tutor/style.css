@@ -225,6 +225,43 @@ progress { display: block; width: 100%; height: .75rem; margin: .45rem 0; accent
   font-weight: 700;
   background: var(--selected);
 }
+.area-navigation { display: grid; gap: .2rem; margin-top: .6rem; }
+.area-nav-button {
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr);
+  align-items: center;
+  gap: .2rem .55rem;
+  width: 100%;
+  min-height: 3rem;
+  padding: .45rem .6rem;
+  text-align: left;
+  border-color: transparent;
+  background: transparent;
+}
+.area-nav-button:hover { background: var(--quiet); }
+.area-nav-button[aria-current] { color: var(--accent); background: var(--selected); border-color: var(--open-line); }
+.area-nav-code { color: var(--accent); font-weight: 800; font-variant-numeric: tabular-nums; }
+.area-nav-copy { display: grid; min-width: 0; }
+.area-nav-copy small { color: var(--muted); font-size: .76rem; font-weight: 500; }
+.home-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
+.home-heading h1 { margin-top: .25rem; }
+.home-settings-button { display: grid; place-items: center; flex: 0 0 auto; width: 2.75rem; height: 2.75rem; padding: .5rem; }
+.home-settings-button svg { display: block; width: 1.25rem; height: 1.25rem; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.area-chapter-list { display: grid; gap: .65rem; max-width: 62rem; }
+.area-chapter-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: .35rem 1rem;
+  width: 100%;
+  padding: .85rem 1rem;
+  text-align: left;
+}
+.area-chapter-card:hover { background: var(--quiet); border-color: var(--accent); }
+.area-chapter-heading { display: flex; flex-wrap: wrap; align-items: baseline; gap: .35rem .65rem; }
+.area-chapter-heading b { color: var(--accent); font-variant-numeric: tabular-nums; }
+.area-chapter-heading strong { font-size: 1rem; }
+.area-chapter-status { color: var(--muted); font-size: .85rem; }
 .profile-panel { max-width: 48rem; padding: clamp(1rem, 3vw, 1.5rem); }
 .profile-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
 .profile-fields label { display: grid; gap: .4rem; font-weight: 650; }
@@ -501,6 +538,7 @@ code { font-size: .9em; }
   .phases button { flex: 1; padding-inline: .35rem; }
 }
 @media (max-width: 450px) {
+  .area-chapter-card { grid-template-columns: minmax(0, 1fr); }
   .profile-fields { grid-template-columns: minmax(0, 1fr); }
   .profile-role { grid-column: auto; }
   .exam-areas li { grid-template-columns: 1.7rem minmax(0, 1fr); row-gap: .05rem; }

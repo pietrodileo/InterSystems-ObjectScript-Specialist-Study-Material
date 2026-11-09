@@ -35,7 +35,7 @@ try {
 } catch {
   storageWorks = false;
 }
-let profile = {};
+let profile = { firstName: '', lastName: '', role: '' };
 let profileStatus = '';
 try {
   const savedProfile = JSON.parse(localStorage.getItem(profileStorageKey));
@@ -115,23 +115,17 @@ function renderNavigation() {
   progress.value = seen;
   document.querySelector('#progress-label').textContent =
     `${done}/${chapters.length} chapters complete. ${seen}/${total} quiz questions answered.${errors ? ` ${errors} to review.` : ''}${storageWorks ? '' : ' Progress could not be saved in this browser.'}`;
-  courseMenu.innerHTML = Object.entries({ profile: 'Profile', roadmap: 'Study plan', review: 'Answer review', final: 'Final assessment' }).map(([page, label]) =>
+  courseMenu.innerHTML = Object.entries({ roadmap: 'Home', review: 'Answer review', final: 'Final assessment' }).map(([page, label]) =>
     `<button type="button" data-course="${page}" ${phase === page ? 'aria-current="page"' : ''}>${label}</button>`).join('');
-  nav.innerHTML = Object.entries(topics).map(([code, name]) => `
-    <details class="topic" data-area="${code}" ${state.openTopics.includes(code) ? 'open' : ''}>
-      <summary><span class="topic-code">${code}</span> <span>${name}</span></summary>
-      <div class="topic-chapters">
-        ${chapters.filter(item => item.topic.startsWith(`${code}.`)).map(item => {
-          const selected = item === chapter ? ' aria-current="page"' : '';
-          const status = step(item) ? `${attempted(item)}/${item.quiz.length} questions` : 'Complete';
-          const errors = missed(item);
-          return `<button type="button" class="chapter-button" data-topic="${item.topic}"${selected}>
-            <span><b>${item.topic}</b> ${escape(item.title.split(': ')[1])}</span>
-            <small>${status}${errors ? `<span class="review-count"> · ${errors} to review</span>` : ''}</small>
-          </button>`;
-        }).join('')}
-      </div>
-    </details>`).join('');
+  const activeArea = phase === 'area' ? state.area : chapter?.topic.split('.')[0];
+  nav.innerHTML = Object.entries(topics).map(([code, name]) => {
+    const group = chapters.filter(item => item.topic.startsWith(`${code}.`));
+    const completed = group.filter(item => !step(item)).length;
+    return `<button type="button" class="area-nav-button" data-area="${escape(code)}" ${activeArea === code ? 'aria-current="page"' : ''}>
+      <span class="area-nav-code">${escape(code)}</span>
+      <span class="area-nav-copy"><strong>${escape(name)}</strong><small>${completed}/${group.length} chapters complete</small></span>
+    </button>`;
+  }).join('');
 }
 
 function openChapter(item, nextPhase = step(item) ?? 'theory', mode = 'learn', questionId) {
@@ -154,6 +148,16 @@ function openCourse(page) {
   chapter = null;
   phase = page;
   state.phase = page;
+  save();
+  render();
+}
+
+function openArea(code) {
+  if (!Object.hasOwn(topics, code)) return;
+  chapter = null;
+  phase = 'area';
+  state.area = code;
+  state.phase = 'area';
   save();
   render();
 }
@@ -197,6 +201,28 @@ function render() {
 }
 
 function renderCourse() {
+  if (phase === 'area' && Object.hasOwn(topics, state.area)) {
+    const code = state.area;
+    const group = chapters.filter(item => item.topic.startsWith(`${code}.`));
+    lesson.innerHTML = `
+      <header class="lesson-header">
+        <p class="chapter-location">Exam area · ${escape(code)}</p>
+        <h1 tabindex="-1">${escape(topics[code])}</h1>
+        <p class="lead">${escape(examAreaDescriptions[code] ?? '')}</p>
+      </header>
+      <section class="area-chapter-list" aria-label="${escape(topics[code])} chapters">
+        ${group.map(item => {
+          const number = chapters.indexOf(item) + 1;
+          const status = step(item) ? phases[step(item)] : 'Complete';
+          const title = item.title.split(': ').slice(1).join(': ');
+          return `<button type="button" class="area-chapter-card" data-topic="${escape(item.topic)}">
+            <span class="area-chapter-heading"><b>${escape(item.topic)}</b><strong>${escape(title)}</strong></span>
+            <span class="area-chapter-status">Chapter ${number} of ${chapters.length} · ${status}</span>
+          </button>`;
+        }).join('')}
+      </section>`;
+    return;
+  }
   if (phase === 'profile') {
     lesson.innerHTML = `
       <header class="lesson-header">
@@ -215,7 +241,7 @@ function renderCourse() {
             <input name="role" type="text" autocomplete="organization-title" maxlength="80" value="${escape(profile.role ?? '')}" placeholder="e.g. Software engineer">
           </label>
         </div>
-        <p class="muted profile-note">These details are saved in this browser and used to personalize the home page.</p>
+        <p class="muted profile-note">These details are saved in this browser, personalize the home page, and are included in your backup.</p>
         <div class="actions"><button type="submit" class="primary">Save profile</button></div>
         <p class="profile-status" role="status" aria-live="polite">${escape(profileStatus)}</p>
       </form>`;
@@ -241,11 +267,19 @@ function renderCourse() {
   const next = nextChapter();
   const started = chapters.some(item => attempted(item) || state.studied[item.topic] || completedCases(item));
   lesson.innerHTML = `
-    <header class="lesson-header">
-      <h1 tabindex="-1">${profile.firstName ? `Hi, ${escape(profile.firstName)}` : 'Welcome to your study space'}</h1>
+    <header class="lesson-header home-header">
+      <div class="home-heading">
+        <h1 tabindex="-1">${profile.firstName ? `Hi, ${escape(profile.firstName)}` : 'Welcome to your study space'}</h1>
+        <button type="button" class="home-settings-button" data-course="profile" aria-label="Edit profile" title="Edit profile">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.1a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.1a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.08a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.1a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.08a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.1a1.65 1.65 0 0 0-1.5 1z"></path>
+          </svg>
+        </button>
+      </div>
       <p class="lead">${profile.role
-        ? `Your ObjectScript Specialist study plan is ready when you are. Role: ${escape(profile.role)}.`
-        : `Pick up your InterSystems ObjectScript Specialist study plan whenever you’re ready.`}</p>
+        ? `Your InterSystems ObjectScript Specialist course is ready when you are. Role: ${escape(profile.role)}.`
+        : `Your InterSystems ObjectScript Specialist course is ready whenever you are.`}</p>
     </header>
     <section class="study-start">
       <div>
@@ -253,7 +287,7 @@ function renderCourse() {
         ${next ? `<p class="muted">Chapter ${chapters.indexOf(next) + 1} of ${chapters.length} · ${phases[step(next)]}</p>` : ''}
       </div>
       <div class="actions">
-        <button type="button" class="primary" data-continue>${next ? (started ? 'Resume study plan' : 'Start study plan') : 'Go to final assessment'}</button>
+        <button type="button" class="primary" data-continue>${next ? (started ? 'Continue learning' : 'Start learning') : 'Go to final assessment'}</button>
       </div>
     </section>
     <section class="panel study-outline">
@@ -803,21 +837,11 @@ function renderCaseProgress() {
   button.textContent = next ? `Continue · ${next.topic} · ${phases[step(next)]}` : 'Go to final assessment';
 }
 
-nav.addEventListener('toggle', event => {
-  const area = event.target.dataset.area;
-  if (!area || !nav.contains(event.target)) return;
-  const open = state.openTopics.includes(area);
-  if (event.target.open === open) return;
-  if (open) state.openTopics = state.openTopics.filter(code => code !== area);
-  else state.openTopics.push(area);
-  save();
-}, true);
-
 nav.addEventListener('click', event => {
-  const button = event.target.closest('[data-topic]');
+  const button = event.target.closest('[data-area]');
   if (!button) return;
   if (mobileMenu.matches) setSidebarOpen(false);
-  openChapter(chapters.find(item => item.topic === button.dataset.topic));
+  openArea(button.dataset.area);
 });
 
 courseMenu.addEventListener('click', event => {
@@ -926,6 +950,7 @@ try {
   const previous = chapters.find(item => item.topic === state.topic);
   if (previous && Object.hasOwn(phases, state.phase)) openChapter(previous, state.phase);
   else if (state.phase === 'past' && state.assessments[state.assessmentIndex]) openCourse('past');
+  else if (state.phase === 'area' && Object.hasOwn(topics, state.area)) openArea(state.area);
   else openCourse(['final', 'review', 'profile'].includes(state.phase) ? state.phase : 'roadmap');
 } catch (error) {
   lesson.innerHTML = '<h1>Could not load the Study Pack</h1><p>Start the tutor from the repository root using the command in the README, then reload this page.</p>';
@@ -936,8 +961,11 @@ const backupFormat = 'objectscript-certification-tutor-progress';
 const backupVersion = 1;
 
 function progressSnapshot() {
-  const keys = ['results', 'studied', 'worked', 'history', 'assessments', 'openTopics', 'topic', 'phase', 'assessmentIndex', 'final', 'sidebarOpen'];
-  return Object.fromEntries(keys.filter(key => Object.hasOwn(state, key)).map(key => [key, state[key]]));
+  const keys = ['results', 'studied', 'worked', 'history', 'assessments', 'openTopics', 'topic', 'phase', 'area', 'assessmentIndex', 'final', 'sidebarOpen'];
+  return {
+    ...Object.fromEntries(keys.filter(key => Object.hasOwn(state, key)).map(key => [key, state[key]])),
+    profile: { firstName: profile.firstName ?? '', lastName: profile.lastName ?? '', role: profile.role ?? '' },
+  };
 }
 
 function isRecord(value) {
@@ -971,6 +999,13 @@ function validateProgressBackup(backup) {
   const validStudied = validTopicMap(saved.studied, entries => isRecord(entries) && Object.values(entries).every(value => typeof value === 'boolean'));
   const validWorked = validTopicMap(saved.worked, (entries, known) => isRecord(entries) && Object.entries(entries).every(([file, done]) => known.cases.has(file) && typeof done === 'boolean'));
   if (!validResults || !validHistory || !validStudied || !validWorked || !saved.openTopics.every(topic => Object.hasOwn(topics, topic))) return null;
+  const validProfile = saved.profile === undefined || (isRecord(saved.profile) &&
+    typeof saved.profile.firstName === 'string' && saved.profile.firstName.length <= 60 &&
+    (saved.profile.lastName === undefined || (typeof saved.profile.lastName === 'string' && saved.profile.lastName.length <= 60)) &&
+    (saved.profile.role === undefined || (typeof saved.profile.role === 'string' && saved.profile.role.length <= 80)) &&
+    Object.keys(saved.profile).every(key => ['firstName', 'lastName', 'role'].includes(key)));
+  if (!validProfile || (saved.area !== undefined && !Object.hasOwn(topics, saved.area)) ||
+      (saved.phase === 'area' && !Object.hasOwn(topics, saved.area))) return null;
 
   const validFinal = final => {
     if (!isRecord(final) || !Array.isArray(final.refs) || !Array.isArray(final.answers) || final.refs.length !== final.answers.length ||
@@ -985,12 +1020,16 @@ function validateProgressBackup(backup) {
   };
   if (!saved.assessments.every(validFinal) || (saved.final !== undefined && !validFinal(saved.final))) return null;
   if (saved.topic !== undefined && !byTopic.has(saved.topic)) return null;
-  if (saved.phase !== undefined && !['theory', 'quiz', 'cases', 'roadmap', 'review', 'final', 'past', 'profile'].includes(saved.phase)) return null;
+  if (saved.phase !== undefined && !['theory', 'quiz', 'cases', 'roadmap', 'review', 'final', 'past', 'profile', 'area'].includes(saved.phase)) return null;
   if (saved.assessmentIndex !== undefined && (!Number.isInteger(saved.assessmentIndex) || saved.assessmentIndex < 0 || saved.assessmentIndex >= saved.assessments.length)) return null;
   if (saved.sidebarOpen !== undefined && typeof saved.sidebarOpen !== 'boolean') return null;
 
-  return Object.fromEntries(['results', 'studied', 'worked', 'history', 'assessments', 'openTopics', 'topic', 'phase', 'assessmentIndex', 'final', 'sidebarOpen']
+  const restored = Object.fromEntries(['results', 'studied', 'worked', 'history', 'assessments', 'openTopics', 'topic', 'phase', 'area', 'assessmentIndex', 'final', 'sidebarOpen']
     .filter(key => Object.hasOwn(saved, key)).map(key => [key, saved[key]]));
+  if (saved.profile !== undefined) restored.profile = {
+    firstName: saved.profile.firstName ?? '', lastName: saved.profile.lastName ?? '', role: saved.profile.role ?? '',
+  };
+  return restored;
 }
 
 exportProgress.addEventListener('click', () => {
@@ -1001,7 +1040,7 @@ exportProgress.addEventListener('click', () => {
   anchor.download = 'objectscript-progress-' + new Date().toISOString().slice(0, 10) + '.json';
   anchor.click();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
-  transferStatus.textContent = 'Progress backup downloaded. Keep the file somewhere safe.';
+  transferStatus.textContent = 'Course progress and profile backup downloaded. Keep the file somewhere safe.';
 });
 
 importProgress.addEventListener('click', () => progressFile.click());
@@ -1017,7 +1056,9 @@ progressFile.addEventListener('change', async () => {
       transferStatus.textContent = 'Import cancelled.';
       return;
     }
-    localStorage.setItem(storageKey, JSON.stringify(restored));
+    const { profile: importedProfile, ...restoredProgress } = restored;
+    localStorage.setItem(storageKey, JSON.stringify(restoredProgress));
+    if (importedProfile) localStorage.setItem(profileStorageKey, JSON.stringify(importedProfile));
     window.location.reload();
   } catch {
     transferStatus.textContent = 'This file is not a valid progress backup, or the browser could not save it.';
