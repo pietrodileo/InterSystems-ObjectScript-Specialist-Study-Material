@@ -431,6 +431,7 @@ function renderPracticeReferences() {
     return '<details class="reading inset apply-question-reference" data-apply-reference="' + question.id + '">' +
       '<summary>Q' + question.id + ' · ' + escape(questionPrompt(question)) + '</summary>' +
       '<div class="disclosure-body">' +
+        '<h4>Practice question</h4><div class="prompt quiz-text">' + quizText(question.question, true) + '</div>' +
         '<h4>Why the answer is correct</h4>' + text + code +
         '<h4>Official documentation</h4><ul>' + docs + '</ul>' + image +
       '</div></details>';
