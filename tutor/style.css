@@ -279,6 +279,7 @@ progress { display: block; width: 100%; height: .75rem; margin: .45rem 0; accent
 .profile-role { grid-column: 1 / -1; }
 .profile-note { margin: .9rem 0; }
 .profile-status:empty { display: none; }
+.home-section-divider { border: 0; border-top: 1px solid var(--line); margin: 1.7rem 0; }
 .home-chapters { margin-top: .35rem; }
 .home-chapters > h2 { margin-bottom: .35rem; }
 .home-chapters > .muted { margin: 0 0 .8rem; }

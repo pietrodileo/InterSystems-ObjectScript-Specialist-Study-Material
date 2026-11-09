@@ -331,7 +331,6 @@ function renderCourse() {
           <span class="muted exam-area-description">${escape(examAreaDescriptions[code])}</span>
         </li>`;
       }).join('')}</ul>
-      ${renderHomeChapters()}
       <h2>How each chapter works</h2>
       <ol class="roadmap">
         <li><strong>Study.</strong> Read the chapter overview, use the diagrams, and open concepts for explanations, code examples, and official references.</li>
@@ -340,6 +339,8 @@ function renderCourse() {
       </ol>
       <p>After the final assessment, use Answer review to decide what to revisit.</p>
       <div class="actions"><button type="button" data-course="review">Open answer review</button></div>
+      <hr class="home-section-divider">
+      ${renderHomeChapters()}
     </section>`;
 }
 
