@@ -14,7 +14,7 @@ Saved 2 November 2026 from [exam-prep.es](https://exam-prep.es/exams/objectscrip
 
 - **%New()** creates a new in-memory instance of a class and returns an object reference (oref)
 - **%Save()** persists the object to disk and returns a %Status value that must be checked
-- **%Id()** returns the unique persistent ID assigned to the object after saving
+- **%Id()** returns the object's ID within its extent. **%Oid()** returns its OID, which includes both the ID and the class name.
 - **Callbacks** let a class initialize, validate, or react to changes at specific points in the object lifecycle. IRIS calls them automatically if the class defines them.
 - **SQL triggers** react to INSERT, UPDATE, or DELETE. A trigger declared with `Foreach = row/object` can also run for corresponding changes made through the object API.
 - **%OpenId(id)** retrieves a previously saved object from disk by its ID
@@ -101,29 +101,34 @@ The save returns an error and creates no row. Setting `EndDate` equal to `StartD
 
 SQL `INSERT`, `UPDATE`, and `DELETE` act on table rows. SQL DML runs applicable `BEFORE` and `AFTER` triggers. An ordinary SQL `UPDATE` does not run `%OnBeforeSave()` or `%OnAfterSave()` as if it had called `%Save()` on an instance. When a table rule such as auditing needs to run for both SQL and object changes, an eligible trigger declared with `Foreach = row/object` can cover both paths. For example, an `AFTER UPDATE` trigger can record a change made through either SQL `UPDATE` or `%Save()` on a modified existing object.
 
-#### Retrieving the ID with %Id()
+#### ID, OID, and OREF
 
-After a successful save, `%Id()` returns the assigned unique identifier.
+The first successful save gives a persistent object two identifiers. Its **ID** is unique within its extent, the set of instances managed together by a persistent class. Its **OID** (object identifier) includes the ID and the object's class name and identifies the object within the database. For example, `Tutor.Patient` and `Tutor.Invoice` can both have an ID of `42` when they use separate extents. Their OIDs differ because they include different class names.
 
-```objectscript
-Set person = ##class(Sample.Person).%New()
-Set person.Name = "Jane Doe"
-Set sc = person.%Save()
-If $$$ISOK(sc) {
-    Write "Saved with ID: ", person.%Id(), !
-}
-```
+| Value | How to get it | Where to use it |
+| --- | --- | --- |
+| ID | `person.%Id()` | `%OpenId(id)`, `%ExistsId(id)`, `%DeleteId(id)`, or the SQL `%ID` pseudo-field |
+| OID | `person.%Oid()` | `%Open(oid)`, `%Exists(oid)`, or `%Delete(oid)` |
+| OREF | Returned by `%New()` or by a successful open | Access the object in memory, for example `person.Name` |
 
-#### Opening an Existing Object with %OpenId()
-
-To retrieve a saved object by its ID:
+`%New()` returns an OREF immediately. At that point, a new object has yet to receive its persistent identifiers. After saving, use the OREF to read either identifier. Keep the OID in the form returned by `%Oid()` and pass it directly to methods that expect one.
 
 ```objectscript
-Set person = ##class(Sample.Person).%OpenId(42)
-If person '= "" {
-    Write person.Name, !
+set person = ##class(Sample.Person).%New()
+set person.Name = "Jane Doe"
+set sc = person.%Save()
+if $SYSTEM.Status.IsError(sc) {
+    write $SYSTEM.Status.GetErrorText(sc), !
+    quit
 }
+
+set id = person.%Id()
+set oid = person.%Oid()
+set byId = ##class(Sample.Person).%OpenId(id)
+set byOid = ##class(Sample.Person).%Open(oid)
 ```
+
+Both calls identify the same saved `Sample.Person` and return an OREF on success. In SQL, use the `%ID` pseudo-field to locate the row by its ID.
 
 The concurrency argument controls how IRIS locks the record during the open. When IRIS loads the record into an instance, `%OnOpen()` can perform an additional check. An error status from the callback prevents the open from succeeding.
 
@@ -152,5 +157,6 @@ Set sc = person2.%Save()
 
 - [Saving Objects](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_persobj_saving)
 - [Opening Objects](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_persobj_opening)
+- [Identifiers for Saved Objects](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_persobj_intro)
 - [Defining Callback Methods](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_callbacks)
 - [Using SQL Triggers](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_TRIGGERS)

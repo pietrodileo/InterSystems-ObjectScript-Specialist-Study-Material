@@ -85,7 +85,7 @@ If a class has foreign key references from other classes, deletion behavior depe
 
 #### The %OnDelete() callback and SQL DELETE triggers
 
-`%OnDelete(oid)` runs before `%Delete()` or `%DeleteId()` removes the object. It is a class method because the caller can delete a record by ID without an open instance. The callback receives an OID, which includes the class and its ID. Returning an error `%Status` stops the deletion. If you need the record's fields, extract the ID from the OID and open the object.
+`%OnDelete(oid)` runs before `%Delete()` or `%DeleteId()` removes the object. It is a class method because the caller can delete a record by ID without an open instance. IRIS passes the callback an OID even when the caller starts with `%DeleteId(id)`. Returning an error `%Status` stops the deletion. The example extracts the ID with `$$$oidPrimary(oid)` because it uses `%OpenId()` to read the record's fields.
 
 For example, add `Property HoldForReview As %Boolean;` and the following class method to `Tutor.Patient` to block object deletion while a review is pending.
 
