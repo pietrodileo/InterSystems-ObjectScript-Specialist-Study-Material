@@ -558,84 +558,146 @@ ZWrite ^Sample.PersonD
 
 ### Key Points
 
-- InterSystems IRIS supports **multiple inheritance** (a class can extend multiple superclasses)
-- **Left-to-right order** determines priority when superclasses define the same member
-- The **leftmost superclass** in the Extends list has the highest priority
-- Storage inheritance comes from the **primary (first) persistent superclass**
-- Use multiple inheritance carefully to avoid ambiguity and complexity
+- List the superclasses in `Extends (A, B)`. The leftmost class is the **primary superclass**.
+- With the default left-to-right inheritance, a property or method from the left superclass wins a name conflict. Members with distinct names can be inherited from either superclass.
+- `Inheritance = right` changes which superclass wins a member conflict. The primary superclass stays the leftmost one.
+- For a persistent class, put `%Persistent` or a persistent parent first. With the default layout, a persistent subclass shares its parent's data global and ID space. A storable property from a mixin can be saved in that layout.
 
 ### Detailed Notes
 
-#### Overview
+#### Resolve Name Conflicts in Properties and Methods
 
-Multiple inheritance allows a class to combine behaviors from several parent classes. In InterSystems IRIS, a class can extend multiple superclasses separated by commas. The order in which superclasses are listed is significant because it determines which version of a member is inherited when conflicts occur.
-
-#### Syntax
+Both registered base classes below define `Channel` and `Describe()`. Only `Tutor.FileDefaults` defines `FileName`. Save each definition in a separate class file and compile the two base classes first.
 
 ```objectscript
-Class MyApp.Manager Extends (Sample.Person, Sample.Employee, %Populate)
+Class Tutor.ScreenDefaults Extends %RegisteredObject
 {
-    // Inherits from all three classes
-    // Sample.Person has highest priority for conflicts
+    Property Channel As %String [ InitialExpression = "screen" ];
+
+    Method Describe() As %String
+    {
+        Quit "Screen output"
+    }
+}
+
+Class Tutor.FileDefaults Extends %RegisteredObject
+{
+    Property Channel As %String [ InitialExpression = "file" ];
+    Property FileName As %String [ InitialExpression = "report.txt" ];
+
+    Method Describe() As %String
+    {
+        Quit "File output"
+    }
+}
+
+Class Tutor.ReportView Extends (Tutor.ScreenDefaults, Tutor.FileDefaults)
+[ Inheritance = left ]
+{
+}
+
+Class Tutor.FileReportView Extends (Tutor.ScreenDefaults, Tutor.FileDefaults)
+[ Inheritance = right ]
+{
 }
 ```
 
-#### Method Resolution Order (MRO)
+```objectscript
+Set report = ##class(Tutor.ReportView).%New()
+Write report.Channel, " | ", report.Describe(), " | ", report.FileName, !
+// screen | Screen output | report.txt
 
-When two or more superclasses define a method or property with the same name, the class compiler resolves the conflict using **left-to-right priority**:
+Set report = ##class(Tutor.FileReportView).%New()
+Write report.Channel, " | ", report.Describe(), " | ", report.FileName, !
+// file | File output | report.txt
+```
 
-1. The class's own members have the highest priority 2. Then the first (leftmost) superclass 3. Then the second superclass 4. And so on
+Both subclasses expose one `Channel` property. The inheritance direction selects the definition, including its initial value. `Describe()` follows the same priority. `FileName` is inherited in both cases because there is no conflict. These classes are registered objects, so their property values live in memory.
 
-Example:
+#### Save Properties Inherited from Two Superclasses
+
+`Tutor.MIPerson` is the primary persistent superclass. `Tutor.BadgeMixin` supplies a property and a method. `Tutor.MIEmployee` adds its own property and overrides `Describe()`. Here, `##super()` calls the inherited implementation from `Tutor.MIPerson`.
 
 ```objectscript
-Class Base.A Extends %RegisteredObject
+Class Tutor.MIPerson Extends %Persistent
 {
-    Method Greet() { Write "Hello from A", ! }
+    Parameter USEEXTENTSET = 0;
+
+    Property FullName As %String;
+    Index FullNameIdx On FullName;
+
+    Method Describe() As %String
+    {
+        Quit ..FullName
+    }
 }
 
-Class Base.B Extends %RegisteredObject
+Class Tutor.BadgeMixin Extends %RegisteredObject
 {
-    Method Greet() { Write "Hello from B", ! }
+    Property BadgeCode As %String;
+
+    Method BadgeLabel() As %String
+    {
+        Quit "Badge "_..BadgeCode
+    }
 }
 
-Class MyApp.Combined Extends (Base.A, Base.B)
+Class Tutor.MIEmployee Extends (Tutor.MIPerson, Tutor.BadgeMixin)
+[ Inheritance = left ]
 {
-    // Greet() is inherited from Base.A (leftmost)
+    Property Department As %String;
+
+    Method Describe() As %String
+    {
+        Quit ##super()_" / "_..Department
+    }
 }
 ```
 
-Calling `Greet()` on a `MyApp.Combined` instance executes `Base.A`'s implementation.
-
-#### Storage and Primary Superclass
-
-For persistent classes, the **primary superclass** (the first persistent class in the Extends list) determines the storage strategy. All other persistent superclasses contribute their properties but do not contribute an independent storage definition.
+Compile the three classes in a practice namespace and run the following from an ObjectScript method. Reopening the object by ID lets you check that the badge and department were saved.
 
 ```objectscript
-Class MyApp.ExtendedPerson Extends (Sample.Person, Sample.Auditable)
-{
-    // Storage comes from Sample.Person (primary)
-    // Properties from Sample.Auditable are added to Sample.Person's storage
+Set employee = ##class(Tutor.MIEmployee).%New()
+Set employee.FullName = "Ada Rossi"
+Set employee.BadgeCode = "B-42"
+Set employee.Department = "Lab"
+
+Set sc = employee.%Save()
+If $SYSTEM.Status.IsError(sc) {
+    Do $SYSTEM.Status.DisplayError(sc)
+    Quit
 }
+Set id = employee.%Id()
+Set employee = ##class(Tutor.MIEmployee).%OpenId(id,,.sc)
+If $SYSTEM.Status.IsError(sc) {
+    Do $SYSTEM.Status.DisplayError(sc)
+    Quit
+}
+Write employee.Describe(), " | ", employee.BadgeLabel(), !
+// Ada Rossi / Lab | Badge B-42
+ZWrite ^Tutor.MIPersonD(id)
 ```
 
-#### Common Patterns for Multiple Inheritance
+| Member | Defined in | What happens on save |
+| --- | --- | --- |
+| `FullName` | `Tutor.MIPerson` | Stored in the shared data global. The inherited `FullNameIdx` also covers employees. |
+| `BadgeCode` | `Tutor.BadgeMixin` | Stored as a property of the employee. The mixin has no persistent extent of its own. |
+| `Department` | `Tutor.MIEmployee` | Stored as a property specific to the employee subclass. |
+| `Describe()` and `BadgeLabel()` | Subclass and mixin | Methods read the property values when called. |
 
-- **Mixin pattern**: Combine a primary persistent class with utility registered classes that add behavior (logging, auditing, validation)
-- **%Populate mixin**: Add `%Populate` to enable test data generation
-- **Adapter pattern**: Combine persistent storage with interface adapters
+#### Locate the Record in Storage
 
-#### Pitfalls to Avoid
+With `%Storage.Persistent`, `USEEXTENTSET = 0` and generated storage in this example, the data global is `^Tutor.MIPersonD`. If the assigned ID is `42`, inspect the branch rooted at `^Tutor.MIPersonD(42)`. In the compiled classes, read `DataLocation` in the active storage definition to locate the data global. Then read the `<Data>` mappings in the parent and subclass to see how the inherited and subclass properties are laid out within the branch.
 
-- Changing the order of superclasses can change which methods are inherited
-- Adding a new superclass in the middle of the list may break existing behavior
-- Diamond inheritance (where two superclasses share a common ancestor) is handled automatically but can create subtle issues
-- Property name collisions between superclasses cause compiler errors if types differ
+The ID is allocated in the parent extent. The employee appears in both `Tutor.MIPerson` and `Tutor.MIEmployee` in SQL under that same ID. The employee projection exposes `BadgeCode` and `Department` alongside `FullName`. Index inheritance follows the primary superclass. An index declared on the employee class covers the employee subextent.
 
 ### Documentation References
 
-- [Class Inheritance](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_classes_inheritance)
-- [Multiple Inheritance](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_classes_inheritance#GOBJ_classes_multiple)
+- [Class inheritance](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_classes)
+- [Inheritance class keyword](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=ROBJ_class_inheritance)
+- [Persistent classes and their subclasses](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_defpersobj)
+- [Storage definitions](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_storage)
+- [Class extents and indexes](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GORIENT_persistence)
 
 ## 6. Documents classes (Description keyword, /// comments)
 

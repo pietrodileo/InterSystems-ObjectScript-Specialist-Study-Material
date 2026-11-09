@@ -36,6 +36,18 @@ Records:   ^Ebnm.EKUy.1
 DOBIndex:  ^Ebnm.EKUy.2
 NameIndex: ^Ebnm.EKUy.3`, 'In this InterSystems example, ^Ebnm.EKUy is the generated ExtentLocation. The two indexes go from sharing one global to using separate globals. Changing the parameter on an existing class does not move its data.'],
   ],
+  'T1.1/5': [
+    [
+      "Resolve a property and a method",
+      "Set report = ##class(Tutor.ReportView).%New()\nWrite report.Channel, \" | \", report.Describe(), \" | \", report.FileName, !\n// screen | Screen output | report.txt\n\nSet report = ##class(Tutor.FileReportView).%New()\nWrite report.Channel, \" | \", report.Describe(), \" | \", report.FileName, !\n// file | File output | report.txt",
+      "Compile the registered classes in the full explanation. The inheritance direction selects the definition of Channel and Describe(). FileName comes from Tutor.FileDefaults in both cases."
+    ],
+    [
+      "Save a property inherited from a mixin",
+      "Set employee = ##class(Tutor.MIEmployee).%New()\nSet employee.FullName = \"Ada Rossi\"\nSet employee.BadgeCode = \"B-42\"\nSet employee.Department = \"Lab\"\n\nSet sc = employee.%Save()\nIf $SYSTEM.Status.IsError(sc) {\n    Do $SYSTEM.Status.DisplayError(sc)\n    Quit\n}\nSet id = employee.%Id()\nSet employee = ##class(Tutor.MIEmployee).%OpenId(id,,.sc)\nIf $SYSTEM.Status.IsError(sc) {\n    Do $SYSTEM.Status.DisplayError(sc)\n    Quit\n}\nWrite employee.Describe(), \" | \", employee.BadgeLabel(), !\n// Ada Rossi / Lab | Badge B-42\nZWrite ^Tutor.MIPersonD(id)",
+      "Compile the persistent example in the full explanation. FullName comes from the primary persistent superclass, BadgeCode from the registered mixin, and Department from the employee class. After reopening, the method output shows all three saved values. The employee uses the ^Tutor.MIPersonD data global in this layout."
+    ]
+  ],
   'T1.2/1': [
     ['Read the length constraint in a property declaration', `Property Code As %String(MAXLEN = 5);`, 'This property declaration belongs inside a class. When the object is validated, "ABCDE" is within the length limit and "ABCDEF" exceeds it. Check the validation or save status.'],
   ],
