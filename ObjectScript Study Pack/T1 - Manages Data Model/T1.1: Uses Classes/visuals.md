@@ -25,3 +25,7 @@ Covers:
 - 4. Interprets storage definitions (DataLocation, IdLocation, IndexLocation, USEEXTENTSET)
 - 5. Implements multiple inheritance (order matters, method resolution)
 - 6. Documents classes (Description keyword, /// comments)
+
+## Object lifecycle and callbacks
+
+![Object lifecycle for Tutor.Patient, showing callbacks for creating, validating, saving, opening, and deleting, SQL trigger timing, and how HomeAddress is stored with its parent](visual-guide-object-lifecycle.png)

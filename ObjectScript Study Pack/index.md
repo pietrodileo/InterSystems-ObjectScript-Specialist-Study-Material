@@ -2,7 +2,7 @@
 
 [Approfondimenti dagli esercizi](approfondimenti-esercizi.md) — casi commentati, varianti e nuovi schemi.
 
-[Visual study index — 31 illustrated guides](visual-index.md)
+[Visual study index — 33 illustrated guides](visual-index.md)
 
 
 Offline study pack · English · Saved 2 November 2026

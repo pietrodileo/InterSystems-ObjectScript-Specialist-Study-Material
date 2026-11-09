@@ -25,3 +25,7 @@ Covers:
 - 4. Describes lock escalation threshold and effect on row locks versus table locks
 - 5. Differentiates between pessimistic and optimistic concurrency controls
 - 6. Uses transactions and applies concurrency controls in SQL scripts
+
+## Two processes updating the same account
+
+![Two processes request the same account lock. A commits a balance of 120 and releases the lock. B then reads 120 and commits a balance of 110, or skips its update if the lock times out.](visual-guide-account-lock-timeline.png)

@@ -26,7 +26,7 @@ Saved 2 November 2026 from [exam-prep.es](https://exam-prep.es/exams/objectscrip
 
 #### Incremental Lock Pattern
 
-The standard pattern in modern ObjectScript uses incremental locks (+/-) to manage concurrency without accidentally releasing other locks held by the process.
+An incremental `LOCK +` acquires a lock without releasing the process's other locks. For a read-modify-write operation, acquire the lock before reading the balance and hold it until the transaction commits or rolls back. The following example assumes there is no outer transaction and that the account already exists.
 
 ```objectscript
  // Acquire lock with 5-second timeout
@@ -36,6 +36,7 @@ The standard pattern in modern ObjectScript uses incremental locks (+/-) to mana
      QUIT
  }
  TRY {
+     TSTART
      // Critical section: read-modify-write
      SET balance = ^Data("account", acctId, "balance")
      SET ^Data("account", acctId, "balance") = balance + amount
@@ -46,6 +47,12 @@ The standard pattern in modern ObjectScript uses incremental locks (+/-) to mana
  }
  LOCK -^Data("account", acctId)     // Always release the lock
 ```
+
+#### Two processes updating the same account
+
+The account starts at 100. Process A adds 20 and process B subtracts 10. Both request the same exclusive lock. A reads 100 and commits 120, then releases the lock. B can then acquire the lock, read 120, and commit 110. If B's lock attempt times out, `$TEST` is 0 and B skips the update. The transaction groups each write with any other database changes in that unit of work. The lock controls when the other process can start its read-modify-write sequence.
+
+![Two processes request the same account lock. A commits a balance of 120 and releases the lock. B then reads 120 and commits a balance of 110, or skips its update if the lock times out.](../visual-guide-account-lock-timeline.png)
 
 #### Shared vs Exclusive Locks
 
@@ -109,3 +116,4 @@ The lock table is a system-wide in-memory structure that tracks all current lock
 
 - [LOCK Command](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_clock)
 - [Lock Management](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_concurrency)
+- [Database Integrity Tutorial](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=TOS_Integrity)

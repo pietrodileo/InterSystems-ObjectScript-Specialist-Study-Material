@@ -2,17 +2,17 @@
 
 [Approfondimenti dagli esercizi](approfondimenti-esercizi.md) — casi commentati, varianti e nuovi schemi.
 
-31 ImageGen study diagrams covering all 22 chapters and 93 numbered content sections. Open a chapter gallery or read the illustrated chapter guide.
+33 study diagrams covering all 22 chapters and 93 numbered content sections. Open a chapter gallery or read the illustrated chapter guide.
 
 [All topics](index.md) · [Technical review notes](visual-technical-notes.md)
 
 | Chapter | Diagrams | Illustrated notes |
 | --- | ---: | --- |
-| [T1.1: Uses Classes](T1%20-%20Manages%20Data%20Model/T1.1%3A%20Uses%20Classes/visuals.md) | 2 | [Read](T1%20-%20Manages%20Data%20Model/T1.1%3A%20Uses%20Classes/study.md) |
+| [T1.1: Uses Classes](T1%20-%20Manages%20Data%20Model/T1.1%3A%20Uses%20Classes/visuals.md) | 3 | [Read](T1%20-%20Manages%20Data%20Model/T1.1%3A%20Uses%20Classes/study.md) |
 | [T1.2: Creates Properties and Indexes](T1%20-%20Manages%20Data%20Model/T1.2%3A%20Creates%20Properties%20and%20Indexes/visuals.md) | 2 | [Read](T1%20-%20Manages%20Data%20Model/T1.2%3A%20Creates%20Properties%20and%20Indexes/study.md) |
 | [T1.3: Creates ObjectScript Methods](T1%20-%20Manages%20Data%20Model/T1.3%3A%20Creates%20ObjectScript%20Methods/visuals.md) | 2 | [Read](T1%20-%20Manages%20Data%20Model/T1.3%3A%20Creates%20ObjectScript%20Methods/study.md) |
 | [T1.4: Uses Complex Structures](T1%20-%20Manages%20Data%20Model/T1.4%3A%20Uses%20Complex%20Structures/visuals.md) | 1 | [Read](T1%20-%20Manages%20Data%20Model/T1.4%3A%20Uses%20Complex%20Structures/study.md) |
-| [T2.1: Ensures Data Integrity](T2%20-%20Basic%20Programming/T2.1%3A%20Ensures%20Data%20Integrity/visuals.md) | 2 | [Read](T2%20-%20Basic%20Programming/T2.1%3A%20Ensures%20Data%20Integrity/study.md) |
+| [T2.1: Ensures Data Integrity](T2%20-%20Basic%20Programming/T2.1%3A%20Ensures%20Data%20Integrity/visuals.md) | 3 | [Read](T2%20-%20Basic%20Programming/T2.1%3A%20Ensures%20Data%20Integrity/study.md) |
 | [T2.2: Tracks Application Data](T2%20-%20Basic%20Programming/T2.2%3A%20Tracks%20Application%20Data/visuals.md) | 1 | [Read](T2%20-%20Basic%20Programming/T2.2%3A%20Tracks%20Application%20Data/study.md) |
 | [T2.3: Implements Security Features](T2%20-%20Basic%20Programming/T2.3%3A%20Implements%20Security%20Features/visuals.md) | 1 | [Read](T2%20-%20Basic%20Programming/T2.3%3A%20Implements%20Security%20Features/study.md) |
 | [T3.1: Differentiates Storage Media](T3%20-%20IRIS%20Features/T3.1%3A%20Differentiates%20Storage%20Media/visuals.md) | 1 | [Read](T3%20-%20IRIS%20Features/T3.1%3A%20Differentiates%20Storage%20Media/study.md) |

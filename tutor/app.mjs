@@ -252,7 +252,7 @@ function renderDiagrams(diagrams, label) {
 }
 
 
-function renderStudyNotes(markdown) {
+function renderStudyNotes(markdown, diagrams) {
   if (!markdown?.trim()) return '';
   const lines = markdown.trim().split(/\r?\n/);
   const html = [];
@@ -265,7 +265,7 @@ function renderStudyNotes(markdown) {
   const cells = line => line.trim().replace(/^\|/, '').replace(/\|$/, '').split('|').map(cell => cell.trim());
   const tableSeparator = line => /^\|.*\|$/.test(line.trim()) &&
     cells(line).every(cell => /^:?-{3,}:?$/.test(cell));
-  const isBlockStart = index => /^(\x60{3}|#{1,6}\s|[-*]\s|\d+\.\s|\|.*\|$)/.test(lines[index].trim());
+  const isBlockStart = index => /^(\x60{3}|#{1,6}\s|[-*]\s|\d+\.\s|\|.*\|$|!\[)/.test(lines[index].trim());
   for (let i = 0; i < lines.length;) {
     const line = lines[i].trim();
     if (!line) { i++; continue; }
@@ -281,6 +281,13 @@ function renderStudyNotes(markdown) {
     if (heading) {
       const tag = heading[1].length >= 4 ? 'h4' : 'h3';
       html.push('<' + tag + '>' + inline(heading[2]) + '</' + tag + '>');
+      i++;
+      continue;
+    }
+    const image = line.match(/^!\[[^\]]+\]\((visual-guide-[\w-]+\.png)\)$/);
+    const diagram = image && diagrams.find(({ file }) => file.endsWith(`/${image[1]}`));
+    if (diagram) {
+      html.push(renderDiagrams([diagram], 'Worked diagram'));
       i++;
       continue;
     }
@@ -349,7 +356,7 @@ function renderTheory(panel) {
           ${renderCodeExamples(examples)}
           <details class="reading inset" ${examples.length ? '' : 'open'}>
             <summary>Full explanation and ${section.noteExampleCount} ${section.noteExampleCount === 1 ? 'code example' : 'code examples'}</summary>
-            <div class="disclosure-body">${renderStudyNotes(section.detail)}</div>
+            <div class="disclosure-body">${renderStudyNotes(section.detail, chapter.diagrams)}</div>
           </details>
           <div class="documentation">
             <h3>Official documentation</h3>

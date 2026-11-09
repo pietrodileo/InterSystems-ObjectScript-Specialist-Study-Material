@@ -24,9 +24,9 @@ Study files preserve explanations, code examples, tables, and documentation link
 
 ## Illustrated study guides
 
-31 colorful ImageGen diagrams cover all 22 chapters and their 93 numbered sections. Each image is stored in its chapter folder and embedded in the full guide and matching content pages. [Browse the visual index](visual-index.md). [Technical review notes](visual-technical-notes.md) explain selected corrections and review limits.
+The 33 study diagrams cover all 22 chapters and their 93 numbered sections. They include 31 generated overviews and two custom diagrams that trace worked examples. Each image is stored in its chapter folder and embedded in the full guide and matching content pages. [Browse the visual index](visual-index.md). [Technical review notes](visual-technical-notes.md) explain selected corrections and review limits.
 
-The final prompt set and asset metadata are saved in [image-generation-prompts.json](image-generation-prompts.json). Images were generated with the built-in ImageGen tool.
+The final prompt set and asset metadata are saved in [image-generation-prompts.json](image-generation-prompts.json). The metadata covers the generated overviews.
 
 
 ## Exercise diagrams

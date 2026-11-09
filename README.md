@@ -25,7 +25,7 @@ The tutor saves progress and submitted choices in the browser you use to study. 
 
 ## Study Pack
 
-Use the Markdown files for offline reading or to look up a specific topic. The pack contains 93 study sections, 358 practice questions with answer explanations and individual analyses, 66 worked cases, and 75 diagrams. The source lessons, quiz questions, and diagrams are in English. The additional question-by-question commentary is in Italian.
+Use the Markdown files for offline reading or to look up a specific topic. The pack contains 93 study sections, 358 practice questions with answer explanations and individual analyses, 66 worked cases, and 77 diagrams. The source lessons, quiz questions, and diagrams are in English. The additional question-by-question commentary is in Italian.
 
 - [Topic index](ObjectScript%20Study%20Pack/index.md) for the full chapter list.
 - [Visual study index](ObjectScript%20Study%20Pack/visual-index.md) for the illustrated lesson guides.

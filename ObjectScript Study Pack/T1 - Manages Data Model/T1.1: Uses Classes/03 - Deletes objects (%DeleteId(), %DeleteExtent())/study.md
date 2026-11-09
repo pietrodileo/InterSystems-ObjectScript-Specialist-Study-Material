@@ -13,6 +13,7 @@ Saved 2 November 2026 from [exam-prep.es](https://exam-prep.es/exams/objectscrip
 ### Key Points
 
 - **%DeleteId(id)** deletes a single object by its ID and returns a %Status
+- **%OnDelete(oid)** is the class callback that can reject an object deletion before IRIS removes its data.
 - **%DeleteExtent()** deletes all instances of a class (all rows in the SQL table)
 - **%KillExtent()** is a faster but less safe alternative that directly kills the storage globals
 - Deletion respects referential integrity constraints (foreign keys)
@@ -39,9 +40,9 @@ Key behaviors:
 
 - Removes the object data from globals
 - Removes associated index entries
-- Fires `%OnDelete()` callback if defined in the class
+- Calls `%OnDelete()` before the deletion and `%OnAfterDelete()` after the data is removed, if implemented
 - Respects foreign key constraints (deletion may fail if referenced by other objects)
-- Fires SQL DELETE triggers if defined
+- Can run eligible `DELETE` triggers, such as a `Foreach = row/object` trigger
 
 #### Deleting All Objects with %DeleteExtent()
 
@@ -53,13 +54,13 @@ Set sc = ##class(Sample.Person).%DeleteExtent()
 
 This method iterates through all objects and deletes them one at a time, which means:
 
-- Each deletion fires triggers and callbacks
+- Each instance follows the object delete path, including applicable callbacks and triggers
 - Foreign key constraints are checked for each object
 - It can be slow for large tables
 - It returns the count of deleted objects via output parameters
 
 ```objectscript
-Set sc = ##class(Sample.Person).%DeleteExtent(.deletecount, .instancecount)
+Set sc = ##class(Sample.Person).%DeleteExtent(, .deletecount, .instancecount)
 Write "Deleted: ", deletecount, " of ", instancecount, !
 ```
 
@@ -82,20 +83,35 @@ If a class has foreign key references from other classes, deletion behavior depe
 - **SetNull**: Foreign key fields in referencing objects are set to null
 - **SetDefault**: Foreign key fields in referencing objects are set to their default value
 
-#### The %OnDelete() Callback
+#### The %OnDelete() callback and SQL DELETE triggers
 
-Classes can implement the `%OnDelete()` callback method to perform custom logic before deletion:
+`%OnDelete(oid)` runs before `%Delete()` or `%DeleteId()` removes the object. It is a class method because the caller can delete a record by ID without an open instance. The callback receives an OID, which includes the class and its ID. Returning an error `%Status` stops the deletion. If you need the record's fields, extract the ID from the OID and open the object.
+
+For example, add `Property HoldForReview As %Boolean;` and the following class method to `Tutor.Patient` to block object deletion while a review is pending.
 
 ```objectscript
-ClassMethod %OnDelete(oid As %ObjectIdentity) As %Status
+ClassMethod %OnDelete(oid As %ObjectIdentity) As %Status [ Private, ServerOnly = 1 ]
 {
-    // Custom cleanup logic
-    Write "Deleting object: ", oid, !
-    Return $$$OK
+    set id = $$$oidPrimary(oid)
+    set patient = ..%OpenId(id, , .sc)
+    if $SYSTEM.Status.IsError(sc) { return sc }
+    if '$ISOBJECT(patient) {
+        return $$$ERROR($$$GeneralError, "Patient could not be opened")
+    }
+    if patient.HoldForReview {
+        return $$$ERROR($$$GeneralError, "Patient review is pending")
+    }
+    return $$$OK
 }
 ```
+
+Save a patient with `HoldForReview = 1`, then call `%DeleteId(patientId)`. The callback returns an error and the record remains. `%OnAfterDelete()` runs after IRIS removes the data successfully.
+
+An ordinary SQL `DELETE` uses the SQL trigger path. If a deletion rule must cover both access paths, a `BEFORE DELETE` trigger with `Foreach = row/object` can apply it to SQL and object deletions. The foreign key keyword `OnDelete` is separate from both. It specifies what happens to referencing rows, for example `NoAction` or `Cascade`.
 
 ### Documentation References
 
 - [Deleting Objects](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_persobj_deleting)
 - [Foreign Keys](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=ROBJ_foreignkey)
+- [Defining Callback Methods](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_callbacks)
+- [Using SQL Triggers](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_TRIGGERS)

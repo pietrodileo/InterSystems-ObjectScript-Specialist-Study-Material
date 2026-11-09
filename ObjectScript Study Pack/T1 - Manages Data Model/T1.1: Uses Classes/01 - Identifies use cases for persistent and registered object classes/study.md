@@ -20,7 +20,7 @@ Saved 2 November 2026 from [exam-prep.es](https://exam-prep.es/exams/objectscrip
 
 An object class defines the properties and methods available to its instances. The superclass in the `Extends` clause determines the object behavior the class inherits. In IRIS, `%Persistent` and `%SerialObject` build on the object API provided by `%RegisteredObject`, then add different storage behavior. For example, a patient is an independent record, an address can be part of that patient, and a request context may only be needed while a request is processed.
 
-The word *object* can refer either to a class instance in memory or, more specifically, to a stored persistent record. These are not the same thing: calling `%New()` creates an in-memory instance, while only a successful `%Save()` on a persistent object writes its record to the database. The examples below show what that means for each class kind.
+Calling `%New()` creates an object in memory. If the class defines `%OnNew()`, IRIS runs it during initialization. A persistent instance becomes a stored record when you first save it successfully. IRIS can also call class-defined hooks during validation, saving, opening, and deletion. The next two sections show where those callbacks run and how they differ from SQL triggers.
 
 #### Persistent classes: records with their own identity
 
@@ -73,7 +73,7 @@ write context.CorrelationId, " for ", context.UserName, !
 
 #### Serial objects: structured values embedded in a parent
 
-A class that extends `%SerialObject` describes an embedded value, sometimes called an embeddable object. It is useful when a group of fields belongs to a parent and has no independent identity—for example, a patient's home address. A serial object can be created and used in memory, but it cannot be saved, opened, or identified independently as a persistent record. When the parent is persistent, save the parent to store the serial object's values with it.
+A class that extends `%SerialObject` describes an embedded value, such as the home address of a patient. An address instance can have an object reference (OREF) while it is in memory. In the database it has **no persistent ID or table row of its own**. Saving the patient stores the address as part of that patient record. The patient's ID identifies the row, and `HomeAddress` identifies the embedded property within it. If the patient also has a `WorkAddress` of the same class, the two property names distinguish the two values.
 
 ```objectscript
 Class Tutor.Address Extends %SerialObject
@@ -96,16 +96,22 @@ set patient.Name = "Ada Lovelace"
 set patient.HomeAddress.Street = "12 Example Street"
 set patient.HomeAddress.City = "London"
 set sc = patient.%Save()
+if $SYSTEM.Status.IsError(sc) {
+    write $SYSTEM.Status.GetErrorText(sc), !
+    quit
+}
+set patientId = patient.%Id()
 ```
 
-With the default SQL projection, the embedded fields can be queried through columns based on both property names. For example, `HomeAddress.City` is commonly exposed as `HomeAddress_City`:
+To read the stored city in ObjectScript, reopen the patient with `##class(Tutor.Patient).%OpenId(patientId)` and, once it opens successfully, read `patient.HomeAddress.City`. With the default SQL projection, query the parent table and bind `patientId` to the placeholder. `HomeAddress_City` combines the parent property name with the embedded field name.
 
 ```sql
-SELECT Name, HomeAddress_City, HomeAddress_PostalCode
-FROM Tutor.Patient;
+SELECT ID, Name, HomeAddress_City
+FROM Tutor.Patient
+WHERE ID = ?;
 ```
 
-This keeps the class model readable without hiding the fields from SQL. If a class customizes its SQL projection or storage, inspect that class's generated SQL definition for the exact column names.
+Here `ID` belongs to `Tutor.Patient`. If the application needs to query or update an address as a record with its own ID, model it as a `%Persistent` class and reference it from `Tutor.Patient`. If the parent customizes its SQL projection, check the generated columns for their exact names.
 
 #### Classes without a superclass: class-level helpers
 
@@ -140,3 +146,4 @@ A useful design check is to ask what should happen to the data after the current
 - [Persistent Objects](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_persobj)
 - [Working with Registered Objects](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_objapi)
 - [Object-Valued Properties and Serial Objects](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_propobj)
+- [Embedded Objects in SQL Tables](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_tables)

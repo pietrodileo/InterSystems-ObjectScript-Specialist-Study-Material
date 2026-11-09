@@ -37,7 +37,7 @@ Saved 2 November 2026 from [exam-prep.es](https://exam-prep.es/exams/objectscrip
 
 An object class defines the properties and methods available to its instances. The superclass in the `Extends` clause determines the object behavior the class inherits. In IRIS, `%Persistent` and `%SerialObject` build on the object API provided by `%RegisteredObject`, then add different storage behavior. For example, a patient is an independent record, an address can be part of that patient, and a request context may only be needed while a request is processed.
 
-The word *object* can refer either to a class instance in memory or, more specifically, to a stored persistent record. These are not the same thing: calling `%New()` creates an in-memory instance, while only a successful `%Save()` on a persistent object writes its record to the database. The examples below show what that means for each class kind.
+Calling `%New()` creates an object in memory. If the class defines `%OnNew()`, IRIS runs it during initialization. A persistent instance becomes a stored record when you first save it successfully. IRIS can also call class-defined hooks during validation, saving, opening, and deletion. The next two sections show where those callbacks run and how they differ from SQL triggers.
 
 #### Persistent classes: records with their own identity
 
@@ -90,7 +90,7 @@ write context.CorrelationId, " for ", context.UserName, !
 
 #### Serial objects: structured values embedded in a parent
 
-A class that extends `%SerialObject` describes an embedded value, sometimes called an embeddable object. It is useful when a group of fields belongs to a parent and has no independent identity—for example, a patient's home address. A serial object can be created and used in memory, but it cannot be saved, opened, or identified independently as a persistent record. When the parent is persistent, save the parent to store the serial object's values with it.
+A class that extends `%SerialObject` describes an embedded value, such as the home address of a patient. An address instance can have an object reference (OREF) while it is in memory. In the database it has **no persistent ID or table row of its own**. Saving the patient stores the address as part of that patient record. The patient's ID identifies the row, and `HomeAddress` identifies the embedded property within it. If the patient also has a `WorkAddress` of the same class, the two property names distinguish the two values.
 
 ```objectscript
 Class Tutor.Address Extends %SerialObject
@@ -113,16 +113,22 @@ set patient.Name = "Ada Lovelace"
 set patient.HomeAddress.Street = "12 Example Street"
 set patient.HomeAddress.City = "London"
 set sc = patient.%Save()
+if $SYSTEM.Status.IsError(sc) {
+    write $SYSTEM.Status.GetErrorText(sc), !
+    quit
+}
+set patientId = patient.%Id()
 ```
 
-With the default SQL projection, the embedded fields can be queried through columns based on both property names. For example, `HomeAddress.City` is commonly exposed as `HomeAddress_City`:
+To read the stored city in ObjectScript, reopen the patient with `##class(Tutor.Patient).%OpenId(patientId)` and, once it opens successfully, read `patient.HomeAddress.City`. With the default SQL projection, query the parent table and bind `patientId` to the placeholder. `HomeAddress_City` combines the parent property name with the embedded field name.
 
 ```sql
-SELECT Name, HomeAddress_City, HomeAddress_PostalCode
-FROM Tutor.Patient;
+SELECT ID, Name, HomeAddress_City
+FROM Tutor.Patient
+WHERE ID = ?;
 ```
 
-This keeps the class model readable without hiding the fields from SQL. If a class customizes its SQL projection or storage, inspect that class's generated SQL definition for the exact column names.
+Here `ID` belongs to `Tutor.Patient`. If the application needs to query or update an address as a record with its own ID, model it as a `%Persistent` class and reference it from `Tutor.Patient`. If the parent customizes its SQL projection, check the generated columns for their exact names.
 
 #### Classes without a superclass: class-level helpers
 
@@ -157,6 +163,8 @@ A useful design check is to ask what should happen to the data after the current
 - [Persistent Objects](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_persobj)
 - [Working with Registered Objects](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_objapi)
 - [Object-Valued Properties and Serial Objects](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_propobj)
+- [Embedded Objects in SQL Tables](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_tables)
+
 ## 2. Creates and saves a persistent object (%New(), %Save(), %Id())
 
 ### Key Points
@@ -164,14 +172,17 @@ A useful design check is to ask what should happen to the data after the current
 - **%New()** creates a new in-memory instance of a class and returns an object reference (oref)
 - **%Save()** persists the object to disk and returns a %Status value that must be checked
 - **%Id()** returns the unique persistent ID assigned to the object after saving
-- Always check the return status of %Save() for error handling
+- **Callbacks** let a class initialize, validate, or react to changes at specific points in the object lifecycle. IRIS calls them automatically if the class defines them.
+- **SQL triggers** react to INSERT, UPDATE, or DELETE. A trigger declared with `Foreach = row/object` can also run for corresponding changes made through the object API.
 - **%OpenId(id)** retrieves a previously saved object from disk by its ID
 
 ### Detailed Notes
 
 #### Overview
 
-The lifecycle of a persistent object involves creation in memory, saving to disk, and later retrieval. Understanding this lifecycle and the methods involved is fundamental to working with InterSystems IRIS.
+Create a persistent object in memory, populate its properties, and save it. Once you have the ID, you can reopen, update, or delete the record. A callback is a method you define to add behavior at one of these steps. Your code calls `%New()` or `%Save()`, for example, and IRIS calls the callback for you at the appropriate point.
+
+![Object lifecycle for Tutor.Patient, showing callbacks for creating, validating, saving, opening, and deleting, SQL trigger timing, and how HomeAddress is stored with its parent](visual-guide-object-lifecycle.png)
 
 #### Creating an Object with %New()
 
@@ -197,13 +208,55 @@ If $$$ISERR(sc) {
 }
 ```
 
-Key behaviors of `%Save()`:
+The first successful save assigns a persistent ID. Saving changes to an existing object updates the same record. The save validates modified objects, stores embedded values with their parent, and can run eligible triggers. Check the returned `%Status` before using the ID or proceeding with dependent work.
 
-- First save assigns a new ID to the object
-- Subsequent saves on the same oref update the existing record
-- Validates required properties before saving
-- Fires any triggers defined on the SQL table
-- Cascades saves to embedded serial objects
+#### Callbacks during creation, validation, and saving
+
+| Callback | When IRIS calls it | Example use |
+| --- | --- | --- |
+| `%OnNew()` | During `%New()`, after memory allocation and property initialization. An error status stops creation. | Initialize properties from an argument passed to `%New()`. |
+| `%OnValidateObject()` | After property validation during `%ValidateObject()` and when `%Save()` validates a modified object. An error status fails validation. | Check that a start date is on or before the end date. |
+| `%OnBeforeSave()` | Before IRIS writes the object. An error status stops the save. | Check whether the operation may proceed. |
+| `%OnAfterSave()` | After the object is written. | Record a related database change as part of the save. |
+
+If the caller opened a transaction, the write can still roll back after `%OnAfterSave()` runs.
+
+This class initializes a draft with today's date. Its custom validation rejects a draft whose end date precedes its start date.
+
+```objectscript
+Class Tutor.VisitDraft Extends %Persistent
+{
+    Property StartDate As %Date [ Required ];
+    Property EndDate As %Date;
+
+    Method %OnNew(initvalue As %String = "") As %Status [ Private, ServerOnly = 1 ]
+    {
+        set ..StartDate = +$HOROLOG
+        return $$$OK
+    }
+
+    Method %OnValidateObject() As %Status [ Private, ServerOnly = 1 ]
+    {
+        if (..EndDate '= "") && (..EndDate < ..StartDate) {
+            return $$$ERROR($$$GeneralError, "End date precedes start date")
+        }
+        return $$$OK
+    }
+}
+```
+
+```objectscript
+set draft = ##class(Tutor.VisitDraft).%New()
+set draft.EndDate = draft.StartDate - 1
+set sc = draft.%Save()
+write $SYSTEM.Status.GetErrorText(sc), !
+```
+
+The save returns an error and creates no row. Setting `EndDate` equal to `StartDate` passes this rule. You can call `%ValidateObject()` to run validation without saving the draft.
+
+#### SQL triggers and object callbacks
+
+SQL `INSERT`, `UPDATE`, and `DELETE` act on table rows. SQL DML runs applicable `BEFORE` and `AFTER` triggers. An ordinary SQL `UPDATE` does not run `%OnBeforeSave()` or `%OnAfterSave()` as if it had called `%Save()` on an instance. When a table rule such as auditing needs to run for both SQL and object changes, an eligible trigger declared with `Foreach = row/object` can cover both paths. For example, an `AFTER UPDATE` trigger can record a change made through either SQL `UPDATE` or `%Save()` on a modified existing object.
 
 #### Retrieving the ID with %Id()
 
@@ -229,7 +282,7 @@ If person '= "" {
 }
 ```
 
-The concurrency parameter controls locking behavior: 0 (no lock), 1 (atomic read, default), 2 (shared lock), 3 (shared/retained lock), 4 (exclusive lock).
+The concurrency argument controls how IRIS locks the record during the open. When IRIS loads the record into an instance, `%OnOpen()` can perform an additional check. An error status from the callback prevents the open from succeeding.
 
 #### Complete Lifecycle Example
 
@@ -256,12 +309,15 @@ Set sc = person2.%Save()
 
 - [Saving Objects](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_persobj_saving)
 - [Opening Objects](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_persobj_opening)
+- [Defining Callback Methods](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_callbacks)
+- [Using SQL Triggers](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_TRIGGERS)
 
 ## 3. Deletes objects (%DeleteId(), %DeleteExtent())
 
 ### Key Points
 
 - **%DeleteId(id)** deletes a single object by its ID and returns a %Status
+- **%OnDelete(oid)** is the class callback that can reject an object deletion before IRIS removes its data.
 - **%DeleteExtent()** deletes all instances of a class (all rows in the SQL table)
 - **%KillExtent()** is a faster but less safe alternative that directly kills the storage globals
 - Deletion respects referential integrity constraints (foreign keys)
@@ -288,9 +344,9 @@ Key behaviors:
 
 - Removes the object data from globals
 - Removes associated index entries
-- Fires `%OnDelete()` callback if defined in the class
+- Calls `%OnDelete()` before the deletion and `%OnAfterDelete()` after the data is removed, if implemented
 - Respects foreign key constraints (deletion may fail if referenced by other objects)
-- Fires SQL DELETE triggers if defined
+- Can run eligible `DELETE` triggers, such as a `Foreach = row/object` trigger
 
 #### Deleting All Objects with %DeleteExtent()
 
@@ -302,13 +358,13 @@ Set sc = ##class(Sample.Person).%DeleteExtent()
 
 This method iterates through all objects and deletes them one at a time, which means:
 
-- Each deletion fires triggers and callbacks
+- Each instance follows the object delete path, including applicable callbacks and triggers
 - Foreign key constraints are checked for each object
 - It can be slow for large tables
 - It returns the count of deleted objects via output parameters
 
 ```objectscript
-Set sc = ##class(Sample.Person).%DeleteExtent(.deletecount, .instancecount)
+Set sc = ##class(Sample.Person).%DeleteExtent(, .deletecount, .instancecount)
 Write "Deleted: ", deletecount, " of ", instancecount, !
 ```
 
@@ -331,23 +387,38 @@ If a class has foreign key references from other classes, deletion behavior depe
 - **SetNull**: Foreign key fields in referencing objects are set to null
 - **SetDefault**: Foreign key fields in referencing objects are set to their default value
 
-#### The %OnDelete() Callback
+#### The %OnDelete() callback and SQL DELETE triggers
 
-Classes can implement the `%OnDelete()` callback method to perform custom logic before deletion:
+`%OnDelete(oid)` runs before `%Delete()` or `%DeleteId()` removes the object. It is a class method because the caller can delete a record by ID without an open instance. The callback receives an OID, which includes the class and its ID. Returning an error `%Status` stops the deletion. If you need the record's fields, extract the ID from the OID and open the object.
+
+For example, add `Property HoldForReview As %Boolean;` and the following class method to `Tutor.Patient` to block object deletion while a review is pending.
 
 ```objectscript
-ClassMethod %OnDelete(oid As %ObjectIdentity) As %Status
+ClassMethod %OnDelete(oid As %ObjectIdentity) As %Status [ Private, ServerOnly = 1 ]
 {
-    // Custom cleanup logic
-    Write "Deleting object: ", oid, !
-    Return $$$OK
+    set id = $$$oidPrimary(oid)
+    set patient = ..%OpenId(id, , .sc)
+    if $SYSTEM.Status.IsError(sc) { return sc }
+    if '$ISOBJECT(patient) {
+        return $$$ERROR($$$GeneralError, "Patient could not be opened")
+    }
+    if patient.HoldForReview {
+        return $$$ERROR($$$GeneralError, "Patient review is pending")
+    }
+    return $$$OK
 }
 ```
+
+Save a patient with `HoldForReview = 1`, then call `%DeleteId(patientId)`. The callback returns an error and the record remains. `%OnAfterDelete()` runs after IRIS removes the data successfully.
+
+An ordinary SQL `DELETE` uses the SQL trigger path. If a deletion rule must cover both access paths, a `BEFORE DELETE` trigger with `Foreach = row/object` can apply it to SQL and object deletions. The foreign key keyword `OnDelete` is separate from both. It specifies what happens to referencing rows, for example `NoAction` or `Cascade`.
 
 ### Documentation References
 
 - [Deleting Objects](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_persobj_deleting)
 - [Foreign Keys](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=ROBJ_foreignkey)
+- [Defining Callback Methods](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_callbacks)
+- [Using SQL Triggers](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_TRIGGERS)
 
 ### Visual study guide — sections 4–6
 

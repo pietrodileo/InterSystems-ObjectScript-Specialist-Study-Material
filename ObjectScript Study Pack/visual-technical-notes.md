@@ -2,7 +2,7 @@
 
 [Visual index](visual-index.md) · [All topics](index.md)
 
-The 31 images summarize all 93 numbered sections across the 22 chapters. Their diagrams are conceptual learning aids; exact declarations, complete implementations, and detailed explanations belong in the chapter notes. Images are stored beside their chapter Markdown and work offline.
+The 31 chapter overviews summarize all 93 numbered sections across the 22 chapters. Two worked diagrams illustrate object callbacks and concurrent account updates. Their diagrams are conceptual learning aids; exact declarations, complete implementations, and detailed explanations belong in the chapter notes. Images are stored beside their chapter Markdown and work offline.
 
 The downloaded notes are a third-party source, and review found several statements that needed qualification. The diagrams use the following distinctions; the original downloaded text and quizzes have not been comprehensively corrected.
 
@@ -24,4 +24,4 @@ The images were visually reviewed and revised for observed mistakes. Coverage, P
 
 ## Image provenance
 
-Generated using the built-in ImageGen tool. [Final prompts and asset metadata](image-generation-prompts.json) record chapter coverage, final file paths, dimensions, hashes, generation prompts, and any final edit prompts. Images contain concise labels rather than every paragraph of the source notes.
+The original 31 overviews were generated with ImageGen. The worked diagrams for T1.1 and T2.1 were drawn from the examples in the notes. [Final prompts and asset metadata](image-generation-prompts.json) record chapter coverage, final file paths, dimensions, hashes, generation prompts, and any final edit prompts. Images contain concise labels rather than every paragraph of the source notes.
