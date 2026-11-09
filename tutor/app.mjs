@@ -8,7 +8,6 @@ const nav = document.querySelector('#chapters');
 const courseMenu = document.querySelector('#course-menu');
 const sidebar = document.querySelector('#course');
 const sidebarToggle = document.querySelector('#sidebar-toggle');
-const sidebarChevron = document.querySelector('#sidebar-chevron');
 const sidebarBrand = sidebarToggle.parentElement;
 const sidebarHeader = sidebarBrand.parentElement;
 const mobileMenu = window.matchMedia('(max-width: 720px)');
@@ -17,6 +16,7 @@ const importProgress = document.querySelector('#import-progress');
 const progressFile = document.querySelector('#progress-file');
 const transferStatus = document.querySelector('#progress-transfer-status');
 const storageKey = 'objectscript-tutor-v1';
+const profileStorageKey = 'objectscript-tutor-profile-v1';
 const phases = { theory: 'Study', quiz: 'Practice', cases: 'Apply' };
 const escape = value => String(value).replace(/[&<>"']/g, char => ({
   '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
@@ -34,6 +34,17 @@ try {
   state = JSON.parse(localStorage.getItem(storageKey)) || {};
 } catch {
   storageWorks = false;
+}
+let profile = {};
+let profileStatus = '';
+try {
+  const savedProfile = JSON.parse(localStorage.getItem(profileStorageKey));
+  if (savedProfile && typeof savedProfile === 'object' && !Array.isArray(savedProfile)) {
+    profile = Object.fromEntries(['firstName', 'lastName', 'role']
+      .map(key => [key, typeof savedProfile[key] === 'string' ? savedProfile[key] : '']));
+  }
+} catch {
+  // A missing or unavailable profile should not prevent the tutor from loading.
 }
 state.results ||= {};
 state.studied ||= {};
@@ -70,7 +81,6 @@ function setSidebarOpen(open) {
     sidebarToggle.setAttribute('aria-label', label);
     sidebarToggle.title = label;
   }
-  sidebarChevron.setAttribute('d', open ? 'm15 9-3 3 3 3' : 'm12 9 3 3-3 3');
 }
 
 function syncSidebarLayout() {
@@ -105,7 +115,7 @@ function renderNavigation() {
   progress.value = seen;
   document.querySelector('#progress-label').textContent =
     `${done}/${chapters.length} chapters complete. ${seen}/${total} quiz questions answered.${errors ? ` ${errors} to review.` : ''}${storageWorks ? '' : ' Progress could not be saved in this browser.'}`;
-  courseMenu.innerHTML = Object.entries({ roadmap: 'Study plan', review: 'Answer review', final: 'Final assessment' }).map(([page, label]) =>
+  courseMenu.innerHTML = Object.entries({ profile: 'Profile', roadmap: 'Study plan', review: 'Answer review', final: 'Final assessment' }).map(([page, label]) =>
     `<button type="button" data-course="${page}" ${phase === page ? 'aria-current="page"' : ''}>${label}</button>`).join('');
   nav.innerHTML = Object.entries(topics).map(([code, name]) => `
     <details class="topic" data-area="${code}" ${state.openTopics.includes(code) ? 'open' : ''}>
@@ -187,6 +197,30 @@ function render() {
 }
 
 function renderCourse() {
+  if (phase === 'profile') {
+    lesson.innerHTML = `
+      <header class="lesson-header">
+        <h1 tabindex="-1">Your profile</h1>
+        <p class="lead">Add a few details to make your study space feel more like yours.</p>
+      </header>
+      <form id="profile-form" class="panel profile-panel">
+        <div class="profile-fields">
+          <label>First name
+            <input name="firstName" type="text" autocomplete="given-name" maxlength="60" value="${escape(profile.firstName ?? '')}" required>
+          </label>
+          <label>Last name
+            <input name="lastName" type="text" autocomplete="family-name" maxlength="60" value="${escape(profile.lastName ?? '')}" required>
+          </label>
+          <label class="profile-role">Role <span class="muted">(optional)</span>
+            <input name="role" type="text" autocomplete="organization-title" maxlength="80" value="${escape(profile.role ?? '')}" placeholder="e.g. Software engineer">
+          </label>
+        </div>
+        <p class="muted profile-note">These details are saved in this browser and used to personalize the home page.</p>
+        <div class="actions"><button type="submit" class="primary">Save profile</button></div>
+        <p class="profile-status" role="status" aria-live="polite">${escape(profileStatus)}</p>
+      </form>`;
+    return;
+  }
   if (phase === 'review') {
     renderReview();
     return;
@@ -208,8 +242,10 @@ function renderCourse() {
   const started = chapters.some(item => attempted(item) || state.studied[item.topic] || completedCases(item));
   lesson.innerHTML = `
     <header class="lesson-header">
-      <h1 tabindex="-1">InterSystems ObjectScript Specialist</h1>
-      <p class="lead">${chapters.length} chapters on classes, SQL, ObjectScript APIs, and more, followed by a practice assessment.</p>
+      <h1 tabindex="-1">${profile.firstName ? `Hi, ${escape(profile.firstName)}` : 'Welcome to your study space'}</h1>
+      <p class="lead">${profile.role
+        ? `Your ObjectScript Specialist study plan is ready when you are. Role: ${escape(profile.role)}.`
+        : `Pick up your InterSystems ObjectScript Specialist study plan whenever you’re ready.`}</p>
     </header>
     <section class="study-start">
       <div>
@@ -790,6 +826,24 @@ courseMenu.addEventListener('click', event => {
   openCourse(button.dataset.course);
 });
 
+lesson.addEventListener('submit', event => {
+  if (event.target.id !== 'profile-form') return;
+  event.preventDefault();
+  const form = new FormData(event.target);
+  profile = {
+    firstName: String(form.get('firstName') ?? '').trim(),
+    lastName: String(form.get('lastName') ?? '').trim(),
+    role: String(form.get('role') ?? '').trim(),
+  };
+  try {
+    localStorage.setItem(profileStorageKey, JSON.stringify(profile));
+    profileStatus = 'Profile saved in this browser.';
+  } catch {
+    profileStatus = 'The browser could not save your profile.';
+  }
+  render();
+});
+
 lesson.addEventListener('click', event => {
   const button = event.target.closest('button');
   if (!button) return;
@@ -871,7 +925,7 @@ try {
   const previous = chapters.find(item => item.topic === state.topic);
   if (previous && Object.hasOwn(phases, state.phase)) openChapter(previous, state.phase);
   else if (state.phase === 'past' && state.assessments[state.assessmentIndex]) openCourse('past');
-  else openCourse(['final', 'review'].includes(state.phase) ? state.phase : 'roadmap');
+  else openCourse(['final', 'review', 'profile'].includes(state.phase) ? state.phase : 'roadmap');
 } catch (error) {
   lesson.innerHTML = '<h1>Could not load the Study Pack</h1><p>Start the tutor from the repository root using the command in the README, then reload this page.</p>';
   console.error(error);
@@ -930,7 +984,7 @@ function validateProgressBackup(backup) {
   };
   if (!saved.assessments.every(validFinal) || (saved.final !== undefined && !validFinal(saved.final))) return null;
   if (saved.topic !== undefined && !byTopic.has(saved.topic)) return null;
-  if (saved.phase !== undefined && !['theory', 'quiz', 'cases', 'roadmap', 'review', 'final', 'past'].includes(saved.phase)) return null;
+  if (saved.phase !== undefined && !['theory', 'quiz', 'cases', 'roadmap', 'review', 'final', 'past', 'profile'].includes(saved.phase)) return null;
   if (saved.assessmentIndex !== undefined && (!Number.isInteger(saved.assessmentIndex) || saved.assessmentIndex < 0 || saved.assessmentIndex >= saved.assessments.length)) return null;
   if (saved.sidebarOpen !== undefined && typeof saved.sidebarOpen !== 'boolean') return null;
 

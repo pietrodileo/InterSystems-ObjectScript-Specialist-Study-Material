@@ -225,6 +225,23 @@ progress { display: block; width: 100%; height: .75rem; margin: .45rem 0; accent
   font-weight: 700;
   background: var(--selected);
 }
+.profile-panel { max-width: 48rem; padding: clamp(1rem, 3vw, 1.5rem); }
+.profile-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+.profile-fields label { display: grid; gap: .4rem; font-weight: 650; }
+.profile-fields input {
+  width: 100%;
+  min-height: 2.75rem;
+  padding: .6rem .7rem;
+  border: 1px solid var(--line);
+  border-radius: .5rem;
+  background: var(--white);
+  color: var(--ink);
+  font: inherit;
+}
+.profile-fields input::placeholder { color: var(--muted); opacity: .8; }
+.profile-role { grid-column: 1 / -1; }
+.profile-note { margin: .9rem 0; }
+.profile-status:empty { display: none; }
 .study-start {
   display: flex;
   flex-wrap: wrap;
@@ -484,6 +501,8 @@ code { font-size: .9em; }
   .phases button { flex: 1; padding-inline: .35rem; }
 }
 @media (max-width: 450px) {
+  .profile-fields { grid-template-columns: minmax(0, 1fr); }
+  .profile-role { grid-column: auto; }
   .exam-areas li { grid-template-columns: 1.7rem minmax(0, 1fr); row-gap: .05rem; }
   .exam-areas li .muted { grid-column: 2; }
   .controls-panel > .controls-row > * { width: 100%; }
