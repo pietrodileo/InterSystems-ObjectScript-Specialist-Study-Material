@@ -83,6 +83,23 @@ test('the real study pack supplies every lesson, question, and worked case', asy
   }
 });
 
+test('practice feedback covers every question with official references', async () => {
+  const chapters = await loadCourse(path => readFile(new URL(packPath(path), import.meta.url), 'utf8'));
+  const questions = chapters.flatMap(chapter => chapter.quiz);
+  assert.equal(questions.length, 358);
+  for (const chapter of chapters) {
+    assert.ok(chapter.quiz.some(question => question.feedback.example), chapter.topic);
+    for (const question of chapter.quiz) {
+      assert.ok(question.feedback.explanation.trim(), `${chapter.topic}/${question.id}`);
+      assert.ok(question.feedback.references.length);
+      assert.ok(question.feedback.references.every(({ url }) => new URL(url).origin === 'https://docs.intersystems.com'));
+    }
+  }
+  const classQuiz = chapters.find(chapter => chapter.topic === 'T1.1').quiz;
+  assert.match(classQuiz.find(question => question.id === 11).feedback.example.code, /GetGlobalDest/);
+  assert.match(classQuiz.find(question => question.id === 13).feedback.example.code, /USEEXTENTSET = 0[\s\S]*USEEXTENTSET = 1/);
+});
+
 test('quiz blocks distinguish code and prose even without a blank line', () => {
   assert.deepEqual(quizBlocks('The global contains:\n^Log(1) = "Started"\n\nWhat happens next?'), [
     { text: 'The global contains:', code: false },

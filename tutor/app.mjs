@@ -1,5 +1,5 @@
-import { assessmentAnswered, assessmentComplete, chapterStep, correctSelection, finalQuestionRefs, loadCourse, packPath, passedAnswer, practiceQueue, quizBlocks, recordPractice, reviewItems, topics } from './content.mjs';
-import { caseFocus, examAreaDescriptions, guides, variations } from './lesson-guides.mjs';
+import { assessmentAnswered, assessmentComplete, chapterStep, correctSelection, finalQuestionRefs, loadCourse, packPath, passedAnswer, practiceQueue, quizBlocks, recordPractice, reviewItems, topics } from './content.mjs?v=practice-feedback-1';
+import { caseFocus, examAreaDescriptions, guides, variations } from './lesson-guides.mjs?v=practice-feedback-1';
 import { diagramExamples, studyExamples } from './code-examples.mjs';
 import './sidebar-controls.mjs';
 
@@ -332,7 +332,7 @@ function renderCodeExamples(examples) {
     <figure class="code-example">
       <figcaption>${escape(title)}</figcaption>
       <pre><code translate="no">${escape(code)}</code></pre>
-      <p>${escape(observation)}</p>
+      ${observation ? `<p>${markdownText(observation)}</p>` : ''}
     </figure>`).join('');
 }
 
@@ -378,19 +378,21 @@ function answerOptions(question, selected) {
   return `<ul>${selected.map(index => `<li><strong>${letter(index)}.</strong> ${quizText(question.options[index])}</li>`).join('')}</ul>`;
 }
 
-function questionExplanation(item, question) {
-  const panels = item.panels.filter(panel => panel.qs.includes(question.id));
+function questionExplanation(question) {
+  const { explanation, example, references, diagram } = question.feedback;
   return `
-    <h3>Why this answer is correct</h3>
-    <p class="quiz-text">${quizText(question.explanation.replace(/\s*\(Reference:[^)]+\)/g, ''))}</p>
-    ${panels.length ? `<details class="reading inset"><summary>Related examples and mistakes</summary>
-      <div class="disclosure-body">${panels.map(panel => `<h4>${escape(panel.title)}</h4><p>${markdownText(panel.reason)}</p>`).join('')}</div>
-    </details>` : ''}
-    <h3>Chapter note</h3>
-    <p>${markdownText(guides[item.topic][1])}</p>`;
+    <h3>Answer explanation</h3>
+    ${explanation.split('\n\n').map(paragraph => `<p>${quizInline(paragraph)}</p>`).join('')}
+    ${example ? renderCodeExamples([[example.title, example.code, example.note]]) : ''}
+    <h3>Official documentation</h3>
+    <ul>${references.map(({ label, url }) => `<li>${link(url, label)}</li>`).join('')}</ul>
+    ${diagram ? `<details class="reading inset">
+      <summary>See the practice diagram</summary>
+      <div class="disclosure-body">${renderDiagrams([diagram], 'Practice diagram')}</div>
+    </details>` : ''}`;
 }
 
-function answerDetails(item, question, attempts) {
+function answerDetails(question, attempts) {
   const last = attempts.at(-1);
   const passed = passedAnswer(last);
   const outcome = passed ? 'Correct' : 'Incorrect';
@@ -408,7 +410,7 @@ function answerDetails(item, question, attempts) {
       </li>`).join('')}</ol>
       <h3>Expected answer</h3>
       ${answerOptions(question, question.correct)}
-      ${questionExplanation(item, question)}
+      ${questionExplanation(question)}
     </div>
   </details>`;
 }
@@ -438,7 +440,7 @@ function renderReview() {
             ${errors ? `<button type="button" data-topic="${item.topic}" data-phase="quiz" data-mode="review">Retry missed questions</button>` : ''}
           </div>
           ${[...answers].sort((a, b) => Number(a.passed) - Number(b.passed))
-            .map(({ question, attempts }) => answerDetails(item, question, attempts)).join('')}
+            .map(({ question, attempts }) => answerDetails(question, attempts)).join('')}
         </div>
       </details>`).join('')}
       <div class="actions">
@@ -548,7 +550,7 @@ function renderQuiz(panel, final = null) {
       <p class="validation" role="alert"></p>
       ${graded ? `<section class="feedback ${passedAnswer(attempt) ? 'passed' : 'retry'}">
         <p class="feedback-status" tabindex="-1">${passedAnswer(attempt) ? 'Correct' : 'Incorrect'}. Expected ${correct.map(letter).join(', ')}.</p>
-        ${questionExplanation(item, question)}
+        ${questionExplanation(question)}
       </section>` : ''}
       <section class="controls-panel" aria-labelledby="quiz-controls-title">
         <h3 id="quiz-controls-title">${final ? 'Assessment controls' : 'Quiz controls'}</h3>
@@ -645,7 +647,7 @@ function renderAssessmentSummary(panel, final) {
       return `<section class="assessment-item">
         <div class="result-line"><strong>${escape(item.title)}</strong>
           <button type="button" data-topic="${item.topic}" data-phase="theory">Review theory</button></div>
-        ${answerDetails(item, question, [attempt])}
+        ${answerDetails(question, [attempt])}
       </section>`;
     }).join('')}
     <div class="actions">

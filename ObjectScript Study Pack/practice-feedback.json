@@ -1,0 +1,2984 @@
+{
+  "sources": {
+    "@compiledmethod": {
+      "label": "%Dictionary.CompiledMethod class reference",
+      "url": "https://docs.intersystems.com/irislatest/csp/documatic/%25CSP.Documatic.cls?CLASSNAME=%25Dictionary.CompiledMethod&LIBRARY=%25SYS"
+    },
+    "@dictionary": {
+      "label": "%Dictionary.ClassDefinition class reference",
+      "url": "https://docs.intersystems.com/irislatest/csp/documatic/%25CSP.Documatic.cls?CLASSNAME=%25Dictionary.ClassDefinition&LIBRARY=%25SYS"
+    },
+    "@exception": {
+      "label": "%Exception.AbstractException class reference",
+      "url": "https://docs.intersystems.com/irislatest/csp/documatic/%25CSP.Documatic.cls?CLASSNAME=%25Exception.AbstractException&LIBRARY=%25SYS"
+    },
+    "@filechar": {
+      "label": "%Stream.FileCharacter class reference",
+      "url": "https://docs.intersystems.com/irislatest/csp/documatic/%25CSP.Documatic.cls?CLASSNAME=%25Stream.FileCharacter&LIBRARY=%25SYS"
+    },
+    "@ftp": {
+      "label": "%Net.FtpSession class reference",
+      "url": "https://docs.intersystems.com/irislatest/csp/documatic/%25CSP.Documatic.cls?CLASSNAME=%25Net.FtpSession&LIBRARY=%25SYS"
+    },
+    "@http": {
+      "label": "%Net.HttpRequest class reference",
+      "url": "https://docs.intersystems.com/irislatest/csp/documatic/%25CSP.Documatic.cls?CLASSNAME=%25Net.HttpRequest&LIBRARY=%25SYS"
+    },
+    "@mail": {
+      "label": "%Net.MailMessage class reference",
+      "url": "https://docs.intersystems.com/irislatest/csp/documatic/%25CSP.Documatic.cls?CLASSNAME=%25Net.MailMessage&LIBRARY=%25SYS"
+    },
+    "@namespace": {
+      "label": "%SYS.Namespace class reference",
+      "url": "https://docs.intersystems.com/irislatest/csp/documatic/%25CSP.Documatic.cls?CLASSNAME=%25SYS.Namespace&LIBRARY=%25SYS"
+    },
+    "@obj": {
+      "label": "%SYSTEM.OBJ class reference",
+      "url": "https://docs.intersystems.com/irislatest/csp/documatic/%25CSP.Documatic.cls?CLASSNAME=%25SYSTEM.OBJ&LIBRARY=%25SYS"
+    },
+    "@persistent": {
+      "label": "%Library.Persistent class reference",
+      "url": "https://docs.intersystems.com/irislatest/csp/documatic/%25CSP.Documatic.cls?CLASSNAME=%25Library.Persistent&LIBRARY=%25SYS"
+    },
+    "@process": {
+      "label": "%SYS.ProcessQuery class reference",
+      "url": "https://docs.intersystems.com/irislatest/csp/documatic/%25CSP.Documatic.cls?CLASSNAME=%25SYS.ProcessQuery&LIBRARY=%25SYS"
+    },
+    "@propertydef": {
+      "label": "%Dictionary.PropertyDefinition class reference",
+      "url": "https://docs.intersystems.com/irislatest/csp/documatic/%25CSP.Documatic.cls?CLASSNAME=%25Dictionary.PropertyDefinition&LIBRARY=%25SYS"
+    },
+    "@ptools": {
+      "label": "%SYS.PTools.StatsSQL class reference",
+      "url": "https://docs.intersystems.com/irisforhealthlatest/csp/documatic/%25CSP.Documatic.cls?CLASSNAME=%25SYS.PTools.StatsSQL&LIBRARY=%25SYS"
+    },
+    "@registered": {
+      "label": "%Library.RegisteredObject class reference",
+      "url": "https://docs.intersystems.com/irislatest/csp/documatic/%25CSP.Documatic.cls?CLASSNAME=%25Library.RegisteredObject&LIBRARY=%25SYS"
+    },
+    "@security": {
+      "label": "%SYSTEM.Security class reference",
+      "url": "https://docs.intersystems.com/irislatest/csp/documatic/%25CSP.Documatic.cls?CLASSNAME=%25SYSTEM.Security&LIBRARY=%25SYS"
+    },
+    "@smtp": {
+      "label": "%Net.SMTP class reference",
+      "url": "https://docs.intersystems.com/irislatest/csp/documatic/%25CSP.Documatic.cls?CLASSNAME=%25Net.SMTP&LIBRARY=%25SYS"
+    },
+    "@status": {
+      "label": "%SYSTEM.Status class reference",
+      "url": "https://docs.intersystems.com/irislatest/csp/documatic/%25CSP.Documatic.cls?CLASSNAME=%25SYSTEM.Status&LIBRARY=%25SYS"
+    },
+    "@statusexception": {
+      "label": "%Exception.StatusException class reference",
+      "url": "https://docs.intersystems.com/irislatest/csp/documatic/%25CSP.Documatic.cls?CLASSNAME=%25Exception.StatusException&LIBRARY=%25SYS"
+    },
+    "@stream": {
+      "label": "%Stream.Object class reference",
+      "url": "https://docs.intersystems.com/irislatest/csp/documatic/%25CSP.Documatic.cls?CLASSNAME=%25Stream.Object&LIBRARY=%25SYS"
+    },
+    "GCDI_journal": {
+      "label": "Journaling Overview",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCDI_journal"
+    },
+    "GCM_dashboard": {
+      "label": "Monitoring InterSystems IRIS Using the Management Portal",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCM_dashboard"
+    },
+    "GCM_monlbl": {
+      "label": "Examining Routine Performance Using ^%SYS.MONLBL",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCM_monlbl"
+    },
+    "GCM_perfmon": {
+      "label": "Monitoring System Performance Using ^PERFMON",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCM_perfmon"
+    },
+    "GCOS_commands": {
+      "label": "Introduction to ObjectScript Commands",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_commands"
+    },
+    "GCOS_macros": {
+      "label": "Macros and Include Files",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_macros"
+    },
+    "GCOS_operators": {
+      "label": "Introduction to ObjectScript Operators",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_operators"
+    },
+    "GCOS_ppg": {
+      "label": "Process-Private Globals",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_ppg"
+    },
+    "GCOS_status": {
+      "label": "Working with %Status Values",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_status"
+    },
+    "GCSP_logging": {
+      "label": "Enabling CSP Logging",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCSP_logging"
+    },
+    "GGBL_limits": {
+      "label": "Global node address limits",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=BPYNAT_globals"
+    },
+    "GGBL_tempgbl": {
+      "label": "Temporary Globals and the IRISTEMP Database",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GGBL_tempgbl"
+    },
+    "GHA_mirror": {
+      "label": "Mirroring Overview",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GHA_mirror"
+    },
+    "GJSON_create": {
+      "label": "Creating and Modifying Dynamic Entities",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GJSON_create"
+    },
+    "GNET_email": {
+      "label": "Email Support in InterSystems IRIS",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GNET_email"
+    },
+    "GNET_ftp": {
+      "label": "Using FTP",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GNET_ftp"
+    },
+    "GNET_http": {
+      "label": "Sending an HTTP Request",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GNET_http"
+    },
+    "GOBJ_callbacks": {
+      "label": "Defining Callback Methods",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_callbacks"
+    },
+    "GOBJ_classes": {
+      "label": "Defining Classes",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_classes"
+    },
+    "GOBJ_defpersobj": {
+      "label": "Defining Persistent Classes",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_defpersobj"
+    },
+    "GOBJ_methods": {
+      "label": "Defining and Calling Methods",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_methods"
+    },
+    "GOBJ_parameters": {
+      "label": "Defining and Referring to Class Parameters",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_parameters"
+    },
+    "GOBJ_persobj_deleting": {
+      "label": "%Library.Persistent class reference",
+      "url": "https://docs.intersystems.com/irislatest/csp/documatic/%25CSP.Documatic.cls?CLASSNAME=%25Library.Persistent&LIBRARY=%25SYS"
+    },
+    "GOBJ_persobj_opening": {
+      "label": "Opening saved objects",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_persobj#GOBJ_persobj_opening"
+    },
+    "GOBJ_persobj_saving": {
+      "label": "Working with persistent objects",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_persobj"
+    },
+    "GOBJ_propmethods": {
+      "label": "Using Property Methods",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_propmethods"
+    },
+    "GOBJ_propparams": {
+      "label": "Common Property Parameters",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_propparams"
+    },
+    "GOBJ_propstream": {
+      "label": "Working with Streams",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_propstream"
+    },
+    "GOBJ_relationships": {
+      "label": "Defining and Using Relationships",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_relationships"
+    },
+    "GOBJ_storage": {
+      "label": "Storage Definitions",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_storage"
+    },
+    "GOBJ_storageglobals": {
+      "label": "Persistent Objects and Storage Globals",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_storageglobals"
+    },
+    "GSA_config_namespace_addmap": {
+      "label": "Adding Mappings to a Namespace",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSA_config_namespace_addmap"
+    },
+    "GSOD_indexes": {
+      "label": "Define and Build Indexes",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSOD_indexes"
+    },
+    "GSQL_collation": {
+      "label": "Collation",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_collation"
+    },
+    "GSQL_dynsql": {
+      "label": "Using Dynamic SQL",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_dynsql"
+    },
+    "GSQL_esql": {
+      "label": "Using Embedded SQL",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_esql"
+    },
+    "GSQL_langelements": {
+      "label": "Language Elements",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_langelements"
+    },
+    "GSQL_privileges": {
+      "label": "SQL Users, Roles, and Privileges",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_privileges"
+    },
+    "GSQL_queries": {
+      "label": "Querying the Database",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_queries"
+    },
+    "RACS_LockThreshold": {
+      "label": "LockThreshold",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RACS_LockThreshold"
+    },
+    "RCOS_ccontinue": {
+      "label": "CONTINUE (ObjectScript)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_ccontinue"
+    },
+    "RCOS_clock": {
+      "label": "LOCK (ObjectScript)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_clock"
+    },
+    "RCOS_cquit": {
+      "label": "QUIT (ObjectScript)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_cquit"
+    },
+    "RCOS_creturn": {
+      "label": "RETURN (ObjectScript)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_creturn"
+    },
+    "RCOS_cthrow": {
+      "label": "THROW (ObjectScript)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_cthrow"
+    },
+    "RCOS_ctrollback": {
+      "label": "TROLLBACK (ObjectScript)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_ctrollback"
+    },
+    "RCOS_ctrycatch": {
+      "label": "TRY and CATCH",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_ctry"
+    },
+    "RCOS_cwhile": {
+      "label": "WHILE (ObjectScript)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_cwhile"
+    },
+    "RCOS_czwrite": {
+      "label": "ZWRITE (ObjectScript)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_czwrite"
+    },
+    "RCOS_fascii": {
+      "label": "$ASCII (ObjectScript)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fascii"
+    },
+    "RCOS_fchar": {
+      "label": "$CHAR (ObjectScript)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fchar"
+    },
+    "RCOS_fclassmethod": {
+      "label": "$CLASSMETHOD (ObjectScript)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fclassmethod"
+    },
+    "RCOS_fclassname": {
+      "label": "$CLASSNAME (ObjectScript)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fclassname"
+    },
+    "RCOS_fdata": {
+      "label": "$DATA (ObjectScript)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fdata"
+    },
+    "RCOS_fextract": {
+      "label": "$EXTRACT (ObjectScript)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fextract"
+    },
+    "RCOS_ffind": {
+      "label": "$FIND (ObjectScript)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_ffind"
+    },
+    "RCOS_ffnumber": {
+      "label": "$FNUMBER (ObjectScript)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_ffnumber"
+    },
+    "RCOS_fget": {
+      "label": "$GET (ObjectScript)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fget"
+    },
+    "RCOS_fincrement": {
+      "label": "$INCREMENT (ObjectScript)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fincrement"
+    },
+    "RCOS_fisobject": {
+      "label": "$ISOBJECT (ObjectScript)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fisobject"
+    },
+    "RCOS_flength": {
+      "label": "$LENGTH (ObjectScript)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_flength"
+    },
+    "RCOS_flist": {
+      "label": "$LIST (ObjectScript)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_flist"
+    },
+    "RCOS_flistbuild": {
+      "label": "$LISTBUILD (ObjectScript)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_flistbuild"
+    },
+    "RCOS_flistfind": {
+      "label": "$LISTFIND (ObjectScript)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_flistfind"
+    },
+    "RCOS_flistfromstring": {
+      "label": "$LISTFROMSTRING (ObjectScript)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_flistfromstring"
+    },
+    "RCOS_flistget": {
+      "label": "$LISTGET (ObjectScript)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_flistget"
+    },
+    "RCOS_flistlength": {
+      "label": "$LISTLENGTH (ObjectScript)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_flistlength"
+    },
+    "RCOS_flistnext": {
+      "label": "$LISTNEXT (ObjectScript)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_flistnext"
+    },
+    "RCOS_flistsame": {
+      "label": "$LISTSAME (ObjectScript)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_flistsame"
+    },
+    "RCOS_flisttostring": {
+      "label": "$LISTTOSTRING (ObjectScript)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_flisttostring"
+    },
+    "RCOS_flistvalid": {
+      "label": "$LISTVALID (ObjectScript)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_flistvalid"
+    },
+    "RCOS_fmatch": {
+      "label": "$MATCH (ObjectScript)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fmatch"
+    },
+    "RCOS_fmethod": {
+      "label": "$METHOD (ObjectScript)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fmethod"
+    },
+    "RCOS_forder": {
+      "label": "$ORDER (ObjectScript)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_forder"
+    },
+    "RCOS_fpiece": {
+      "label": "$PIECE (ObjectScript)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fpiece"
+    },
+    "RCOS_fproperty": {
+      "label": "$PROPERTY (ObjectScript)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fproperty"
+    },
+    "RCOS_freplace": {
+      "label": "$REPLACE (ObjectScript)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_freplace"
+    },
+    "RCOS_fselect": {
+      "label": "$SELECT (ObjectScript)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fselect"
+    },
+    "RCOS_fstack": {
+      "label": "$STACK Function (ObjectScript)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fstack"
+    },
+    "RCOS_ftranslate": {
+      "label": "$TRANSLATE (ObjectScript)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_ftranslate"
+    },
+    "RCOS_fzconvert": {
+      "label": "$ZCONVERT (ObjectScript)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fzconvert"
+    },
+    "RCOS_fzdate": {
+      "label": "$ZDATE (ObjectScript)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fzdate"
+    },
+    "RCOS_fzdateh": {
+      "label": "$ZDATEH (ObjectScript)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fzdateh"
+    },
+    "RCOS_fzstrip": {
+      "label": "$ZSTRIP (ObjectScript)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fzstrip"
+    },
+    "RCOS_fztime": {
+      "label": "$ZTIME (ObjectScript)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fztime"
+    },
+    "RCOS_symbols": {
+      "label": "Symbols Used in ObjectScript",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_symbols"
+    },
+    "RCOS_vhorolog": {
+      "label": "$HOROLOG (ObjectScript)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_vhorolog"
+    },
+    "RCOS_vroles": {
+      "label": "$ROLES (ObjectScript)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_vroles"
+    },
+    "RCOS_vtlevel": {
+      "label": "$TLEVEL (ObjectScript)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_vtlevel"
+    },
+    "RCOS_vzhorolog": {
+      "label": "$ZHOROLOG (ObjectScript)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_vzhorolog"
+    },
+    "RCOS_vztimestamp": {
+      "label": "$ZTIMESTAMP (ObjectScript)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_vztimestamp"
+    },
+    "RERR_gen": {
+      "label": "General Error Messages",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RERR_gen"
+    },
+    "ROBJ_foreignkey": {
+      "label": "Foreign Key Syntax and Keywords",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=ROBJ_foreignkey"
+    },
+    "ROBJ_method_requires": {
+      "label": "Requires (Method Keyword)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=ROBJ_method_requires"
+    },
+    "ROBJ_method_sqlproc": {
+      "label": "SqlProc (Method Keyword)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=ROBJ_method_sqlproc"
+    },
+    "ROBJ_property_sqlcomputeonchange": {
+      "label": "SqlComputeOnChange (Property Keyword)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=ROBJ_property_sqlcomputeonchange"
+    },
+    "ROBJ_storage_datalocation": {
+      "label": "DataLocation (Storage Keyword)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=ROBJ_storage_datalocation"
+    },
+    "ROBJ_storage_idlocation": {
+      "label": "IdLocation (Storage Keyword)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=ROBJ_storage_idlocation"
+    },
+    "ROBJ_storage_indexlocation": {
+      "label": "IndexLocation (Storage Keyword)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=ROBJ_storage_indexlocation"
+    },
+    "RSQL_avg": {
+      "label": "AVG (SQL)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RSQL_avg"
+    },
+    "RSQL_coalesce": {
+      "label": "COALESCE (SQL)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RSQL_coalesce"
+    },
+    "RSQL_count": {
+      "label": "COUNT (SQL)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RSQL_count"
+    },
+    "RSQL_createindex": {
+      "label": "CREATE INDEX (SQL)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RSQL_createindex"
+    },
+    "RSQL_grant": {
+      "label": "GRANT (SQL)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RSQL_grant"
+    },
+    "RSQL_ifnull": {
+      "label": "IFNULL (SQL)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RSQL_ifnull"
+    },
+    "RSQL_odbcinout": {
+      "label": "%ODBCOUT (SQL)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RSQL_odbcout"
+    },
+    "RSQL_revoke": {
+      "label": "REVOKE (SQL)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RSQL_revoke"
+    },
+    "RSQL_selectmode": {
+      "label": "%SQL.Statement and %SelectMode",
+      "url": "https://docs.intersystems.com/irislatest/csp/documatic/%25CSP.Documatic.cls?CLASSNAME=%25SQL.Statement&LIBRARY=%25SYS"
+    },
+    "RSQL_sqlcode": {
+      "label": "SQLCODE Error Codes",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RSQL_sqlcode"
+    },
+    "RSQL_tunetable": {
+      "label": "TUNE TABLE (SQL)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RSQL_tunetable"
+    },
+    "RSQL_variables": {
+      "label": "Embedded SQL variables",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_esql"
+    },
+    "TOS_Transaction": {
+      "label": "Transaction Processing",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=TOS_Transaction"
+    },
+    "GORIENT_enviro": {
+      "label": "Namespaces and databases",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GORIENT_enviro"
+    }
+  },
+  "chapters": {
+    "T1.1": {
+      "1": {
+        "explanation": "Find the index declaration with the Extent keyword. Its name is BME, so look for the storage entry named BME and read its explicit Location. Here ^EW3K.DuIo.3 contains the bitmap of existing IDs, while .1 is the data global and .4 belongs to the unique name index.",
+        "sources": [
+          "GSOD_indexes",
+          "GOBJ_storageglobals"
+        ]
+      },
+      "2": {
+        "explanation": "JTE810 is the value of MessageId. The compiler names the generated method after the unique index MIIdx, so MIIdxDelete resolves that key to the stored object and returns a %Status. %DeleteId takes an ID and %Delete takes an OID. If you start with the business key and need the ID, call MIIdxExists(\"JTE810\", .id).",
+        "sources": [
+          "GSOD_indexes"
+        ],
+        "example": {
+          "title": "Get the object ID from the unique index",
+          "code": "Set found = ##class(Sample.EmailMessage).MIIdxExists(\"JTE810\", .id)\nIf found Write \"Object ID: \", id, !"
+        }
+      },
+      "3": {
+        "explanation": "%Save validates the new object, allocates its persistent ID, writes its property data and maintains its indexes. Check the returned %Status before calling %Id. Inside an outer transaction the ID is available after the save, and a later rollback can still undo the row.",
+        "sources": [
+          "GOBJ_persobj_saving",
+          "TOS_Transaction"
+        ]
+      },
+      "4": {
+        "explanation": "App.Truck is the primary superclass and supplies persistence. App.Vehicle contributes Make, Model and Describe. On a PickupTruck instance, setting Make and saving stores it alongside TowCapacity in the hierarchy's storage, and Describe can read the inherited properties.",
+        "sources": [
+          "GOBJ_classes",
+          "GOBJ_defpersobj"
+        ]
+      },
+      "5": {
+        "explanation": "In this layout the root value is the highest assigned ID from the incrementing counter. A root of 5 and data nodes at 1 and 2 can coexist because the counter and rows serve different purposes. The next increment yields 6, while the visible nodes represent two rows.",
+        "sources": [
+          "ROBJ_storage_idlocation"
+        ]
+      },
+      "6": {
+        "explanation": "%OpenId opens an object using the ID for its extent. On success emp is an OREF, which gives access to Salary. On failure the caller must handle the empty return before accessing a property. Pass the optional status output if the reason for the failure matters.",
+        "sources": [
+          "GOBJ_persobj_opening"
+        ]
+      },
+      "7": {
+        "explanation": "%DeleteExtent processes the objects in the extent through the object deletion API, so applicable %OnDelete callbacks run. For example, a callback can refuse to delete an experiment that is still under review. Check the returned status and counts when clearing a test extent.",
+        "sources": [
+          "GOBJ_persobj_deleting"
+        ]
+      },
+      "8": {
+        "explanation": "Triple-slash comments attach documentation to the declaration that follows. A comment above a property can explain what units it stores and a comment above a method can describe its return contract. The class dictionary and Class Reference expose this documentation.",
+        "sources": [
+          "GOBJ_classes"
+        ]
+      },
+      "9": {
+        "explanation": "%New creates the in-memory instance and passes John Smith to %OnNew. The callback uses that argument to initialize Name and assigns an MRN using the logic in the example. Persistence still requires a separate successful %Save.",
+        "sources": [
+          "GOBJ_callbacks"
+        ]
+      },
+      "10": {
+        "explanation": "Follow the index name from the SKU declaration to its matching Location entry. That gives ^A1B2.C3D4.3. Read the storage map even when the suffix looks predictable. The numbering tells you which location was generated, and the named entry tells you which index uses it.",
+        "sources": [
+          "GOBJ_storageglobals"
+        ]
+      },
+      "11": {
+        "explanation": "DataLocation identifies the global ^Sales.OrderD. The namespace then resolves that global to a database directory. Run the lookup from the application's namespace, since two namespaces can resolve the same global name differently.\n\nThe result has the form system^directory, with an empty system part for a local database. The destination directory contains IRIS.DAT on the identified system. A mapping limited to a subscript can send a particular branch elsewhere, so include the relevant subscript when checking such a mapping.",
+        "sources": [
+          "@namespace",
+          "GSA_config_namespace_addmap",
+          "ROBJ_storage_datalocation",
+          "GORIENT_enviro"
+        ],
+        "example": {
+          "title": "Resolve the global in the application's namespace",
+          "code": "Set dest = ##class(%SYS.Namespace).GetGlobalDest($NAMESPACE, \"Sales.OrderD\")\nWrite \"System: \", $PIECE(dest, \"^\", 1), !\nWrite \"Directory: \", $PIECE(dest, \"^\", 2), !",
+          "note": "For a local mapping, a sample result is `^/iris/db/sales/`. To check where `^Sales.OrderD(42)` goes when a subscript mapping applies, pass `42` as the third argument. In the Management Portal, inspect **System Administration → Configuration → System Configuration → Namespaces → Global Mappings**."
+        },
+        "diagram": 0
+      },
+      "12": {
+        "explanation": "The %RegisteredObject superclass gives the class instances and properties in memory. It does not supply %Save. Calling c.%Save() therefore fails as a missing method. For a saveable object, the class would need persistent behavior, for example by extending %Persistent as its primary superclass.",
+        "sources": [
+          "GOBJ_classes",
+          "GOBJ_persobj_saving"
+        ]
+      },
+      "13": {
+        "explanation": "Start with the parent data global and the rectangle's ID. In the default generated layout the inherited Color belongs to the main node, and the subclass Data mapping, through its Subscript, places Width and Height in its subnode.\n\nWith USEEXTENTSET = 1 the same hierarchy still shares the parent data global and ID. The data global gets a short generated name. An index defined on Rectangle can use a separate global based on Rectangle's own ExtentLocation.",
+        "sources": [
+          "GOBJ_storage",
+          "GOBJ_storageglobals",
+          "@persistent"
+        ],
+        "example": {
+          "title": "Compare the same record with standard and hashed storage",
+          "code": "// USEEXTENTSET = 0, ID 42\n^App.ShapeD(42)                       // base data, including Color\n^App.ShapeD(42,\"Rectangle\")           // Width and Height\n\n// USEEXTENTSET = 1 on App.Shape, illustrative generated names\n^A1B2.S3H4.1(42)                      // base data, including Color\n^A1B2.S3H4.1(42,\"Rectangle\")          // Width and Height\n^A1B2.R5C6.3                          // illustrative WidthIdx location",
+          "note": "For a fresh hierarchy, declare `Parameter USEEXTENTSET = 1;` on `App.Shape` before generating storage. Here `^A1B2.S3H4.1` is the illustrative parent data global. A new `Index WidthIdx On Width;` in `App.Rectangle` can get its own location under the child's extent prefix. Inspect the active `DataLocation`, `Subscript` and index `Location` for actual values. Changing the parameter on a populated class does not move its data. In the official `Sample.Person` / `Sample.Employee` example, both use the same `IDKEY` location, `^EW3K.wPC9.1`, while the employee extent index has its own location, `^EW3K.D1Ex.2`."
+        }
+      },
+      "14": {
+        "explanation": "The extra comma leaves the concurrency argument at its default. The dot in .sc passes a caller variable by reference, so IRIS can report the result of the open while returning the OREF separately. Checking both values avoids treating every failed open as a successful lookup.",
+        "sources": [
+          "GOBJ_persobj_opening"
+        ]
+      },
+      "15": {
+        "explanation": "The object was created as App.AuditLogger, so the call dispatches to its override. It assigns LogEntry and attempts %Save. The inherited console logger runs only if called, for example via ##super(msg). In application code capture and check the status to confirm the audit entry was saved.",
+        "sources": [
+          "GOBJ_methods"
+        ]
+      },
+      "16": {
+        "explanation": "Read the location tags by purpose. DataLocation identifies where object data goes. IndexLocation is the shared default for indexes, and a named index may override it. IdLocation is the counter node for increment-based IDs. It can have the same global name as DataLocation because the counter and data rows occupy different nodes.",
+        "sources": [
+          "GOBJ_storage",
+          "ROBJ_storage_idlocation",
+          "ROBJ_storage_indexlocation"
+        ]
+      },
+      "17": {
+        "explanation": "FormatDate takes all its input as an argument and does not need an instance. Declare it as a ClassMethod and call it directly on the utility class. The Abstract keyword blocks instantiation, and $ZDATE(d,3) formats the internal date as YYYY-MM-DD.",
+        "sources": [
+          "GOBJ_methods",
+          "RCOS_fzdate"
+        ]
+      },
+      "18": {
+        "explanation": "The loop tries 1,000 possible IDs. A failed open gives an empty result and this code skips it, while sc records only save failures. The missing IDs need not be contiguous or previously deleted. Capture the open status or iterate over the existing row IDs if you need to account for every record.",
+        "sources": [
+          "GOBJ_persobj_opening",
+          "ROBJ_storage_idlocation"
+        ]
+      }
+    },
+    "T1.2": {
+      "1": {
+        "explanation": "Start with the declaration for Bio. The default MAXLEN is 50, so a larger limit such as 2000 changes what the property can accept. For a real truncation report, trace the write path as well. Object validation can report an oversized value in the save status, while other paths may truncate it earlier.",
+        "sources": [
+          "GOBJ_propparams"
+        ]
+      },
+      "2": {
+        "explanation": "Reports contains text that can exceed a scalar string's practical size. A global character stream stores text as stream data and lets you read it in chunks. A binary stream would be the matching choice for a PDF or another byte-oriented file.",
+        "sources": [
+          "GOBJ_propstream"
+        ]
+      },
+      "3": {
+        "explanation": "Check each declaration against the supplied value. The missing Name violates Required. Toys does not appear in Category's VALUELIST. Values that fit their numeric or length constraints contribute no additional validation errors.",
+        "sources": [
+          "GOBJ_propparams"
+        ]
+      },
+      "4": {
+        "explanation": "TaxRate starts at 0.08 from InitialExpression. The compute code uses Subtotal and TaxRate and runs for the stored computed field on the save path in the exercise. Substituting 100 and 0.08 gives 100 × 1.08 = 108. Read the property after checking the save status.",
+        "sources": [
+          "ROBJ_property_sqlcomputeonchange",
+          "GOBJ_propparams"
+        ]
+      },
+      "5": {
+        "explanation": "A Calculated property is evaluated on access. ObjectScript needs an accessor that calculates the value, for example FullNameGet() joining FirstName and LastName. SQL computation keywords govern the SQL projection. Check which interface is reading the property before choosing where to put the computation.",
+        "sources": [
+          "GOBJ_propmethods"
+        ]
+      },
+      "6": {
+        "explanation": "A bitslice index organizes a numeric measure so the optimizer can answer supported aggregates without reading every stored value. ChargesIdx is the candidate because the query aggregates TotalCharges. A bitmap index on a category would instead be useful for filtering that category.",
+        "sources": [
+          "GSOD_indexes"
+        ]
+      },
+      "7": {
+        "explanation": "EmailIdxOpen returns the opened object reference. Despite the name sc in the assignment, that variable receives the OREF, and .sc2 receives the status. Use separate names such as account and sc when calling this API.",
+        "sources": [
+          "GSOD_indexes"
+        ]
+      },
+      "8": {
+        "explanation": "Each bitmap represents a set of matching row IDs. A bit is set in the result of AND only when the corresponding ID occurs in both sets. Here that yields the IDs of shipped orders in the North region before the engine reads their projected columns.",
+        "sources": [
+          "GSOD_indexes"
+        ]
+      },
+      "9": {
+        "explanation": "The foreign key requires the supplied DeptCode to match a referenced Department key. Because HR is missing, the attempted save fails referential integrity and returns an error status. Creating a matching department changes the result without changing the employee property.",
+        "sources": [
+          "GOBJ_relationships",
+          "ROBJ_foreignkey"
+        ]
+      },
+      "10": {
+        "explanation": "The class parameter has a value shared by the class. The ..# syntax accesses it from the class method, so the method returns 3.2.1 without constructing an instance. A property would instead represent state on an object.",
+        "sources": [
+          "GOBJ_parameters"
+        ]
+      },
+      "11": {
+        "explanation": "The compound index orders by SensorId first and ReadingTime second. Equality on SensorId finds one prefix of the index, then the date range limits the entries inside that prefix. A filter on ReadingTime alone cannot use the same leading-key lookup.",
+        "sources": [
+          "GSOD_indexes"
+        ],
+        "example": {
+          "title": "Match the filter to the compound key",
+          "code": "Index SensorTimeIdx On (SensorId, ReadingTime);\n\n// Equality narrows the first key; the range narrows the second.\nWHERE SensorId = 'S100' AND ReadingTime > '2026-01-01'"
+        }
+      },
+      "12": {
+        "explanation": "The SQL UPDATE changes the dependency Data. The compute code evaluates $LENGTH(\"Updated content\"), which is 15 including the space. Check SQLCODE before reading the new value. The example also assumes that the target row has ID 1.",
+        "sources": [
+          "ROBJ_property_sqlcomputeonchange"
+        ]
+      },
+      "13": {
+        "explanation": "InitialExpression supplies Viewer and 0 when %New constructs the object. Saving persists those values unless the code assigns something else before the save. Reopening an existing row loads its saved values.",
+        "sources": [
+          "GOBJ_propparams"
+        ]
+      },
+      "14": {
+        "explanation": "Write appends text and WriteLine adds a line terminator after its argument. With an empty argument, the middle call contributes just the terminator. Reading successive chunks reconstructs the two lines in their original order.",
+        "sources": [
+          "GOBJ_propstream"
+        ]
+      },
+      "15": {
+        "explanation": "TitleIdx identifies one row per unique title, so IRIS supplies the unique-key lookup and delete helpers. A bitmap on a low-cardinality status represents groups of matching IDs. For the compound index, read the listed field order before deciding which filters it supports.",
+        "sources": [
+          "GSOD_indexes"
+        ]
+      },
+      "16": {
+        "explanation": "25000 is less than the declared MINVAL of 30000. Saving reports validation failure, so the status predicate in the question prints 0. If you need to see which property failed, display the returned status.",
+        "sources": [
+          "GOBJ_propparams",
+          "GOBJ_persobj_saving"
+        ]
+      },
+      "17": {
+        "explanation": "The expression in braces is evaluated during initialization. Two objects created at different times therefore get different initial timestamps. Saving later does not make InitialExpression act like a last-modified callback.",
+        "sources": [
+          "GOBJ_propparams"
+        ]
+      },
+      "18": {
+        "explanation": "An empty MAXLEN removes the property-specific length constraint. The platform's string limit still applies. For text expected to exceed ordinary string sizes, model it as a character stream and consume it in chunks.",
+        "sources": [
+          "GOBJ_propparams"
+        ]
+      }
+    },
+    "T1.3": {
+      "1": {
+        "explanation": "Area runs on a specific object, so ..Radius refers to that object's Radius. FromDiameter runs on the class and receives its input as a parameter. It would need an explicit object reference to read an instance's Radius.",
+        "sources": [
+          "GOBJ_methods"
+        ]
+      },
+      "2": {
+        "explanation": "The tax rate is constant for the class, so store it as a parameter and read it with ..#TaxRate. Tax uses the caller's amount and the parameter, so a ClassMethod exposes the operation directly. For 100 at 0.05 the result is 5.",
+        "sources": [
+          "GOBJ_parameters",
+          "GOBJ_methods"
+        ]
+      },
+      "3": {
+        "explanation": "Add passes 3.777777 to the other class method using ..Round. Inside Round, ..#PRECISION supplies 4 to $FNUMBER, so the returned representation is rounded to 3.7778.",
+        "sources": [
+          "GOBJ_methods",
+          "RCOS_ffnumber"
+        ]
+      },
+      "4": {
+        "explanation": "The dots on .myData and .myResult make both arguments references to the caller's variables. Output documents the intended use of result. It does not clear old-result. A method that promises to replace it must actually assign it.",
+        "sources": [
+          "GOBJ_methods"
+        ],
+        "example": {
+          "title": "Observe the existing output variable",
+          "code": "Set input = \"input-value\", result = \"old-result\"\nSet sc = ##class(App.Processor).ProcessData(.input, .result)\n// At entry, result still contains \"old-result\" until the method assigns it."
+        }
+      },
+      "5": {
+        "explanation": "Follow the calls in the body in order. Each method writes one line, and the exclamation mark in WRITE advances to the next line. That produces Header, Body and Footer in the order the caller invokes them.",
+        "sources": [
+          "GOBJ_methods"
+        ]
+      },
+      "6": {
+        "explanation": "Passing an OREF by value copies the reference. Both variables still designate the same object, so the second read observes Active. Reassigning the callee's variable would be different from setting a property on the shared object.",
+        "sources": [
+          "GOBJ_methods"
+        ]
+      },
+      "7": {
+        "explanation": "The Circle override explicitly calls ##super(), so the parent produces its generic message first. The override then adds the radius from the Circle instance. Without that call, only the overriding implementation runs.",
+        "sources": [
+          "GOBJ_methods"
+        ]
+      },
+      "8": {
+        "explanation": "The nonzero denominator takes the success branch. The method assigns 10/3 through .answer and returns a separate status. The expected decimal rendering depends on the arithmetic precision in use. The status and quotient are different outputs.",
+        "sources": [
+          "GOBJ_methods",
+          "GCOS_status"
+        ]
+      },
+      "9": {
+        "explanation": "The negative age takes the validation branch and returns an error status carrying the supplied message. The caller displays that message. Returning a status and throwing an exception are distinct control flows.",
+        "sources": [
+          "GCOS_status"
+        ]
+      },
+      "10": {
+        "explanation": "The first omitted amount uses 1, the explicit second argument adds 5 and the third omitted argument adds another 1. All three calls mutate the same Value property, so the running totals are 1, 6 and 7.",
+        "sources": [
+          "GOBJ_methods"
+        ]
+      },
+      "11": {
+        "explanation": "Passing the caller variable with a dot lets the method write the transformed text into it. Converting world to uppercase in this call affects the value read afterward. For a fresh output value, assign it explicitly inside the method.",
+        "sources": [
+          "GOBJ_methods"
+        ]
+      },
+      "12": {
+        "explanation": "The override calls the inherited validation with ##super(). Once it succeeds, the subclass checks its own condition. A nonempty email without @ reaches the Invalid email status instead of the success return.",
+        "sources": [
+          "GOBJ_methods",
+          "GCOS_status"
+        ]
+      },
+      "13": {
+        "explanation": "The prefix is a class parameter. The method reads it with ..# and combines it with the supplied message. The result is [AUDIT] followed by the message text.",
+        "sources": [
+          "GOBJ_parameters"
+        ]
+      },
+      "14": {
+        "explanation": "%IsA checks whether the object's actual class is Sample.Person or derives from it. An exact class-name comparison would exclude Sample.Patient. If the caller might supply something other than an object, use $ISOBJECT before calling an instance method.",
+        "sources": [
+          "@registered"
+        ]
+      },
+      "15": {
+        "explanation": "The dot aliases the caller's local array, including existing descendants. The method sets total, active and inactive nodes. It leaves the root and extra alone, so the three reads yield 0, 100 and 999.",
+        "sources": [
+          "GOBJ_methods"
+        ]
+      },
+      "16": {
+        "explanation": "Process is inherited, but ..FetchData() dispatches on the actual FileSource instance. The override supplies data from file and the inherited processing step uppercases it. The base class provides the workflow and the subclass supplies one step.",
+        "sources": [
+          "GOBJ_methods"
+        ]
+      },
+      "17": {
+        "explanation": "$ORDER visits the three array subscripts. Each $LISTBUILD creates one encoded element, and concatenating those encoded fragments builds a three-element list. $LISTLENGTH counts those elements, not the length of the encoded string.",
+        "sources": [
+          "RCOS_flistbuild",
+          "GOBJ_methods"
+        ]
+      },
+      "18": {
+        "explanation": "Final prevents a subclass from overriding that inherited method. The compiler rejects SpecialHandler's OnEvent declaration before the application can call it. A subclass can still add a method with a different name.",
+        "sources": [
+          "GOBJ_methods"
+        ]
+      }
+    },
+    "T1.4": {
+      "1": {
+        "explanation": "In a JSON literal true is a JSON token. In the standalone ObjectScript assignment it is read as a local variable, which is undefined here. Use patient.%Set(\"active\",1,\"boolean\") to store the JSON Boolean.",
+        "sources": [
+          "GJSON_create"
+        ]
+      },
+      "2": {
+        "explanation": "Read the nested array element first and then the Name value on that object. Dynamic arrays use zero-based indexes, so the second element supplies Bob. The index into the array and the key inside the object address different levels.",
+        "sources": [
+          "GJSON_create"
+        ]
+      },
+      "3": {
+        "explanation": "The type argument to %Set creates explicit JSON null for error and JSON true for verified. The count is a number and status is a string. The type information determines how %ToJSON serializes each value.",
+        "sources": [
+          "GJSON_create"
+        ]
+      },
+      "4": {
+        "explanation": "Create an iterator with %GetIterator() and call %GetNext(.key,.value) on that iterator. The dynamic object owns the members. The iterator tracks the traversal position and hands back one key/value pair at a time.",
+        "sources": [
+          "GJSON_create"
+        ]
+      },
+      "5": {
+        "explanation": "After adding the element, %Size counts three entries. %ToJSON renders those entries in array order. Dynamic array indexes are zero based, so the third element is at index 2.",
+        "sources": [
+          "GJSON_create"
+        ]
+      },
+      "6": {
+        "explanation": "arr and the values member reference the same dynamic array. Setting element 1 replaces its second value, 20, with 99. Serializing the parent then shows the mutation through the nested reference.",
+        "sources": [
+          "GJSON_create"
+        ]
+      },
+      "7": {
+        "explanation": "%IsDefined reports that name exists and phone is absent. address is present with a JSON null value, so %GetTypeOf returns null. Use both checks when an API distinguishes an omitted field from an explicit request to clear it.",
+        "sources": [
+          "GJSON_create"
+        ],
+        "example": {
+          "title": "Distinguish a missing field from explicit null",
+          "code": "Set data = {\"address\":null}\nWrite data.%IsDefined(\"address\"), \" \", data.%GetTypeOf(\"address\"), !\n// 1 null\nWrite data.%IsDefined(\"phone\"), !\n// 0"
+        }
+      },
+      "8": {
+        "explanation": "%FromJSON parses the text into dynamic entities and %ToJSON serializes those entities. The items value remains a nested array of numbers. The result is equivalent JSON even when whitespace or object-member order differs.",
+        "sources": [
+          "GJSON_create"
+        ]
+      },
+      "9": {
+        "explanation": "A global stream property stores a reference in the parent record. The stream chunks live in the stream's data global. The generated StreamLocation identifies the stream storage for this class in the layout shown.",
+        "sources": [
+          "GOBJ_propstream",
+          "GOBJ_storage"
+        ]
+      },
+      "10": {
+        "explanation": "Size counts the characters written, including the two spaces between sentences. The first nine characters are Line 1 of when the read starts at the beginning. Use Rewind before reading when the stream's current cursor is uncertain.",
+        "sources": [
+          "GOBJ_propstream",
+          "@stream"
+        ]
+      },
+      "11": {
+        "explanation": "Read each numeric array element and add it to the running sum. Divide by the number of elements to obtain 85. If accepting arbitrary JSON, check that the array is nonempty before dividing.",
+        "sources": [
+          "GJSON_create"
+        ]
+      },
+      "12": {
+        "explanation": "The extra role property is added to the same dynamic object before serialization. The output includes the initial id and name as well as role. Dynamic objects accept keys that were absent in the original JSON.",
+        "sources": [
+          "GJSON_create"
+        ]
+      },
+      "13": {
+        "explanation": "A global binary stream stores the bytes copied from the PDF in database-backed stream storage. The document row keeps the stream reference. This differs from a file stream, which addresses a file outside the database.",
+        "sources": [
+          "GOBJ_propstream",
+          "@stream"
+        ]
+      },
+      "14": {
+        "explanation": "Each %Push places the nested item object into the same items array held by order. Serialization walks both levels and preserves the object fields and array order. The total is the numeric value assigned by the code.",
+        "sources": [
+          "GJSON_create"
+        ]
+      },
+      "15": {
+        "explanation": "WriteLine adds a terminator after the first text and Write writes the second text without adding one. A file character stream writes text to the linked path. Check the stream status to distinguish a successful write from a path or permissions error.",
+        "sources": [
+          "GOBJ_propstream",
+          "@stream"
+        ]
+      }
+    },
+    "T2.1": {
+      "1": {
+        "explanation": "Both SET commands belong to one logical update. Start the transaction before either write and commit after both succeed. If the second write fails, roll back the first as well. If other processes also update these nodes, coordinate them with a lock in addition to the transaction.",
+        "sources": [
+          "TOS_Transaction"
+        ]
+      },
+      "2": {
+        "explanation": "Trace the two transaction levels. The argument to TROLLBACK rolls back the current inner level, so the change made there disappears. The earlier status and later notes are both part of the outer level and survive its commit.",
+        "sources": [
+          "RCOS_ctrollback"
+        ]
+      },
+      "3": {
+        "explanation": "Count the open transaction levels after each command. TSTART raises the count from 0 to 1 and then to 2. The inner TCOMMIT reduces it to 1. The outer TCOMMIT brings it to 0 and commits the work.",
+        "sources": [
+          "RCOS_vtlevel"
+        ]
+      },
+      "4": {
+        "explanation": "The lock reserves a name in the lock table. Another process that asks for an incompatible lock on that name must wait. A bare SET or read still accesses the global, which is why every cooperating writer needs to follow the same lock protocol.",
+        "sources": [
+          "RCOS_clock"
+        ]
+      },
+      "5": {
+        "explanation": "Process B writes the phone node because its SET does not request a lock. To make the patient lock effective, have every writer acquire the corresponding patient lock before touching that patient's data.",
+        "sources": [
+          "RCOS_clock"
+        ]
+      },
+      "6": {
+        "explanation": "The timeout is five seconds. If the other process still owns an incompatible lock when the timeout expires, $TEST is 0 and the error branch runs. Read $TEST immediately after the timed LOCK so intervening commands cannot change it.",
+        "sources": [
+          "RCOS_clock"
+        ]
+      },
+      "7": {
+        "explanation": "Shared locks on the same order can coexist. An exclusive lock conflicts with those shared locks, so readers wait for an active writer and a writer waits for current shared holders. The behavior assumes every path requests the relevant lock.",
+        "sources": [
+          "RCOS_clock"
+        ]
+      },
+      "8": {
+        "explanation": "The loop accumulates row locks on the same table inside one SQL transaction. At the configured threshold IRIS may replace those with a table lock. A default of 1,000 makes escalation plausible here. Compare the threshold and lock table to the timing instead of inferring it from the loop count alone.",
+        "sources": [
+          "RACS_LockThreshold"
+        ]
+      },
+      "9": {
+        "explanation": "Escalation replaces many row locks with a coarser table lock. That can block a request for a different row in the same table. Fewer entries in the lock table can therefore coincide with reduced concurrency.",
+        "sources": [
+          "RACS_LockThreshold"
+        ]
+      },
+      "10": {
+        "explanation": "The version comparison is optimistic because the user can edit without holding a lock. The shown check and write have a race. A second process can pass the same check before the first increments the version. Make the compare-and-write atomic, for example with a cooperating lock around the short save step.",
+        "sources": [
+          "RCOS_clock",
+          "TOS_Transaction"
+        ],
+        "example": {
+          "title": "Keep the edit optimistic and protect the save",
+          "code": "Read value and version\nLet the user edit\nAcquire a cooperating lock for the record\n    Compare the current version with the one read earlier\n    If it matches, write the new value and version in one transaction\nRelease the lock and report success or conflict"
+        },
+        "diagram": 1
+      },
+      "11": {
+        "explanation": "The sequence illustrates a pessimistic lock followed by a transaction. The catch rolls back and the lock is released on either shown path. The method still returns success after catching an error. A production implementation needs to return or rethrow that error and respect any transaction its caller owns.",
+        "sources": [
+          "RCOS_clock",
+          "TOS_Transaction"
+        ]
+      },
+      "12": {
+        "explanation": "Each LOCK + acquires another lock while retaining the previous one. Releasing the lock for the other node leaves ^Patient(42) held. Track both the resource name and how many times this process acquired it.",
+        "sources": [
+          "RCOS_clock"
+        ]
+      },
+      "13": {
+        "explanation": "The first two commands acquire incremental locks. The third uses the simple form without +, so it releases the earlier locks and acquires ^Order(3). The prefix changes how the command treats the current lock set.",
+        "sources": [
+          "RCOS_clock"
+        ]
+      },
+      "14": {
+        "explanation": "TROLLBACK without an argument rolls back all active levels and brings $TLEVEL to 0. Use TROLLBACK 1 to undo the current level only. That distinction matters when a method is called inside a transaction it did not start.",
+        "sources": [
+          "RCOS_ctrollback",
+          "RCOS_vtlevel"
+        ],
+        "example": {
+          "title": "Undo only the current level",
+          "code": "TSTART\nSet ^TutorPractice(\"outer\") = 1\nTSTART\nSet ^TutorPractice(\"inner\") = 1\nTROLLBACK 1\nWrite $TLEVEL, !  // 1\nTROLLBACK         // Clean up the test transaction."
+        }
+      },
+      "15": {
+        "explanation": "The global write and the SQL operation are in the same process transaction. Rolling it back undoes the journaled global change and any transactional SQL changes. If the update already failed before changing data, its rollback has no row changes to undo.",
+        "sources": [
+          "TOS_Transaction",
+          "GSQL_esql"
+        ]
+      },
+      "16": {
+        "explanation": "A timeout of 0 means the process tries the acquisition immediately and never waits for the holder. $TEST is 1 on acquisition and 0 on failure. The code should branch on that result before it modifies protected data.",
+        "sources": [
+          "RCOS_clock"
+        ]
+      },
+      "17": {
+        "explanation": "On process termination IRIS releases its locks and rolls back its uncommitted transaction. The nested levels belong to that process. Work committed before the open transaction is outside that rollback.",
+        "sources": [
+          "TOS_Transaction",
+          "RCOS_clock"
+        ]
+      },
+      "18": {
+        "explanation": "Dynamic and embedded SQL use the transaction context of the executing process. A TROLLBACK there can undo both operations and the journaled global writes. Work submitted to another process or connection has its own context.",
+        "sources": [
+          "TOS_Transaction",
+          "GSQL_esql",
+          "GSQL_dynsql"
+        ]
+      }
+    },
+    "T2.2": {
+      "1": {
+        "explanation": "The double bars make queryLog process-private. Methods in the same process can use it even when their local variables differ. A second process has its own private storage, and ending the owner process clears it.",
+        "sources": [
+          "GCOS_ppg"
+        ]
+      },
+      "2": {
+        "explanation": "Start with the class's active DataLocation. Use that global name with GetGlobalDest in the namespace used by the application. A mapping can choose a different database from the default, so the same global name in two namespaces does not guarantee access to the same data.",
+        "sources": [
+          "@namespace",
+          "GSA_config_namespace_addmap",
+          "GORIENT_enviro"
+        ],
+        "example": {
+          "title": "Resolve the hashed data global",
+          "code": "Set dest = ##class(%SYS.Namespace).GetGlobalDest($NAMESPACE, \"EW3K.DuIo.1\")\nWrite dest, !",
+          "note": "Read the result as `system^directory`. If the system part is empty, the directory is local. That directory contains the database file `IRIS.DAT`."
+        }
+      },
+      "3": {
+        "explanation": "$DATA returns 10 when a node has descendants and no scalar value of its own. For example, a value at ^Patient(1,\"Phone\",\"Home\") can make $DATA on Phone return 10. Check the units digit when you need to know whether the exact node has a value.",
+        "sources": [
+          "RCOS_fdata"
+        ],
+        "example": {
+          "title": "Create a parent that has only children",
+          "code": "Set patient(1,\"Phone\",\"Home\") = \"555-0100\"\nWrite $DATA(patient(1,\"Phone\")), !        // 10\nWrite $DATA(patient(1,\"Phone\",\"Home\")), ! // 1"
+        }
+      },
+      "4": {
+        "explanation": "$INCREMENT updates a shared counter atomically and returns the resulting sequence number. Two processes using the same counter get different allocations, while random numbers can collide. An allocated sequence can still have gaps if a process fails before writing its log entry.",
+        "sources": [
+          "RCOS_fincrement"
+        ]
+      },
+      "5": {
+        "explanation": "In CSP logging, level 3 includes raw information such as data received in an HTTP request, in addition to the lower logging levels. InterSystems also documents level 5 for OAuth information. The setting applies to components that use this logging facility.",
+        "sources": [
+          "GCSP_logging"
+        ]
+      },
+      "6": {
+        "explanation": "Each process receives its own ^||calc tree, so separate workers can use the same subscripts without overwriting each other. That makes it suitable for scratch calculations within one process. Use shared storage if another process must read the results.",
+        "sources": [
+          "GCOS_ppg"
+        ]
+      },
+      "7": {
+        "explanation": "$ORDER walks subscripts in collation order. Canonical numeric subscripts 1, 2 and 10 sort numerically, so 10 comes after 2. Values stored at those nodes do not determine the traversal order.",
+        "sources": [
+          "RCOS_forder"
+        ]
+      },
+      "8": {
+        "explanation": "ZWRITE data displays the scalar root if present and the defined descendant nodes. A plain WRITE data only asks for the root value. It can fail if the array has children but no root value.",
+        "sources": [
+          "RCOS_czwrite"
+        ]
+      },
+      "9": {
+        "explanation": "ZWRITE renders an encoded list in a readable $LB representation, so you can recognize its three elements. The displayed expression is a diagnostic form of the internal list. Use list functions to read the elements in code.",
+        "sources": [
+          "RCOS_czwrite",
+          "RCOS_flistbuild"
+        ]
+      },
+      "10": {
+        "explanation": "$ZHOROLOG provides fractional seconds and a numeric elapsed-time value. Capture it before and after the operation and subtract the two samples. $HOROLOG uses separate day and second fields and offers whole-second resolution.",
+        "sources": [
+          "RCOS_vzhorolog"
+        ]
+      },
+      "11": {
+        "explanation": "ZWRITE can show the global's nodes and values for a small inspection. $ORDER lets you walk one subscript level and apply a filter or stop early. If nested levels matter, traverse them separately or use $QUERY for full node references.",
+        "sources": [
+          "RCOS_czwrite",
+          "RCOS_forder"
+        ]
+      },
+      "12": {
+        "explanation": "The key finds a log record. Its first encoded element is the recorded date. For each matching key, use $LISTGET to compare that field with today's date, then display or count the selected entries.",
+        "sources": [
+          "RCOS_forder",
+          "RCOS_flistget"
+        ]
+      },
+      "13": {
+        "explanation": "Use the Processes page to inspect one PID. For programmatic monitoring, the %SYS.ProcessQuery SQL projection exposes GlobalReferences and PID. This is a cumulative count for the process, so subtract two samples to measure activity during an interval. The process can exit before you take the second sample.",
+        "sources": [
+          "GCM_dashboard",
+          "@process"
+        ]
+      },
+      "14": {
+        "explanation": "Elapsed timestamps compare large sections of code, while MONLBL can identify the lines that account for the work. Use the timing loop to locate a slow phase, then profile that phase to distinguish execution count from cost per line.",
+        "sources": [
+          "RCOS_vzhorolog",
+          "GCM_monlbl"
+        ]
+      },
+      "15": {
+        "explanation": "PERFMON gathers instance-level activity such as global reference and I/O counters. Compare intervals of similar duration and workload. If you need a single process rather than the instance total, start with the Processes page.",
+        "sources": [
+          "GCM_perfmon"
+        ]
+      }
+    },
+    "T2.3": {
+      "1": {
+        "explanation": "Requires names the resource and permissions needed to call the method. Declaring %Create_Account:RW on the method makes IRIS check both before it reaches the account-creation code. The operation's business validation remains a separate concern.",
+        "sources": [
+          "ROBJ_method_requires"
+        ]
+      },
+      "2": {
+        "explanation": "The caller lacks the required permission, so the declarative check rejects the call with <PROTECT> before the body starts. An error handler for this case belongs at the calling boundary.",
+        "sources": [
+          "ROBJ_method_requires"
+        ]
+      },
+      "3": {
+        "explanation": "The contains operator sees AppAdmin inside SuperAppAdmin and accepts the wrong role. Treat $ROLES as a comma-delimited list and match a complete role, or check the resource permission the operation actually requires.",
+        "sources": [
+          "RCOS_vroles",
+          "RCOS_ffind"
+        ]
+      },
+      "4": {
+        "explanation": "Requires rejects the call before entering the method and raises <PROTECT>. An explicit security check runs inside the body, allowing the method to return an application status. Match the caller's handling to the contract of the chosen method.",
+        "sources": [
+          "ROBJ_method_requires",
+          "@security"
+        ]
+      },
+      "5": {
+        "explanation": "Concatenation lets the input close the string literal and inject an always-true predicate. The trailing comment can hide the rest of the query. A bound value stays in the parameter position, so its quotes and SQL-looking text remain data.",
+        "sources": [
+          "GSQL_dynsql"
+        ]
+      },
+      "6": {
+        "explanation": "Version B mixes user text with the SQL source. Version A binds a value to a placeholder after preparing the statement. Use placeholders for values. If the user chooses a table or column, select the identifier from a fixed allowed set.",
+        "sources": [
+          "GSQL_dynsql"
+        ],
+        "example": {
+          "title": "Prepare fixed SQL and bind the value",
+          "code": "Set stmt = ##class(%SQL.Statement).%New()\nSet sc = stmt.%Prepare(\"SELECT ID FROM Sample.Person WHERE Name = ?\")\nIf $SYSTEM.Status.IsError(sc) Quit\nSet result = stmt.%Execute(userName)"
+        }
+      },
+      "7": {
+        "explanation": "The double bars isolate each process's temporary results from other processes using the same global name. That is useful for scratch data in one request. Authorization for the original query and returned rows still needs to be enforced separately.",
+        "sources": [
+          "GCOS_ppg"
+        ]
+      },
+      "8": {
+        "explanation": "Check answers whether the current security context holds the requested permissions on the resource. It returns a Boolean, so branch on the result. A successful check authorizes the particular resource and permission you asked for.",
+        "sources": [
+          "@security"
+        ]
+      },
+      "9": {
+        "explanation": "Use Requires for an unconditional entry check. Use a programmatic check when the needed permission depends on input or when the method must return a domain status. In either case, perform the check before the protected action.",
+        "sources": [
+          "ROBJ_method_requires",
+          "@security"
+        ]
+      },
+      "10": {
+        "explanation": "GRANT SELECT gives NurseRole permission to read the table. It does not add INSERT, UPDATE or DELETE privileges. A user can still receive additional permissions through another role, so inspect effective grants when validating access.",
+        "sources": [
+          "RSQL_grant"
+        ]
+      },
+      "11": {
+        "explanation": "The privilege list can contain one permission or several. ALL PRIVILEGES grants the applicable object privileges. A column-level SELECT grant restricts which columns the grantee can access through that grant.",
+        "sources": [
+          "RSQL_grant"
+        ]
+      },
+      "12": {
+        "explanation": "Embedded SQL does not perform the SQL object-privilege check that a dynamic statement would. The missing UPDATE grant alone therefore does not stop this statement. The application must enforce authorization before executing it, and normal database access and runtime errors can still prevent success.",
+        "sources": [
+          "GSQL_privileges",
+          "GSQL_esql"
+        ]
+      },
+      "13": {
+        "explanation": "The REVOKE removes the three named permissions from that grant. An ALL PRIVILEGES table grant can also include SELECT, REFERENCES and %ALTER, which the shown command does not remove. Other grants can contribute to the user's effective privileges.",
+        "sources": [
+          "RSQL_revoke",
+          "RSQL_grant"
+        ]
+      },
+      "14": {
+        "explanation": "The colon marks a host variable. The compiler treats its runtime contents as the value for the predicate. A value containing quotes or the text OR 1=1 stays a value instead of changing the statement structure.",
+        "sources": [
+          "GSQL_esql"
+        ]
+      },
+      "15": {
+        "explanation": "Bind user values and grant only the database permissions the application needs. Parameter binding protects statement structure, while authorization controls which data a valid statement is allowed to reach. Treat logging and storage of secrets as separate controls.",
+        "sources": [
+          "GSQL_dynsql",
+          "GSQL_privileges"
+        ]
+      }
+    },
+    "T3.1": {
+      "1": {
+        "explanation": "The ^|| prefix makes the global private to the process that uses it. It can be reused across calls within that process, and its data is removed when the process ends.",
+        "sources": [
+          "GCOS_ppg"
+        ]
+      },
+      "2": {
+        "explanation": "The staging data belongs to one process and can be large. A process-private global gives it a subscripted store in IRISTEMP and releases it when the owner ends. Use a shared store if a second job must read it.",
+        "sources": [
+          "GCOS_ppg"
+        ]
+      },
+      "3": {
+        "explanation": "Process A's ^||counter belongs to A. An unguarded read in B sees B's own, undefined node and raises <UNDEFINED>. In B, $GET(^||counter,0) would return the fallback.",
+        "sources": [
+          "GCOS_ppg",
+          "RCOS_fget"
+        ]
+      },
+      "4": {
+        "explanation": "Progress stored in a PPG is scoped to the worker process. Another HTTP request may run in a different worker and therefore read its own empty tree. A shared global keyed by job ID can make progress visible across processes.",
+        "sources": [
+          "GCOS_ppg"
+        ],
+        "example": {
+          "title": "Choose storage by reader and lifetime",
+          "code": "One worker reads its own progress       → ^||progress(jobId)\nAnother process needs current progress  → shared temporary global\nProgress must survive instance restart  → durable application data"
+        }
+      },
+      "5": {
+        "explanation": "The restart requirement points to a shared temporary global mapped to IRISTEMP. ^IRIS.Temp.cache uses the temporary naming convention when that mapping applies. Verify the mapping in the namespace that actually serves the application.",
+        "sources": [
+          "GGBL_tempgbl"
+        ]
+      },
+      "6": {
+        "explanation": "A PPG lives in IRISTEMP and its changes are outside normal transaction journaling. It is temporary even if the process writes a large tree. A restart or process termination makes it unsuitable as the only copy of data to recover.",
+        "sources": [
+          "GCOS_ppg"
+        ]
+      },
+      "7": {
+        "explanation": "A temporary global can be shared by processes using the same mapping. $INCREMENT allocates a different sequence number to each writer. It does not make allocation and publication of a queue item one atomic operation.",
+        "sources": [
+          "GGBL_tempgbl",
+          "RCOS_fincrement"
+        ]
+      },
+      "8": {
+        "explanation": "A durable application global can survive restart when it is mapped to a durable database. Locals and process-private globals are tied to a process. Shared globals in IRISTEMP are tied to the instance's temporary storage.",
+        "sources": [
+          "GCOS_ppg",
+          "GGBL_tempgbl"
+        ]
+      },
+      "9": {
+        "explanation": "The patient queue survives in the scenario because its database is mirrored and the relevant journal records reach the failover member. Process-private and instance-temporary state belongs to the old process or instance. Durability on one instance alone does not imply mirroring.",
+        "sources": [
+          "GHA_mirror",
+          "GGBL_tempgbl"
+        ]
+      },
+      "10": {
+        "explanation": "Each worker increments its own counter, so requests routed to different workers report different totals. Choose a shared temporary counter for a per-startup total or a durable shared counter when the total must survive restart.",
+        "sources": [
+          "GCOS_ppg",
+          "GGBL_tempgbl"
+        ]
+      },
+      "11": {
+        "explanation": "The new terminal is a different process. It can read ^data(1) if the global is still present and mapped to the same database. It has neither the old process's local variables nor the old process's PPGs.",
+        "sources": [
+          "GCOS_ppg",
+          "GGBL_tempgbl"
+        ]
+      },
+      "12": {
+        "explanation": "The state must survive across method calls within one job and disappear when the job ends. A PPG matches both requirements. A method-local variable would need to be passed around and a shared global would require explicit scoping and cleanup.",
+        "sources": [
+          "GCOS_ppg"
+        ]
+      },
+      "13": {
+        "explanation": "CacheTemp is the historical temporary global prefix. The restart and visibility behavior follows the actual mapping to IRISTEMP. Check that mapping before treating a similarly named global as temporary.",
+        "sources": [
+          "GGBL_tempgbl"
+        ]
+      },
+      "14": {
+        "explanation": "Once the process terminates, its private log disappears. If the log must support postmortem investigation, record the relevant events in a durable logging facility while the process still runs.",
+        "sources": [
+          "GCOS_ppg"
+        ]
+      },
+      "15": {
+        "explanation": "Persistence across restart follows the database's durability. Journaling depends on database and operation settings. Those are separate properties. A durable database that is not journaled still differs from a temporary database cleared at startup.",
+        "sources": [
+          "GGBL_tempgbl",
+          "GCDI_journal"
+        ]
+      }
+    },
+    "T3.2": {
+      "1": {
+        "explanation": "The plus operator requests numeric interpretation. Neither A nor B has a numeric prefix, so each contributes zero. The underscore operator would concatenate the strings instead.",
+        "sources": [
+          "GCOS_operators"
+        ]
+      },
+      "2": {
+        "explanation": "SelectMode applies to the result as a whole. Use %ODBCOUT on UTCPurchaseDate to format that expression alone, leaving LocalPurchaseDate in logical form for this result set.",
+        "sources": [
+          "RSQL_selectmode",
+          "RSQL_odbcinout"
+        ]
+      },
+      "3": {
+        "explanation": "The preprocessor reports that it cannot find FindAreaCode. Check which include is actually expanded and whether it defines that spelling. A class-level Include declaration makes the dependency explicit for the class. The diagnostic alone does not prove where an existing include failed.",
+        "sources": [
+          "GCOS_macros"
+        ]
+      },
+      "4": {
+        "explanation": "In numeric context the string contributes the leading 10 and conversion stops at a. The trailing 20 is outside that prefix. Adding 5 therefore produces 15.",
+        "sources": [
+          "GCOS_operators"
+        ]
+      },
+      "5": {
+        "explanation": "IS NULL selects rows with a SQL null Email. COUNT(*) counts the selected rows, so the given data returns one. COUNT(Email) on that same filtered result would exclude that null value.",
+        "sources": [
+          "GSQL_langelements"
+        ]
+      },
+      "6": {
+        "explanation": "The macro must be visible when the method is compiled. The quiz uses a class-level include to make the status macros available. The include name is a compile-time dependency, and the return value is still a %Status at runtime.",
+        "sources": [
+          "GCOS_macros",
+          "GCOS_status"
+        ]
+      },
+      "7": {
+        "explanation": "For a SELECT INTO that finds no row, SQLCODE is 100 and the not-found branch runs. Negative codes indicate SQL errors. Test 100 separately from both success and error.",
+        "sources": [
+          "RSQL_sqlcode"
+        ],
+        "example": {
+          "title": "Distinguish no row from an SQL error",
+          "code": "&sql(SELECT Name INTO :name FROM Sample.Person WHERE ID = :id)\nIf SQLCODE < 0 Write \"SQL error: \", SQLCODE, !\nIf SQLCODE = 100 Write \"No matching row\", !\nIf SQLCODE = 0 Write name, !"
+        }
+      },
+      "8": {
+        "explanation": "Logical mode returns a %Date in its internal day-count form. Formatting the number for display is a separate operation. For example, $ZDATE(value,3) formats an internal date as an ISO-style date.",
+        "sources": [
+          "RSQL_selectmode"
+        ]
+      },
+      "9": {
+        "explanation": "The compiler projects the persistent class and its eligible properties into SQL. With default naming, the package supplies the schema and the class supplies the table name. The projected row also exposes its object ID.",
+        "sources": [
+          "GOBJ_defpersobj"
+        ]
+      },
+      "10": {
+        "explanation": "On a successful one-row INSERT, SQLCODE is 0 and %ROWCOUNT is 1. %ROWID supplies the inserted row ID where the statement supports it. Check SQLCODE before consuming either value.",
+        "sources": [
+          "RSQL_variables",
+          "RSQL_sqlcode"
+        ]
+      },
+      "11": {
+        "explanation": "Numeric coercion reads the leading 3.14 from the first string. The other values have no numeric prefix, so they contribute zero. Adding one gives 4.14, 1 and 1.",
+        "sources": [
+          "GCOS_operators"
+        ]
+      },
+      "12": {
+        "explanation": "The macro expands at compile time to the tax rate used by the method. Multiplying 100 by 0.07 gives 7. Changing the macro source takes effect in compiled code after recompilation.",
+        "sources": [
+          "GCOS_macros"
+        ]
+      },
+      "13": {
+        "explanation": "The statement is assembled at runtime, which makes it dynamic SQL. Since an identifier cannot be bound as a value placeholder, select the table from known allowed names before composing the statement. Bind the actual filter values.",
+        "sources": [
+          "GSQL_dynsql"
+        ]
+      },
+      "14": {
+        "explanation": "The first successful FETCH sets %ROWCOUNT to 1 and each later successful FETCH increments it. When FETCH signals end of data or the cursor is closed, %ROWCOUNT contains the total fetched, so both it and the local count are 5 here. Capture the diagnostic before executing unrelated SQL.",
+        "sources": [
+          "RSQL_variables"
+        ]
+      },
+      "15": {
+        "explanation": "Plus coerces each operand to a number and adds the leading values 5 and 3. Underscore concatenates the original strings, including letters and spaces. The same operands therefore yield a number in one expression and text in the other.",
+        "sources": [
+          "GCOS_operators"
+        ]
+      },
+      "16": {
+        "explanation": "A successful UPDATE reports SQLCODE 0 and the number of affected rows in %ROWCOUNT. For 50 matching rows the output reports 50. Capture those variables before another SQL statement replaces the diagnostics.",
+        "sources": [
+          "RSQL_variables",
+          "RSQL_sqlcode"
+        ]
+      },
+      "17": {
+        "explanation": "The persistent class supplies the SQL table and projected columns. SqlProc exposes the class method as a SQL procedure. SqlName supplies the SQL name for that entry point. The parameter is bound as a value in the query it prepares.",
+        "sources": [
+          "GOBJ_defpersobj",
+          "ROBJ_method_sqlproc"
+        ]
+      }
+    },
+    "T3.3": {
+      "1": {
+        "explanation": "$CHAR(0) is a string containing one character with code point zero. The empty string contains zero characters. Their lengths and values therefore differ, even if neither prints a visible glyph.",
+        "sources": [
+          "RCOS_fchar",
+          "RCOS_flength"
+        ]
+      },
+      "2": {
+        "explanation": "For this ordinary string property, an ObjectScript empty string projects as SQL NULL. After a successful save the row meets Email IS NULL, and COUNT(*) counts it. An SQL empty-string literal is a different boundary case.",
+        "sources": [
+          "GSQL_langelements"
+        ]
+      },
+      "3": {
+        "explanation": "The NUL character has length one and code 0. It compares unequal to the zero-length string. $ASCII returns -1 when there is no character to inspect, so the sequence ends in 0 and -1 for the empty string.",
+        "sources": [
+          "RCOS_fchar",
+          "RCOS_fascii",
+          "RCOS_flength"
+        ]
+      },
+      "4": {
+        "explanation": "IS NULL and comparison with an SQL empty-string literal test different values. Count the rows in each category separately. A missing SQL value is matched by IS NULL, while an explicit empty string can satisfy the empty-string comparison.",
+        "sources": [
+          "GSQL_langelements"
+        ]
+      },
+      "5": {
+        "explanation": "IF tests the numeric truth of each expression. Neither the zero-length string nor the NUL character contributes a nonzero number. Both branches print falsy, although the two strings still differ under string comparison.",
+        "sources": [
+          "GCOS_operators"
+        ]
+      },
+      "6": {
+        "explanation": "COALESCE returns its first non-NULL argument. An explicit SQL empty string can qualify, so the Email fallback is not reached. When inspecting the ObjectScript host variable, remember that SQL-to-ObjectScript conversion can represent an SQL empty string using $CHAR(0).",
+        "sources": [
+          "RSQL_coalesce",
+          "GSQL_langelements"
+        ],
+        "example": {
+          "title": "See why COALESCE keeps the first value",
+          "code": "SELECT COALESCE('', 'user@test.com', 'No Contact')\nSELECT COALESCE(NULL, 'user@test.com', 'No Contact')",
+          "note": "The first expression returns an SQL empty string. The second returns the email. Use an explicit empty-value test if both states should trigger fallback."
+        },
+        "diagram": 1
+      },
+      "7": {
+        "explanation": "The numeric aggregate uses 10, 20 and 30. SUM adds them to 60, AVG divides by three and COUNT(column) counts three non-NULL values. COUNT(*) counts all five rows, including the two with NULL.",
+        "sources": [
+          "RSQL_avg",
+          "RSQL_count"
+        ]
+      },
+      "8": {
+        "explanation": "$PIECE returns the component between delimiter occurrences. Read the delimiter and the requested position from the call, then count from one. Here that selects Doe.",
+        "sources": [
+          "RCOS_fpiece"
+        ]
+      },
+      "9": {
+        "explanation": "The inserted SQL empty-string literal is a value, so IFNULL keeps it and does not substitute N/A. An actual SQL NULL would select N/A. At the host-variable boundary, distinguish an SQL empty string's representation from the fallback text.",
+        "sources": [
+          "RSQL_ifnull",
+          "GSQL_langelements"
+        ]
+      },
+      "10": {
+        "explanation": "The helper performs equality with the empty string. Only the first call satisfies that comparison. $CHAR(0) has one character, and the numeric value 0 is also a distinct value, even though both are false in a Boolean test.",
+        "sources": [
+          "GCOS_operators",
+          "RCOS_fchar"
+        ]
+      },
+      "11": {
+        "explanation": "Subtracting SQL NULL gives SQL NULL. In a successful SELECT INTO, the NULL is represented by an empty ObjectScript host value, so WRITE net prints no visible number. COALESCE(Discount,0) would instead treat the missing discount as zero.",
+        "sources": [
+          "GSQL_langelements",
+          "GSQL_esql"
+        ]
+      },
+      "12": {
+        "explanation": "For this property with no other default or constraint, leaving Email unset and assigning an ObjectScript empty string lead to the same SQL NULL after saving. The query therefore counts both. Persist an explicit state if the application needs to distinguish those two events.",
+        "sources": [
+          "GSQL_langelements",
+          "GOBJ_propparams"
+        ]
+      },
+      "13": {
+        "explanation": "The 30 Boston rows fail the inequality. The 20 NULL rows yield unknown and do not pass WHERE. Only the 50 rows with another known city are counted. To include the NULL rows, add an explicit OR City IS NULL.",
+        "sources": [
+          "GSQL_langelements"
+        ]
+      },
+      "14": {
+        "explanation": "NUL is a character inside the string, so the two five-letter words plus the delimiter make eleven characters. $PIECE can use that delimiter and returns Hello and World from positions one and two.",
+        "sources": [
+          "RCOS_fchar",
+          "RCOS_fpiece"
+        ]
+      },
+      "15": {
+        "explanation": "For the first row COALESCE returns X, and for the second it returns Y. Only the row where both fields are NULL reaches the fallback none. The WHERE condition therefore selects one row.",
+        "sources": [
+          "RSQL_coalesce"
+        ]
+      }
+    },
+    "T3.4": {
+      "1": {
+        "explanation": "Compiling the index declaration and populating it for existing rows are separate steps when changing the class definition. New writes alone do not fill missing historical entries. Build the index and verify results against known rows before relying on that access path.",
+        "sources": [
+          "GSOD_indexes"
+        ]
+      },
+      "2": {
+        "explanation": "%BuildIndices accepts a $LIST of index names. $LISTBUILD(\"StatusIdx\") identifies one index, so the operation can populate it without requesting every index. Capture the %Status and verify the result in the target namespace.",
+        "sources": [
+          "GSOD_indexes",
+          "@persistent"
+        ]
+      },
+      "3": {
+        "explanation": "The old Name bytes remain in their original slot. When FullName is added as a separate property, its generated mapping can point to a new slot with no value in old records. Reading the new slot therefore yields an empty value.",
+        "sources": [
+          "GOBJ_storage"
+        ]
+      },
+      "4": {
+        "explanation": "To keep the old values after a true rename, map FullName to the slot that held Name. Review any redundant mapping for the new property before deploying. Check representative old records and dependent indexes after the change.",
+        "sources": [
+          "GOBJ_storage"
+        ],
+        "example": {
+          "title": "Preserve the storage position during a rename",
+          "code": "<!-- Before -->\n<Value name=\"2\"><Value>Name</Value></Value>\n<!-- After preserving slot 2 -->\n<Value name=\"2\"><Value>FullName</Value></Value>",
+          "note": "This changes how IRIS reads the existing slot. Check the active storage and the index or SQL dependencies before migrating."
+        },
+        "diagram": 1
+      },
+      "5": {
+        "explanation": "Compiling changes the mapping used to interpret data. It does not by itself convert every stored string to the new type. Inspect the existing representation and plan a backfill or conversion if it no longer matches the new property contract.",
+        "sources": [
+          "GOBJ_storage"
+        ]
+      },
+      "6": {
+        "explanation": "An old row has no value in the newly added Phone slot. Adding the property describes how to read and write that slot in the future. An initialization expression for new instances does not backfill the existing rows.",
+        "sources": [
+          "GOBJ_storage",
+          "GOBJ_propparams"
+        ]
+      },
+      "7": {
+        "explanation": "The old standard index and the new bitmap index use different physical structures. After recompilation, the stored index still needs to be rebuilt for the new format. Treat results using the index as unverified until the rebuild succeeds.",
+        "sources": [
+          "GSOD_indexes"
+        ]
+      },
+      "8": {
+        "explanation": "SQL CREATE INDEX normally builds the entries as part of creation. Options that defer building change that behavior. With a class-definition change, include index population for existing rows as a distinct deployment step.",
+        "sources": [
+          "RSQL_createindex",
+          "GSOD_indexes"
+        ]
+      },
+      "9": {
+        "explanation": "Inspect the cached query and reprepare or purge the relevant entry if its compiled projection or plan needs refreshing. A cached plan is executable query logic, not a cache of result rows. If a fresh execution still shows stale values, investigate the transaction and data path.",
+        "sources": [
+          "GSQL_queries"
+        ]
+      },
+      "10": {
+        "explanation": "Removing Price and adding Cost changes the class definition. The old Price value stays in the global unless a migration changes it, and a new Cost slot does not automatically expose it. Inspect the generated mapping and migrate deliberately if the values represent the same business field.",
+        "sources": [
+          "GOBJ_storage"
+        ]
+      },
+      "11": {
+        "explanation": "BUILD INDEX FOR TABLE provides an SQL interface for building indexes on existing rows. For a large live table, check the supported concurrent-build behavior, lock requirements and index selectability on the target IRIS version before scheduling it.",
+        "sources": [
+          "GSOD_indexes"
+        ]
+      },
+      "12": {
+        "explanation": "Collation controls the stored index keys. Recompiling after a collation change does not reinterpret old entries into new keys. Rebuild the index and verify a case-sensitive or case-insensitive lookup that exercises the change.",
+        "sources": [
+          "GSOD_indexes",
+          "GSQL_collation"
+        ]
+      },
+      "13": {
+        "explanation": "TUNE TABLE gathers optimizer statistics. When the relevant values change, IRIS purges affected cached queries so they can be optimized when next prepared. If the values stay the same, it does not purge those queries. The quiz's wording about recompiling every query is broader than this behavior.",
+        "sources": [
+          "RSQL_tunetable",
+          "GSQL_queries"
+        ]
+      },
+      "14": {
+        "explanation": "Existing properties normally retain their storage mappings when another property is removed and the storage definition is preserved. Phone can therefore still read slot 4. Verify the generated mapping before using the same assumption for a manually edited or regenerated definition.",
+        "sources": [
+          "GOBJ_storage"
+        ]
+      },
+      "15": {
+        "explanation": "Two independent tasks remain. The rename must preserve or migrate the old Address data, and the new City index must be populated for existing rows. Test an old record's Address and a City filter separately to check both changes.",
+        "sources": [
+          "GOBJ_storage",
+          "GSOD_indexes"
+        ]
+      },
+      "16": {
+        "explanation": "A frozen plan can preserve the previous access path even after the table receives a new index and updated statistics. Check whether the statement's plan is frozen before expecting a new plan. Review the new plan before changing the freeze policy.",
+        "sources": [
+          "GSQL_queries"
+        ]
+      },
+      "17": {
+        "explanation": "Freezing plans for a table asks the engine to preserve existing plans for that scope. This is a way to retain known access paths across changes. It does not guarantee the same wall-clock performance under a different workload or data distribution.",
+        "sources": [
+          "GSQL_queries"
+        ]
+      }
+    },
+    "T3.5": {
+      "1": {
+        "explanation": "A cold preparation or execution can be much slower than the steady-state executions. If only a small subset is cold, the mean and median can look healthy while P99 rises. Compare preparation time, cache state and execution time before attributing the whole difference to cache eviction.",
+        "sources": [
+          "GSQL_queries"
+        ]
+      },
+      "2": {
+        "explanation": "Refresh statistics after material changes to data size or distribution. The exercise uses a 20 percent change as its trigger. Selectivity can also change after a targeted load even when the total row count barely changes.",
+        "sources": [
+          "RSQL_tunetable"
+        ]
+      },
+      "3": {
+        "explanation": "TUNE TABLE measures the table and field distributions used by the optimizer. Extent size helps estimate scan cost, and selectivity estimates how many rows a predicate will retain. These are inputs to plan selection, not new indexes.",
+        "sources": [
+          "RSQL_tunetable"
+        ]
+      },
+      "4": {
+        "explanation": "The plan's access path walks the table and applies the City predicate to rows encountered. That can be reasonable for a small table or a common city. Compare the scanned rows with the result size to see why an index might help here.",
+        "sources": [
+          "GSQL_queries"
+        ]
+      },
+      "5": {
+        "explanation": "The index finds the IDs matching the predicate. The engine then reads the data global for Name because the index lookup does not already supply that projected value. An index-only plan is possible only when it can obtain what the query needs from index data.",
+        "sources": [
+          "GSQL_queries",
+          "GSOD_indexes"
+        ]
+      },
+      "6": {
+        "explanation": "$ZH is a numeric elapsed-time counter with fractional seconds, so subtraction gives elapsed seconds for the measured block. $HOROLOG uses a day and whole-second pair. Take both $ZH samples within the same IRIS uptime.",
+        "sources": [
+          "RCOS_vzhorolog"
+        ]
+      },
+      "7": {
+        "explanation": "Inspect whether the benchmark actually prepares a new plan. A cached or frozen plan can keep the same access path. TUNE TABLE can purge affected cached queries when statistics change, so an explicit purge is not universally required. Compare the plans before and after.",
+        "sources": [
+          "RSQL_tunetable",
+          "GSQL_queries"
+        ]
+      },
+      "8": {
+        "explanation": "The plan shows work entering the join before the Status filter reduces it. If Status is selective, an appropriate access path can reduce the join input. Confirm the actual predicate order and estimated cardinalities instead of inferring them from SQL text order.",
+        "sources": [
+          "GSQL_queries"
+        ]
+      },
+      "9": {
+        "explanation": "The chosen Status index produces rows for the filter, and that access path does not emit them in Name order. The sort supplies the requested order. An index starting with Status and continuing with Name may support both for this equality filter, depending on cost.",
+        "sources": [
+          "GSQL_queries",
+          "GSOD_indexes"
+        ],
+        "example": {
+          "title": "Read both requirements from the query",
+          "code": "WHERE Status = 'Active'\nORDER BY Name\n\n// Candidate to evaluate against the actual plan:\nIndex StatusNameIdx On (Status, Name);"
+        },
+        "diagram": 1
+      },
+      "10": {
+        "explanation": "The timer begins after preparation and includes execution and consumption of each result set. Dividing by iterations gives a per-run mean for that workload. Validate prepare and execute status, and measure cold preparation separately if users experience it.",
+        "sources": [
+          "RCOS_vzhorolog",
+          "GSQL_dynsql"
+        ]
+      },
+      "11": {
+        "explanation": "The average estimate of roughly one third describes a typical value across three categories. The outlier statistic identifies Active as far more common. The optimizer can use the different estimate when deciding whether an index lookup or scan costs less.",
+        "sources": [
+          "RSQL_tunetable"
+        ]
+      },
+      "12": {
+        "explanation": "The larger production extent changes scan cost and often changes predicate selectivity. Compare production statistics and the actual plan, build any needed index and check plan reuse. Verify the improvement with production-like parameters rather than just repeating the development benchmark.",
+        "sources": [
+          "RSQL_tunetable",
+          "GSQL_queries",
+          "GSOD_indexes"
+        ]
+      },
+      "13": {
+        "explanation": "Read the cost in stages. The address scan reads candidates, the nested loop multiplies person reads by those candidates, and a late filter cannot undo that work. Look for a selective filter and an indexed join key, then compare the resulting plan.",
+        "sources": [
+          "GSQL_queries"
+        ]
+      },
+      "14": {
+        "explanation": "Each bitmap represents matching IDs. AND keeps the IDs common to both predicates, and COUNT can count those set bits without reading the full rows in the shown plan. Compressed bitmaps also reduce the data that must be read for suitable distributions.",
+        "sources": [
+          "GSOD_indexes"
+        ]
+      },
+      "15": {
+        "explanation": "The unique SSN index locates at most one matching ID. The old scan looked for that value across the table. That change explains the speedup in the measured case. The exact factor depends on workload, caching and table size.",
+        "sources": [
+          "GSOD_indexes",
+          "GSQL_queries"
+        ]
+      }
+    },
+    "T4.1": {
+      "1": {
+        "explanation": "Start from the empty sentinel. Canonical numeric subscripts sort before string subscripts in the default collation, and 20 precedes 100. The first result is the key 20, regardless of the value stored at that node.",
+        "sources": [
+          "RCOS_forder"
+        ]
+      },
+      "2": {
+        "explanation": "Run one $ORDER traversal for the first subscript and another inside it for the second. Reset the inner cursor for each outer key. This visits each parent and then its own children without skipping the first child.",
+        "sources": [
+          "RCOS_forder"
+        ],
+        "example": {
+          "title": "Walk each subscript level separately",
+          "code": "Set row = \"\"\nFor {\n    Set row = $ORDER(data(row))\n    Quit:row=\"\"\n    Set col = \"\"\n    For {\n        Set col = $ORDER(data(row,col))\n        Quit:col=\"\"\n        Write data(row,col), !\n    }\n}",
+          "note": "This assumes each second-level node in the example has a scalar value."
+        }
+      },
+      "3": {
+        "explanation": "The keys 1, 3 and 10 are numeric, so they come first in numeric order. The alphanumeric keys 10A and 2B are strings and then sort lexically under the default collation.",
+        "sources": [
+          "RCOS_forder"
+        ]
+      },
+      "4": {
+        "explanation": "A result of 11 combines both facts. The units digit indicates a value on the exact node and the tens digit indicates descendants. Deleting just the scalar value would leave a node whose $DATA is 10 while descendants remain.",
+        "sources": [
+          "RCOS_fdata"
+        ]
+      },
+      "5": {
+        "explanation": "The keys are visited as 1, 2, 3 and 10 even though they were assigned in another order. Reading their values yields A, D, B and C. $ORDER orders by subscript, independent of insertion order.",
+        "sources": [
+          "RCOS_forder"
+        ]
+      },
+      "6": {
+        "explanation": "Direction -1 reverses the traversal. With the empty sentinel, the first call starts at the last subscript and returns 40. Repeating with that key advances toward smaller subscripts.",
+        "sources": [
+          "RCOS_forder"
+        ]
+      },
+      "7": {
+        "explanation": "Starting from the empty sentinel yields Alice, and the third argument receives the value at that node, 95. This form gets both in one call. On a tree where some nodes only have descendants, handle the absence of a scalar value.",
+        "sources": [
+          "RCOS_forder"
+        ]
+      },
+      "8": {
+        "explanation": "Canonical numeric keys sort by their numeric values. Negative keys therefore come before zero and positives. The ordered keys in the example are -3, -1, 0 and 2.",
+        "sources": [
+          "RCOS_forder"
+        ]
+      },
+      "9": {
+        "explanation": "The four results encode independent facts about the node. Use the units digit to test for a scalar value and the tens digit to test for children. This is why a nonzero $DATA result alone does not make a direct read safe.",
+        "sources": [
+          "RCOS_fdata"
+        ]
+      },
+      "10": {
+        "explanation": "The default string collation used by the example orders ABC before Abc before abc. Looking up their values yields 2, 3 and 1. If you explicitly change collation, recalculate the key order.",
+        "sources": [
+          "RCOS_forder"
+        ]
+      },
+      "11": {
+        "explanation": "The cursor variable ordKey is read as a subscript before it has a value. Initialize it to the empty sentinel before the first call. An undefined cursor is different from the empty result that signals the end of traversal.",
+        "sources": [
+          "RCOS_forder",
+          "RERR_gen"
+        ]
+      },
+      "12": {
+        "explanation": "The queried node has descendants but no stored value at that exact address. That gives 10. Inspect a descendant directly if you want its scalar contents.",
+        "sources": [
+          "RCOS_fdata"
+        ]
+      },
+      "13": {
+        "explanation": "The unquoted number 1.10 is the canonical numeric key 1.1. The ordering is 1, 1.1, 1.5 and 2, so their values print as BDAC. A quoted noncanonical number can instead behave like a string key.",
+        "sources": [
+          "RCOS_forder"
+        ]
+      },
+      "14": {
+        "explanation": "KILL removes the original db tree. The two following SETs create host and port below db without assigning db itself. The parent therefore has descendants only, and $DATA returns 10.",
+        "sources": [
+          "RCOS_fdata"
+        ]
+      },
+      "15": {
+        "explanation": "The requested traversal has no further subscript in that direction, so $ORDER returns the empty string. Check for that result before treating it as the next data key.",
+        "sources": [
+          "RCOS_forder"
+        ]
+      },
+      "16": {
+        "explanation": "Direction -1 walks keys in reverse, and the empty return signals exhaustion. The function returns a subscript rather than the stored value. To get the value as well, use its optional output argument or read the resulting node.",
+        "sources": [
+          "RCOS_forder"
+        ]
+      },
+      "17": {
+        "explanation": "$GET reads the exact node and supplies 30 if it lacks a scalar value. It leaves an existing empty string alone. This differs from a fallback that also treats an empty configured value as missing.",
+        "sources": [
+          "RCOS_fget"
+        ]
+      },
+      "18": {
+        "explanation": "The numeric subscripts 100, 200 and 500 come before AUTH01 and AUTH02. The third call returns 500. Reading ^errors(500) then produces Internal.",
+        "sources": [
+          "RCOS_forder"
+        ]
+      }
+    },
+    "T4.2": {
+      "1": {
+        "explanation": "Positions in an encoded list start at 1. $LISTGET(x,3,\"default value\") reads the third element and supplies the fallback if that position has no defined value. A present element containing an empty string is still defined.",
+        "sources": [
+          "RCOS_flistget"
+        ]
+      },
+      "2": {
+        "explanation": "The requested element is present, so $LISTGET returns John. The optional default matters when the element is absent or undefined. It does not override a defined value.",
+        "sources": [
+          "RCOS_flistget"
+        ]
+      },
+      "3": {
+        "explanation": "The requested position has no defined element, so $LISTGET returns N/A. This is useful for optional positions in a record, but check $LISTVALID separately if the input might not be encoded list data.",
+        "sources": [
+          "RCOS_flistget"
+        ]
+      },
+      "4": {
+        "explanation": "The function decodes the three list elements and places the chosen separator between them. The displayed value is Red|Green|Blue. A delimiter inside an element can make the resulting plain text ambiguous to parse.",
+        "sources": [
+          "RCOS_flisttostring"
+        ]
+      },
+      "5": {
+        "explanation": "The conversion splits the delimited text into encoded elements. Then $LIST reads the requested position, which contains London. The representation has changed, while the position of the value is preserved.",
+        "sources": [
+          "RCOS_flistfromstring",
+          "RCOS_flist"
+        ]
+      },
+      "6": {
+        "explanation": "Initialize the cursor to 0. Each $LISTNEXT call advances it and writes the current element to msg. This walks the encoded list once instead of repeatedly finding a position from the start.",
+        "sources": [
+          "RCOS_flistnext"
+        ]
+      },
+      "7": {
+        "explanation": "Each operand already contains two encoded list elements. Concatenating the encoded fragments produces a valid four-element list. $LISTLENGTH counts the elements rather than the number of bytes used to encode them.",
+        "sources": [
+          "RCOS_flistbuild",
+          "RCOS_flistlength"
+        ]
+      },
+      "8": {
+        "explanation": "$LIST reads a one-based position, so the requested element is Banana. The list is an encoded value and its element indexes differ from character offsets into the value.",
+        "sources": [
+          "RCOS_flist"
+        ]
+      },
+      "9": {
+        "explanation": "The range selects the three consecutive elements Tue, Wed and Thu as a sublist. The later conversion displays them using hyphens. The range operation keeps the values encoded until that conversion.",
+        "sources": [
+          "RCOS_flist",
+          "RCOS_flisttostring"
+        ]
+      },
+      "10": {
+        "explanation": "$LISTFIND reports the position at which it finds the searched value. In the given list it finds that value at position 3. A result of 0 would mean the search found no matching element.",
+        "sources": [
+          "RCOS_flistfind"
+        ]
+      },
+      "11": {
+        "explanation": "The omitted argument in $LISTBUILD creates an undefined element at position 2. Reading it with $LIST raises <NULL VALUE>. Use $LISTGET with a fallback for an optional element.",
+        "sources": [
+          "RCOS_flist",
+          "RCOS_flistget"
+        ],
+        "example": {
+          "title": "Read an omitted list element safely",
+          "code": "Set data = $LISTBUILD(\"A\",,\"C\")\nWrite $LISTGET(data,2,\"(missing)\"), !  // (missing)\nWrite $LISTGET(data,3,\"(missing)\"), !  // C"
+        }
+      },
+      "12": {
+        "explanation": "Encoded lists keep element boundaries without a textual delimiter and can represent an undefined position separately from an empty string. For example, an element containing a comma remains one element without an escaping convention.",
+        "sources": [
+          "RCOS_flistbuild",
+          "RCOS_flistvalid"
+        ]
+      },
+      "13": {
+        "explanation": "The supplied text does not have the encoded list structure, so $LISTVALID returns 0. Convert delimited text with $LISTFROMSTRING if that is its actual format, then use the list APIs.",
+        "sources": [
+          "RCOS_flistvalid"
+        ]
+      },
+      "14": {
+        "explanation": "$LISTSAME compares the lists by their elements. Both constructors produce X, Y and Z in the same order, so it returns 1. The construction path does not matter for that comparison.",
+        "sources": [
+          "RCOS_flistsame"
+        ]
+      },
+      "15": {
+        "explanation": "The search reaches the matching element at position 2, so the branch for a found item prints that position. Use the optional starting position to search for a later occurrence.",
+        "sources": [
+          "RCOS_flistfind"
+        ]
+      }
+    },
+    "T4.3": {
+      "1": {
+        "explanation": "$PIECE reads fields separated by the delimiter, with positions starting at one. Taking the requested range keeps the intervening carets, so the result is Smith^John^A.",
+        "sources": [
+          "RCOS_fpiece"
+        ]
+      },
+      "2": {
+        "explanation": "Using $PIECE on the left of SET replaces the addressed field and leaves the other fields in place. Replacing the city changes that component to Boston while the other caret-delimited fields remain.",
+        "sources": [
+          "RCOS_fpiece"
+        ]
+      },
+      "3": {
+        "explanation": "The range starts at the B field and ends at D. $PIECE retains the delimiter between the selected fields, producing B-C-D as one string.",
+        "sources": [
+          "RCOS_fpiece"
+        ]
+      },
+      "4": {
+        "explanation": "Character positions 9 through 16 include both endpoints. That is eight characters: JOHN and four padding spaces. Brackets make the trailing padding visible in the diagnostic output.",
+        "sources": [
+          "RCOS_fextract",
+          "RCOS_flength"
+        ]
+      },
+      "5": {
+        "explanation": "Using $EXTRACT as a SET target replaces the specified character span. The prefix AB and suffix EF stay in place, with XY occupying the two replaced positions.",
+        "sources": [
+          "RCOS_fextract"
+        ]
+      },
+      "6": {
+        "explanation": "Each $REPLACE call searches for a literal placeholder and substitutes the supplied text. After replacing both placeholders, the sentence contains Alice and Paris. This is a text operation, so escaping for a target format is a separate step.",
+        "sources": [
+          "RCOS_freplace"
+        ]
+      },
+      "7": {
+        "explanation": "$TRANSLATE maps individual characters. With no replacement characters for the punctuation being removed, those characters are deleted wherever they occur. The digits keep their original order.",
+        "sources": [
+          "RCOS_ftranslate"
+        ]
+      },
+      "8": {
+        "explanation": "The removal applies to each matching character, so both vowels in Hello are removed and Hll remains. Unlike $REPLACE, $TRANSLATE does not require the search characters to be adjacent.",
+        "sources": [
+          "RCOS_ftranslate"
+        ]
+      },
+      "9": {
+        "explanation": "The strip action targets the leading and trailing whitespace. The single space between the words is interior and remains, so the result has eleven characters.",
+        "sources": [
+          "RCOS_fzstrip"
+        ]
+      },
+      "10": {
+        "explanation": "The * action applies at every position, and W selects whitespace. This removes the surrounding spaces and the embedded ones. With only edge actions the interior spaces would remain.",
+        "sources": [
+          "RCOS_fzstrip"
+        ]
+      },
+      "11": {
+        "explanation": "The U mode converts the letters to uppercase and leaves the interior space intact. The resulting string is HELLO WORLD. This operation changes case, rather than removing whitespace.",
+        "sources": [
+          "RCOS_fzconvert"
+        ]
+      },
+      "12": {
+        "explanation": "Double the quotation mark inside an ObjectScript string literal to embed one quote in the result. The outer pair marks the literal itself. The resulting text contains a single pair around hello.",
+        "sources": [
+          "RCOS_symbols"
+        ]
+      },
+      "13": {
+        "explanation": "Plus reads the leading numeric portions, 3 and 5, and returns 8. The letters are ignored by numeric coercion. To preserve both original strings, use underscore for concatenation.",
+        "sources": [
+          "GCOS_operators"
+        ]
+      },
+      "14": {
+        "explanation": "The expression matches the example from start to end and $MATCH returns 1. It checks the format described by the regular expression. A match does not establish that the mailbox exists or that this pattern covers every valid address.",
+        "sources": [
+          "RCOS_fmatch"
+        ]
+      },
+      "15": {
+        "explanation": "With a delimiter argument, $LENGTH counts pieces. Count the separators and the fields they bound, including empty pieces between adjacent separators. The example contains four pieces.",
+        "sources": [
+          "RCOS_flength"
+        ]
+      },
+      "16": {
+        "explanation": "The output HTML conversion encodes characters such as angle brackets into entities. A text node can then display the markup characters without treating them as markup. Other output contexts can require different escaping.",
+        "sources": [
+          "RCOS_fzconvert"
+        ]
+      },
+      "17": {
+        "explanation": "The requested field has no characters at that position. $PIECE returns the empty string in this case. If the application must distinguish a missing field from a present empty one, also check the number of pieces.",
+        "sources": [
+          "RCOS_fpiece"
+        ]
+      },
+      "18": {
+        "explanation": "$REPLACE matches the substring an and replaces its two nonoverlapping occurrences with X, giving bXXa. $TRANSLATE maps each a to X and each n to Y independently, giving bXYXYX.",
+        "sources": [
+          "RCOS_freplace",
+          "RCOS_ftranslate"
+        ],
+        "example": {
+          "title": "Run the two operations on the same string",
+          "code": "Write $REPLACE(\"banana\",\"an\",\"X\"), !      // bXXa\nWrite $TRANSLATE(\"banana\",\"an\",\"XY\"), !   // bXYXYX"
+        }
+      }
+    },
+    "T4.4": {
+      "1": {
+        "explanation": "Plus interprets the operands numerically. A and B have no leading numeric content, so both contribute zero. The concatenation operator would instead return AB.",
+        "sources": [
+          "GCOS_operators"
+        ]
+      },
+      "2": {
+        "explanation": "Evaluate the two parenthesized groups first. The remaining expression becomes 3 + 4 + 8 / 3. Evaluating from left to right yields 15 / 3, which is 5. Parenthesize the intended operation when porting a formula from a language with precedence.",
+        "sources": [
+          "GCOS_operators"
+        ]
+      },
+      "3": {
+        "explanation": "Evaluate 2 + 3 first to get 5, then multiply by 4 to get 20. Use 2 + (3 * 4) when you want multiplication to happen first. That version returns 14.",
+        "sources": [
+          "GCOS_operators"
+        ]
+      },
+      "4": {
+        "explanation": "The remainder operator # returns 7 because 47 consists of five groups of eight and seven left over. The backslash operator would give the integer quotient instead.",
+        "sources": [
+          "GCOS_operators"
+        ]
+      },
+      "5": {
+        "explanation": "The backslash operator performs integer division. With 47 and 10 it returns the whole quotient 4. Slash would preserve the fractional quotient 4.7.",
+        "sources": [
+          "GCOS_operators"
+        ]
+      },
+      "6": {
+        "explanation": "For the positive divisor 3, the modulo result is 2 because -7 = (-3 × 3) + 2. A remainder rule that truncates the quotient toward zero could give a different result in another language.",
+        "sources": [
+          "GCOS_operators"
+        ]
+      },
+      "7": {
+        "explanation": "$HOROLOG is a comma-separated local date and time. The first piece counts days since December 31, 1840. The second counts whole seconds since local midnight. Extract the component you intend to use.",
+        "sources": [
+          "RCOS_vhorolog"
+        ]
+      },
+      "8": {
+        "explanation": "The supplied internal time represents 3,661 seconds after midnight. Split that into one hour, one minute and one second. The requested output format renders those components as 01:01:01.",
+        "sources": [
+          "RCOS_fztime"
+        ]
+      },
+      "9": {
+        "explanation": "Both expressions yield a day number. Numeric coercion reads the leading day part of $HOROLOG, and $PIECE extracts the same part explicitly. The result is a date component only. To display it, format it with $ZDATE.",
+        "sources": [
+          "RCOS_vhorolog",
+          "RCOS_fpiece",
+          "GCOS_operators"
+        ],
+        "example": {
+          "title": "Extract the day number explicitly",
+          "code": "Set day = $PIECE($HOROLOG,\",\",1)\nSet future = day + 7\nWrite $ZDATE(future,3), !"
+        }
+      },
+      "10": {
+        "explanation": "$ZDATEH parses the input using the supplied date format and returns the internal integer day count. It is the counterpart to $ZDATE, which formats a day count for display.",
+        "sources": [
+          "RCOS_fzdateh"
+        ]
+      },
+      "11": {
+        "explanation": "Evaluate 10 - 2 first, then multiply the 8 by 3, then add 1. That produces 25. Use parentheses to express 10 - (2 * 3) + 1 if the multiplication should happen first.",
+        "sources": [
+          "GCOS_operators"
+        ]
+      },
+      "12": {
+        "explanation": "Date format 3 displays the internal day count as YYYY-MM-DD. It changes the displayed representation while leaving the internal value available for date arithmetic.",
+        "sources": [
+          "RCOS_fzdate"
+        ]
+      },
+      "13": {
+        "explanation": "Trace the running value from left to right: 100 - 10 is 90, times 2 is 180, plus 5 is 185 and times 3 is 555. Parentheses are how you give a term priority.",
+        "sources": [
+          "GCOS_operators"
+        ]
+      },
+      "14": {
+        "explanation": "Use $HOROLOG for a local day and whole-second pair, $ZTIMESTAMP for UTC with fractional seconds, and $ZHOROLOG for elapsed time since instance startup. Choose by the time basis as well as the precision.",
+        "sources": [
+          "RCOS_vhorolog",
+          "RCOS_vztimestamp",
+          "RCOS_vzhorolog"
+        ]
+      },
+      "15": {
+        "explanation": "The value 0 represents zero seconds since midnight. The expected 24-hour formatting renders all three components as zero. To make that format explicit in an example, use $ZTIME(0,1).",
+        "sources": [
+          "RCOS_fztime"
+        ]
+      }
+    },
+    "T4.5": {
+      "1": {
+        "explanation": "$GET(person) yields the empty string if person is undefined or already empty. The SET postconditional then decides whether to assign the fallback. If person contains another value, this SET is skipped.",
+        "sources": [
+          "RCOS_fget",
+          "GCOS_commands"
+        ]
+      },
+      "2": {
+        "explanation": "The condition converts its argument to a numeric value. The leading 1 in 1abc gives a nonzero number, so it is true. Text without a numeric prefix gives zero in this context.",
+        "sources": [
+          "GCOS_operators"
+        ]
+      },
+      "3": {
+        "explanation": "Each listed value has a numeric value of zero in Boolean context. That includes strings with no numeric prefix and text representing zero. A string can be nonempty while still testing false.",
+        "sources": [
+          "GCOS_operators"
+        ]
+      },
+      "4": {
+        "explanation": "Evaluate each postconditional against the current value before deciding whether its command runs. Only the condition for big succeeds in this example. A postconditional applies to its own command.",
+        "sources": [
+          "GCOS_commands"
+        ]
+      },
+      "5": {
+        "explanation": "When the search reaches the matching item, RETURN immediately exits the method with found. Later iterations and any fallback return are skipped. This differs from leaving just the loop.",
+        "sources": [
+          "RCOS_creturn"
+        ]
+      },
+      "6": {
+        "explanation": "The QUIT in the loop stops iteration after the first two writes. Execution continues at the statement after the loop, which writes done. Trace the scope of the loop rather than treating every QUIT as a method return.",
+        "sources": [
+          "RCOS_cquit"
+        ]
+      },
+      "7": {
+        "explanation": "The condition on the command that would print Online is true. The alternate command's condition is false. Postconditionals are evaluated independently for each command.",
+        "sources": [
+          "GCOS_commands"
+        ]
+      },
+      "8": {
+        "explanation": "SET, DO, QUIT and WRITE can be guarded with a command postconditional. The condition is evaluated before the corresponding command executes. Check the command reference before applying the same syntax to a different command.",
+        "sources": [
+          "GCOS_commands"
+        ]
+      },
+      "9": {
+        "explanation": "For every even i, i#2 is zero and CONTINUE skips the increment. The five odd values 1, 3, 5, 7 and 9 reach the increment. The loop itself still runs ten iterations.",
+        "sources": [
+          "RCOS_ccontinue",
+          "GCOS_operators"
+        ]
+      },
+      "10": {
+        "explanation": "Numeric interpretation reads the leading 3.5 and ignores the suffix. Because 3.5 is nonzero, IF takes the true branch. Compare explicitly with the empty string if your question is about text presence.",
+        "sources": [
+          "GCOS_operators"
+        ]
+      },
+      "11": {
+        "explanation": "x contains the empty string and evaluates false. The DO postconditional skips the call, so MyMethod writes nothing. The later WRITE still runs and displays End.",
+        "sources": [
+          "GCOS_commands"
+        ]
+      },
+      "12": {
+        "explanation": "$SELECT tests the conditions from left to right and returns the value from the first true condition. In the example that value is Meow. Later branches do not contribute to the result.",
+        "sources": [
+          "RCOS_fselect"
+        ]
+      },
+      "13": {
+        "explanation": "Every condition is false and no fallback was supplied, so $SELECT raises <SELECT>. Append a final 1:defaultValue pair when the expression should always return something.",
+        "sources": [
+          "RCOS_fselect"
+        ]
+      },
+      "14": {
+        "explanation": "The numbers 1 and -5 are nonzero. The strings 2dogs and .5test have nonzero leading numeric portions. All four therefore test true, independent of their string length.",
+        "sources": [
+          "GCOS_operators"
+        ]
+      },
+      "15": {
+        "explanation": "Within this FOR, QUIT is the loop-exit form and cannot take i as a return value. Use RETURN i to exit the method when a match is found, or save i, issue argumentless QUIT and return the saved value after the loop.",
+        "sources": [
+          "RCOS_cquit",
+          "RCOS_creturn"
+        ],
+        "example": {
+          "title": "Return from the method inside the loop",
+          "code": "For i = 1:1:list.Count() {\n    If list.GetAt(i) = target Return i\n}\nReturn -1"
+        }
+      }
+    },
+    "T4.6": {
+      "1": {
+        "explanation": "%IsA checks membership in the class hierarchy, so it accepts an instance of Sample.Person and of a subclass. Use $ISOBJECT first if the input could be something other than an object reference.",
+        "sources": [
+          "@registered",
+          "RCOS_fisobject"
+        ],
+        "example": {
+          "title": "Validate the reference before querying its class",
+          "code": "If '$ISOBJECT(oref) Return \"Expected an object\"\nIf 'oref.%IsA(\"Sample.Person\") Return \"Wrong class\""
+        }
+      },
+      "2": {
+        "explanation": "%ClassName with no argument returns the short name Invoice. Passing 1 returns the full name MyApp.Invoice. Choose the full name when package identity matters.",
+        "sources": [
+          "RCOS_fclassname",
+          "@registered"
+        ]
+      },
+      "3": {
+        "explanation": "$CLASSMETHOD takes the class and method names, then forwards the remaining arguments. In this call the selected class is App.Plugins.EmailNotifier and the entry point is its Send class method.",
+        "sources": [
+          "RCOS_fclassmethod"
+        ]
+      },
+      "4": {
+        "explanation": "$METHOD dispatches on the supplied object reference. The method name resolves to Add on that object, and its arguments are forwarded as supplied. The sum in the example is 30.",
+        "sources": [
+          "RCOS_fmethod"
+        ]
+      },
+      "5": {
+        "explanation": "The string User.Person selects the class at runtime. $CLASSMETHOD invokes %New and returns its object reference. %ClassName(1) reads the full class name from that object.",
+        "sources": [
+          "RCOS_fclassmethod",
+          "RCOS_fclassname"
+        ]
+      },
+      "6": {
+        "explanation": "$ISOBJECT distinguishes a valid OREF from an ordinary value. The first operand is not an object and gives 0. The created object gives 1. Test validity before invoking instance methods on uncertain input.",
+        "sources": [
+          "RCOS_fisobject"
+        ]
+      },
+      "7": {
+        "explanation": "$PROPERTY reads the property whose name is in the variable. It therefore reads the same value as a direct access to the selected name property and returns Alice.",
+        "sources": [
+          "RCOS_fproperty"
+        ]
+      },
+      "8": {
+        "explanation": "%Dictionary.ClassDefinition is keyed by the fully qualified class name. %OpenId(\"User.Person\") retrieves its source definition object. A compiled dictionary class is a different view of the class after inheritance and compilation.",
+        "sources": [
+          "@dictionary"
+        ]
+      },
+      "9": {
+        "explanation": "The loop enumerates the class definition's Properties collection and reads its entries. This is the declared view of User.Person. Use compiled property metadata when inherited properties are also relevant.",
+        "sources": [
+          "@dictionary"
+        ]
+      },
+      "10": {
+        "explanation": "%ClassName(1) and $CLASSNAME give a full name, %IsA tests an object's class hierarchy, and $ISOBJECT tests reference validity. %Extends is a class-level inheritance query. Distinguish that query from inspecting the current object's actual type.",
+        "sources": [
+          "RCOS_fclassname",
+          "RCOS_fisobject",
+          "@registered"
+        ]
+      },
+      "11": {
+        "explanation": "The three predicates succeed because the instance belongs to its own class and the tested ancestors. %IsA walks the hierarchy. A comparison of only the concrete class name would answer a narrower question.",
+        "sources": [
+          "@registered"
+        ]
+      },
+      "12": {
+        "explanation": "Using $PROPERTY on the left side of SET writes the property selected by name. propName contains Timeout, so obj.Timeout is set to 30. The usual property behavior still applies.",
+        "sources": [
+          "RCOS_fproperty"
+        ]
+      },
+      "13": {
+        "explanation": "CompiledMethod describes methods in the compiled class view, including inherited members that are available there. Use it to answer what can be called. Use MethodDefinition to inspect what was declared in the source.",
+        "sources": [
+          "@compiledmethod",
+          "@dictionary"
+        ]
+      },
+      "14": {
+        "explanation": "A PropertyDefinition entry describes a declaration, including its name, type and keywords such as Required and SqlFieldName. These are metadata values. To read the value on a specific object, use its OREF and a property access.",
+        "sources": [
+          "@propertydef"
+        ]
+      },
+      "15": {
+        "explanation": "The class and method strings identify App.EmailHandler.Process, and the remaining argument is passed unchanged. This is the same target as the direct class method call. In application code resolve external names through an allowed set.",
+        "sources": [
+          "RCOS_fclassmethod"
+        ]
+      }
+    },
+    "T4.7": {
+      "1": {
+        "explanation": "A file character stream represents text in a filesystem file. It supports line-oriented reads, so the program can handle a large log without loading it into a single string. Use the binary counterpart for byte-preserving reads.",
+        "sources": [
+          "GOBJ_propstream",
+          "@filechar"
+        ]
+      },
+      "2": {
+        "explanation": "Bind the stream to the intended file, write the text and check the status of the operation. In production prefer the class's documented linking and open modes so you can control whether an existing file is replaced or appended to.",
+        "sources": [
+          "@filechar"
+        ]
+      },
+      "3": {
+        "explanation": "Loop until AtEnd and use ReadLine when the unit of work is a line. WRITE with an exclamation mark displays each returned line separately. For arbitrary binary data, use bounded Read calls instead.",
+        "sources": [
+          "@stream",
+          "@filechar"
+        ]
+      },
+      "4": {
+        "explanation": "Rewind moves the read cursor back to the beginning. It leaves the content in the stream intact, so a following Read starts again from the first chunk.",
+        "sources": [
+          "@stream"
+        ]
+      },
+      "5": {
+        "explanation": "Call CopyFrom on the destination with the source stream as the argument. Check the returned status and confirm the source position when copying a partially consumed stream. Match character or binary types to the data.",
+        "sources": [
+          "@stream"
+        ]
+      },
+      "6": {
+        "explanation": "The two Write calls contribute Hello and World in sequence, with the explicit space in the first chunk. Rewind resets the read position, so the following Read yields Hello World.",
+        "sources": [
+          "@stream"
+        ]
+      },
+      "7": {
+        "explanation": "Choose two axes independently. File versus Global decides where the stream is backed, and Character versus Binary decides whether the API treats the content as text or bytes. That gives the four classes listed in the question.",
+        "sources": [
+          "GOBJ_propstream",
+          "@filechar"
+        ]
+      },
+      "8": {
+        "explanation": "Configure the request's server and transport, then call Get with the path. Check the returned %Status for transport errors. On success, inspect HttpResponse.StatusCode before interpreting the body.",
+        "sources": [
+          "GNET_http",
+          "@http"
+        ],
+        "example": {
+          "title": "Inspect transport and HTTP outcomes separately",
+          "code": "Set req = ##class(%Net.HttpRequest).%New()\nSet req.Server = \"api.example.com\"\nSet sc = req.Get(\"/data\")\nIf $SYSTEM.Status.IsError(sc) {\n    Do $SYSTEM.Status.DisplayError(sc)\n    Quit\n}\nWrite req.HttpResponse.StatusCode, !",
+          "note": "The host is illustrative. Configure HTTPS and its TLS profile when the actual endpoint requires them."
+        }
+      },
+      "9": {
+        "explanation": "HttpResponse.Data is a stream for the response body. Read from that stream in bounded chunks for a large payload. Check the HTTP status code first because an error response can also contain a body.",
+        "sources": [
+          "GNET_http",
+          "@http"
+        ]
+      },
+      "10": {
+        "explanation": "The request is a POST to /users. The JSON content is written to the request body and the content type tells the receiver how to interpret it. Check transport and HTTP status separately.",
+        "sources": [
+          "GNET_http",
+          "@http"
+        ]
+      },
+      "11": {
+        "explanation": "The request class has helpers for GET, POST, PUT, DELETE and PATCH. Choose the verb required by the endpoint. Each helper returns a transport status and exposes the server response through HttpResponse.",
+        "sources": [
+          "@http"
+        ]
+      },
+      "12": {
+        "explanation": "MailMessage holds recipients, subject and body. SMTP owns the transport and sends that message through the configured server. Keeping those roles separate lets you build the content before attempting the connection.",
+        "sources": [
+          "GNET_email",
+          "@smtp"
+        ]
+      },
+      "13": {
+        "explanation": "Populate the message object, add a recipient, write the body and pass the message to SMTP.Send. In ObjectScript invoke a body write with DO or capture its status. The quiz option shows the sequence, but the bare SET before the Write call must be corrected.",
+        "sources": [
+          "GNET_email",
+          "@smtp",
+          "@mail"
+        ]
+      },
+      "14": {
+        "explanation": "%Net.FtpSession is the FTP client API. Establish the session, choose the transfer mode that preserves your content, and check the result of each transfer. The FTP interface should not be confused with a different protocol such as SFTP.",
+        "sources": [
+          "GNET_ftp",
+          "@ftp"
+        ]
+      },
+      "15": {
+        "explanation": "Server and Port select the destination, Https enables TLS, ContentType sets the content-type header, and SetHeader can supply another header. For a real HTTPS request, also configure the required SSLConfiguration for the target.",
+        "sources": [
+          "GNET_http",
+          "@http"
+        ]
+      }
+    },
+    "T5.1": {
+      "1": {
+        "explanation": "The error is from the macro preprocessor, before the method runs. Confirm the include is visible to the class and actually defines the macro. A class-level Include states the dependency explicitly, but the error alone cannot distinguish a missing definition from an include that was not loaded.",
+        "sources": [
+          "GCOS_macros"
+        ]
+      },
+      "2": {
+        "explanation": "The include file is present, but it defines LogInfo rather than LogError. The preprocessor looks for the exact macro name used by the call. Add the intended definition or correct the call, then recompile consumers.",
+        "sources": [
+          "GCOS_macros"
+        ]
+      },
+      "3": {
+        "explanation": "Both samples come from the same numeric elapsed-time counter. Subtracting the earlier from the later value yields seconds, including fractions. This measures elapsed time within the current instance uptime.",
+        "sources": [
+          "RCOS_vzhorolog"
+        ],
+        "example": {
+          "title": "Time just the operation under investigation",
+          "code": "Set start = $ZHOROLOG\nDo ..ProcessBatch()\nWrite \"Seconds: \", $ZHOROLOG-start, !"
+        }
+      },
+      "4": {
+        "explanation": "Both $HOROLOG samples contain a day count followed by seconds since midnight. Subtraction coerces them to their leading day numbers, so two samples on the same day give 0, not elapsed seconds. The exact 66818 shown in the question does not follow from those two same-day samples. Use two $ZHOROLOG samples for the benchmark.",
+        "sources": [
+          "RCOS_vhorolog",
+          "RCOS_vzhorolog"
+        ]
+      },
+      "5": {
+        "explanation": "Run the utility from a terminal in %SYS with appropriate permissions. Its counters describe instance activity over a sampling interval. Record the workload and interval so later comparisons have context.",
+        "sources": [
+          "GCM_perfmon"
+        ]
+      },
+      "6": {
+        "explanation": "The compiler is trying to resolve a property data type. %Strig does not name the standard string type. Correct it to %String, then recompile and check the first remaining compiler diagnostic.",
+        "sources": [
+          "GOBJ_classes"
+        ]
+      },
+      "7": {
+        "explanation": "The subclass depends on the compiled superclass. The presence of its source does not establish that compilation succeeded in this namespace. Compile App.Base.Record, fix its own errors if any, then compile the subclass.",
+        "sources": [
+          "GOBJ_classes",
+          "@obj"
+        ]
+      },
+      "8": {
+        "explanation": "Use SQL performance tools to relate a statement's plan to measured execution work. A plan shows the access path and joins. Runtime statistics tell you how much work that execution actually performed.",
+        "sources": [
+          "@ptools",
+          "GSQL_queries"
+        ]
+      },
+      "9": {
+        "explanation": "A small number of executions can pay cold preparation or cache costs while most reuse compiled logic. That pattern can raise P99 without affecting the median much. Measure preparation and execution separately to test the cache hypothesis.",
+        "sources": [
+          "GSQL_queries"
+        ]
+      },
+      "10": {
+        "explanation": "RETURN is an ObjectScript command and its spelling is case-insensitive. Return, return and RETURN select the same command. Variable names in the same code still need their correct case.",
+        "sources": [
+          "RCOS_creturn"
+        ]
+      },
+      "11": {
+        "explanation": "The recursive compilation option can bring in dependency predecessors before compiling the supplied classes. Check the qualifiers supported by the target version and read the first dependency failure rather than just the final subclass error.",
+        "sources": [
+          "@obj",
+          "GOBJ_classes"
+        ]
+      },
+      "12": {
+        "explanation": "Both a missing macro definition and a malformed #If expression are errors in preprocessing. Reproduce by expanding the macro or checking the conditional directive. A runtime exception in the method would occur in a different phase.",
+        "sources": [
+          "GCOS_macros"
+        ]
+      },
+      "13": {
+        "explanation": "Macro definitions are visible through the relevant compilation scope and includes. Defining DbName elsewhere in the project is insufficient unless this class's preprocessor can see it. The compile error names the unresolved macro.",
+        "sources": [
+          "GCOS_macros"
+        ]
+      },
+      "14": {
+        "explanation": "Low global-buffer efficiency can indicate more database block reads per global reference. Verify the cause with physical read counters over the same interval. The ratio by itself does not distinguish a cold cache from a scan-heavy workload.",
+        "sources": [
+          "GCM_dashboard"
+        ]
+      },
+      "15": {
+        "explanation": "The line-by-line monitor attributes elapsed work and execution counts to specific routine lines. A line can dominate by running very often or by doing expensive work each time. Use both values when choosing what to inspect next.",
+        "sources": [
+          "GCM_monlbl"
+        ]
+      }
+    },
+    "T5.2": {
+      "1": {
+        "explanation": "Iterate through the stack levels and use $STACK(level,\"PLACE\") to get each execution location. Capture the stack while the relevant frames are still present, or use the exception's captured diagnostics after unwinding.",
+        "sources": [
+          "RCOS_fstack"
+        ]
+      },
+      "2": {
+        "explanation": "The catch variable is an exception object. AsStatus converts that object to the status representation expected by an API returning %Status. Keep the original exception if the caller also needs its location or other metadata.",
+        "sources": [
+          "RCOS_ctrycatch",
+          "GCOS_status"
+        ]
+      },
+      "3": {
+        "explanation": "If %OpenId fails to return an object, the following property access has no valid OREF and raises <INVALID OREF>. Check the open result and its status first to report the underlying lookup failure.",
+        "sources": [
+          "GOBJ_persobj_opening",
+          "RERR_gen"
+        ]
+      },
+      "4": {
+        "explanation": "ThrowOnError bridges a status-returning API and exception handling. A success status lets the next line execute. An error status is wrapped in a status exception, so the nearest matching CATCH can handle it.",
+        "sources": [
+          "RCOS_ctrycatch",
+          "GCOS_status"
+        ]
+      },
+      "5": {
+        "explanation": "$STACK(-1) gives the current stack depth for iterating frame levels. It is not the text of a frame. Ask for a specific level and detail such as PLACE when you want diagnostic output.",
+        "sources": [
+          "RCOS_fstack"
+        ]
+      },
+      "6": {
+        "explanation": "THROW accepts an exception object, such as %Exception.General created with a name and details. A status-throwing macro wraps a failing %Status in an exception. The catch block can inspect the object or convert it back to status.",
+        "sources": [
+          "RCOS_cthrow",
+          "RCOS_ctrycatch"
+        ]
+      },
+      "7": {
+        "explanation": "StatusException represents an existing %Status within exception handling. General lets application code create a named exception with its own details. Choose based on whether you are propagating an existing status or creating a new exception.",
+        "sources": [
+          "RCOS_ctrycatch"
+        ]
+      },
+      "8": {
+        "explanation": "GetErrorText formats the status into readable text for a human. Preserve the original status for programmatic checks or propagation. The formatted text is useful for logs and display.",
+        "sources": [
+          "GCOS_status"
+        ]
+      },
+      "9": {
+        "explanation": "Use $$$ISOK(sc) to test success and $$$ISERR(sc) to test failure. Keep that check separate from interpreting the returned data. A status is not itself the domain value or SQLCODE.",
+        "sources": [
+          "GCOS_status"
+        ]
+      },
+      "10": {
+        "explanation": "THROW ex propagates the exception caught by the current handler. You can log it before rethrowing and let an outer handler choose the policy. Replacing it with a new exception would change the diagnostic context.",
+        "sources": [
+          "RCOS_cthrow",
+          "RCOS_ctrycatch"
+        ]
+      },
+      "11": {
+        "explanation": "One option throws through the status macro, and the other explicitly creates a StatusException from the error status before throwing it. Both carry the original status through the catch boundary.",
+        "sources": [
+          "RCOS_cthrow",
+          "@statusexception"
+        ]
+      },
+      "12": {
+        "explanation": "ProcessOrder names the label, +7 is its routine offset and App.OrderService.1 is the generated routine. Use the class and method source to map the offset before guessing which expression failed.",
+        "sources": [
+          "RCOS_ctrycatch",
+          "RCOS_fstack"
+        ]
+      },
+      "13": {
+        "explanation": "Name describes the error kind, Code carries a numeric error code and Location identifies where it occurred. These properties capture distinct parts of the diagnostic. Log all relevant fields rather than encoding the whole exception as just a name.",
+        "sources": [
+          "RCOS_ctrycatch",
+          "@exception"
+        ]
+      },
+      "14": {
+        "explanation": "$$$ADDSC combines the accumulated status and a new error into one compound status. This is useful when independent steps each need validation. It preserves more information than overwriting sc after every check.",
+        "sources": [
+          "GCOS_status"
+        ]
+      },
+      "15": {
+        "explanation": "DecomposeStatus exposes the individual errors inside a compound status through its output array. Use it to present or log the failures separately instead of treating the combined status as one opaque string.",
+        "sources": [
+          "GCOS_status",
+          "@status"
+        ]
+      },
+      "16": {
+        "explanation": "Step1 returns a value, so execution continues in the caller until the code explicitly returns or throws. The shown error branch returns the same status. The CATCH runs only if something throws an exception.",
+        "sources": [
+          "RCOS_ctrycatch",
+          "GCOS_status"
+        ],
+        "example": {
+          "title": "Convert a returned status only if exception flow is intended",
+          "code": "Set sc = ..Step1()\nIf $SYSTEM.Status.IsError(sc) Return sc\n\n// In a TRY block that uses exceptions instead:\n// $$$ThrowOnError(sc)"
+        },
+        "diagram": 1
+      },
+      "17": {
+        "explanation": "$STACK(-1) reports the depth. For a frame with available source, $STACK(level,\"MCODE\") retrieves its code line. PLACE gives the execution location when source text is unavailable or you need a stable location.",
+        "sources": [
+          "RCOS_fstack"
+        ]
+      },
+      "18": {
+        "explanation": "The routine stores a formatted error entry and then records information for each frame it iterates. That is the stack observed by the logging code. Preserve exception location separately when you need the original failure frame after unwinding.",
+        "sources": [
+          "RCOS_fstack",
+          "RCOS_ctrycatch"
+        ]
+      }
+    },
+    "T5.3": {
+      "1": {
+        "explanation": "Namespace access depends on the resources of its mapped databases. The job can run in one namespace and still lack access to a database it references after switching. Check the job's identity and the destination database resource.",
+        "sources": [
+          "RERR_gen",
+          "GSA_config_namespace_addmap"
+        ]
+      },
+      "2": {
+        "explanation": "The error names ordKey because the code evaluates it before it has been assigned. If key was meant to be the $ORDER cursor, use that name consistently and initialize it before the first traversal step.",
+        "sources": [
+          "RERR_gen",
+          "RCOS_forder"
+        ]
+      },
+      "3": {
+        "explanation": "$ORDER returns the empty sentinel at the end. Moving the QUIT below WRITE lets the code use that sentinel as an array subscript first. Move the exit check immediately after $ORDER. The exact error depends on what kind of array or global is accessed.",
+        "sources": [
+          "RERR_gen",
+          "RCOS_forder"
+        ],
+        "example": {
+          "title": "Stop before reading the end-of-traversal sentinel",
+          "code": "Set key = \"\"\nFor {\n    Set key = $ORDER(data(key))\n    Quit:key=\"\"\n    Write data(key), !\n}",
+          "note": "For an array with branch-only nodes, check for a value before the final read."
+        }
+      },
+      "4": {
+        "explanation": "Each recursive call needs a smaller argument and a base case that returns without recursing. With the base case for n <= 1, Factorial(5) eventually reaches 1 and the calls can unwind instead of exhausting the stack.",
+        "sources": [
+          "RERR_gen",
+          "RCOS_creturn"
+        ]
+      },
+      "5": {
+        "explanation": "The expression refers to agee but the prior assignment defines age. Since those are different names, concatenation attempts to read an undefined variable. Correct the identifier where it is read.",
+        "sources": [
+          "RERR_gen"
+        ]
+      },
+      "6": {
+        "explanation": "The error identifies config as the undefined value and gives a location relative to the zProcess label in App.Engine.1. Find the corresponding source line and trace where config should have been assigned on that path.",
+        "sources": [
+          "RERR_gen",
+          "RCOS_fstack"
+        ]
+      },
+      "7": {
+        "explanation": "A write can fail because the database is mounted read-only or because the process lacks permission on the relevant database resource. Verify the actual mapped database and the permissions of the failing process, including a background job's identity.",
+        "sources": [
+          "RERR_gen",
+          "GSA_config_namespace_addmap"
+        ]
+      },
+      "8": {
+        "explanation": "$GET(timeout,default) reads the variable if it has a value and returns the fallback otherwise. It avoids an undefined-variable error. An explicitly set empty string is still an assigned value.",
+        "sources": [
+          "RCOS_fget"
+        ]
+      },
+      "9": {
+        "explanation": "Position 3 exists but has no defined element because the constructor skipped that argument. Direct $LIST access raises <NULL VALUE>. If the position is optional, use $LISTGET with a fallback or check its presence before reading.",
+        "sources": [
+          "RCOS_flist",
+          "RCOS_flistget"
+        ]
+      },
+      "10": {
+        "explanation": "The loop expands the key until it exceeds the encoded subscript limit. At that point the global reference is invalid and raises <SUBSCRIPT>. Store long data as a node value and use a bounded key.",
+        "sources": [
+          "RERR_gen",
+          "GGBL_limits"
+        ]
+      },
+      "11": {
+        "explanation": "An invalid global subscript or an oversized encoded key can raise <SUBSCRIPT>. The empty global subscript case depends on configuration and context. Test the exact global reference in the target environment rather than assuming that every empty subscript is forbidden.",
+        "sources": [
+          "RERR_gen",
+          "GGBL_limits"
+        ]
+      },
+      "12": {
+        "explanation": "The destination here is the protected system database, so the application user cannot write under the stated permissions. Confirm the actual mapping and database resource before changing code or asking for broader access.",
+        "sources": [
+          "RERR_gen",
+          "GSA_config_namespace_addmap"
+        ]
+      },
+      "13": {
+        "explanation": "The first addition reads total before any assignment. Initialize it to 0 before the loop so every path has a defined accumulator, including the empty input case.",
+        "sources": [
+          "RERR_gen"
+        ]
+      },
+      "14": {
+        "explanation": "ObjectScript local variable names are case-sensitive. The query assigns city but the SET uses City as a subscript. Use the variable actually populated by the query.",
+        "sources": [
+          "RERR_gen"
+        ]
+      },
+      "15": {
+        "explanation": "<SUBSCRIPT> points to a bad key or subscript for the accessed node. <FRAMESTACK> points to exhausting stack space, for example through unbounded recursion. Inspect the referenced key for the former and the repeated call path for the latter.",
+        "sources": [
+          "RERR_gen"
+        ]
+      },
+      "16": {
+        "explanation": "With no variadic arguments, the count node may be absent. Use $GET(scores,0) for the count and decide what an average of zero inputs should return before doing division.",
+        "sources": [
+          "GOBJ_methods",
+          "RCOS_fget"
+        ]
+      },
+      "17": {
+        "explanation": "Every visited node still has a Next value, so the loop never reaches its exit condition. An iterative cycle does not increase recursion depth. Track visited IDs or impose a valid termination condition to detect the cycle.",
+        "sources": [
+          "RCOS_cwhile",
+          "RCOS_fdata"
+        ]
+      },
+      "18": {
+        "explanation": "After the record is deleted, the open can return an empty value. Reading .Email on that value raises <INVALID OREF>. Check the open outcome before reading the property and handle deletion as a lookup failure.",
+        "sources": [
+          "GOBJ_persobj_opening",
+          "RERR_gen"
+        ]
+      }
+    }
+  }
+}

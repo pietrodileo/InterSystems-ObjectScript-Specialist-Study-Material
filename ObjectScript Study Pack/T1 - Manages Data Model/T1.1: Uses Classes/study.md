@@ -621,9 +621,25 @@ If storDef '= "" {
 ZWrite ^Sample.PersonD
 ```
 
+#### Find the Database Behind a Data Global
+
+`DataLocation` tells you the global name. The namespace's global mappings tell you which database holds that global. For example, if `Sales.Order` has `<DataLocation>^Sales.OrderD</DataLocation>`, check the destination from the namespace where the application runs.
+
+```objectscript
+Set dest = ##class(%SYS.Namespace).GetGlobalDest($NAMESPACE, "Sales.OrderD")
+Write "System: ", $PIECE(dest, "^", 1), !
+Write "Directory: ", $PIECE(dest, "^", 2), !
+```
+
+The result has the form `system^directory`. An empty system part means the database is local. For example, `^/iris/db/sales/` identifies the directory containing that database's `IRIS.DAT`. For a remote mapping, the directory refers to the identified remote system. If the mapping covers only certain subscripts, pass the subscript as the third argument. For example, use `GetGlobalDest($NAMESPACE, "Sales.OrderD", 42)` to resolve `^Sales.OrderD(42)`.
+
 ### Documentation References
 
 - [Storage Definitions](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_storage)
+
+- [%SYS.Namespace class reference](https://docs.intersystems.com/irislatest/csp/documatic/%25CSP.Documatic.cls?CLASSNAME=%25SYS.Namespace&LIBRARY=%25SYS)
+- [Adding global mappings to a namespace](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSA_config_namespace_addmap)
+- [Namespaces and databases](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GORIENT_enviro)
 - [USEEXTENTSET Parameter](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_storageglobals)
 
 ## 5. Implements multiple inheritance (order matters, method resolution)
@@ -761,6 +777,8 @@ ZWrite ^Tutor.MIPersonD(id)
 
 With `%Storage.Persistent`, `USEEXTENTSET = 0` and generated storage in this example, the data global is `^Tutor.MIPersonD`. If the assigned ID is `42`, inspect the branch rooted at `^Tutor.MIPersonD(42)`. In the compiled classes, read `DataLocation` in the active storage definition to locate the data global. Then read the `<Data>` mappings in the parent and subclass to see how the inherited and subclass properties are laid out within the branch.
 
+With `USEEXTENTSET = 1` on a fresh hierarchy, the same record layout uses the parent's generated hashed data global. A subclass-only index can instead get a separate global from the subclass's `ExtentLocation`. For an example with both sets of names, see Practice question 13.
+
 The ID is allocated in the parent extent. The employee appears in both `Tutor.MIPerson` and `Tutor.MIEmployee` in SQL under that same ID. The employee projection exposes `BadgeCode` and `Department` alongside `FullName`. Index inheritance follows the primary superclass. An index declared on the employee class covers the employee subextent.
 
 ### Documentation References
@@ -770,6 +788,8 @@ The ID is allocated in the parent extent. The employee appears in both `Tutor.MI
 - [Persistent classes and their subclasses](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_defpersobj)
 - [Storage definitions](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_storage)
 - [Class extents and indexes](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GORIENT_persistence)
+- [Hashed data and index globals](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_storageglobals)
+- [%Library.Persistent class reference](https://docs.intersystems.com/irislatest/csp/documatic/%25CSP.Documatic.cls?CLASSNAME=%25Library.Persistent&LIBRARY=%25SYS)
 
 ## 6. Documents classes (Description keyword, /// comments)
 

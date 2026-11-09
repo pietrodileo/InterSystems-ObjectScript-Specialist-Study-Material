@@ -96,15 +96,16 @@ Navigate to System Explorer &gt; Globals to browse, search, and edit globals. Yo
 
 #### Locating Class Data Globals
 
-Persistent classes store data in globals named after the class. Use the storage definition in Studio/VS Code to find the exact global name:
+Find the active `DataLocation` in the class's storage definition. For example, a generated standard layout may use `^MyApp.CustomerD`, while a layout generated with `USEEXTENTSET = 1` may use a short name such as `^EW3K.DuIo.1`. Use the actual name from the definition in both cases.
+
+`ZWRITE` inspects nodes through the current namespace. To find which database directory those nodes are mapped to, call `GetGlobalDest` using the same namespace.
 
 ```objectscript
- // For class MyApp.Customer, data is typically in:
- // ^MyApp.CustomerD (data global)
- // ^MyApp.CustomerI (index global)
- // ^MyApp.CustomerS (sequence counter)
- ZWRITE ^MyApp.CustomerD
+Set dest = ##class(%SYS.Namespace).GetGlobalDest($NAMESPACE, "EW3K.DuIo.1")
+Write dest, !
 ```
+
+Read the result as `system^directory`. An empty system part means a local database. A subscript-specific mapping can send a branch to a different destination. In that case, supply the relevant subscript as the third argument or inspect **Global Mappings** for that namespace in the Management Portal.
 
 ### Documentation References
 
@@ -112,6 +113,9 @@ Persistent classes store data in globals named after the class. Use the storage 
 - [Global Structure](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GGBL_structure)
 - [$ORDER Function](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_forder)
 - [$DATA Function](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fdata)
+- [%SYS.Namespace class reference](https://docs.intersystems.com/irislatest/csp/documatic/%25CSP.Documatic.cls?CLASSNAME=%25SYS.Namespace&LIBRARY=%25SYS)
+- [Adding global mappings to a namespace](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSA_config_namespace_addmap)
+- [Namespaces and databases](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GORIENT_enviro)
 
 ## 2. Uses logging to track application data
 

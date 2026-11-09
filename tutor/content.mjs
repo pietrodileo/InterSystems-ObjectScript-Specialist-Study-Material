@@ -138,9 +138,10 @@ export function finalQuestionRefs(chapters) {
 }
 
 export async function loadCourse(read) {
-  const [manifest, exercises] = await Promise.all([
+  const [manifest, exercises, feedback] = await Promise.all([
     read('manifest.json').then(JSON.parse),
     read('exercise-focus-content.json').then(JSON.parse),
+    read('practice-feedback.json').then(JSON.parse),
   ]);
   return Promise.all(manifest.map(async chapter => {
     const exercise = exercises.find(item => item.id === chapter.topic);
@@ -168,6 +169,18 @@ export async function loadCourse(read) {
       ...panels[i], file,
       code: code?.replace(/^(\s*; )(.+)$/gm, (_, prefix, comment) => prefix + (codeComments[comment] ?? comment)),
     }));
-    return { ...chapter, cases, panels, sections, diagrams, exerciseDiagrams, quiz: questions };
+    const chapterFeedback = feedback.chapters[chapter.topic];
+    const quiz = questions.map(question => {
+      const entry = chapterFeedback?.[question.id];
+      const references = entry?.sources.map(key => feedback.sources[key]);
+      const diagram = exerciseDiagrams[entry?.diagram];
+      if (!entry?.explanation.trim() || !references?.length ||
+          references.some(source => !source?.label || !source.url.startsWith('https://docs.intersystems.com/')) ||
+          (entry.diagram !== undefined && !diagram)) {
+        throw new Error(`Incomplete feedback for ${chapter.topic} question ${question.id}`);
+      }
+      return { ...question, feedback: { explanation: entry.explanation, example: entry.example, references, diagram } };
+    });
+    return { ...chapter, cases, panels, sections, diagrams, exerciseDiagrams, quiz };
   }));
 }
