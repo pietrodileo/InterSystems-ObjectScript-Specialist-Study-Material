@@ -324,9 +324,8 @@ function renderCourse() {
           </svg>
         </button>
       </div>
-      <p class="lead">${profile.role
-        ? `Your InterSystems ObjectScript Specialist course is ready when you are. Role: ${escape(profile.role)}.`
-        : `Your InterSystems ObjectScript Specialist course is ready whenever you are.`}</p>
+      ${profile.role ? `<p class="home-role muted">${escape(profile.role)}</p>` : ''}
+      <p class="lead">Your InterSystems ObjectScript Specialist course is ready whenever you are.</p>
     </header>
     <section class="panel study-outline">
       <h2>The five exam areas</h2>
