@@ -163,17 +163,14 @@ button.primary:disabled { background: var(--quiet); border-color: var(--line); c
   padding-inline-end: .15rem;
   scrollbar-color: var(--open-line) transparent;
 }
-.sidebar-footer {
-  flex: 0 0 auto;
-  margin-top: .45rem;
-  padding: .65rem 0 .2rem;
-  border-top: 1px solid var(--line);
-  background: var(--page);
-}
 .sidebar-actions {
+  flex: 0 0 auto;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: .5rem;
+  margin-bottom: .45rem;
+  padding-bottom: .45rem;
+  border-bottom: 1px solid var(--line);
 }
 .sidebar-actions button.sidebar-action {
   display: flex;
