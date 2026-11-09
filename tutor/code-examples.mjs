@@ -22,7 +22,19 @@ write person.%Id(), !`, 'Use a scratch namespace with a compiled Sample.Person c
         <Location>^Tutor.InvoiceCity</Location>
     </Index>
     <Type>%Storage.Persistent</Type>
-</Storage>`, 'Read this fragment as a map. For CityIdx, follow its own Location to ^Tutor.InvoiceCity. Use the general IndexLocation to look up indexes that have no override.'],
+</Storage>`, 'IndexLocation is the default for the class. If DateIdx has no explicit Location in this layout, its entries are under ^Tutor.InvoiceI("DateIdx",...). CityIdx has its own Location, so its entries are under ^Tutor.InvoiceCity. The invoice records live under DataLocation.'],
+    ['Compare standard and hashed storage globals', `// Declare inside GlobalsTest.President before IRIS generates storage
+Parameter USEEXTENTSET = 1;
+
+// USEEXTENTSET = 0
+Records:   ^GlobalsTest.PresidentD
+DOBIndex:  ^GlobalsTest.PresidentI("DOBIndex",...)
+NameIndex: ^GlobalsTest.PresidentI("NameIndex",...)
+
+// USEEXTENTSET = 1
+Records:   ^Ebnm.EKUy.1
+DOBIndex:  ^Ebnm.EKUy.2
+NameIndex: ^Ebnm.EKUy.3`, 'In this InterSystems example, ^Ebnm.EKUy is the generated ExtentLocation. The two indexes go from sharing one global to using separate globals. Changing the parameter on an existing class does not move its data.'],
   ],
   'T1.2/1': [
     ['Read the length constraint in a property declaration', `Property Code As %String(MAXLEN = 5);`, 'This property declaration belongs inside a class. When the object is validated, "ABCDE" is within the length limit and "ABCDEF" exceeds it. Check the validation or save status.'],

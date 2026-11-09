@@ -439,8 +439,8 @@ An ordinary SQL `DELETE` uses the SQL trigger path. If a deletion rule must cove
 - **Storage definition** maps class properties to underlying global structures
 - **DataLocation** specifies the global where object data is stored (default: `^Package.ClassD`)
 - **IdLocation** specifies the global holding the ID counter (default: `^Package.ClassD`)
-- **IndexLocation** specifies the global for index data (default: `^Package.ClassI`)
-- **USEEXTENTSET** parameter changes storage to use short hashed global names instead of class-name-based globals
+- **IndexLocation** sets the default location for index entries. A `<Location>` inside a named `<Index>` takes precedence for that index.
+- **USEEXTENTSET** controls how IRIS generates storage locations. With `1`, IRIS normally uses short hashed global names and gives each index without an explicit location its own global.
 - Storage definitions are auto-generated but can be customized for special requirements
 
 ### Detailed Notes
@@ -465,12 +465,12 @@ Default storage globals:
 
 - **Data**: `^Sample.PersonD` - stores object data
 - **Index**: `^Sample.PersonI` - stores index entries
-- **ID Counter**: `^Sample.PersonD(0)` or a separate counter node - tracks the next available ID
+- **ID counter**: `^Sample.PersonD` at the root in this example. With the `increment` ID function, it holds the highest assigned ID.
 
 The data global structure typically looks like:
 
 ```text
-^Sample.PersonD = <next ID counter>
+^Sample.PersonD = 2
 ^Sample.PersonD(1) = $LB("", "John Smith", 35)
 ^Sample.PersonD(2) = $LB("", "Jane Doe", 28)
 ```
@@ -498,23 +498,32 @@ Storage Default
 }
 ```
 
-#### USEEXTENTSET Parameter
+#### Default and Per-Index Locations
 
-When `USEEXTENTSET = 1`, the system generates short hashed global names instead of using the class name:
+Suppose `Tutor.Invoice` defines `CityIdx` on `City` and `DateIdx` on `InvoiceDate`. The following storage fragment gives `CityIdx` its own global and leaves `DateIdx` in the shared index global.
 
-```objectscript
-Class Sample.Person Extends %Persistent [ SqlTableName = Person ]
-{
-    Parameter USEEXTENTSET = 1;
-}
+```xml
+<IndexLocation>^Tutor.InvoiceI</IndexLocation>
+<Index name="CityIdx">
+    <Location>^Tutor.InvoiceCity</Location>
+</Index>
 ```
 
-With USEEXTENTSET enabled:
+`IndexLocation` is the class-wide default. `DateIdx` has no location of its own in this layout, so IRIS stores its entries under `^Tutor.InvoiceI("DateIdx",...)`. For `CityIdx`, the explicit `Location` takes precedence, so its entries live under `^Tutor.InvoiceCity`. Both entries are index data. The invoice record itself lives at the `DataLocation`.
 
-- Globals get names like `^Eprogramming.Hjkl.1` (short hashed names)
-- Each property group and index gets its own global
-- Avoids the 31-character global name limit for deeply nested packages
-- Recommended for new development, especially with long package names
+#### USEEXTENTSET Parameter
+
+Declare `Parameter USEEXTENTSET = 1;` inside a persistent class to have IRIS generate hashed locations when it creates the default storage. With `USEEXTENTSET = 0`, indexes without their own location normally share the `I` global. With `1`, each index without an explicit location gets its own global.
+
+The [InterSystems example](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_storageglobals) uses `GlobalsTest.President` with indexes named `DOBIndex` and `NameIndex`. These are the locations shown for the two layouts.
+
+| What IRIS stores | `USEEXTENTSET = 0` | `USEEXTENTSET = 1` |
+| --- | --- | --- |
+| Records | `^GlobalsTest.PresidentD` | `^Ebnm.EKUy.1` |
+| `DOBIndex` entries | `^GlobalsTest.PresidentI("DOBIndex",...)` | `^Ebnm.EKUy.2` |
+| `NameIndex` entries | `^GlobalsTest.PresidentI("NameIndex",...)` | `^Ebnm.EKUy.3` |
+
+`ExtentLocation` is `^Ebnm.EKUy` in the hashed layout. IRIS uses it as the base for the numbered globals. For example, the record with ID `42` is at `^Ebnm.EKUy.1(42)` in that layout. For an existing class, changing the parameter alone does not move stored data or replace locations already defined in its storage. Read the active storage definition to see which globals the class uses.
 
 #### Why Storage Definitions Matter
 
