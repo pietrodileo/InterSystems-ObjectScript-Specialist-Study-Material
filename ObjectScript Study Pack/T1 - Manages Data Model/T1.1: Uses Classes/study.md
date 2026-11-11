@@ -213,6 +213,8 @@ The first successful save assigns a persistent ID. Saving changes to an existing
 
 #### Callbacks during creation, validation, and saving
 
+`%ValidateObject()` is an instance method that runs validation for the object's current values and returns a `%Status` indicating success or an error. Call it to check an object without saving; `%Save()` calls it before writing a persistent object. If your class defines `%OnValidateObject()`, IRIS calls that method during validation. Check the returned status before continuing.
+
 | Callback | When IRIS calls it | Example use |
 | --- | --- | --- |
 | `%OnNew()` | During `%New()`, after memory allocation and property initialization. An error status stops creation. | Initialize properties from an argument passed to `%New()`. |
@@ -572,16 +574,29 @@ Storage Default
 
 #### Default and Per-Index Locations
 
-Suppose `Tutor.Invoice` defines `CityIdx` on `City` and `DateIdx` on `InvoiceDate`. The following storage fragment gives `CityIdx` its own global and leaves `DateIdx` in the shared index global.
+Suppose `Tutor.Invoice` defines `CityIdx` on `City` and `DateIdx` on `InvoiceDate`. The index declarations in the class identify which properties each index covers:
 
-```xml
-<IndexLocation>^Tutor.InvoiceI</IndexLocation>
-<Index name="CityIdx">
-    <Location>^Tutor.InvoiceCity</Location>
-</Index>
+```objectscript
+Index CityIdx On City;
+Index DateIdx On InvoiceDate;
 ```
 
-`IndexLocation` is the class-wide default. `DateIdx` has no location of its own in this layout, so IRIS stores its entries under `^Tutor.InvoiceI("DateIdx",...)`. For `CityIdx`, the explicit `Location` takes precedence, so its entries live under `^Tutor.InvoiceCity`. Both entries are index data. The invoice record itself lives at the `DataLocation`.
+The physical global for an index is set in the class's `Storage Default` definition. To give one index its own global, place a `<Location>` element inside the matching `<Index>` entry. This excerpt keeps `DateIdx` on the shared default and assigns `CityIdx` a separate location:
+
+```objectscript
+Storage Default
+{
+    ...
+    <DataLocation>^Tutor.InvoiceD</DataLocation>
+    <IndexLocation>^Tutor.InvoiceI</IndexLocation>
+    <Index name="CityIdx">
+        <Location>^Tutor.InvoiceCity</Location>
+    </Index>
+    ...
+}
+```
+
+`IndexLocation` is the class-wide default for indexes without their own `Location`. Here, `CityIdx` has an explicit location because its `<Location>` is nested under `<Index name="CityIdx">`. `DateIdx` has no such entry, so IRIS stores its entries under `^Tutor.InvoiceI("DateIdx",...)`. The `CityIdx` entries live under `^Tutor.InvoiceCity`. Both are index data; the invoice record itself lives under the `DataLocation`.
 
 #### USEEXTENTSET Parameter
 
