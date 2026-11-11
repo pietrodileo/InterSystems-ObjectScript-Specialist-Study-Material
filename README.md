@@ -34,6 +34,12 @@ Use the Markdown files for offline reading or to look up a specific topic. The p
 
 ## Run the tutor locally
 
+On Windows, enable long paths when cloning because some study section names are long:
+
+```sh
+git -c core.longpaths=true clone https://github.com/pietrodileo/InterSystems-ObjectScript-Specialist-Study-Material.git
+```
+
 From the repository root, start a local server with Python 3.
 
 ```sh

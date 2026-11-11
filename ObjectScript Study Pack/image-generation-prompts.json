@@ -3,7 +3,7 @@
   "assets": [
     {
       "topic": "T1.1",
-      "folder": "T1 - Manages Data Model/T1.1: Uses Classes",
+      "folder": "T1 - Manages Data Model/T1.1 - Uses Classes",
       "filename": "visual-guide-01.png",
       "sections": [
         "1. Identifies use cases for persistent and registered object classes",
@@ -14,12 +14,12 @@
       "source": "/Users/pietrodileo/.codex/generated_images/01a19e30-9885-7a11-aa48-f0c5eb2a213e/exec-ff014848-6238-4fc7-9b45-5eab5c4fb1fe.png",
       "width": 1536,
       "height": 1024,
-      "file": "T1 - Manages Data Model/T1.1: Uses Classes/visual-guide-01.png",
+      "file": "T1 - Manages Data Model/T1.1 - Uses Classes/visual-guide-01.png",
       "sha256": "8b3486475a2a25c4bc5ad2f3d2354b6d71caca43ce0648edc45610504b00d2eb"
     },
     {
       "topic": "T1.1",
-      "folder": "T1 - Manages Data Model/T1.1: Uses Classes",
+      "folder": "T1 - Manages Data Model/T1.1 - Uses Classes",
       "filename": "visual-guide-02-v2.png",
       "sections": [
         "4. Interprets storage definitions (DataLocation, IdLocation, IndexLocation, USEEXTENTSET)",
@@ -31,12 +31,12 @@
       "refined": true,
       "width": 1536,
       "height": 1024,
-      "file": "T1 - Manages Data Model/T1.1: Uses Classes/visual-guide-02-v2.png",
+      "file": "T1 - Manages Data Model/T1.1 - Uses Classes/visual-guide-02-v2.png",
       "sha256": "622597b7ec7082647cf33b26db078229334fea04b7c329f86546014e1424c313"
     },
     {
       "topic": "T1.2",
-      "folder": "T1 - Manages Data Model/T1.2: Creates Properties and Indexes",
+      "folder": "T1 - Manages Data Model/T1.2 - Creates Properties and Indexes",
       "filename": "visual-guide-01-v2.png",
       "sections": [
         "1. Sets max length for string properties (MAXLEN parameter, TRUNCATE)",
@@ -49,12 +49,12 @@
       "refined": true,
       "width": 1536,
       "height": 1024,
-      "file": "T1 - Manages Data Model/T1.2: Creates Properties and Indexes/visual-guide-01-v2.png",
+      "file": "T1 - Manages Data Model/T1.2 - Creates Properties and Indexes/visual-guide-01-v2.png",
       "sha256": "e93d4855d8fd751bf84ac298541b164ec26623e1d0ba2c7f2e74b8e96c87cf40"
     },
     {
       "topic": "T1.2",
-      "folder": "T1 - Manages Data Model/T1.2: Creates Properties and Indexes",
+      "folder": "T1 - Manages Data Model/T1.2 - Creates Properties and Indexes",
       "filename": "visual-guide-02.png",
       "sections": [
         "5. Selects appropriate index type based on data distribution (standard, bitmap, bitslice)",
@@ -65,12 +65,12 @@
       "source": "/Users/pietrodileo/.codex/generated_images/01a19e30-9885-7a11-aa48-f0c5eb2a213e/exec-8ba91e64-fbd8-45a6-b195-ccb492d1b3bf.png",
       "width": 1536,
       "height": 1024,
-      "file": "T1 - Manages Data Model/T1.2: Creates Properties and Indexes/visual-guide-02.png",
+      "file": "T1 - Manages Data Model/T1.2 - Creates Properties and Indexes/visual-guide-02.png",
       "sha256": "3e29c1e8a6cc836d267e44bddbb28aaba9234728eec90fe99af9b8026f86fc33"
     },
     {
       "topic": "T1.3",
-      "folder": "T1 - Manages Data Model/T1.3: Creates ObjectScript Methods",
+      "folder": "T1 - Manages Data Model/T1.3 - Creates ObjectScript Methods",
       "filename": "visual-guide-01.png",
       "sections": [
         "1. Differentiates between instance and class methods (Method vs ClassMethod, ..property syntax)",
@@ -82,12 +82,12 @@
       "source": "/Users/pietrodileo/.codex/generated_images/01a19e30-9885-7a11-aa48-f0c5eb2a213e/exec-d3338864-aea5-4d9b-b02f-6deedf52a3ac.png",
       "width": 1536,
       "height": 1024,
-      "file": "T1 - Manages Data Model/T1.3: Creates ObjectScript Methods/visual-guide-01.png",
+      "file": "T1 - Manages Data Model/T1.3 - Creates ObjectScript Methods/visual-guide-01.png",
       "sha256": "4787a27b5c4d9069a9a17fee168717d74b46e238a03e9663cbf972131fecd60f"
     },
     {
       "topic": "T1.3",
-      "folder": "T1 - Manages Data Model/T1.3: Creates ObjectScript Methods",
+      "folder": "T1 - Manages Data Model/T1.3 - Creates ObjectScript Methods",
       "filename": "visual-guide-02.png",
       "sections": [
         "5. Passes variables by reference (ByRef, .variable syntax at call site)",
@@ -99,12 +99,12 @@
       "source": "/Users/pietrodileo/.codex/generated_images/01a19e30-9885-7a11-aa48-f0c5eb2a213e/exec-8ef12581-0fa8-4214-9ed2-a53a155257c7.png",
       "width": 1536,
       "height": 1024,
-      "file": "T1 - Manages Data Model/T1.3: Creates ObjectScript Methods/visual-guide-02.png",
+      "file": "T1 - Manages Data Model/T1.3 - Creates ObjectScript Methods/visual-guide-02.png",
       "sha256": "bd91b1fa5c4361c854328c7b1845cfa8fde24affcb4a0ecfe8e54cf6b5995a4d"
     },
     {
       "topic": "T1.4",
-      "folder": "T1 - Manages Data Model/T1.4: Uses Complex Structures",
+      "folder": "T1 - Manages Data Model/T1.4 - Uses Complex Structures",
       "filename": "visual-guide-01.png",
       "sections": [
         "1. Creates dynamic objects/arrays (JSON) - %DynamicObject, %DynamicArray, %FromJSON, %ToJSON",
@@ -114,12 +114,12 @@
       "source": "/Users/pietrodileo/.codex/generated_images/01a19e30-9885-7a11-aa48-f0c5eb2a213e/exec-cd4f9a61-ccb0-439b-a71c-03291db4840a.png",
       "width": 1536,
       "height": 1024,
-      "file": "T1 - Manages Data Model/T1.4: Uses Complex Structures/visual-guide-01.png",
+      "file": "T1 - Manages Data Model/T1.4 - Uses Complex Structures/visual-guide-01.png",
       "sha256": "05490295677feff036863817ec90dae0f8559d5b0c4823bd70c12ce1266da5df"
     },
     {
       "topic": "T2.1",
-      "folder": "T2 - Basic Programming/T2.1: Ensures Data Integrity",
+      "folder": "T2 - Basic Programming/T2.1 - Ensures Data Integrity",
       "filename": "visual-guide-01-v2.png",
       "sections": [
         "1. Manages transactions",
@@ -131,12 +131,12 @@
       "refined": true,
       "width": 1536,
       "height": 1024,
-      "file": "T2 - Basic Programming/T2.1: Ensures Data Integrity/visual-guide-01-v2.png",
+      "file": "T2 - Basic Programming/T2.1 - Ensures Data Integrity/visual-guide-01-v2.png",
       "sha256": "a10b7b1f42b9db2fc3ab76101de3b46b8c02860412cd87ea94f9e732a76d6462"
     },
     {
       "topic": "T2.1",
-      "folder": "T2 - Basic Programming/T2.1: Ensures Data Integrity",
+      "folder": "T2 - Basic Programming/T2.1 - Ensures Data Integrity",
       "filename": "visual-guide-02-v2.png",
       "sections": [
         "4. Describes lock escalation threshold and effect on row locks versus table locks",
@@ -148,12 +148,12 @@
       "refined": true,
       "width": 1536,
       "height": 1024,
-      "file": "T2 - Basic Programming/T2.1: Ensures Data Integrity/visual-guide-02-v2.png",
+      "file": "T2 - Basic Programming/T2.1 - Ensures Data Integrity/visual-guide-02-v2.png",
       "sha256": "50b7f8e73a5080c2b9fefffe8d82b97a16bb77d6ee8a3f4fb384e6cd79831513"
     },
     {
       "topic": "T2.2",
-      "folder": "T2 - Basic Programming/T2.2: Tracks Application Data",
+      "folder": "T2 - Basic Programming/T2.2 - Tracks Application Data",
       "filename": "visual-guide-01-v2.png",
       "sections": [
         "1. Locates and accesses application globals",
@@ -165,12 +165,12 @@
       "refined": true,
       "width": 1536,
       "height": 1024,
-      "file": "T2 - Basic Programming/T2.2: Tracks Application Data/visual-guide-01-v2.png",
+      "file": "T2 - Basic Programming/T2.2 - Tracks Application Data/visual-guide-01-v2.png",
       "sha256": "cb6251020f944651ceb20c6dd0cc2b75a6d43d6d6e4bdd21ae88931f017fb670"
     },
     {
       "topic": "T2.3",
-      "folder": "T2 - Basic Programming/T2.3: Implements Security Features",
+      "folder": "T2 - Basic Programming/T2.3 - Implements Security Features",
       "filename": "visual-guide-01-v3.png",
       "sections": [
         "1. Ensures appropriate variable and global use to avoid security leaks",
@@ -184,12 +184,12 @@
       "edit_prompt": "Edit this educational infographic. Preserve all style, layout, panels1-3, titles, and typography. Change ONLY panel4 Embedded SQL Permission Checks: replace the box 'Uses SQL privileges (for the current user)' in the Embedded SQL column with exact text 'No automatic SQL privilege check'. Replace the two bullets below with 'Embedded SQL: application must check SQL privileges explicitly.' and 'Dynamic SQL: SQL privileges are enforced by the SQL engine.' Keep the amber explicit-check banner. This correction is required by official InterSystems SQL documentation. Add no extra content.",
       "width": 1536,
       "height": 1024,
-      "file": "T2 - Basic Programming/T2.3: Implements Security Features/visual-guide-01-v3.png",
+      "file": "T2 - Basic Programming/T2.3 - Implements Security Features/visual-guide-01-v3.png",
       "sha256": "87dc79d3fe16a2262df6eb45473237034f89ddbaf4093b53496cb6dd7ae62d4e"
     },
     {
       "topic": "T3.1",
-      "folder": "T3 - IRIS Features/T3.1: Differentiates Storage Media",
+      "folder": "T3 - IRIS Features/T3.1 - Differentiates Storage Media",
       "filename": "visual-guide-01.png",
       "sections": [
         "1. Differentiates between PPGs, variables, temporary globals, and globals"
@@ -198,12 +198,12 @@
       "source": "/Users/pietrodileo/.codex/generated_images/01a19e30-9885-7a11-aa48-f0c5eb2a213e/exec-5f52b15f-ead8-4c91-8055-0713f4abba27.png",
       "width": 1536,
       "height": 1024,
-      "file": "T3 - IRIS Features/T3.1: Differentiates Storage Media/visual-guide-01.png",
+      "file": "T3 - IRIS Features/T3.1 - Differentiates Storage Media/visual-guide-01.png",
       "sha256": "4f50431b4f462c6e6e26acc0fe9478a45853305f6b9115d6f3cc339e1ac746c9"
     },
     {
       "topic": "T3.2",
-      "folder": "T3 - IRIS Features/T3.2: Leverages ObjectScript - SQL Features",
+      "folder": "T3 - IRIS Features/T3.2 - Leverages ObjectScript - SQL Features",
       "filename": "visual-guide-01-v2.png",
       "sections": [
         "1. ObjectScript as a weakly typed language",
@@ -215,12 +215,12 @@
       "refined": true,
       "width": 1536,
       "height": 1024,
-      "file": "T3 - IRIS Features/T3.2: Leverages ObjectScript - SQL Features/visual-guide-01-v2.png",
+      "file": "T3 - IRIS Features/T3.2 - Leverages ObjectScript - SQL Features/visual-guide-01-v2.png",
       "sha256": "52a7daebaa568d75ae90e1b110cdadc425f4cd34b175f1f12047c4dd120a2aaf"
     },
     {
       "topic": "T3.2",
-      "folder": "T3 - IRIS Features/T3.2: Leverages ObjectScript - SQL Features",
+      "folder": "T3 - IRIS Features/T3.2 - Leverages ObjectScript - SQL Features",
       "filename": "visual-guide-02-v3.png",
       "sections": [
         "4. Embedded SQL vs Dynamic SQL",
@@ -233,12 +233,12 @@
       "edit_prompt": "Edit this educational infographic. Preserve all layout, style, text and diagrams except one numeric label: in panel5's example date value, replace 'Day count (e.g. 45200)' with exact text 'Day count 66748'. This internal ObjectScript date is exactly 2023-10-01 as displayed in the next box. Change nothing else.",
       "width": 1536,
       "height": 1024,
-      "file": "T3 - IRIS Features/T3.2: Leverages ObjectScript - SQL Features/visual-guide-02-v3.png",
+      "file": "T3 - IRIS Features/T3.2 - Leverages ObjectScript - SQL Features/visual-guide-02-v3.png",
       "sha256": "97ceb6f7de809b294ac83255d69335e97974621cc9f11a086651fd5460b18449"
     },
     {
       "topic": "T3.3",
-      "folder": "T3 - IRIS Features/T3.3: Handles Nulls",
+      "folder": "T3 - IRIS Features/T3.3 - Handles Nulls",
       "filename": "visual-guide-01-v2.png",
       "sections": [
         "1. Understands $CHAR(0) vs empty string vs SQL NULL"
@@ -248,12 +248,12 @@
       "refined": true,
       "width": 1536,
       "height": 1024,
-      "file": "T3 - IRIS Features/T3.3: Handles Nulls/visual-guide-01-v2.png",
+      "file": "T3 - IRIS Features/T3.3 - Handles Nulls/visual-guide-01-v2.png",
       "sha256": "bb384b4540525bfdb5a46d8952630d8891888107f6166757a6995850c3e71dd4"
     },
     {
       "topic": "T3.4",
-      "folder": "T3 - IRIS Features/T3.4: Handles Schema Evolution",
+      "folder": "T3 - IRIS Features/T3.4 - Handles Schema Evolution",
       "filename": "visual-guide-01.png",
       "sections": [
         "1. Adding indexes to existing properties",
@@ -264,12 +264,12 @@
       "source": "/Users/pietrodileo/.codex/generated_images/01a19e30-9885-7a11-aa48-f0c5eb2a213e/exec-16676bda-65cd-47f7-9ae7-e4f07384908d.png",
       "width": 1536,
       "height": 1024,
-      "file": "T3 - IRIS Features/T3.4: Handles Schema Evolution/visual-guide-01.png",
+      "file": "T3 - IRIS Features/T3.4 - Handles Schema Evolution/visual-guide-01.png",
       "sha256": "624f3b90e2bafa92cbaff5b3b584456738f3d096c63b965dfe1abe226822b52f"
     },
     {
       "topic": "T3.5",
-      "folder": "T3 - IRIS Features/T3.5: Ensures Scalability and Performance",
+      "folder": "T3 - IRIS Features/T3.5 - Ensures Scalability and Performance",
       "filename": "visual-guide-01.png",
       "sections": [
         "1. TUNE TABLE for gathering table statistics",
@@ -280,12 +280,12 @@
       "source": "/Users/pietrodileo/.codex/generated_images/01a19e30-9885-7a11-aa48-f0c5eb2a213e/exec-6ef8f4bc-2db8-4d90-be87-43af2fb2828e.png",
       "width": 1536,
       "height": 1024,
-      "file": "T3 - IRIS Features/T3.5: Ensures Scalability and Performance/visual-guide-01.png",
+      "file": "T3 - IRIS Features/T3.5 - Ensures Scalability and Performance/visual-guide-01.png",
       "sha256": "1d8f3cebd5d4c14ccc3f6bdf191176bc7098f409519b3cc47de55775e27bf24a"
     },
     {
       "topic": "T4.1",
-      "folder": "T4 - Functions & APIs/T4.1: Traverses and Sorts Arrays",
+      "folder": "T4 - Functions & APIs/T4.1 - Traverses and Sorts Arrays",
       "filename": "visual-guide-01.png",
       "sections": [
         "1. Subscript sorting (canonical numeric order)",
@@ -297,12 +297,12 @@
       "source": "/Users/pietrodileo/.codex/generated_images/01a19e30-9885-7a11-aa48-f0c5eb2a213e/exec-1cb99538-db2e-4b95-86da-22ff24b19424.png",
       "width": 1536,
       "height": 1024,
-      "file": "T4 - Functions & APIs/T4.1: Traverses and Sorts Arrays/visual-guide-01.png",
+      "file": "T4 - Functions & APIs/T4.1 - Traverses and Sorts Arrays/visual-guide-01.png",
       "sha256": "b3b5ee8e9f5b2d4fd018a7247c02ba427194b01a3efc76e7fe93fe394f81c4b9"
     },
     {
       "topic": "T4.2",
-      "folder": "T4 - Functions & APIs/T4.2: Manipulates Lists",
+      "folder": "T4 - Functions & APIs/T4.2 - Manipulates Lists",
       "filename": "visual-guide-01-v2.png",
       "sections": [
         "1. $LIST/$LISTBUILD to insert, update, and delete list elements",
@@ -314,12 +314,12 @@
       "refined": true,
       "width": 1536,
       "height": 1024,
-      "file": "T4 - Functions & APIs/T4.2: Manipulates Lists/visual-guide-01-v2.png",
+      "file": "T4 - Functions & APIs/T4.2 - Manipulates Lists/visual-guide-01-v2.png",
       "sha256": "0311d611cc4e9920fd424f6de4fe8bad2e560ad257facd6e1ce4a3f349c1f3f5"
     },
     {
       "topic": "T4.3",
-      "folder": "T4 - Functions & APIs/T4.3: Manipulates Strings",
+      "folder": "T4 - Functions & APIs/T4.3 - Manipulates Strings",
       "filename": "visual-guide-01-v2.png",
       "sections": [
         "1. $PIECE for delimited strings",
@@ -332,12 +332,12 @@
       "refined": true,
       "width": 1536,
       "height": 1024,
-      "file": "T4 - Functions & APIs/T4.3: Manipulates Strings/visual-guide-01-v2.png",
+      "file": "T4 - Functions & APIs/T4.3 - Manipulates Strings/visual-guide-01-v2.png",
       "sha256": "4d279f9327550d183a3c20fff3e642421ffc6d7939c91268ff0c22017a695249"
     },
     {
       "topic": "T4.3",
-      "folder": "T4 - Functions & APIs/T4.3: Manipulates Strings",
+      "folder": "T4 - Functions & APIs/T4.3 - Manipulates Strings",
       "filename": "visual-guide-02.png",
       "sections": [
         "5. Regular expressions",
@@ -348,12 +348,12 @@
       "source": "/Users/pietrodileo/.codex/generated_images/01a19e30-9885-7a11-aa48-f0c5eb2a213e/exec-7ab41a95-5f0b-4931-95fd-31823dad457a.png",
       "width": 1536,
       "height": 1024,
-      "file": "T4 - Functions & APIs/T4.3: Manipulates Strings/visual-guide-02.png",
+      "file": "T4 - Functions & APIs/T4.3 - Manipulates Strings/visual-guide-02.png",
       "sha256": "b0468f5878560bd499c2b9c69f1fee4e0b985d97f6908c59e97bca0e8bdb8b2d"
     },
     {
       "topic": "T4.4",
-      "folder": "T4 - Functions & APIs/T4.4: Mathematical, Logical, and Date - Time Operations",
+      "folder": "T4 - Functions & APIs/T4.4 - Mathematical, Logical, and Date - Time Operations",
       "filename": "visual-guide-01-v2.png",
       "sections": [
         "1. Mathematical operators",
@@ -366,12 +366,12 @@
       "refined": true,
       "width": 1536,
       "height": 1024,
-      "file": "T4 - Functions & APIs/T4.4: Mathematical, Logical, and Date - Time Operations/visual-guide-01-v2.png",
+      "file": "T4 - Functions & APIs/T4.4 - Mathematical, Logical, and Date - Time Operations/visual-guide-01-v2.png",
       "sha256": "7d023bff3cdbd32aed72cbbb3a60c39d99b500c02c59c6518bad3d11cde724a5"
     },
     {
       "topic": "T4.5",
-      "folder": "T4 - Functions & APIs/T4.5: Decision and Control Structures",
+      "folder": "T4 - Functions & APIs/T4.5 - Decision and Control Structures",
       "filename": "visual-guide-01.png",
       "sections": [
         "1. Post-conditionals",
@@ -382,12 +382,12 @@
       "source": "/Users/pietrodileo/.codex/generated_images/01a19e30-9885-7a11-aa48-f0c5eb2a213e/exec-d54392e1-4f3c-4db1-a022-3a46e0aa27d6.png",
       "width": 1536,
       "height": 1024,
-      "file": "T4 - Functions & APIs/T4.5: Decision and Control Structures/visual-guide-01.png",
+      "file": "T4 - Functions & APIs/T4.5 - Decision and Control Structures/visual-guide-01.png",
       "sha256": "ffad5ece6d34156d1899ff24983674fcc954c1c90e424a59484f5458514a8620"
     },
     {
       "topic": "T4.6",
-      "folder": "T4 - Functions & APIs/T4.6: Executes Methods and Queries Objects",
+      "folder": "T4 - Functions & APIs/T4.6 - Executes Methods and Queries Objects",
       "filename": "visual-guide-01.png",
       "sections": [
         "1. $METHOD and $CLASSMETHOD for dynamic dispatch",
@@ -398,12 +398,12 @@
       "source": "/Users/pietrodileo/.codex/generated_images/01a19e30-9885-7a11-aa48-f0c5eb2a213e/exec-a1171c35-715b-4cea-aa5c-f14d31fddd6b.png",
       "width": 1536,
       "height": 1024,
-      "file": "T4 - Functions & APIs/T4.6: Executes Methods and Queries Objects/visual-guide-01.png",
+      "file": "T4 - Functions & APIs/T4.6 - Executes Methods and Queries Objects/visual-guide-01.png",
       "sha256": "b498877671d58172feb059c1540ff7816278c95d75c16e0b0fb9601076465443"
     },
     {
       "topic": "T4.7",
-      "folder": "T4 - Functions & APIs/T4.7: Uses APIs for Common Operations",
+      "folder": "T4 - Functions & APIs/T4.7 - Uses APIs for Common Operations",
       "filename": "visual-guide-01.png",
       "sections": [
         "1. %Stream for file I/O",
@@ -413,12 +413,12 @@
       "source": "/Users/pietrodileo/.codex/generated_images/01a19e30-9885-7a11-aa48-f0c5eb2a213e/exec-1fef3f67-fc4d-4682-8459-8d167bde5ddc.png",
       "width": 1536,
       "height": 1024,
-      "file": "T4 - Functions & APIs/T4.7: Uses APIs for Common Operations/visual-guide-01.png",
+      "file": "T4 - Functions & APIs/T4.7 - Uses APIs for Common Operations/visual-guide-01.png",
       "sha256": "29ae0cc8d42e8a240277db497e4b112bbb2f3a687ece10b4701995be992960b3"
     },
     {
       "topic": "T5.1",
-      "folder": "T5 - Error Handling/T5.1: Uses Troubleshooting Tools",
+      "folder": "T5 - Error Handling/T5.1 - Uses Troubleshooting Tools",
       "filename": "visual-guide-01-v2.png",
       "sections": [
         "1. Tools for monitoring code performance",
@@ -429,12 +429,12 @@
       "refined": true,
       "width": 1536,
       "height": 1024,
-      "file": "T5 - Error Handling/T5.1: Uses Troubleshooting Tools/visual-guide-01-v2.png",
+      "file": "T5 - Error Handling/T5.1 - Uses Troubleshooting Tools/visual-guide-01-v2.png",
       "sha256": "67f74a96a018c607c663687106e966ef06d2cc17e16d3b834bf51a05dec8a173"
     },
     {
       "topic": "T5.2",
-      "folder": "T5 - Error Handling/T5.2: Handles and Logs Runtime Errors",
+      "folder": "T5 - Error Handling/T5.2 - Handles and Logs Runtime Errors",
       "filename": "visual-guide-01.png",
       "sections": [
         "1. TRY-CATCH blocks",
@@ -445,12 +445,12 @@
       "source": "/Users/pietrodileo/.codex/generated_images/01a19e30-9885-7a11-aa48-f0c5eb2a213e/exec-4ee3d3f4-e1fa-4f97-afea-4463f80eb6be.png",
       "width": 1536,
       "height": 1024,
-      "file": "T5 - Error Handling/T5.2: Handles and Logs Runtime Errors/visual-guide-01.png",
+      "file": "T5 - Error Handling/T5.2 - Handles and Logs Runtime Errors/visual-guide-01.png",
       "sha256": "1d4325b1f4885feb672a2e0a822e5b1a2c5ef7e0723db41313ad0a50ba0b5e52"
     },
     {
       "topic": "T5.2",
-      "folder": "T5 - Error Handling/T5.2: Handles and Logs Runtime Errors",
+      "folder": "T5 - Error Handling/T5.2 - Handles and Logs Runtime Errors",
       "filename": "visual-guide-02.png",
       "sections": [
         "4. $STACK for tracing",
@@ -461,12 +461,12 @@
       "source": "/Users/pietrodileo/.codex/generated_images/01a19e30-9885-7a11-aa48-f0c5eb2a213e/exec-0fee064b-d4eb-44bf-8aab-62740982a7e7.png",
       "width": 1536,
       "height": 1024,
-      "file": "T5 - Error Handling/T5.2: Handles and Logs Runtime Errors/visual-guide-02.png",
+      "file": "T5 - Error Handling/T5.2 - Handles and Logs Runtime Errors/visual-guide-02.png",
       "sha256": "c971faae2f8fdd6865fafc55d5fca115cd9e0058863f20790d72b739e8db2689"
     },
     {
       "topic": "T5.3",
-      "folder": "T5 - Error Handling/T5.3: Diagnoses Common Errors",
+      "folder": "T5 - Error Handling/T5.3 - Diagnoses Common Errors",
       "filename": "visual-guide-01.png",
       "sections": [
         "1. <SUBSCRIPT> errors",
@@ -477,12 +477,12 @@
       "source": "/Users/pietrodileo/.codex/generated_images/01a19e30-9885-7a11-aa48-f0c5eb2a213e/exec-994d56e0-2b7b-4911-8462-fad4c1a76b53.png",
       "width": 1536,
       "height": 1024,
-      "file": "T5 - Error Handling/T5.3: Diagnoses Common Errors/visual-guide-01.png",
+      "file": "T5 - Error Handling/T5.3 - Diagnoses Common Errors/visual-guide-01.png",
       "sha256": "726a044c4ed7b50151fade2ad88bbb9f358ed7c7da5b7908f27fd71374e139e1"
     },
     {
       "topic": "T5.3",
-      "folder": "T5 - Error Handling/T5.3: Diagnoses Common Errors",
+      "folder": "T5 - Error Handling/T5.3 - Diagnoses Common Errors",
       "filename": "visual-guide-02.png",
       "sections": [
         "4. <UNDEFINED> errors",
@@ -493,12 +493,12 @@
       "source": "/Users/pietrodileo/.codex/generated_images/01a19e30-9885-7a11-aa48-f0c5eb2a213e/exec-cb200a5b-290c-40a5-957c-ddcef65076ed.png",
       "width": 1536,
       "height": 1024,
-      "file": "T5 - Error Handling/T5.3: Diagnoses Common Errors/visual-guide-02.png",
+      "file": "T5 - Error Handling/T5.3 - Diagnoses Common Errors/visual-guide-02.png",
       "sha256": "7ee57acbb1b83b5678bb8fee2bb5097c3720d49e0a86dc780d06edd24fa778bd"
     },
     {
       "topic": "T5.3",
-      "folder": "T5 - Error Handling/T5.3: Diagnoses Common Errors",
+      "folder": "T5 - Error Handling/T5.3 - Diagnoses Common Errors",
       "filename": "visual-guide-03.png",
       "sections": [
         "7. <METHOD DOES NOT EXIST> errors",
@@ -509,7 +509,7 @@
       "source": "/Users/pietrodileo/.codex/generated_images/01a19e30-9885-7a11-aa48-f0c5eb2a213e/exec-dafe4379-b966-41dc-95f5-4d0348e0ff73.png",
       "width": 1536,
       "height": 1024,
-      "file": "T5 - Error Handling/T5.3: Diagnoses Common Errors/visual-guide-03.png",
+      "file": "T5 - Error Handling/T5.3 - Diagnoses Common Errors/visual-guide-03.png",
       "sha256": "5ad8018964586653f35d8305527fb34d03847788d13e3a80d2a9ed24638b586f"
     }
   ]

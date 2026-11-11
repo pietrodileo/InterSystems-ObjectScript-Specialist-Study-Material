@@ -18,7 +18,7 @@ Saved from https://exam-prep.es/exams/objectscript/index.html on 2 November 2026
 The original exam index advertises 357 practice questions; the downloaded quiz files contain 358 questions.
 The site warns that this new exam's study content and quizzes are still being refined and may contain errors. Content accuracy has not been independently verified. External documentation is linked, not downloaded. Spanish translations are not included.
 
-Folder hierarchy: `T1 - Manages Data Model/T1.1: Uses Classes/01 - …/study.md` (and similarly through T5).
+Folder hierarchy: `T1 - Manages Data Model/T1.1 - Uses Classes/01 - …/study.md` (and similarly through T5).
 
 Study files preserve explanations, code examples, tables, and documentation links. Quiz files include every question, answer choices, correct answer letters, and explanations.
 

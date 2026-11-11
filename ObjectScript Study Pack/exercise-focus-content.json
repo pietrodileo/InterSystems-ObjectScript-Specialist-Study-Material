@@ -58,7 +58,7 @@
         "file": "03 - Creare, salvare e controllare il risultato.md"
       }
     ],
-    "folder": "T1 - Manages Data Model/T1.1: Uses Classes/Approfondimenti esercizi",
+    "folder": "T1 - Manages Data Model/T1.1 - Uses Classes/Approfondimenti esercizi",
     "image": "schema-esercizi.png",
     "references": [
       {
@@ -142,7 +142,7 @@
         "file": "03 - Stringa, stream e valore derivato.md"
       }
     ],
-    "folder": "T1 - Manages Data Model/T1.2: Creates Properties and Indexes/Approfondimenti esercizi",
+    "folder": "T1 - Manages Data Model/T1.2 - Creates Properties and Indexes/Approfondimenti esercizi",
     "image": "schema-esercizi.png",
     "references": [
       {
@@ -222,7 +222,7 @@
         "file": "03 - Override e validazione non cancellano il contratto.md"
       }
     ],
-    "folder": "T1 - Manages Data Model/T1.3: Creates ObjectScript Methods/Approfondimenti esercizi",
+    "folder": "T1 - Manages Data Model/T1.3 - Creates ObjectScript Methods/Approfondimenti esercizi",
     "image": "schema-esercizi.png",
     "references": [
       {
@@ -304,7 +304,7 @@
         "file": "03 - Uno stream si legge dalla posizione corrente.md"
       }
     ],
-    "folder": "T1 - Manages Data Model/T1.4: Uses Complex Structures/Approfondimenti esercizi",
+    "folder": "T1 - Manages Data Model/T1.4 - Uses Complex Structures/Approfondimenti esercizi",
     "image": "schema-esercizi.png",
     "references": [
       {
@@ -383,7 +383,7 @@
         "file": "03 - Il segno più cambia l’insieme dei lock.md"
       }
     ],
-    "folder": "T2 - Basic Programming/T2.1: Ensures Data Integrity/Approfondimenti esercizi",
+    "folder": "T2 - Basic Programming/T2.1 - Ensures Data Integrity/Approfondimenti esercizi",
     "image": "schema-esercizi.png",
     "references": [
       {
@@ -466,7 +466,7 @@
         "file": "03 - Misurare durata, quantità e costo separatamente.md"
       }
     ],
-    "folder": "T2 - Basic Programming/T2.2: Tracks Application Data/Approfondimenti esercizi",
+    "folder": "T2 - Basic Programming/T2.2 - Tracks Application Data/Approfondimenti esercizi",
     "image": "schema-esercizi.png",
     "references": [
       {
@@ -549,7 +549,7 @@
         "file": "03 - SQL privilege e contesto di esecuzione.md"
       }
     ],
-    "folder": "T2 - Basic Programming/T2.3: Implements Security Features/Approfondimenti esercizi",
+    "folder": "T2 - Basic Programming/T2.3 - Implements Security Features/Approfondimenti esercizi",
     "image": "schema-esercizi.png",
     "references": [
       {
@@ -632,7 +632,7 @@
         "file": "03 - Un contatore condiviso non rende atomico l’intero lavoro.md"
       }
     ],
-    "folder": "T3 - IRIS Features/T3.1: Differentiates Storage Media/Approfondimenti esercizi",
+    "folder": "T3 - IRIS Features/T3.1 - Differentiates Storage Media/Approfondimenti esercizi",
     "image": "schema-esercizi.png",
     "references": [
       {
@@ -707,7 +707,7 @@
         "file": "03 - Un cursore richiede stato, controllo e chiusura.md"
       }
     ],
-    "folder": "T3 - IRIS Features/T3.2: Leverages ObjectScript - SQL Features/Approfondimenti esercizi",
+    "folder": "T3 - IRIS Features/T3.2 - Leverages ObjectScript - SQL Features/Approfondimenti esercizi",
     "image": "schema-esercizi.png",
     "references": [
       {
@@ -790,7 +790,7 @@
         "file": "03 - UNKNOWN non passa un filtro WHERE.md"
       }
     ],
-    "folder": "T3 - IRIS Features/T3.3: Handles Nulls/Approfondimenti esercizi",
+    "folder": "T3 - IRIS Features/T3.3 - Handles Nulls/Approfondimenti esercizi",
     "image": "schema-esercizi.png",
     "references": [
       {
@@ -875,7 +875,7 @@
         "file": "03 - Un piano congelato spiega un indice ignorato.md"
       }
     ],
-    "folder": "T3 - IRIS Features/T3.4: Handles Schema Evolution/Approfondimenti esercizi",
+    "folder": "T3 - IRIS Features/T3.4 - Handles Schema Evolution/Approfondimenti esercizi",
     "image": "schema-esercizi.png",
     "references": [
       {
@@ -958,7 +958,7 @@
         "file": "03 - Dal sintomo al piano, con una modifica verificabile.md"
       }
     ],
-    "folder": "T3 - IRIS Features/T3.5: Ensures Scalability and Performance/Approfondimenti esercizi",
+    "folder": "T3 - IRIS Features/T3.5 - Ensures Scalability and Performance/Approfondimenti esercizi",
     "image": "schema-esercizi.png",
     "references": [
       {
@@ -1044,7 +1044,7 @@
         "file": "03 - Il controllo di fine precede l’accesso.md"
       }
     ],
-    "folder": "T4 - Functions & APIs/T4.1: Traverses and Sorts Arrays/Approfondimenti esercizi",
+    "folder": "T4 - Functions & APIs/T4.1 - Traverses and Sorts Arrays/Approfondimenti esercizi",
     "image": "schema-esercizi.png",
     "references": [
       {
@@ -1127,7 +1127,7 @@
         "file": "03 - Una lista codificata evita l’ambiguità dei delimitatori.md"
       }
     ],
-    "folder": "T4 - Functions & APIs/T4.2: Manipulates Lists/Approfondimenti esercizi",
+    "folder": "T4 - Functions & APIs/T4.2 - Manipulates Lists/Approfondimenti esercizi",
     "image": "schema-esercizi.png",
     "references": [
       {
@@ -1213,7 +1213,7 @@
         "file": "03 - Normalizzare non è sempre preservare il significato.md"
       }
     ],
-    "folder": "T4 - Functions & APIs/T4.3: Manipulates Strings/Approfondimenti esercizi",
+    "folder": "T4 - Functions & APIs/T4.3 - Manipulates Strings/Approfondimenti esercizi",
     "image": "schema-esercizi.png",
     "references": [
       {
@@ -1300,7 +1300,7 @@
         "file": "03 - Data civile, orario e durata hanno rappresentazioni diverse.md"
       }
     ],
-    "folder": "T4 - Functions & APIs/T4.4: Mathematical, Logical, and Date - Time Operations/Approfondimenti esercizi",
+    "folder": "T4 - Functions & APIs/T4.4 - Mathematical, Logical, and Date - Time Operations/Approfondimenti esercizi",
     "image": "schema-esercizi.png",
     "references": [
       {
@@ -1387,7 +1387,7 @@
         "file": "03 - Una scelta totale ha un caso di riserva.md"
       }
     ],
-    "folder": "T4 - Functions & APIs/T4.5: Decision and Control Structures/Approfondimenti esercizi",
+    "folder": "T4 - Functions & APIs/T4.5 - Decision and Control Structures/Approfondimenti esercizi",
     "image": "schema-esercizi.png",
     "references": [
       {
@@ -1474,7 +1474,7 @@
         "file": "03 - Definizione e classe compilata sono viste diverse.md"
       }
     ],
-    "folder": "T4 - Functions & APIs/T4.6: Executes Methods and Queries Objects/Approfondimenti esercizi",
+    "folder": "T4 - Functions & APIs/T4.6 - Executes Methods and Queries Objects/Approfondimenti esercizi",
     "image": "schema-esercizi.png",
     "references": [
       {
@@ -1561,7 +1561,7 @@
         "file": "03 - Messaggio e canale di invio hanno ruoli distinti.md"
       }
     ],
-    "folder": "T4 - Functions & APIs/T4.7: Uses APIs for Common Operations/Approfondimenti esercizi",
+    "folder": "T4 - Functions & APIs/T4.7 - Uses APIs for Common Operations/Approfondimenti esercizi",
     "image": "schema-esercizi.png",
     "references": [
       {
@@ -1648,7 +1648,7 @@
         "file": "03 - Ogni strumento risponde a una scala diversa.md"
       }
     ],
-    "folder": "T5 - Error Handling/T5.1: Uses Troubleshooting Tools/Approfondimenti esercizi",
+    "folder": "T5 - Error Handling/T5.1 - Uses Troubleshooting Tools/Approfondimenti esercizi",
     "image": "schema-esercizi.png",
     "references": [
       {
@@ -1734,7 +1734,7 @@
         "file": "03 - Un errore composto richiede una rappresentazione strutturata.md"
       }
     ],
-    "folder": "T5 - Error Handling/T5.2: Handles and Logs Runtime Errors/Approfondimenti esercizi",
+    "folder": "T5 - Error Handling/T5.2 - Handles and Logs Runtime Errors/Approfondimenti esercizi",
     "image": "schema-esercizi.png",
     "references": [
       {
@@ -1820,7 +1820,7 @@
         "file": "03 - Un valore opzionale richiede una politica esplicita.md"
       }
     ],
-    "folder": "T5 - Error Handling/T5.3: Diagnoses Common Errors/Approfondimenti esercizi",
+    "folder": "T5 - Error Handling/T5.3 - Diagnoses Common Errors/Approfondimenti esercizi",
     "image": "schema-esercizi.png",
     "references": [
       {

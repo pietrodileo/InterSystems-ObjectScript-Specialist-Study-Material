@@ -16,6 +16,6 @@
 3. [03. Object-to-SQL projection](03%20-%20Object-to-SQL%20projection/study.md)
 4. [04. Embedded SQL vs Dynamic SQL](04%20-%20Embedded%20SQL%20vs%20Dynamic%20SQL/study.md)
 5. [05. Runtime mode and select modes (Logical/ODBC/Display)](05%20-%20Runtime%20mode%20and%20select%20modes%20%28Logical%20-%20ODBC%20-%20Display%29/study.md)
-6. [06. SQL variables: SQLCODE, %ROWCOUNT, %ROWID](06%20-%20SQL%20variables%3A%20SQLCODE%2C%20%25ROWCOUNT%2C%20%25ROWID/study.md)
+6. [06. SQL variables: SQLCODE, %ROWCOUNT, %ROWID](06%20-%20SQL%20variables%20-%20SQLCODE%2C%20%25ROWCOUNT%2C%20%25ROWID/study.md)
 
 Saved 2 November 2026 from [exam-prep.es](https://exam-prep.es/exams/objectscript/knowledge/T3.2.html). Reference links require internet access.

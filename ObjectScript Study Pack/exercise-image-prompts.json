@@ -5,7 +5,7 @@
     {
       "chapter": "T1.1",
       "kind": "core",
-      "file": "T1 - Manages Data Model/T1.1: Uses Classes/Approfondimenti esercizi/schema-esercizi.png",
+      "file": "T1 - Manages Data Model/T1.1 - Uses Classes/Approfondimenti esercizi/schema-esercizi.png",
       "source_image": "exec-6d7b6e52-f45c-4716-a0a9-43429ffea379.png",
       "mode": "built-in ImageGen",
       "language": "English",
@@ -34,7 +34,7 @@
     {
       "chapter": "T1.2",
       "kind": "core",
-      "file": "T1 - Manages Data Model/T1.2: Creates Properties and Indexes/Approfondimenti esercizi/schema-esercizi.png",
+      "file": "T1 - Manages Data Model/T1.2 - Creates Properties and Indexes/Approfondimenti esercizi/schema-esercizi.png",
       "source_image": "exec-59e5a93b-450f-4ae0-94a6-07ff2d046dbf.png",
       "mode": "built-in ImageGen",
       "language": "English",
@@ -63,7 +63,7 @@
     {
       "chapter": "T1.3",
       "kind": "core",
-      "file": "T1 - Manages Data Model/T1.3: Creates ObjectScript Methods/Approfondimenti esercizi/schema-esercizi.png",
+      "file": "T1 - Manages Data Model/T1.3 - Creates ObjectScript Methods/Approfondimenti esercizi/schema-esercizi.png",
       "source_image": "exec-9b815225-d725-474d-9ae8-5e621bd551a4.png",
       "mode": "built-in ImageGen",
       "language": "English",
@@ -92,7 +92,7 @@
     {
       "chapter": "T1.4",
       "kind": "core",
-      "file": "T1 - Manages Data Model/T1.4: Uses Complex Structures/Approfondimenti esercizi/schema-esercizi.png",
+      "file": "T1 - Manages Data Model/T1.4 - Uses Complex Structures/Approfondimenti esercizi/schema-esercizi.png",
       "source_image": "exec-275bb11a-4323-4e07-a60d-c7c52255c4e5.png",
       "mode": "built-in ImageGen",
       "language": "English",
@@ -121,7 +121,7 @@
     {
       "chapter": "T2.1",
       "kind": "core",
-      "file": "T2 - Basic Programming/T2.1: Ensures Data Integrity/Approfondimenti esercizi/schema-esercizi.png",
+      "file": "T2 - Basic Programming/T2.1 - Ensures Data Integrity/Approfondimenti esercizi/schema-esercizi.png",
       "source_image": "exec-eb64e19e-cab4-49b5-91f9-86c24d894807.png",
       "mode": "built-in ImageGen",
       "language": "English",
@@ -150,7 +150,7 @@
     {
       "chapter": "T2.2",
       "kind": "core",
-      "file": "T2 - Basic Programming/T2.2: Tracks Application Data/Approfondimenti esercizi/schema-esercizi.png",
+      "file": "T2 - Basic Programming/T2.2 - Tracks Application Data/Approfondimenti esercizi/schema-esercizi.png",
       "source_image": "exec-bf3e72c5-9510-46e0-87cb-ae7c1bc650b6.png",
       "mode": "built-in ImageGen",
       "language": "English",
@@ -179,7 +179,7 @@
     {
       "chapter": "T2.3",
       "kind": "core",
-      "file": "T2 - Basic Programming/T2.3: Implements Security Features/Approfondimenti esercizi/schema-esercizi.png",
+      "file": "T2 - Basic Programming/T2.3 - Implements Security Features/Approfondimenti esercizi/schema-esercizi.png",
       "source_image": "exec-61140159-eb46-4d97-9cd9-00986a00de70.png",
       "mode": "built-in ImageGen",
       "language": "English",
@@ -208,7 +208,7 @@
     {
       "chapter": "T3.1",
       "kind": "core",
-      "file": "T3 - IRIS Features/T3.1: Differentiates Storage Media/Approfondimenti esercizi/schema-esercizi.png",
+      "file": "T3 - IRIS Features/T3.1 - Differentiates Storage Media/Approfondimenti esercizi/schema-esercizi.png",
       "source_image": "exec-b5973e1a-8b21-4af6-a25c-c5a293301d8a.png",
       "mode": "built-in ImageGen",
       "language": "English",
@@ -237,7 +237,7 @@
     {
       "chapter": "T3.2",
       "kind": "core",
-      "file": "T3 - IRIS Features/T3.2: Leverages ObjectScript - SQL Features/Approfondimenti esercizi/schema-esercizi.png",
+      "file": "T3 - IRIS Features/T3.2 - Leverages ObjectScript - SQL Features/Approfondimenti esercizi/schema-esercizi.png",
       "source_image": "exec-6c8538d8-8d1d-4850-b7c7-90419d889d8e.png",
       "mode": "built-in ImageGen",
       "language": "English",
@@ -266,7 +266,7 @@
     {
       "chapter": "T3.3",
       "kind": "core",
-      "file": "T3 - IRIS Features/T3.3: Handles Nulls/Approfondimenti esercizi/schema-esercizi.png",
+      "file": "T3 - IRIS Features/T3.3 - Handles Nulls/Approfondimenti esercizi/schema-esercizi.png",
       "source_image": "exec-c22da023-0880-4abc-9785-555f232d5799.png",
       "mode": "built-in ImageGen",
       "language": "English",
@@ -295,7 +295,7 @@
     {
       "chapter": "T3.4",
       "kind": "core",
-      "file": "T3 - IRIS Features/T3.4: Handles Schema Evolution/Approfondimenti esercizi/schema-esercizi.png",
+      "file": "T3 - IRIS Features/T3.4 - Handles Schema Evolution/Approfondimenti esercizi/schema-esercizi.png",
       "source_image": "exec-abd54ac1-899e-4d06-8a69-dfdeb5289c0a.png",
       "mode": "built-in ImageGen",
       "language": "English",
@@ -324,7 +324,7 @@
     {
       "chapter": "T3.5",
       "kind": "core",
-      "file": "T3 - IRIS Features/T3.5: Ensures Scalability and Performance/Approfondimenti esercizi/schema-esercizi.png",
+      "file": "T3 - IRIS Features/T3.5 - Ensures Scalability and Performance/Approfondimenti esercizi/schema-esercizi.png",
       "source_image": "exec-160c8fa3-9baf-4b0a-aa94-0fe1c7275a12.png",
       "mode": "built-in ImageGen",
       "language": "English",
@@ -353,7 +353,7 @@
     {
       "chapter": "T4.1",
       "kind": "core",
-      "file": "T4 - Functions & APIs/T4.1: Traverses and Sorts Arrays/Approfondimenti esercizi/schema-esercizi.png",
+      "file": "T4 - Functions & APIs/T4.1 - Traverses and Sorts Arrays/Approfondimenti esercizi/schema-esercizi.png",
       "source_image": "exec-ecc12674-f251-4bae-9a6a-be59bda8db23.png",
       "mode": "built-in ImageGen",
       "language": "English",
@@ -382,7 +382,7 @@
     {
       "chapter": "T4.2",
       "kind": "core",
-      "file": "T4 - Functions & APIs/T4.2: Manipulates Lists/Approfondimenti esercizi/schema-esercizi.png",
+      "file": "T4 - Functions & APIs/T4.2 - Manipulates Lists/Approfondimenti esercizi/schema-esercizi.png",
       "source_image": "exec-964c1a9f-4e59-4d24-9c6d-2540925d80e5.png",
       "mode": "built-in ImageGen",
       "language": "English",
@@ -411,7 +411,7 @@
     {
       "chapter": "T4.3",
       "kind": "core",
-      "file": "T4 - Functions & APIs/T4.3: Manipulates Strings/Approfondimenti esercizi/schema-esercizi.png",
+      "file": "T4 - Functions & APIs/T4.3 - Manipulates Strings/Approfondimenti esercizi/schema-esercizi.png",
       "source_image": "exec-48218037-5e6b-413e-9e0a-94ef53954403.png",
       "mode": "built-in ImageGen",
       "language": "English",
@@ -440,7 +440,7 @@
     {
       "chapter": "T4.4",
       "kind": "core",
-      "file": "T4 - Functions & APIs/T4.4: Mathematical, Logical, and Date - Time Operations/Approfondimenti esercizi/schema-esercizi.png",
+      "file": "T4 - Functions & APIs/T4.4 - Mathematical, Logical, and Date - Time Operations/Approfondimenti esercizi/schema-esercizi.png",
       "source_image": "exec-5c481960-4d6e-4e03-81dd-4f36950a2dd7.png",
       "mode": "built-in ImageGen",
       "language": "English",
@@ -469,7 +469,7 @@
     {
       "chapter": "T4.5",
       "kind": "core",
-      "file": "T4 - Functions & APIs/T4.5: Decision and Control Structures/Approfondimenti esercizi/schema-esercizi.png",
+      "file": "T4 - Functions & APIs/T4.5 - Decision and Control Structures/Approfondimenti esercizi/schema-esercizi.png",
       "source_image": "exec-8baf1069-5d39-45f4-9d2b-22479a4933ab.png",
       "mode": "built-in ImageGen",
       "language": "English",
@@ -498,7 +498,7 @@
     {
       "chapter": "T4.6",
       "kind": "core",
-      "file": "T4 - Functions & APIs/T4.6: Executes Methods and Queries Objects/Approfondimenti esercizi/schema-esercizi.png",
+      "file": "T4 - Functions & APIs/T4.6 - Executes Methods and Queries Objects/Approfondimenti esercizi/schema-esercizi.png",
       "source_image": "exec-858bda0f-ffb6-4a1a-b683-d2328c050cef.png",
       "mode": "built-in ImageGen",
       "language": "English",
@@ -527,7 +527,7 @@
     {
       "chapter": "T4.7",
       "kind": "core",
-      "file": "T4 - Functions & APIs/T4.7: Uses APIs for Common Operations/Approfondimenti esercizi/schema-esercizi.png",
+      "file": "T4 - Functions & APIs/T4.7 - Uses APIs for Common Operations/Approfondimenti esercizi/schema-esercizi.png",
       "source_image": "exec-8bbc123f-ef4c-4977-94b1-ad6cfeda1b3c.png",
       "mode": "built-in ImageGen",
       "language": "English",
@@ -556,7 +556,7 @@
     {
       "chapter": "T5.1",
       "kind": "core",
-      "file": "T5 - Error Handling/T5.1: Uses Troubleshooting Tools/Approfondimenti esercizi/schema-esercizi.png",
+      "file": "T5 - Error Handling/T5.1 - Uses Troubleshooting Tools/Approfondimenti esercizi/schema-esercizi.png",
       "source_image": "exec-ead46652-3cde-47d0-b10e-2dee52469931.png",
       "mode": "built-in ImageGen",
       "language": "English",
@@ -585,7 +585,7 @@
     {
       "chapter": "T5.2",
       "kind": "core",
-      "file": "T5 - Error Handling/T5.2: Handles and Logs Runtime Errors/Approfondimenti esercizi/schema-esercizi.png",
+      "file": "T5 - Error Handling/T5.2 - Handles and Logs Runtime Errors/Approfondimenti esercizi/schema-esercizi.png",
       "source_image": "exec-a221fefb-611f-48b5-bf08-d86a353cea87.png",
       "mode": "built-in ImageGen",
       "language": "English",
@@ -614,7 +614,7 @@
     {
       "chapter": "T5.3",
       "kind": "core",
-      "file": "T5 - Error Handling/T5.3: Diagnoses Common Errors/Approfondimenti esercizi/schema-esercizi.png",
+      "file": "T5 - Error Handling/T5.3 - Diagnoses Common Errors/Approfondimenti esercizi/schema-esercizi.png",
       "source_image": "exec-6df5041f-4a25-4bba-88f2-eedeec9f6d83.png",
       "mode": "built-in ImageGen",
       "language": "English",
@@ -643,7 +643,7 @@
     {
       "chapter": "T1.1",
       "kind": "further_insights",
-      "file": "T1 - Manages Data Model/T1.1: Uses Classes/Approfondimenti esercizi/schema-esercizi-extra.png",
+      "file": "T1 - Manages Data Model/T1.1 - Uses Classes/Approfondimenti esercizi/schema-esercizi-extra.png",
       "source_image": "exec-c17a7176-48c3-44e5-8d4f-5bf593fad002.png",
       "mode": "built-in ImageGen",
       "language": "English",
@@ -677,7 +677,7 @@
     {
       "chapter": "T1.2",
       "kind": "further_insights",
-      "file": "T1 - Manages Data Model/T1.2: Creates Properties and Indexes/Approfondimenti esercizi/schema-esercizi-extra.png",
+      "file": "T1 - Manages Data Model/T1.2 - Creates Properties and Indexes/Approfondimenti esercizi/schema-esercizi-extra.png",
       "source_image": "exec-7a344bb5-0c05-4369-8899-134e852eda0b.png",
       "mode": "built-in ImageGen",
       "language": "English",
@@ -711,7 +711,7 @@
     {
       "chapter": "T1.3",
       "kind": "further_insights",
-      "file": "T1 - Manages Data Model/T1.3: Creates ObjectScript Methods/Approfondimenti esercizi/schema-esercizi-extra.png",
+      "file": "T1 - Manages Data Model/T1.3 - Creates ObjectScript Methods/Approfondimenti esercizi/schema-esercizi-extra.png",
       "source_image": "exec-fb6196e3-1951-48ba-9425-7fc46fcd8755.png",
       "mode": "built-in ImageGen",
       "language": "English",
@@ -745,7 +745,7 @@
     {
       "chapter": "T1.4",
       "kind": "further_insights",
-      "file": "T1 - Manages Data Model/T1.4: Uses Complex Structures/Approfondimenti esercizi/schema-esercizi-extra.png",
+      "file": "T1 - Manages Data Model/T1.4 - Uses Complex Structures/Approfondimenti esercizi/schema-esercizi-extra.png",
       "source_image": "exec-1d188e64-00c9-423b-9654-ca7fc9c9289f.png",
       "mode": "built-in ImageGen",
       "language": "English",
@@ -779,7 +779,7 @@
     {
       "chapter": "T2.1",
       "kind": "further_insights",
-      "file": "T2 - Basic Programming/T2.1: Ensures Data Integrity/Approfondimenti esercizi/schema-esercizi-extra.png",
+      "file": "T2 - Basic Programming/T2.1 - Ensures Data Integrity/Approfondimenti esercizi/schema-esercizi-extra.png",
       "source_image": "exec-f3d91005-5505-4272-a3ec-39c167d21e4b.png",
       "mode": "built-in ImageGen",
       "language": "English",
@@ -813,7 +813,7 @@
     {
       "chapter": "T2.2",
       "kind": "further_insights",
-      "file": "T2 - Basic Programming/T2.2: Tracks Application Data/Approfondimenti esercizi/schema-esercizi-extra.png",
+      "file": "T2 - Basic Programming/T2.2 - Tracks Application Data/Approfondimenti esercizi/schema-esercizi-extra.png",
       "source_image": "exec-c17a0d23-4a3d-4058-ae48-46bbbbbe8283.png",
       "mode": "built-in ImageGen",
       "language": "English",
@@ -847,7 +847,7 @@
     {
       "chapter": "T2.3",
       "kind": "further_insights",
-      "file": "T2 - Basic Programming/T2.3: Implements Security Features/Approfondimenti esercizi/schema-esercizi-extra.png",
+      "file": "T2 - Basic Programming/T2.3 - Implements Security Features/Approfondimenti esercizi/schema-esercizi-extra.png",
       "source_image": "exec-b1b1f13d-f93d-41d8-a0fb-bd713f937dc2.png",
       "mode": "built-in ImageGen",
       "language": "English",
@@ -881,7 +881,7 @@
     {
       "chapter": "T3.1",
       "kind": "further_insights",
-      "file": "T3 - IRIS Features/T3.1: Differentiates Storage Media/Approfondimenti esercizi/schema-esercizi-extra.png",
+      "file": "T3 - IRIS Features/T3.1 - Differentiates Storage Media/Approfondimenti esercizi/schema-esercizi-extra.png",
       "source_image": "exec-cd2f19ed-f6e3-480c-b846-09a05f3db4b1.png",
       "mode": "built-in ImageGen",
       "language": "English",
@@ -915,7 +915,7 @@
     {
       "chapter": "T3.2",
       "kind": "further_insights",
-      "file": "T3 - IRIS Features/T3.2: Leverages ObjectScript - SQL Features/Approfondimenti esercizi/schema-esercizi-extra.png",
+      "file": "T3 - IRIS Features/T3.2 - Leverages ObjectScript - SQL Features/Approfondimenti esercizi/schema-esercizi-extra.png",
       "source_image": "exec-e6a3777e-c855-4335-8696-9d7f76a5b95d.png",
       "mode": "built-in ImageGen",
       "language": "English",
@@ -949,7 +949,7 @@
     {
       "chapter": "T3.3",
       "kind": "further_insights",
-      "file": "T3 - IRIS Features/T3.3: Handles Nulls/Approfondimenti esercizi/schema-esercizi-extra.png",
+      "file": "T3 - IRIS Features/T3.3 - Handles Nulls/Approfondimenti esercizi/schema-esercizi-extra.png",
       "source_image": "exec-5656218b-31bb-4c1a-83b0-5a31380a36c0.png",
       "mode": "built-in ImageGen",
       "language": "English",
@@ -983,7 +983,7 @@
     {
       "chapter": "T3.4",
       "kind": "further_insights",
-      "file": "T3 - IRIS Features/T3.4: Handles Schema Evolution/Approfondimenti esercizi/schema-esercizi-extra.png",
+      "file": "T3 - IRIS Features/T3.4 - Handles Schema Evolution/Approfondimenti esercizi/schema-esercizi-extra.png",
       "source_image": "exec-7813cee7-3440-40f7-9491-8e1233c12f25.png",
       "mode": "built-in ImageGen",
       "language": "English",
@@ -1017,7 +1017,7 @@
     {
       "chapter": "T3.5",
       "kind": "further_insights",
-      "file": "T3 - IRIS Features/T3.5: Ensures Scalability and Performance/Approfondimenti esercizi/schema-esercizi-extra.png",
+      "file": "T3 - IRIS Features/T3.5 - Ensures Scalability and Performance/Approfondimenti esercizi/schema-esercizi-extra.png",
       "source_image": "exec-3f6114ff-6067-43e7-81b5-097a87b9d365.png",
       "mode": "built-in ImageGen",
       "language": "English",
@@ -1051,7 +1051,7 @@
     {
       "chapter": "T4.1",
       "kind": "further_insights",
-      "file": "T4 - Functions & APIs/T4.1: Traverses and Sorts Arrays/Approfondimenti esercizi/schema-esercizi-extra.png",
+      "file": "T4 - Functions & APIs/T4.1 - Traverses and Sorts Arrays/Approfondimenti esercizi/schema-esercizi-extra.png",
       "source_image": "exec-1533d3e2-aff1-437d-b808-6f92aab0ff9b.png",
       "mode": "built-in ImageGen",
       "language": "English",
@@ -1085,7 +1085,7 @@
     {
       "chapter": "T4.2",
       "kind": "further_insights",
-      "file": "T4 - Functions & APIs/T4.2: Manipulates Lists/Approfondimenti esercizi/schema-esercizi-extra.png",
+      "file": "T4 - Functions & APIs/T4.2 - Manipulates Lists/Approfondimenti esercizi/schema-esercizi-extra.png",
       "source_image": "exec-232dd04f-d807-409a-a54f-fb4ef3a50b06.png",
       "mode": "built-in ImageGen",
       "language": "English",
@@ -1119,7 +1119,7 @@
     {
       "chapter": "T4.3",
       "kind": "further_insights",
-      "file": "T4 - Functions & APIs/T4.3: Manipulates Strings/Approfondimenti esercizi/schema-esercizi-extra.png",
+      "file": "T4 - Functions & APIs/T4.3 - Manipulates Strings/Approfondimenti esercizi/schema-esercizi-extra.png",
       "source_image": "exec-2f342112-515a-4d66-a925-305e826e6fe0.png",
       "mode": "built-in ImageGen",
       "language": "English",
@@ -1153,7 +1153,7 @@
     {
       "chapter": "T4.4",
       "kind": "further_insights",
-      "file": "T4 - Functions & APIs/T4.4: Mathematical, Logical, and Date - Time Operations/Approfondimenti esercizi/schema-esercizi-extra.png",
+      "file": "T4 - Functions & APIs/T4.4 - Mathematical, Logical, and Date - Time Operations/Approfondimenti esercizi/schema-esercizi-extra.png",
       "source_image": "exec-8a57f383-326f-4b85-9a58-c27a45361ba7.png",
       "mode": "built-in ImageGen",
       "language": "English",
@@ -1187,7 +1187,7 @@
     {
       "chapter": "T4.5",
       "kind": "further_insights",
-      "file": "T4 - Functions & APIs/T4.5: Decision and Control Structures/Approfondimenti esercizi/schema-esercizi-extra.png",
+      "file": "T4 - Functions & APIs/T4.5 - Decision and Control Structures/Approfondimenti esercizi/schema-esercizi-extra.png",
       "source_image": "exec-96fdb615-3434-4291-bc9a-39b2aafa5c35.png",
       "mode": "built-in ImageGen",
       "language": "English",
@@ -1221,7 +1221,7 @@
     {
       "chapter": "T4.6",
       "kind": "further_insights",
-      "file": "T4 - Functions & APIs/T4.6: Executes Methods and Queries Objects/Approfondimenti esercizi/schema-esercizi-extra.png",
+      "file": "T4 - Functions & APIs/T4.6 - Executes Methods and Queries Objects/Approfondimenti esercizi/schema-esercizi-extra.png",
       "source_image": "exec-ca43493a-eae9-4d54-b696-4e131ad7a9dc.png",
       "mode": "built-in ImageGen",
       "language": "English",
@@ -1255,7 +1255,7 @@
     {
       "chapter": "T4.7",
       "kind": "further_insights",
-      "file": "T4 - Functions & APIs/T4.7: Uses APIs for Common Operations/Approfondimenti esercizi/schema-esercizi-extra.png",
+      "file": "T4 - Functions & APIs/T4.7 - Uses APIs for Common Operations/Approfondimenti esercizi/schema-esercizi-extra.png",
       "source_image": "exec-58336ef9-18a5-4573-ba2e-5814d2630128.png",
       "mode": "built-in ImageGen",
       "language": "English",
@@ -1289,7 +1289,7 @@
     {
       "chapter": "T5.1",
       "kind": "further_insights",
-      "file": "T5 - Error Handling/T5.1: Uses Troubleshooting Tools/Approfondimenti esercizi/schema-esercizi-extra.png",
+      "file": "T5 - Error Handling/T5.1 - Uses Troubleshooting Tools/Approfondimenti esercizi/schema-esercizi-extra.png",
       "source_image": "exec-1df8fc3d-dd10-4033-9431-43df5fd6f4ae.png",
       "mode": "built-in ImageGen",
       "language": "English",
@@ -1323,7 +1323,7 @@
     {
       "chapter": "T5.2",
       "kind": "further_insights",
-      "file": "T5 - Error Handling/T5.2: Handles and Logs Runtime Errors/Approfondimenti esercizi/schema-esercizi-extra.png",
+      "file": "T5 - Error Handling/T5.2 - Handles and Logs Runtime Errors/Approfondimenti esercizi/schema-esercizi-extra.png",
       "source_image": "exec-e23c2684-4306-4c45-9a05-af4900004eef.png",
       "mode": "built-in ImageGen",
       "language": "English",
@@ -1357,7 +1357,7 @@
     {
       "chapter": "T5.3",
       "kind": "further_insights",
-      "file": "T5 - Error Handling/T5.3: Diagnoses Common Errors/Approfondimenti esercizi/schema-esercizi-extra.png",
+      "file": "T5 - Error Handling/T5.3 - Diagnoses Common Errors/Approfondimenti esercizi/schema-esercizi-extra.png",
       "source_image": "exec-66da5406-b953-4953-9dee-ef55de52fe89.png",
       "mode": "built-in ImageGen",
       "language": "English",
