@@ -508,6 +508,8 @@ An ordinary SQL `DELETE` uses the SQL trigger path. If a deletion rule must cove
 
 ## 4. Interprets storage definitions (DataLocation, IdLocation, IndexLocation, USEEXTENTSET)
 
+![IRIS globals and USEEXTENTSET comparison](visual-guide-storage-definitions.svg)
+
 ### Key Points
 
 - **Storage definition** maps class properties to underlying global structures
@@ -658,6 +660,8 @@ The result has the form `system^directory`. An empty system part means the datab
 - [USEEXTENTSET Parameter](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_storageglobals)
 
 ## 5. Implements multiple inheritance (order matters, method resolution)
+
+![ObjectScript method priority and persistent inheritance](visual-guide-multiple-inheritance.svg)
 
 ### Key Points
 

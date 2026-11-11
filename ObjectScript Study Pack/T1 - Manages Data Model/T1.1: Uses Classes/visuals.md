@@ -29,3 +29,11 @@ Covers:
 ## Object lifecycle and callbacks
 
 ![Object lifecycle for Tutor.Patient, showing callbacks for creating, validating, saving, opening, and deleting, SQL trigger timing, and how HomeAddress is stored with its parent](visual-guide-object-lifecycle.png)
+
+## Storage definitions and USEEXTENTSET
+
+![DataLocation, IdLocation, IndexLocation and per-index Location overrides, with hashed global comparison](visual-guide-storage-definitions.svg)
+
+## ObjectScript multiple inheritance
+
+![Inheritance left/right method resolution with a persistent parent and mixin](visual-guide-multiple-inheritance.svg)
