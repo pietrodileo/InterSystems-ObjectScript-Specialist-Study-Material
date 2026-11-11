@@ -10,6 +10,47 @@ const minZoom = 100;
 const maxZoom = 400;
 const zoomStep = 25;
 let zoom = minZoom;
+let imageLinks = [];
+let imageIndex = 0;
+const previous = document.querySelector('#image-previous');
+const next = document.querySelector('#image-next');
+
+function showImage(link) {
+  const thumbnail = link.querySelector('img');
+  image.hidden = true;
+  image.style.removeProperty('width');
+  image.alt = thumbnail.alt;
+  download.href = link.href;
+  document.querySelector('#image-viewer-caption').textContent =
+    `${imageIndex + 1} / ${imageLinks.length} · ${link.closest('figure')?.querySelector('figcaption')?.innerText.replace(/View in chapter\s*Download\s*$/, '').trim() || thumbnail.alt}`;
+  previous.disabled = imageIndex === 0;
+  next.disabled = imageIndex === imageLinks.length - 1;
+  zoom = minZoom;
+  zoomOut.disabled = true;
+  zoomIn.disabled = true;
+  zoomLevel.value = `${zoom}%`;
+  message.textContent = 'Loading image…';
+  message.hidden = false;
+  if (!viewer.open) viewer.showModal();
+  viewport.scrollTo(0, 0);
+  image.src = link.href;
+}
+
+function moveImage(offset) {
+  const index = imageIndex + offset;
+  if (index < 0 || index >= imageLinks.length) return;
+  imageIndex = index;
+  showImage(imageLinks[imageIndex]);
+}
+
+previous.addEventListener('click', () => moveImage(-1));
+next.addEventListener('click', () => moveImage(1));
+viewer.addEventListener('keydown', event => {
+  if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+    event.preventDefault();
+    moveImage(event.key === 'ArrowLeft' ? -1 : 1);
+  }
+});
 
 function updateZoom() {
   if (image.hidden) return;
@@ -41,20 +82,9 @@ document.querySelector('#lesson').addEventListener('click', event => {
 
   event.preventDefault();
   link.focus({ preventScroll: true });
-  const thumbnail = link.querySelector('img');
-  image.hidden = true;
-  image.style.removeProperty('width');
-  image.alt = thumbnail.alt;
-  download.href = link.href;
-  zoom = minZoom;
-  zoomOut.disabled = true;
-  zoomIn.disabled = true;
-  zoomLevel.value = `${zoom}%`;
-  message.textContent = 'Loading image…';
-  message.hidden = false;
-  viewer.showModal();
-  viewport.scrollTo(0, 0);
-  image.src = link.href;
+  imageLinks = [...document.querySelectorAll('#lesson [data-image-viewer]')];
+  imageIndex = imageLinks.indexOf(link);
+  showImage(link);
 });
 
 image.addEventListener('load', () => {

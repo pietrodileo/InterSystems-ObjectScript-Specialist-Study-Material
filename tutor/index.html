@@ -8,10 +8,10 @@
   <title>ObjectScript Certification Tutor</title>
   <link rel="icon" type="image/png" sizes="32x32" href="./favicon.png">
   <link rel="icon" type="image/svg+xml" sizes="any" href="./favicon.svg">
-  <link rel="stylesheet" href="./style.css?v=home-profile-role-1">
+  <link rel="stylesheet" href="./style.css?v=gallery-1">
   <script type="module" src="./sidebar-controls.mjs"></script>
-  <script type="module" src="./image-viewer.mjs"></script>
-  <script type="module" src="./app.mjs?v=home-profile-role-1"></script>
+  <script type="module" src="./image-viewer.mjs?v=gallery-1"></script>
+  <script type="module" src="./app.mjs?v=gallery-1"></script>
 </head>
 <body>
   <a class="skip" href="#lesson">Skip to content</a>
@@ -83,6 +83,11 @@
         <img alt="" hidden>
         <p id="image-viewer-message" role="status" hidden></p>
       </div>
+    </div>
+    <div class="image-viewer-footer">
+      <button type="button" id="image-previous" aria-label="Previous image">←</button>
+      <p id="image-viewer-caption" aria-live="polite"></p>
+      <button type="button" id="image-next" aria-label="Next image">→</button>
     </div>
   </dialog>
   <div class="layout">

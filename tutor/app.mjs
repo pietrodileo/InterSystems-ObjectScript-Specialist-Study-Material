@@ -2,6 +2,7 @@ import { assessmentAnswered, assessmentComplete, chapterStep, correctSelection, 
 import { caseFocus, examAreaDescriptions, guides, variations } from './lesson-guides.mjs?v=practice-feedback-1';
 import { diagramExamples, studyExamples } from './code-examples.mjs';
 import './sidebar-controls.mjs';
+import { galleryItems } from './content.mjs?v=practice-feedback-1';
 
 const lesson = document.querySelector('#lesson');
 const nav = document.querySelector('#chapters');
@@ -115,7 +116,7 @@ function renderNavigation() {
   progress.value = seen;
   document.querySelector('#progress-label').textContent =
     `${done}/${chapters.length} chapters complete. ${seen}/${total} quiz questions answered.${errors ? ` ${errors} to review.` : ''}${storageWorks ? '' : ' Progress could not be saved in this browser.'}`;
-  courseMenu.innerHTML = Object.entries({ roadmap: 'Home', review: 'Answer review', final: 'Final assessment' }).map(([page, label]) =>
+  courseMenu.innerHTML = Object.entries({ roadmap: 'Home', gallery: 'Gallery', review: 'Answer review', final: 'Final assessment' }).map(([page, label]) =>
     `<button type="button" data-course="${page}" ${phase === page ? 'aria-current="page"' : ''}>${label}</button>`).join('');
   const activeArea = phase === 'area' ? state.area : chapter?.topic.split('.')[0];
   nav.innerHTML = Object.entries(topics).map(([code, name]) => {
@@ -238,6 +239,10 @@ function renderHomeChapters() {
   </section>`;
 }
 function renderCourse() {
+  if (phase === 'gallery') {
+    renderGallery();
+    return;
+  }
   if (phase === 'area' && Object.hasOwn(topics, state.area)) {
     const code = state.area;
     const group = chapters.filter(item => item.topic.startsWith(`${code}.`));
@@ -358,6 +363,53 @@ function renderDiagrams(diagrams, label) {
       <img src="${url}" alt="${escape(alt)}" width="${width}" height="${height}" loading="lazy">
     </a><figcaption>${label} ${index + 1}. Select the image to zoom or download it.</figcaption></figure>`;
   }).join('')}</div>`;
+}
+
+function renderGallery() {
+  lesson.innerHTML = `
+    <header class="lesson-header">
+      <h1 tabindex="-1">Gallery</h1>
+      <p class="lead">Browse every course diagram. Select an image to zoom, browse or download the original.</p>
+    </header>
+    <section class="panel gallery-filters" aria-label="Filter images">
+      <label>Search images<input id="gallery-search" type="search" placeholder="Caption, chapter or section"></label>
+      <label>Chapter<select id="gallery-chapter"><option value="">All chapters</option>${chapters.map(item => `<option value="${escape(item.topic)}">${escape(item.title)}</option>`).join('')}</select></label>
+      <label>Course step<select id="gallery-phase"><option value="">All steps</option><option value="theory">Study</option><option value="quiz">Practice</option><option value="cases">Apply</option></select></label>
+    </section>
+    <p id="gallery-count" class="muted" role="status"></p>
+    <div id="gallery-grid" class="gallery-grid"></div>`;
+  for (const input of lesson.querySelectorAll('.gallery-filters input, .gallery-filters select')) {
+    input.addEventListener('input', renderGalleryGrid);
+  }
+  renderGalleryGrid();
+}
+
+function renderGalleryGrid() {
+  const query = lesson.querySelector('#gallery-search').value.trim().toLowerCase();
+  const topic = lesson.querySelector('#gallery-chapter').value;
+  const selectedPhase = lesson.querySelector('#gallery-phase').value;
+  const items = galleryItems(chapters);
+  const visible = items.filter(item => (!topic || item.topic === topic) &&
+    (!selectedPhase || (selectedPhase === 'quiz' ? item.locations.some(location => location.startsWith('Practice')) : item.phase === selectedPhase)) &&
+    `${item.title} ${item.caption} ${item.locations.join(' ')}`.toLowerCase().includes(query));
+  lesson.querySelector('#gallery-count').textContent = `${visible.length} of ${items.length} images`;
+  lesson.querySelector('#gallery-grid').innerHTML = visible.length ? visible.map(item => {
+    const url = escape(packPath(item.file));
+    return `<figure class="gallery-card">
+      <a href="${url}" data-image-viewer target="_blank" rel="noopener" aria-haspopup="dialog" aria-controls="image-viewer" aria-label="Open ${escape(item.caption)}">
+        <img src="${url}" alt="${escape(item.caption)}" width="${item.width}" height="${item.height}" loading="lazy">
+      </a>
+      <figcaption>
+        <p class="muted">Chapter ${item.chapter} · ${escape(item.title)}</p>
+        <p>${escape(item.caption)}</p>
+        <p class="muted">${item.locations.map(escape).join('<br>')}</p>
+        <div class="actions">
+          <button type="button" data-gallery-file="${escape(item.file)}" data-topic="${escape(item.topic)}" data-phase="${item.phase}">View in chapter</button>
+          <a class="button-link" href="${url}" download>Download</a>
+        </div>
+      </figcaption>
+    </figure>`;
+  }).join('') : '<p>No images match these filters. Try another chapter or search term.</p>';
 }
 
 
@@ -974,6 +1026,15 @@ lesson.addEventListener('click', event => {
     openCourse(button.dataset.course);
   } else if (button.dataset.topic) {
     openChapter(chapters.find(item => item.topic === button.dataset.topic), button.dataset.phase, button.dataset.mode);
+    if (button.dataset.galleryFile) {
+      const target = [...lesson.querySelectorAll('[data-image-viewer]')]
+        .find(link => link.getAttribute('href') === packPath(button.dataset.galleryFile));
+      for (let parent = target?.parentElement; parent; parent = parent.parentElement) {
+        if (parent.tagName === 'DETAILS') parent.open = true;
+      }
+      target?.scrollIntoView({ block: 'center' });
+      target?.focus({ preventScroll: true });
+    }
   } else if (button.dataset.phase) {
     if (button.hasAttribute('data-study')) state.studied[chapter.topic] = true;
     openChapter(chapter, button.dataset.phase, button.dataset.mode);
@@ -1000,7 +1061,7 @@ try {
   if (previous && Object.hasOwn(phases, state.phase)) openChapter(previous, state.phase);
   else if (state.phase === 'past' && state.assessments[state.assessmentIndex]) openCourse('past');
   else if (state.phase === 'area' && Object.hasOwn(topics, state.area)) openArea(state.area);
-  else openCourse(['final', 'review', 'profile'].includes(state.phase) ? state.phase : 'roadmap');
+  else openCourse(['final', 'review', 'profile', 'gallery'].includes(state.phase) ? state.phase : 'roadmap');
 } catch (error) {
   lesson.innerHTML = '<h1>Could not load the Study Pack</h1><p>Start the tutor from the repository root using the command in the README, then reload this page.</p>';
   console.error(error);
@@ -1069,7 +1130,7 @@ function validateProgressBackup(backup) {
   };
   if (!saved.assessments.every(validFinal) || (saved.final !== undefined && !validFinal(saved.final))) return null;
   if (saved.topic !== undefined && !byTopic.has(saved.topic)) return null;
-  if (saved.phase !== undefined && !['theory', 'quiz', 'cases', 'roadmap', 'review', 'final', 'past', 'profile', 'area'].includes(saved.phase)) return null;
+  if (saved.phase !== undefined && !['theory', 'quiz', 'cases', 'roadmap', 'review', 'final', 'past', 'profile', 'area', 'gallery'].includes(saved.phase)) return null;
   if (saved.assessmentIndex !== undefined && (!Number.isInteger(saved.assessmentIndex) || saved.assessmentIndex < 0 || saved.assessmentIndex >= saved.assessments.length)) return null;
   if (saved.sidebarOpen !== undefined && typeof saved.sidebarOpen !== 'boolean') return null;
 

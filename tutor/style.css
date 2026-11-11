@@ -682,7 +682,7 @@ html:has(.image-viewer[open]) { overflow: hidden; }
   box-shadow: 0 1rem 3rem rgb(5 12 30 / 30%);
   overflow: hidden;
 }
-.image-viewer[open] { display: grid; grid-template-rows: auto minmax(0, 1fr); }
+.image-viewer[open] { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; }
 .image-viewer::backdrop { background: rgb(9 17 38 / 75%); }
 .image-viewer-toolbar {
   display: flex;
@@ -735,6 +735,19 @@ html:has(.image-viewer[open]) { overflow: hidden; }
 }
 .image-viewer-canvas img { max-width: none; height: auto; }
 .image-viewer-canvas p { margin: 1rem; color: var(--muted); }
+
+.gallery-filters { display: flex; flex-wrap: wrap; gap: 1rem; }
+.gallery-filters label { display: grid; gap: .4rem; flex: 1 1 12rem; min-width: 0; }
+.gallery-filters input, .gallery-filters select { width: 100%; min-width: 0; }
+.gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr)); gap: 1.25rem; }
+.gallery-card { border: 1px solid var(--line); border-radius: .6rem; overflow: hidden; background: var(--white); }
+.gallery-card > a { display: block; background: var(--quiet); cursor: zoom-in; }
+.gallery-card img { height: 15rem; object-fit: contain; border: 0; border-radius: 0; }
+.gallery-card figcaption { padding: 1rem; }
+.gallery-card figcaption p { margin: 0 0 .8rem; overflow-wrap: anywhere; }
+.image-viewer-footer { display: flex; align-items: center; gap: .75rem; padding: .65rem; border-top: 1px solid var(--line); }
+.image-viewer-footer p { flex: 1; min-width: 0; max-height: 7rem; overflow: auto; margin: 0; font-size: .85rem; white-space: pre-line; }
+.image-viewer-footer button { flex: none; }
 
 @media (max-width: 720px) {
   .header-tools { width: 100%; justify-content: space-between; gap: .5rem; }

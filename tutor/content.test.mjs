@@ -5,6 +5,27 @@ import { assessmentAnswered, assessmentComplete, chapterStep, correctSelection, 
 
 import { caseFocus, guides, variations } from './lesson-guides.mjs';
 import { diagramExamples, studyExamples } from './code-examples.mjs';
+import { galleryItems } from './content.mjs';
+
+test('gallery covers every course diagram with captions and valid course locations', async () => {
+  const chapters = await loadCourse(path => readFile(new URL(packPath(path), import.meta.url), 'utf8'));
+  const images = galleryItems(chapters);
+  assert.equal(images.length, 79);
+  assert.equal(new Set(images.map(image => image.file)).size, images.length);
+  for (const image of images) {
+    const chapter = chapters[image.chapter - 1];
+    assert.equal(image.topic, chapter.topic);
+    assert.ok(image.caption.trim());
+    assert.ok(image.locations.length);
+    assert.ok((image.phase === 'theory' ? chapter.diagrams : chapter.exerciseDiagrams)
+      .some(diagram => diagram.file === image.file));
+    for (const question of chapter.quiz.filter(question => question.feedback.diagram?.file === image.file)) {
+      assert.ok(image.locations.includes(`Practice · Question ${question.id}`));
+    }
+  }
+  const lifecycle = images.find(image => image.file.endsWith('/visual-guide-object-lifecycle.png'));
+  assert.ok(lifecycle.locations.some(location => location.startsWith('Study · 2.')));
+});
 
 test('the real study pack supplies every lesson, question, and worked case', async () => {
   const packFile = path => new URL(packPath(path), import.meta.url);

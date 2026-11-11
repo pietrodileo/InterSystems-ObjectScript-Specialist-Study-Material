@@ -8,6 +8,21 @@ export const topics = {
   T5: 'Error handling and diagnostics',
 };
 
+export function galleryItems(chapters) {
+  return chapters.flatMap((chapter, index) => [
+    ...chapter.diagrams.map(diagram => ({ ...diagram, phase: 'theory',
+      locations: ['Study · Chapter diagrams', ...chapter.sections.filter(section => section.detail?.includes(diagram.file.split('/').at(-1)))
+        .map(section => `Study · ${section.title}`)],
+    })),
+    ...chapter.exerciseDiagrams.map(diagram => ({ ...diagram, phase: 'cases',
+      locations: ['Apply · Exercise diagrams', ...chapter.quiz.filter(question => question.feedback.diagram?.file === diagram.file)
+        .map(question => `Practice · Question ${question.id}`)],
+    })),
+  ].map(diagram => ({ ...diagram, topic: chapter.topic, chapter: index + 1,
+    title: chapter.title, caption: diagram.caption ?? diagram.alt,
+  })));
+}
+
 export function studySections(markdown) {
   // shortcut: these readers follow the pack's heading structure. Update them if the pack changes format.
   const blocks = markdown.split(/^## (\d+\. .+)$/m);
@@ -163,9 +178,11 @@ export async function loadCourse(read) {
         return { alt, file: `${chapter.folder}/${file}`, width, height };
       });
     const exerciseDiagrams = Array.from(illustrated.matchAll(/^!\[([^\]]+)\]\(<(schema-esercizi([\w-]*)\.png)>\)$/gm),
-      ([, alt, file, suffix]) => {
+      match => {
+        const [, alt, file, suffix] = match;
+        const heading = [...illustrated.slice(0, match.index).matchAll(/^## (.+)$/gm)].at(-1)?.[1];
         const [width, height] = wideExerciseSizes[chapter.topic + suffix] ?? [1536, 1024];
-        return { alt, file: `${exercise.folder}/${file}`, width, height };
+        return { alt, caption: heading ? `${alt}: ${heading}` : alt, file: `${exercise.folder}/${file}`, width, height };
       });
     const panels = exercisePanels(illustrated);
     if (questions.length !== chapter.questions || sections.length !== chapter.sections ||
