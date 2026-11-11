@@ -508,7 +508,7 @@ An ordinary SQL `DELETE` uses the SQL trigger path. If a deletion rule must cove
 
 ## 4. Interprets storage definitions (DataLocation, IdLocation, IndexLocation, USEEXTENTSET)
 
-![IRIS globals and USEEXTENTSET comparison](visual-guide-storage-definitions.svg)
+![IRIS globals and USEEXTENTSET comparison](visual-guide-storage-definitions.png)
 
 ### Key Points
 
@@ -661,7 +661,7 @@ The result has the form `system^directory`. An empty system part means the datab
 
 ## 5. Implements multiple inheritance (order matters, method resolution)
 
-![ObjectScript method priority and persistent inheritance](visual-guide-multiple-inheritance.svg)
+![ObjectScript method priority and persistent inheritance](visual-guide-multiple-inheritance.png)
 
 ### Key Points
 

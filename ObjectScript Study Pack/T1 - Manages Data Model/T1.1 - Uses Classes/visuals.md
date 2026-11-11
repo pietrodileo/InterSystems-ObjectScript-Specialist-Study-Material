@@ -32,8 +32,8 @@ Covers:
 
 ## Storage definitions and USEEXTENTSET
 
-![DataLocation, IdLocation, IndexLocation and per-index Location overrides, with hashed global comparison](visual-guide-storage-definitions.svg)
+![DataLocation, IdLocation, IndexLocation and per-index Location overrides, with hashed global comparison](visual-guide-storage-definitions.png)
 
 ## ObjectScript multiple inheritance
 
-![Inheritance left/right method resolution with a persistent parent and mixin](visual-guide-multiple-inheritance.svg)
+![Inheritance left/right method resolution with a persistent parent and mixin](visual-guide-multiple-inheritance.png)

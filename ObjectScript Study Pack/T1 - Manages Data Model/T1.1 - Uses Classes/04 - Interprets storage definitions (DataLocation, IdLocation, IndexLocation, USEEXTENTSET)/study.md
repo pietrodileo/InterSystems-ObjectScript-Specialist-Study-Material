@@ -10,7 +10,7 @@ Saved 2 November 2026 from [exam-prep.es](https://exam-prep.es/exams/objectscrip
 
 *This diagram covers sections 4–6; use the matching numbered panel for this page.* [Chapter diagrams](../visuals.md) · [Technical review notes](../../../visual-technical-notes.md)
 
-![IRIS storage globals: DataLocation, IdLocation, IndexLocation and explicit per-index Location, plus USEEXTENTSET comparison](../visual-guide-storage-definitions.svg)
+![IRIS storage globals: DataLocation, IdLocation, IndexLocation and explicit per-index Location, plus USEEXTENTSET comparison](../visual-guide-storage-definitions.png)
 
 *Read the arrows together with the `Tutor.Invoice` and `GlobalsTest.President` examples below.*
 

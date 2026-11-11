@@ -10,7 +10,7 @@ Saved 2 November 2026 from [exam-prep.es](https://exam-prep.es/exams/objectscrip
 
 *This diagram covers sections 4–6; use the matching numbered panel for this page.* [Chapter diagrams](../visuals.md) · [Technical review notes](../../../visual-technical-notes.md)
 
-![ObjectScript multiple inheritance: Inheritance left versus right and shared persistent storage](../visual-guide-multiple-inheritance.svg)
+![ObjectScript multiple inheritance: Inheritance left versus right and shared persistent storage](../visual-guide-multiple-inheritance.png)
 
 *The resolution examples use the actual `Tutor.ScreenDefaults`, `Tutor.FileDefaults`, and persistent mixin classes introduced below.*
 

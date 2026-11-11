@@ -68,6 +68,11 @@ const wideExerciseSizes = {
   'T3.2-extra': [1672, 941], 'T3.3-extra': [1774, 887], 'T3.5-extra': [1752, 897],
 };
 
+const studyDiagramSizes = {
+  'T1.1/visual-guide-storage-definitions.png': [1672, 941],
+  'T1.1/visual-guide-multiple-inheritance.png': [1672, 941],
+};
+
 export function correctSelection(correct, selected) {
   const chosen = new Set(selected);
   return chosen.size === correct.length && correct.every(value => chosen.has(value));
@@ -153,7 +158,10 @@ export async function loadCourse(read) {
     const { questions } = rawQuiz.quiz;
     const sections = studySections(study);
     const diagrams = Array.from(study.matchAll(/^!\[([^\]]+)\]\((visual-guide-[\w-]+\.png)\)$/gm),
-      ([, alt, file]) => ({ alt, file: `${chapter.folder}/${file}`, width: 1536, height: 1024 }));
+      ([, alt, file]) => {
+        const [width, height] = studyDiagramSizes[`${chapter.topic}/${file}`] ?? [1536, 1024];
+        return { alt, file: `${chapter.folder}/${file}`, width, height };
+      });
     const exerciseDiagrams = Array.from(illustrated.matchAll(/^!\[([^\]]+)\]\(<(schema-esercizi([\w-]*)\.png)>\)$/gm),
       ([, alt, file, suffix]) => {
         const [width, height] = wideExerciseSizes[chapter.topic + suffix] ?? [1536, 1024];
