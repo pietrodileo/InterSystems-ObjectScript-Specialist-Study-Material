@@ -74,6 +74,32 @@ Storage Default
 }
 ```
 
+#### Default and Per-Index Locations
+
+Suppose `Tutor.Invoice` defines `CityIdx` on `City` and `DateIdx` on `InvoiceDate`. Declare the indexes in the class body:
+
+```objectscript
+Index CityIdx On City;
+Index DateIdx On InvoiceDate;
+```
+
+To assign one index a separate global, place `<Location>` inside that index's `<Index>` entry in the class's `Storage Default` definition. For example:
+
+```objectscript
+Storage Default
+{
+    ...
+    <DataLocation>^Tutor.InvoiceD</DataLocation>
+    <IndexLocation>^Tutor.InvoiceI</IndexLocation>
+    <Index name="CityIdx">
+        <Location>^Tutor.InvoiceCity</Location>
+    </Index>
+    ...
+}
+```
+
+`IndexLocation` is the default for indexes without their own `Location`. Since only `CityIdx` has a per-index entry here, its entries are stored under `^Tutor.InvoiceCity`; `DateIdx` uses the default and is stored under `^Tutor.InvoiceI("DateIdx",...)`. The `<Index name="CityIdx">` must match the index declaration in the class. Both globals contain index data; the invoice record itself is stored at the `DataLocation`.
+
 #### USEEXTENTSET Parameter
 
 When `USEEXTENTSET = 1`, the system generates short hashed global names instead of using the class name:
