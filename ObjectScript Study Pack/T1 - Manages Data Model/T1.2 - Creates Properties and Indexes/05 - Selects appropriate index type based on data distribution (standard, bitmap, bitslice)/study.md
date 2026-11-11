@@ -10,6 +10,10 @@ Saved 2 November 2026 from [exam-prep.es](https://exam-prep.es/exams/objectscrip
 
 *This diagram covers sections 5–7; use the matching numbered panel for this page.* [Chapter diagrams](../visuals.md) · [Technical review notes](../../../visual-technical-notes.md)
 
+![Standard index key-to-row-ID mapping, bitmap value vectors, and bitslice vectors for numeric values](../index-structures-standard-bitmap-bitslice.png)
+
+![Bitmap AND and OR filtering across row IDs, and a bitslice sum reconstructed from binary positions](../index-bitwise-operations.png)
+
 ### Key Points
 
 - **Standard index** (B-tree): Best for high-cardinality data (many unique values); supports equality and range queries

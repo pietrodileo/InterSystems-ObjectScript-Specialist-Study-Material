@@ -2,14 +2,14 @@
 
 [Approfondimenti dagli esercizi](approfondimenti-esercizi.md) — casi commentati, varianti e nuovi schemi.
 
-33 study diagrams covering all 22 chapters and 93 numbered content sections. Open a chapter gallery or read the illustrated chapter guide.
+35 study diagrams covering all 22 chapters and 93 numbered content sections. Open a chapter gallery or read the illustrated chapter guide.
 
 [All topics](index.md) · [Technical review notes](visual-technical-notes.md)
 
 | Chapter | Diagrams | Illustrated notes |
 | --- | ---: | --- |
 | [T1.1: Uses Classes](T1%20-%20Manages%20Data%20Model/T1.1%20-%20Uses%20Classes/visuals.md) | 3 | [Read](T1%20-%20Manages%20Data%20Model/T1.1%20-%20Uses%20Classes/study.md) |
-| [T1.2: Creates Properties and Indexes](T1%20-%20Manages%20Data%20Model/T1.2%20-%20Creates%20Properties%20and%20Indexes/visuals.md) | 2 | [Read](T1%20-%20Manages%20Data%20Model/T1.2%20-%20Creates%20Properties%20and%20Indexes/study.md) |
+| [T1.2: Creates Properties and Indexes](T1%20-%20Manages%20Data%20Model/T1.2%20-%20Creates%20Properties%20and%20Indexes/visuals.md) | 4 | [Read](T1%20-%20Manages%20Data%20Model/T1.2%20-%20Creates%20Properties%20and%20Indexes/study.md) |
 | [T1.3: Creates ObjectScript Methods](T1%20-%20Manages%20Data%20Model/T1.3%20-%20Creates%20ObjectScript%20Methods/visuals.md) | 2 | [Read](T1%20-%20Manages%20Data%20Model/T1.3%20-%20Creates%20ObjectScript%20Methods/study.md) |
 | [T1.4: Uses Complex Structures](T1%20-%20Manages%20Data%20Model/T1.4%20-%20Uses%20Complex%20Structures/visuals.md) | 1 | [Read](T1%20-%20Manages%20Data%20Model/T1.4%20-%20Uses%20Complex%20Structures/study.md) |
 | [T2.1: Ensures Data Integrity](T2%20-%20Basic%20Programming/T2.1%20-%20Ensures%20Data%20Integrity/visuals.md) | 3 | [Read](T2%20-%20Basic%20Programming/T2.1%20-%20Ensures%20Data%20Integrity/study.md) |

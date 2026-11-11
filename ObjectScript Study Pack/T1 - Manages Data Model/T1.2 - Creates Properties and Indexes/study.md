@@ -422,6 +422,10 @@ If $$$ISERR(sc) {
 
 ## 5. Selects appropriate index type based on data distribution (standard, bitmap, bitslice)
 
+![Standard index key-to-row-ID mapping, bitmap value vectors, and bitslice vectors for numeric values](index-structures-standard-bitmap-bitslice.png)
+
+![Bitmap AND and OR filtering across row IDs, and a bitslice sum reconstructed from binary positions](index-bitwise-operations.png)
+
 ### Key Points
 
 - **Standard index** (B-tree): Best for high-cardinality data (many unique values); supports equality and range queries

@@ -4,7 +4,19 @@
 
 [Chapter contents](index.md) · [Full guide](study.md) · [Practice questions](quiz.md)
 
-Generated learning summaries. Read the full notes for detailed explanations and exact code. [Technical review notes](../../visual-technical-notes.md).
+Illustrated learning summaries. Read the full notes for detailed explanations and exact code. [Technical review notes](../../visual-technical-notes.md).
+
+## Index diagrams — section 5
+
+These two diagrams expand the index overview with concrete key-to-ID, bitmap, and bitslice layouts, then show bitmap `AND`/`OR` filtering and a bitslice sum. The sample bit vectors and arithmetic are shown as learning examples.
+
+![Standard index key-to-row-ID mapping, bitmap value vectors, and bitslice vectors for numeric values](index-structures-standard-bitmap-bitslice.png)
+
+![Bitmap AND and OR filtering across row IDs, and a bitslice sum reconstructed from binary positions](index-bitwise-operations.png)
+
+### Reusable style prompt
+
+Scientific-educational infographic for the T1.2 ObjectScript study pack. Match the existing chapter guides: landscape 3:2 canvas, white background with a subtle pale-blue square grid, rounded navy title bar, pale-blue section headers, dark-navy sans-serif typography, crisp table borders, and flat vector-like technical diagrams. Use restrained blue, violet, teal, amber/coral, and green accents to group concepts; keep arrows precise, spacing generous, labels high-contrast and readable, and visual hierarchy consistent with the other chapter guides. No photorealism, decorative characters, logos, or watermarks. Preserve all supplied values, bit vectors, and arithmetic exactly.
 
 ## Visual guide — sections 1–4
 
