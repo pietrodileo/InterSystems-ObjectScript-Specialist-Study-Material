@@ -22,7 +22,7 @@ function showImage(link) {
   image.alt = thumbnail.alt;
   download.href = link.href;
   document.querySelector('#image-viewer-caption').textContent =
-    `${imageIndex + 1} / ${imageLinks.length} · ${link.closest('figure')?.querySelector('figcaption')?.innerText.replace(/View in chapter\s*Download\s*$/, '').trim() || thumbnail.alt}`;
+    `${imageIndex + 1} / ${imageLinks.length} · ${link.closest('figure')?.querySelector('figcaption')?.innerText.replace(/^\s*Select for ZIP\s*/, '').replace(/View in chapter\s*Download\s*$/, '').trim() || thumbnail.alt}`;
   previous.disabled = imageIndex === 0;
   next.disabled = imageIndex === imageLinks.length - 1;
   zoom = minZoom;
