@@ -23,6 +23,9 @@ test('course search retains collapsible area containers and original chapter car
   vm.runInContext('renderCourseResults()', context);
   assert.equal((nodes['#course-results'].innerHTML.match(/<details class="home-area"/g) ?? []).length, 5);
   assert.equal((nodes['#course-results'].innerHTML.match(/class="home-chapter-card"/g) ?? []).length, 22);
+  assert.equal((nodes['#course-results'].innerHTML.match(/class="home-chapter"/g) ?? []).length, 22);
+  assert.equal((nodes['#course-results'].innerHTML.match(/class="chapter-concepts"/g) ?? []).length, 22);
+  assert.match(nodes['#course-results'].innerHTML, /class="home-chapter">[\s\S]*?<\/button>\s*<details class="chapter-concepts"/);
   assert.match(nodes['#course-results'].innerHTML, /data-home-area="T1" open/);
   assert.match(nodes['#course-results'].innerHTML, /data-home-area="T2" >?/);
   assert.doesNotMatch(nodes['#course-results'].innerHTML, /data-home-area="T2" open/);
@@ -43,7 +46,7 @@ test('course search retains collapsible area containers and original chapter car
   assert.match(nodes['#course-results'].innerHTML, /<details class="home-area"/);
   assert.match(nodes['#course-results'].innerHTML, /data-section="\d+"/);
   assert.match(nodes['#course-results'].innerHTML, /class="home-chapter-card"/);
-  assert.match(nodes['#course-results'].innerHTML, /class="reading inset" open/);
+  assert.match(nodes['#course-results'].innerHTML, /class="chapter-concepts" open/);
   context.step = () => null;
   nodes['#course-search'].value = '';
   vm.runInContext('renderCourseResults()', context);

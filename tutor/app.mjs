@@ -1,7 +1,7 @@
 import { assessmentAnswered, assessmentComplete, chapterStep, correctSelection, finalQuestionRefs, loadCourse, packPath, passedAnswer, practiceQueue, quizBlocks, recordPractice, reviewItems, topics } from './content.mjs?v=course-index-1';
 import { caseFocus, examAreaDescriptions, guides, variations } from './lesson-guides.mjs?v=practice-feedback-1';
 import { diagramExamples, studyExamples } from './code-examples.mjs';
-import './sidebar-controls.mjs';
+import './sidebar-controls.mjs?v=chapter-layout-2';
 import { createZip, galleryDownloadItems } from './gallery-download.mjs';
 import { galleryItems, searchCourse } from './content.mjs?v=course-index-1';
 
@@ -222,14 +222,14 @@ function renderHomeChapters(matches, searching = false) {
           const casesDone = completedCases(item);
           const title = item.title.split(': ').slice(1).join(': ');
           const concepts = matches?.find(match => match.item === item).sections;
-          return `<div><button type="button" class="home-chapter-card" data-topic="${escape(item.topic)}" ${matches ? 'data-phase="theory"' : ''}>
+          return `<div class="home-chapter"><button type="button" class="home-chapter-card" data-topic="${escape(item.topic)}" ${matches ? 'data-phase="theory"' : ''}>
             <span class="home-chapter-code">${escape(item.topic)}</span>
             <strong class="home-chapter-title">${escape(title)}</strong>
-            <span class="home-chapter-open" aria-hidden="true">Open →</span>
+            <span class="home-chapter-open" aria-hidden="true">Open chapter</span>
             <small class="home-chapter-status">${chapterStatus(item, currentStep)} · ${answered}/${item.quiz.length} questions answered · ${casesDone}/${item.cases.length} cases complete</small>
           </button>${concepts?.length ? `
-            <details class="reading inset" ${searching ? 'open' : ''}>
-              <summary>${searching ? 'Matching concepts' : 'Concepts'} · ${concepts.length}</summary>
+            <details class="chapter-concepts" ${searching ? 'open' : ''}>
+              <summary aria-label="${searching ? 'Matching concepts' : 'Concepts'} (${concepts.length}) for ${escape(item.topic)} ${escape(title)}"><span>${searching ? 'Matching concepts' : 'Concepts'} <small>(${concepts.length})</small></span></summary>
               <ul class="course-concepts">${concepts.map(({ section, index }) => `
                 <li><button type="button" data-topic="${escape(item.topic)}" data-phase="theory" data-section="${index}">${markdownText(section.title)}</button></li>
               `).join('')}</ul>

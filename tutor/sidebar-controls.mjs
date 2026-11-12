@@ -1,4 +1,14 @@
 const themeToggle = document.querySelector('#theme-toggle');
+const sidebar = document.querySelector('#course');
+if (sidebar) {
+  const fitSidebar = () => sidebar.style.setProperty('--sidebar-top', `${Math.max(16, sidebar.getBoundingClientRect().top)}px`);
+  window.addEventListener('scroll', fitSidebar, { passive: true });
+  window.addEventListener('resize', fitSidebar);
+  const observer = new ResizeObserver(fitSidebar);
+  observer.observe(sidebar);
+  observer.observe(document.querySelector('.topbar'));
+  fitSidebar();
+}
 const themeLabel = document.querySelector('#theme-mode-label');
 const themeColor = document.querySelector('meta[name="theme-color"]');
 const root = document.documentElement;
