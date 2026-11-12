@@ -508,8 +508,6 @@ An ordinary SQL `DELETE` uses the SQL trigger path. If a deletion rule must cove
 
 ## 4. Interprets storage definitions (DataLocation, IdLocation, IndexLocation, USEEXTENTSET)
 
-![IRIS globals and USEEXTENTSET comparison](visual-guide-storage-definitions.png)
-
 ### Key Points
 
 - **Storage definition** maps class properties to underlying global structures
@@ -520,6 +518,8 @@ An ordinary SQL `DELETE` uses the SQL trigger path. If a deletion rule must cove
 - Storage definitions are auto-generated but can be customized for special requirements
 
 ### Detailed Notes
+
+![Storage Definitions in IRIS](visual-guide-storage-definitions.png)
 
 #### Overview
 
@@ -661,8 +661,6 @@ The result has the form `system^directory`. An empty system part means the datab
 
 ## 5. Implements multiple inheritance (order matters, method resolution)
 
-![ObjectScript method priority and persistent inheritance](visual-guide-multiple-inheritance.png)
-
 ### Key Points
 
 - List the superclasses in `Extends (A, B)`. The leftmost class is the **primary superclass**.
@@ -671,6 +669,8 @@ The result has the form `system^directory`. An empty system part means the datab
 - For a persistent class, put `%Persistent` or a persistent parent first. With the default layout, a persistent subclass shares its parent's data global and ID space. A storable property from a mixin can be saved in that layout.
 
 ### Detailed Notes
+
+![Multiple Inheritance in ObjectScript](visual-guide-multiple-inheritance.png)
 
 #### Resolve Name Conflicts in Properties and Methods
 

@@ -200,3 +200,16 @@ test('answer history keeps every selection and retains legacy results', () => {
   assert.deepEqual(practiceQueue(quiz, saved.results[topic], 'review'), []);
   assert.deepEqual([true, false, wrong, right].map(passedAnswer), [true, false, false, true]);
 });
+
+
+test('approved T1.1 images appear in gallery and their chapter sections', async () => {
+  const chapters = await loadCourse(path => readFile(new URL(packPath(path), import.meta.url), 'utf8'));
+  const chapter = chapters.find(item => item.topic === 'T1.1');
+  for (const [name, section, title] of [['storage-definitions', 4, 'Storage Definitions in IRIS'], ['multiple-inheritance', 5, 'Multiple Inheritance in ObjectScript']]) {
+    const file = 'visual-guide-' + name + '.png';
+    assert.ok(chapter.sections[section - 1].detail.includes(file));
+    const image = galleryItems(chapters).find(item => item.file.endsWith('/' + file));
+    assert.equal(image.caption, title);
+    assert.ok(image.locations.some(location => location.startsWith('Study · ' + section + '.')));
+  }
+});

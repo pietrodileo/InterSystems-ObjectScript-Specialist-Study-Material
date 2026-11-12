@@ -1,8 +1,8 @@
-import { assessmentAnswered, assessmentComplete, chapterStep, correctSelection, finalQuestionRefs, loadCourse, packPath, passedAnswer, practiceQueue, quizBlocks, recordPractice, reviewItems, topics } from './content.mjs?v=practice-feedback-1';
+import { assessmentAnswered, assessmentComplete, chapterStep, correctSelection, finalQuestionRefs, loadCourse, packPath, passedAnswer, practiceQueue, quizBlocks, recordPractice, reviewItems, topics } from './content.mjs?v=approved-images-2';
 import { caseFocus, examAreaDescriptions, guides, variations } from './lesson-guides.mjs?v=practice-feedback-1';
 import { diagramExamples, studyExamples } from './code-examples.mjs';
 import './sidebar-controls.mjs';
-import { galleryItems } from './content.mjs?v=practice-feedback-1';
+import { galleryItems } from './content.mjs?v=approved-images-2';
 
 const lesson = document.querySelector('#lesson');
 const nav = document.querySelector('#chapters');
@@ -1053,7 +1053,7 @@ lesson.addEventListener('change', event => {
 
 try {
   chapters = await loadCourse(async path => {
-    const response = await fetch(packPath(path));
+    const response = await fetch(packPath(path), { cache: 'no-cache' });
     if (!response.ok) throw new Error(`${path} (${response.status})`);
     return response.text();
   });
