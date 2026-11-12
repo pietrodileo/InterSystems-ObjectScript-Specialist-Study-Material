@@ -226,7 +226,7 @@ function renderHomeChapters(matches, searching = false) {
             <span class="home-chapter-code">${escape(item.topic)}</span>
             <strong class="home-chapter-title">${escape(title)}</strong>
             <span class="home-chapter-open" aria-hidden="true">Open →</span>
-            <small class="home-chapter-status">${phases[currentStep] ?? 'Completed'} · ${answered}/${item.quiz.length} questions answered · ${casesDone}/${item.cases.length} cases complete</small>
+            <small class="home-chapter-status">${chapterStatus(item, currentStep)} · ${answered}/${item.quiz.length} questions answered · ${casesDone}/${item.cases.length} cases complete</small>
           </button>${concepts?.length ? `
             <details class="reading inset" ${searching ? 'open' : ''}>
               <summary>${searching ? 'Matching concepts' : 'Concepts'} · ${concepts.length}</summary>
@@ -247,6 +247,12 @@ function renderHomeChapters(matches, searching = false) {
       : sections}
   </section>`;
 }
+function chapterStatus(item, currentStep) {
+  if (currentStep === null) return '<span class="completion-badge"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3 8 3 3 7-7"></path></svg>Completed</span>';
+  const ongoing = state.studied[item.topic] || attempted(item) > 0 || completedCases(item) > 0;
+  return `${ongoing ? '<span class="completion-badge ongoing-badge">Ongoing</span> · ' : ''}${phases[currentStep]}`;
+}
+
 function renderCourse() {
   if (phase === 'index') {
     renderCourseIndex();
@@ -270,9 +276,7 @@ function renderCourse() {
           const number = chapters.indexOf(item) + 1;
           const currentStep = step(item);
           const completed = currentStep === null;
-          const status = completed
-            ? '<span class="completion-badge"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3 8 3 3 7-7"></path></svg>Completed</span>'
-            : phases[currentStep];
+          const status = chapterStatus(item, currentStep);
           const title = item.title.split(': ').slice(1).join(': ');
           return `<button type="button" class="area-chapter-card${completed ? ' is-complete' : ''}" data-topic="${escape(item.topic)}">
             <span class="area-chapter-heading"><b>${escape(item.topic)}</b><strong>${escape(title)}</strong></span>

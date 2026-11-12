@@ -310,6 +310,7 @@ progress { display: block; width: 100%; height: .75rem; margin: .45rem 0; accent
   vertical-align: middle;
 }
 .completion-badge svg { width: .95rem; height: .95rem; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.ongoing-badge { background: var(--selected); color: var(--accent); }
 .area-chapter-card.is-complete { border-color: var(--correct-ink); background: var(--correct-surface); }
 .area-chapter-card.is-complete:hover { border-color: var(--correct-ink); background: var(--selected-hover); }
 .home-chapter-list { display: grid; gap: .35rem; }

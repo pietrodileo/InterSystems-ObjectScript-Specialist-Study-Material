@@ -12,7 +12,7 @@ test('course search retains collapsible area containers and original chapter car
     '#course-count': {}, '#course-results': {},
   };
   const context = vm.createContext({
-    chapters, topics, searchCourse, state: { openTopics: ['T1'] },
+    chapters, topics, searchCourse, state: { openTopics: ['T1'], studied: {} },
     lesson: { querySelector: selector => nodes[selector] },
     escape: value => String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('"', '&quot;'),
     markdownText: value => value, step: () => 'theory', attempted: () => 0,
@@ -26,6 +26,18 @@ test('course search retains collapsible area containers and original chapter car
   assert.match(nodes['#course-results'].innerHTML, /data-home-area="T1" open/);
   assert.match(nodes['#course-results'].innerHTML, /data-home-area="T2" >?/);
   assert.doesNotMatch(nodes['#course-results'].innerHTML, /data-home-area="T2" open/);
+  assert.doesNotMatch(nodes['#course-results'].innerHTML, /Ongoing/);
+  context.state.studied[chapters[0].topic] = true;
+  vm.runInContext('renderCourseResults()', context);
+  assert.equal((nodes['#course-results'].innerHTML.match(/Ongoing/g) ?? []).length, 1);
+  context.state.studied = {};
+  context.attempted = item => item === chapters[0] ? 1 : 0;
+  vm.runInContext('renderCourseResults()', context);
+  assert.equal((nodes['#course-results'].innerHTML.match(/Ongoing/g) ?? []).length, 1);
+  context.attempted = () => 0;
+  context.completedCases = item => item === chapters[0] ? 1 : 0;
+  vm.runInContext('renderCourseResults()', context);
+  assert.equal((nodes['#course-results'].innerHTML.match(/Ongoing/g) ?? []).length, 1);
   nodes['#course-search'].value = 'storage definitions';
   vm.runInContext('renderCourseResults()', context);
   assert.match(nodes['#course-results'].innerHTML, /<details class="home-area"/);
@@ -37,6 +49,7 @@ test('course search retains collapsible area containers and original chapter car
   vm.runInContext('renderCourseResults()', context);
   assert.equal((nodes['#course-results'].innerHTML.match(/class="home-chapter-card"/g) ?? []).length, 22);
   assert.match(nodes['#course-results'].innerHTML, /Completed/);
+  assert.doesNotMatch(nodes['#course-results'].innerHTML, /Ongoing/);
   nodes['#course-search'].value = 'no-such-course-concept-xyz';
   vm.runInContext('renderCourseResults()', context);
   assert.match(nodes['#course-results'].innerHTML, /No chapters or concepts match/);
