@@ -415,6 +415,7 @@ function renderGallery() {
     </section>
     <div class="actions">
       <button type="button" id="gallery-download">Download all images as ZIP</button>
+      <button type="button" id="gallery-select-all" title="Select every gallery image, including those hidden by filters">Select all for ZIP</button>
       <button type="button" id="gallery-clear-selection">Clear selection</button>
     </div>
     <p id="gallery-selection-count" class="muted" role="status"></p>
@@ -425,6 +426,10 @@ function renderGallery() {
     input.addEventListener('input', renderGalleryGrid);
   }
   lesson.querySelector('#gallery-download').addEventListener('click', downloadGallery);
+  lesson.querySelector('#gallery-select-all').addEventListener('click', () => {
+    for (const item of galleryItems(chapters)) selectedGalleryImages.add(item.file);
+    renderGalleryGrid();
+  });
   lesson.querySelector('#gallery-clear-selection').addEventListener('click', () => {
     selectedGalleryImages.clear();
     renderGalleryGrid();
@@ -493,7 +498,7 @@ function renderGalleryGrid() {
         <img src="${url}" alt="${escape(item.caption)}" width="${item.width}" height="${item.height}" loading="lazy">
       </a>
       <figcaption>
-        <label class="gallery-select"><input type="checkbox" data-gallery-select="${escape(item.file)}" ${selectedGalleryImages.has(item.file) ? 'checked' : ''} aria-label="Select ${escape(item.caption)}"> Select for ZIP</label>
+        <label class="gallery-select"><input type="checkbox" data-gallery-select="${escape(item.file)}" ${selectedGalleryImages.has(item.file) ? 'checked' : ''} aria-label="Select ${escape(item.caption)}"> Select</label>
         <p class="muted">Chapter ${item.chapter} · ${escape(item.title)}</p>
         <p>${escape(item.caption)}</p>
         <p class="muted">${item.locations.map(escape).join('<br>')}</p>
