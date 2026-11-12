@@ -18,6 +18,7 @@ Saved 2 November 2026 from [exam-prep.es](https://exam-prep.es/exams/objectscrip
 - **%ToJSON()** serializes a dynamic object/array back to a JSON string
 - Curly brace `{}` and bracket `[]` literals create dynamic objects and arrays inline
 - Dynamic objects are schema-less: no class definition required
+- Assigning a nested dynamic array or object to a variable shares a reference; mutations are visible through the parent
 
 ### Detailed Notes
 
@@ -162,6 +163,37 @@ Write person.address.city, !                      // Springfield
 Write person.phones.%Get(0).number, !             // 555-1234
 Write person.%ToJSON(), !                          // Full JSON string
 ```
+
+#### Shared References to Nested Arrays
+
+A nested dynamic array is an object. In `Set arr = obj.values`, the variable `arr` receives a reference to the same array held by the `values` member. Both references let you access and modify that array.
+
+`%DynamicArray` indexes start at 0, so `arr.%Set(1, 99)` replaces the second element, 20, with 99. Serializing the parent with `obj.%ToJSON()` includes the array's current contents, so the change appears in the parent's JSON.
+
+```objectscript
+Set obj = {"name":"Test","values":[10,20,30]}
+Set arr = obj.values
+Do arr.%Set(1, 99)
+
+Write arr.%ToJSON(), !
+// [10,99,30]
+Write obj.values.%ToJSON(), !
+// [10,99,30]
+Write obj.%ToJSON(), !
+// {"name":"Test","values":[10,99,30]}
+```
+
+Assigning a new array to `arr` has a different effect: it changes which object that variable references. It leaves `obj.values` pointing to the original array.
+
+```objectscript
+Set arr = [1,2,3]
+Write arr.%ToJSON(), !
+// [1,2,3]
+Write obj.values.%ToJSON(), !
+// [10,99,30]
+```
+
+The same reference behavior applies to nested `%DynamicObject` values.
 
 #### Iterating Over Dynamic Objects
 

@@ -147,6 +147,13 @@ do ##class(Tutor.Counter).AddResult(.counts)
 write counts("passed"), "/", counts("failed"), !`, 'Passing .counts gives the method access to the caller’s local array. It updates just the passed node, so the caller prints 3/1.'],
   ],
   'T1.4/1': [
+    ['Modify a nested array through a shared reference', `Set obj = {"name":"Test","values":[10,20,30]}
+Set arr = obj.values
+Do arr.%Set(1, 99)
+Write arr.%ToJSON(), !
+// [10,99,30]
+Write obj.%ToJSON(), !
+// {"name":"Test","values":[10,99,30]}`, 'arr and obj.values reference the same dynamic array. Index 1 is its second element. Updating it through arr changes the array serialized inside obj. Set arr = [1,2,3] would instead point arr to a new array and leave obj.values unchanged.'],
     ['Change one field in a JSON object', `set person = ##class(%DynamicObject).%FromJSON("{""name"":""Ada""}")
 do person.%Set("active", 1, "number")
 write person.name, !

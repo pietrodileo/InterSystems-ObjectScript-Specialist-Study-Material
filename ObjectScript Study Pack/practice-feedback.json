@@ -934,10 +934,14 @@
         }
       },
       "5": {
-        "explanation": "After adding the element, %Size counts three entries. %ToJSON renders those entries in array order. Dynamic array indexes are zero based, so the third element is at index 2.",
+        "explanation": "%Push(value) appends a value to the end of a %DynamicArray. After the three pushes, colors contains [\"red\",\"green\",\"blue\"], at indexes 0, 1 and 2.\n\n%Pop() removes the last element and returns that element's value. It changes the existing array; it does not return the shortened array, an index or a success flag. Therefore Set removed = colors.%Pop() assigns \"blue\" to removed, leaves colors as [\"red\",\"green\"], and reduces %Size() from 3 to 2. Repeated calls remove elements from the end, so %Push and %Pop provide last-in, first-out stack behavior.\n\nThe final %Push(\"yellow\") appends yellow at index 2. The result is B: 3: [\"red\",\"green\",\"yellow\"].\n\nOn an empty array, %Pop() returns the empty string (\"\") and the array stays empty. Because a stored empty string or JSON null can also return \"\", check %Size() before popping when you need to distinguish an empty array from an empty value.",
         "sources": [
           "GJSON_create"
-        ]
+        ],
+        "example": {
+          "title": "%Pop removes and returns the last value",
+          "code": "Set colors = []\nDo colors.%Push(\"red\")\nDo colors.%Push(\"green\")\nDo colors.%Push(\"blue\")\nSet removed = colors.%Pop()\nWrite removed, !\n// blue\nWrite colors.%Size(), \": \", colors.%ToJSON(), !\n// 2: [\"red\",\"green\"]\nDo colors.%Push(\"yellow\")\nWrite colors.%Size(), \": \", colors.%ToJSON(), !\n// 3: [\"red\",\"green\",\"yellow\"]\n\nSet empty = []\nSet removed = empty.%Pop()\nWrite \"Returned: [\", removed, \"], size: \", empty.%Size(), !\n// Returned: [], size: 0"
+        }
       },
       "6": {
         "explanation": "arr and the values member reference the same dynamic array. Setting element 1 replaces its second value, 20, with 99. Serializing the parent then shows the mutation through the nested reference.",
