@@ -10,7 +10,7 @@ import { galleryItems } from './content.mjs';
 test('gallery covers every course diagram with captions and valid course locations', async () => {
   const chapters = await loadCourse(path => readFile(new URL(packPath(path), import.meta.url), 'utf8'));
   const images = galleryItems(chapters);
-  assert.equal(images.length, 79);
+  assert.equal(images.length, 81);
   assert.equal(new Set(images.map(image => image.file)).size, images.length);
   for (const image of images) {
     const chapter = chapters[image.chapter - 1];
@@ -34,7 +34,7 @@ test('the real study pack supplies every lesson, question, and worked case', asy
   assert.equal(chapters.flatMap(chapter => chapter.sections).length, 93);
   assert.equal(chapters.flatMap(chapter => chapter.quiz).length, 358);
   assert.equal(chapters.flatMap(chapter => chapter.cases).length, 66);
-  assert.equal(chapters.flatMap(chapter => chapter.diagrams).length, 35);
+  assert.equal(chapters.flatMap(chapter => chapter.diagrams).length, 37);
   assert.equal(chapters.flatMap(chapter => chapter.exerciseDiagrams).length, 44);
   const studyKeys = chapters.flatMap(chapter => chapter.sections.map((_, i) => `${chapter.topic}/${i + 1}`));
   const diagramKeys = chapters.flatMap(chapter => chapter.panels.slice(chapter.cases.length)
