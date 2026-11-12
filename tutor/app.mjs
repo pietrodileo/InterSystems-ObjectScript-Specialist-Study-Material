@@ -203,14 +203,14 @@ function render() {
   focusLesson();
 }
 
-function renderHomeChapters() {
+function renderHomeChapters(matches, searching = false) {
   const sections = Object.entries(topics).map(([code, name]) => {
     const group = chapters.filter(item => item.topic.startsWith(`${code}.`));
-    const unfinished = group.filter(item => step(item));
+    const unfinished = group.filter(item => matches ? matches.some(match => match.item === item) : step(item));
     if (!unfinished.length) return '';
-    const completedCount = group.length - unfinished.length;
-    const isOpen = state.openTopics.includes(code);
-    return `<details class="home-area" data-home-area="${escape(code)}" ${isOpen ? 'open' : ''}>
+    const completedCount = group.filter(item => !step(item)).length;
+    const isOpen = searching || state.openTopics.includes(code);
+    return `<details class="home-area" ${searching ? '' : `data-home-area="${escape(code)}"`} ${isOpen ? 'open' : ''}>
       <summary class="home-area-summary">
         <span class="home-area-title">${escape(code)} · ${escape(name)}</span>
         <small>${completedCount}/${group.length} complete</small>
@@ -221,20 +221,27 @@ function renderHomeChapters() {
           const answered = attempted(item);
           const casesDone = completedCases(item);
           const title = item.title.split(': ').slice(1).join(': ');
-          return `<button type="button" class="home-chapter-card" data-topic="${escape(item.topic)}">
+          const concepts = matches?.find(match => match.item === item).sections;
+          return `<div><button type="button" class="home-chapter-card" data-topic="${escape(item.topic)}" ${matches ? 'data-phase="theory"' : ''}>
             <span class="home-chapter-code">${escape(item.topic)}</span>
             <strong class="home-chapter-title">${escape(title)}</strong>
             <span class="home-chapter-open" aria-hidden="true">Open →</span>
-            <small class="home-chapter-status">${phases[currentStep]} · ${answered}/${item.quiz.length} questions answered · ${casesDone}/${item.cases.length} cases complete</small>
-          </button>`;
+            <small class="home-chapter-status">${phases[currentStep] ?? 'Completed'} · ${answered}/${item.quiz.length} questions answered · ${casesDone}/${item.cases.length} cases complete</small>
+          </button>${concepts?.length ? `
+            <details class="reading inset" ${searching ? 'open' : ''}>
+              <summary>${searching ? 'Matching concepts' : 'Concepts'} · ${concepts.length}</summary>
+              <ul class="course-concepts">${concepts.map(({ section, index }) => `
+                <li><button type="button" data-topic="${escape(item.topic)}" data-phase="theory" data-section="${index}">${markdownText(section.title)}</button></li>
+              `).join('')}</ul>
+            </details>` : ''}</div>`;
         }).join('')}
       </div>
     </details>`;
   }).join('');
-  const allComplete = chapters.every(item => !step(item));
+  const allComplete = !matches && chapters.every(item => !step(item));
   return `<section class="home-chapters">
-    <h2>Chapters to complete</h2>
-    <p class="muted">All unfinished chapters are listed here. Choose any one to work on its current step.</p>
+    <h2>${matches ? 'Course chapters' : 'Chapters to complete'}</h2>
+    <p class="muted">${matches ? 'Expand an exam area to browse its chapters and concepts.' : 'All unfinished chapters are listed here. Choose any one to work on its current step.'}</p>
     ${allComplete
       ? `<div class="home-all-complete"><p>All chapters are complete. The final assessment is ready.</p><button type="button" class="primary" data-course="final">Start final assessment</button></div>`
       : sections}
@@ -373,7 +380,7 @@ function renderCourseIndex() {
       <div class="actions"><button type="button" data-course="review">Open answer review</button></div>
     </section>
     <p id="course-count" class="muted" role="status"></p>
-    <div id="course-results" class="course-index-results"></div>`;
+    <section id="course-results" class="panel study-outline"></section>`;
   lesson.querySelector('#course-search').addEventListener('input', renderCourseResults);
   renderCourseResults();
 }
@@ -383,14 +390,9 @@ function renderCourseResults() {
   lesson.querySelector('#course-overview').hidden = Boolean(query.trim());
   const matches = searchCourse(chapters, query);
   lesson.querySelector('#course-count').textContent = `${matches.length} of ${chapters.length} chapters`;
-  lesson.querySelector('#course-results').innerHTML = matches.length ? matches.map(({ item, sections }) => `
-    <section class="panel">
-      <h2><button type="button" data-topic="${escape(item.topic)}" data-phase="theory">${escape(item.title)}</button></h2>
-      <p class="muted">${escape(topics[item.topic.split('.')[0]])}</p>
-      <ul class="course-concepts">${sections.map(({ section, index }) => `
-        <li><button type="button" data-topic="${escape(item.topic)}" data-phase="theory" data-section="${index}">${markdownText(section.title)}</button></li>
-      `).join('')}</ul>
-    </section>`).join('') : '<p>No chapters or concepts match your search. Try another keyword.</p>';
+  lesson.querySelector('#course-results').innerHTML = matches.length
+    ? renderHomeChapters(matches, Boolean(query.trim()))
+    : '<p>No chapters or concepts match your search. Try another keyword.</p>';
 }
 
 function renderDiagrams(diagrams, label) {
