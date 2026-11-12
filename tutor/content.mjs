@@ -172,7 +172,7 @@ export async function loadCourse(read) {
     ]);
     const { questions } = rawQuiz.quiz;
     const sections = studySections(study);
-    const diagrams = Array.from(study.matchAll(/^!\[([^\]]+)\]\((visual-guide-[\w-]+\.png)\)$/gm),
+    const diagrams = Array.from(study.matchAll(/^!\[([^\]]+)\]\(([^)]+\.png)\)$/gm),
       ([, alt, file]) => {
         const [width, height] = studyDiagramSizes[`${chapter.topic}/${file}`] ?? [1536, 1024];
         return { alt, file: `${chapter.folder}/${file}`, width, height };
