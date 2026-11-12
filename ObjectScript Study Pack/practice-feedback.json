@@ -924,10 +924,14 @@
         ]
       },
       "4": {
-        "explanation": "Create an iterator with %GetIterator() and call %GetNext(.key,.value) on that iterator. The dynamic object owns the members. The iterator tracks the traversal position and hands back one key/value pair at a time.",
+        "explanation": "Calling config.%GetNext(.key) raises a <METHOD DOES NOT EXIST> error because %GetNext is a method of the iterator, not of %DynamicObject. First call config.%GetIterator() to create an iterator, then call iter.%GetNext(.key, .value) in a While loop. Each successful call returns 1 and assigns the next member's name and value to key and value by reference (the leading dots). When no members remain, it returns 0 and the loop stops.\n\nThe dynamic object owns the members. The iterator tracks the traversal position and hands back one key/value pair at a time. Append each pair to result inside the loop; no separate config.%Get(key) call is needed because value already contains that member's value.",
         "sources": [
           "GJSON_create"
-        ]
+        ],
+        "example": {
+          "title": "Iterate over the configuration's key/value pairs",
+          "code": "Set config = {\"host\":\"localhost\",\"port\":8080,\"debug\":true}\nSet iter = config.%GetIterator()\nSet result = \"\"\nWhile iter.%GetNext(.key, .value) {\n    Set result = result _ key _ \"=\" _ value _ \";\"\n}\nWrite result\n// For this object: host=localhost;port=8080;debug=1;\n// JSON true is returned as the ObjectScript value 1."
+        }
       },
       "5": {
         "explanation": "After adding the element, %Size counts three entries. %ToJSON renders those entries in array order. Dynamic array indexes are zero based, so the third element is at index 2.",
