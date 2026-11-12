@@ -8,6 +8,18 @@ export const topics = {
   T5: 'Error handling and diagnostics',
 };
 
+export function searchCourse(chapters, query) {
+  const words = query.trim().toLowerCase().split(/\s+/).filter(Boolean);
+  return chapters.flatMap(item => {
+    const context = `${item.topic} ${item.title} ${topics[item.topic.split('.')[0]]}`.toLowerCase();
+    const sections = item.sections.map((section, index) => ({ section, index })).filter(({ section }) => {
+      const text = `${context} ${section.title} ${section.prose ?? ''} ${(section.points ?? []).join(' ')} ${section.detail ?? ''}`.toLowerCase();
+      return words.every(word => text.includes(word));
+    });
+    return sections.length || words.every(word => context.includes(word)) ? [{ item, sections }] : [];
+  });
+}
+
 export function galleryItems(chapters) {
   return chapters.flatMap((chapter, index) => [
     ...chapter.diagrams.map(diagram => ({ ...diagram, phase: 'theory',

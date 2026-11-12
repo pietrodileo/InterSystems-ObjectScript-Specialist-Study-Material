@@ -5,7 +5,22 @@ import { assessmentAnswered, assessmentComplete, chapterStep, correctSelection, 
 
 import { caseFocus, guides, variations } from './lesson-guides.mjs';
 import { diagramExamples, studyExamples } from './code-examples.mjs';
-import { galleryItems } from './content.mjs';
+import { galleryItems, searchCourse } from './content.mjs';
+
+test('course search finds chapters and concept text and preserves concept positions', async () => {
+  const chapters = await loadCourse(path => readFile(new URL(packPath(path), import.meta.url), 'utf8'));
+  const all = searchCourse(chapters, '  ');
+  assert.equal(all.length, 22);
+  assert.equal(all.flatMap(match => match.sections).length, 93);
+  assert.deepEqual(searchCourse(chapters, ' t1.1 ').map(match => match.item.topic), ['T1.1']);
+  const matches = searchCourse(chapters, '  STORAGE   definitions ');
+  assert.ok(matches.some(match => match.item.topic === 'T1.1'));
+  for (const { item, sections } of matches) {
+    for (const { section, index } of sections) assert.equal(item.sections[index], section);
+  }
+  assert.ok(searchCourse(chapters, 'Data modeling').every(match => match.item.topic.startsWith('T1.')));
+  assert.deepEqual(searchCourse(chapters, 'no-such-course-concept-xyz'), []);
+});
 
 test('gallery covers every course diagram with captions and valid course locations', async () => {
   const chapters = await loadCourse(path => readFile(new URL(packPath(path), import.meta.url), 'utf8'));
