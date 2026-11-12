@@ -11,6 +11,7 @@ Open **Study plan** and select **Start study plan** to work through the chapters
 | Mode | What you can do |
 | --- | --- |
 | **Study plan** | Use **Check answer** to record each chapter quiz attempt. |
+| **Index Course** | Search chapters and concepts by keyword, open a matching lesson, and review the exam areas and chapter workflow. |
 | **Gallery** | Browse all course diagrams, search captions, filter by chapter or step, and jump to the chapter. Open an image to zoom, move between diagrams, or download the original. |
 | **Answer review** | Compare your choices with the expected answers, track retries, and see which chapters have the most current errors. You can also revisit completed final assessments. |
 | **Final assessment** | Answer one question per chapter. The tutor saves your selections as you go, and you can change them until you select **Finish assessment**. You'll then see the answers and your results by exam area. |

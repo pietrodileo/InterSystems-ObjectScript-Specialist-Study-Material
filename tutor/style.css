@@ -736,6 +736,11 @@ html:has(.image-viewer[open]) { overflow: hidden; }
 .image-viewer-canvas img { max-width: none; height: auto; }
 .image-viewer-canvas p { margin: 1rem; color: var(--muted); }
 
+.course-index-results { display: grid; gap: 1rem; margin-bottom: 1.5rem; }
+.course-index-results h2 { margin-top: 0; }
+.course-index-results h2 button { text-align: left; }
+.course-concepts { display: grid; gap: .4rem; padding-left: 1.25rem; }
+.course-concepts button { text-align: left; }
 .gallery-filters { display: flex; flex-wrap: wrap; gap: 1rem; }
 .gallery-filters label { display: grid; gap: .4rem; flex: 1 1 12rem; min-width: 0; }
 .gallery-filters input, .gallery-filters select { width: 100%; min-width: 0; }
