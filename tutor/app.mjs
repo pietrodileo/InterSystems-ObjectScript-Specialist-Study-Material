@@ -2,6 +2,7 @@ import { assessmentAnswered, assessmentComplete, chapterStep, correctSelection, 
 import { caseFocus, examAreaDescriptions, guides, variations } from './lesson-guides.mjs?v=practice-feedback-1';
 import { diagramExamples, studyExamples } from './code-examples.mjs';
 import './sidebar-controls.mjs';
+import { createZip, galleryDownloadItems } from './gallery-download.mjs';
 import { galleryItems, searchCourse } from './content.mjs?v=course-index-1';
 
 const lesson = document.querySelector('#lesson');
@@ -55,6 +56,7 @@ state.assessments ||= [];
 state.openTopics ??= [state.topic?.split('.')[0] ?? 'T1'];
 
 let chapters, chapter, phase, cursor, practiceMode, drafts, checked;
+const selectedGalleryImages = new Set();
 const results = item => state.results[item.topic] ?? {};
 const attempted = item => item.quiz.filter(q => Object.hasOwn(results(item), q.id)).length;
 const missed = item => item.quiz.filter(q => results(item)[q.id] === false).length;
@@ -404,19 +406,75 @@ function renderGallery() {
   lesson.innerHTML = `
     <header class="lesson-header">
       <h1 tabindex="-1">Gallery</h1>
-      <p class="lead">Browse every course diagram. Select an image to zoom, browse or download the original.</p>
+      <p class="lead">Open an image to zoom or download the original. Select images for a ZIP download, or leave none selected to download all images, including those hidden by filters.</p>
     </header>
     <section class="panel gallery-filters" aria-label="Filter images">
       <label>Search images<input id="gallery-search" type="search" placeholder="Caption, chapter or section"></label>
       <label>Chapter<select id="gallery-chapter"><option value="">All chapters</option>${chapters.map(item => `<option value="${escape(item.topic)}">${escape(item.title)}</option>`).join('')}</select></label>
       <label>Course step<select id="gallery-phase"><option value="">All steps</option><option value="theory">Study</option><option value="quiz">Practice</option><option value="cases">Apply</option></select></label>
     </section>
+    <div class="actions">
+      <button type="button" id="gallery-download">Download all images as ZIP</button>
+      <button type="button" id="gallery-clear-selection">Clear selection</button>
+    </div>
+    <p id="gallery-selection-count" class="muted" role="status"></p>
+    <p id="gallery-download-status" role="status"></p>
     <p id="gallery-count" class="muted" role="status"></p>
     <div id="gallery-grid" class="gallery-grid"></div>`;
   for (const input of lesson.querySelectorAll('.gallery-filters input, .gallery-filters select')) {
     input.addEventListener('input', renderGalleryGrid);
   }
+  lesson.querySelector('#gallery-download').addEventListener('click', downloadGallery);
+  lesson.querySelector('#gallery-clear-selection').addEventListener('click', () => {
+    selectedGalleryImages.clear();
+    renderGalleryGrid();
+  });
+  lesson.querySelector('#gallery-grid').addEventListener('change', event => {
+    const input = event.target.closest('[data-gallery-select]');
+    if (!input) return;
+    if (input.checked) selectedGalleryImages.add(input.dataset.gallerySelect);
+    else selectedGalleryImages.delete(input.dataset.gallerySelect);
+    updateGallerySelection();
+  });
   renderGalleryGrid();
+}
+
+function updateGallerySelection() {
+  const count = selectedGalleryImages.size;
+  lesson.querySelector('#gallery-selection-count').textContent = `${count} images selected (including any hidden by filters)`;
+  lesson.querySelector('#gallery-download').textContent = count ? `Download ${count} selected as ZIP` : 'Download all images as ZIP';
+  lesson.querySelector('#gallery-clear-selection').disabled = !count;
+}
+
+async function downloadGallery() {
+  const items = galleryDownloadItems(galleryItems(chapters), selectedGalleryImages);
+  if (!items.length || !window.confirm(`Start downloading ${items.length} ${selectedGalleryImages.size ? 'selected' : 'gallery'} images as a ZIP file?`)) return;
+  const button = lesson.querySelector('#gallery-download');
+  const status = lesson.querySelector('#gallery-download-status');
+  button.disabled = true;
+  status.textContent = `Preparing ZIP with ${items.length} images…`;
+  try {
+    const files = [];
+    for (const item of items) {
+      const response = await fetch(packPath(item.file));
+      if (!response.ok) throw new Error('An image could not be loaded.');
+      files.push({ name: `${item.topic}/${item.file.split('/').at(-1)}`, data: new Uint8Array(await response.arrayBuffer()) });
+      status.textContent = `Preparing ZIP: ${files.length} of ${items.length} images…`;
+    }
+    const url = URL.createObjectURL(createZip(files));
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'objectscript-gallery.zip';
+    document.body.append(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 60000);
+    status.textContent = `Download started: ${items.length} images in objectscript-gallery.zip.`;
+  } catch {
+    status.textContent = 'The ZIP could not be created. Please try again.';
+  } finally {
+    button.disabled = false;
+  }
 }
 
 function renderGalleryGrid() {
@@ -435,6 +493,7 @@ function renderGalleryGrid() {
         <img src="${url}" alt="${escape(item.caption)}" width="${item.width}" height="${item.height}" loading="lazy">
       </a>
       <figcaption>
+        <label class="gallery-select"><input type="checkbox" data-gallery-select="${escape(item.file)}" ${selectedGalleryImages.has(item.file) ? 'checked' : ''} aria-label="Select ${escape(item.caption)}"> Select for ZIP</label>
         <p class="muted">Chapter ${item.chapter} · ${escape(item.title)}</p>
         <p>${escape(item.caption)}</p>
         <p class="muted">${item.locations.map(escape).join('<br>')}</p>
@@ -445,6 +504,7 @@ function renderGalleryGrid() {
       </figcaption>
     </figure>`;
   }).join('') : '<p>No images match these filters. Try another chapter or search term.</p>';
+  updateGallerySelection();
 }
 
 
