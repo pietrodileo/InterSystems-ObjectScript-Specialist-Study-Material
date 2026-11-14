@@ -66,7 +66,7 @@ a { color: var(--accent); text-underline-offset: .2em; }
 a:hover { color: var(--accent-hover); text-decoration-thickness: .12em; }
 button { font: inherit; cursor: pointer; }
 a, button, summary, .option, .case-done { touch-action: manipulation; }
-a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visible, .quiz-table:focus-visible {
+a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visible, select:focus-visible, .quiz-table:focus-visible {
   outline: 3px solid var(--focus);
   outline-offset: 3px;
 }
@@ -78,6 +78,24 @@ button:not(.chapter-button), .button-link, .nav-link {
   color: var(--ink);
 }
 button:not(.chapter-button):hover, .button-link:hover { border-color: var(--accent); }
+input:is([type="text"], [type="search"]), select {
+  width: 100%;
+  min-width: 0;
+  min-height: 2.75rem;
+  padding: .6rem .75rem;
+  border: 1px solid var(--open-line);
+  border-radius: .55rem;
+  background-color: var(--white);
+  color: var(--ink);
+  caret-color: var(--accent);
+  font: inherit;
+  font-weight: 400;
+}
+input::placeholder { color: var(--muted); opacity: 1; }
+input:is([type="text"], [type="search"]):hover:not(:disabled), select:hover:not(:disabled) { border-color: var(--accent); }
+input:is([type="text"], [type="search"]):focus, select:focus { border-color: var(--accent); }
+select { cursor: pointer; }
+input:is([type="text"], [type="search"]):disabled, select:disabled { background-color: var(--quiet); color: var(--muted); cursor: not-allowed; }
 .nav-link { text-decoration: none; color: var(--ink); }
 .nav-link:hover { color: var(--ink); border-color: var(--accent); }
 .button-link {
@@ -267,17 +285,6 @@ progress { display: block; width: 100%; height: .75rem; margin: .45rem 0; accent
 .profile-panel { max-width: 48rem; padding: clamp(1rem, 3vw, 1.5rem); }
 .profile-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
 .profile-fields label { display: grid; gap: .4rem; font-weight: 650; }
-.profile-fields input {
-  width: 100%;
-  min-height: 2.75rem;
-  padding: .6rem .7rem;
-  border: 1px solid var(--line);
-  border-radius: .5rem;
-  background: var(--white);
-  color: var(--ink);
-  font: inherit;
-}
-.profile-fields input::placeholder { color: var(--muted); opacity: .8; }
 .profile-role { grid-column: 1 / -1; }
 .profile-note { margin: .9rem 0; }
 .profile-status:empty { display: none; }

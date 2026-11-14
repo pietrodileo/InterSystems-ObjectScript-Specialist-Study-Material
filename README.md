@@ -2,7 +2,7 @@
 
 Study for the InterSystems ObjectScript Specialist certification with a browser-based tutor and a Markdown study pack. Both follow the same 22 chapters, covering data modeling, basic programming, IRIS features, functions and APIs, and error handling.
 
-**[Open the tutor online](https://pietrodileo.github.io/InterSystems-ObjectScript-Specialist-Study-Material/tutor/)** · [Browse the study pack](ObjectScript%20Study%20Pack/README.md) · [Official exam outline](https://www.intersystems.com/certifications/intersystems-objectscript-specialist/)
+**[Open the tutor online](https://pietrodileo.github.io/InterSystems-ObjectScript-Specialist-Study-Material/tutor/#page=roadmap)** · [Browse the study pack](ObjectScript%20Study%20Pack/README.md) · [Official exam outline](https://www.intersystems.com/certifications/intersystems-objectscript-specialist/)
 
 ## Certification tutor
 
