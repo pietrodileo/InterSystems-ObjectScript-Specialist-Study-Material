@@ -8,10 +8,10 @@
   <title>ObjectScript Certification Tutor</title>
   <link rel="icon" type="image/png" sizes="32x32" href="./favicon.png">
   <link rel="icon" type="image/svg+xml" sizes="any" href="./favicon.svg">
-  <link rel="stylesheet" href="./style.css?v=chapter-layout-2">
-  <script type="module" src="./sidebar-controls.mjs?v=chapter-layout-2"></script>
-  <script type="module" src="./image-viewer.mjs?v=gallery-zip-2"></script>
-  <script type="module" src="./app.mjs?v=chapter-layout-2"></script>
+  <link rel="stylesheet" href="./style.css?v=compact-diagrams-2">
+  <script type="module" src="./sidebar-controls.mjs?v=compact-diagrams-2"></script>
+  <script type="module" src="./image-viewer.mjs?v=compact-diagrams-2"></script>
+  <script type="module" src="./app.mjs?v=compact-diagrams-2"></script>
 </head>
 <body>
   <a class="skip" href="#lesson">Skip to content</a>
@@ -70,6 +70,9 @@
         <button type="button" id="image-zoom-in" class="image-viewer-control" aria-label="Zoom in" title="Zoom in" disabled>
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-7-7v14"/></svg>
         </button>
+        <button type="button" id="image-explanation-toggle" class="image-viewer-control" aria-label="Show diagram explanation" title="Show diagram explanation" aria-controls="image-explanation" aria-expanded="false">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v15M3 4c3-1 6-1 9 1 3-2 6-2 9-1v15c-3-1-6-1-9 1-3-2-6-2-9-1Z"/></svg>
+        </button>
         <a id="image-download" class="image-viewer-control" download aria-label="Download original image" title="Download original image">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-4-4 4 4 4-4M5 16v4h14v-4"/></svg>
         </a>
@@ -86,7 +89,12 @@
     </div>
     <div class="image-viewer-footer">
       <button type="button" id="image-previous" aria-label="Previous image">←</button>
-      <p id="image-viewer-caption" aria-live="polite"></p>
+      <div id="image-viewer-caption" tabindex="0" role="region" aria-label="Diagram description" aria-live="polite">
+        <section id="image-explanation" aria-labelledby="image-explanation-title" hidden>
+          <h3 id="image-explanation-title">Diagram explanation</h3>
+          <div id="image-explanation-body"></div>
+        </section>
+      </div>
       <button type="button" id="image-next" aria-label="Next image">→</button>
     </div>
   </dialog>

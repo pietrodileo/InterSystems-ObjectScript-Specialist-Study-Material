@@ -70,7 +70,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visibl
   outline: 3px solid var(--focus);
   outline-offset: 3px;
 }
-button:not(.chapter-button), .button-link {
+button:not(.chapter-button), .button-link, .nav-link {
   border: 1px solid var(--line);
   border-radius: .55rem;
   padding: .55rem .85rem;
@@ -78,6 +78,8 @@ button:not(.chapter-button), .button-link {
   color: var(--ink);
 }
 button:not(.chapter-button):hover, .button-link:hover { border-color: var(--accent); }
+.nav-link { text-decoration: none; color: var(--ink); }
+.nav-link:hover { color: var(--ink); border-color: var(--accent); }
 .button-link {
   display: inline-flex;
   align-items: center;
@@ -86,13 +88,13 @@ button:not(.chapter-button):hover, .button-link:hover { border-color: var(--acce
   text-decoration: none;
 }
 .button-link:hover { color: var(--ink); }
-button.primary {
+:is(button, a).primary {
   background: var(--button-accent);
   border-color: var(--button-accent);
   color: white;
   font-weight: 700;
 }
-button.primary:hover { background: var(--button-accent-hover); }
+:is(button, a).primary:hover { background: var(--button-accent-hover); }
 button.primary:disabled { background: var(--quiet); border-color: var(--line); color: var(--muted); cursor: default; }
 .skip {
   position: fixed;
@@ -210,7 +212,7 @@ progress { display: block; width: 100%; height: .75rem; margin: .45rem 0; accent
 .muted { color: var(--muted); font-size: .88rem; }
 .course-progress p { margin: 0; }
 .course-menu { display: grid; }
-.course-menu button:not(.chapter-button) {
+.course-menu :is(button, a):not(.chapter-button) {
   text-align: left;
   padding: .45rem .6rem;
   font-size: .9rem;
@@ -218,8 +220,8 @@ progress { display: block; width: 100%; height: .75rem; margin: .45rem 0; accent
   border-color: transparent;
   background: transparent;
 }
-.course-menu button:not(.chapter-button):hover { background: var(--quiet); }
-.course-menu button[aria-current]:not(.chapter-button) {
+.course-menu :is(button, a):not(.chapter-button):hover { background: var(--quiet); }
+.course-menu :is(button, a)[aria-current]:not(.chapter-button) {
   color: var(--accent);
   font-weight: 700;
   background: var(--selected);
@@ -328,13 +330,14 @@ progress { display: block; width: 100%; height: .75rem; margin: .45rem 0; accent
 .chapter-concepts > summary:hover { background: var(--quiet); }
 .chapter-concepts > summary small { color: var(--muted); font-weight: 500; }
 .chapter-concepts .course-concepts { margin-block: 0 .65rem; padding: 0; list-style: none; }
-.chapter-concepts .course-concepts button {
+.chapter-concepts .course-concepts :is(button, a) {
+  display: block;
   width: 100%;
   min-height: 2.75rem;
   border-color: transparent;
   background: transparent;
 }
-.chapter-concepts .course-concepts button:hover { background: var(--quiet); }
+.chapter-concepts .course-concepts :is(button, a):hover { background: var(--quiet); }
 .home-chapter :focus-visible { outline-offset: -3px; }
 .home-chapter-card {
   display: grid;
@@ -411,10 +414,10 @@ h4 { font-size: 1rem; margin: 1rem 0 .35rem; }
 .lead + .lead { margin-top: .8rem; }
 .chapter-location + .lead { margin-top: .65rem; }
 .phases { display: flex; gap: .4rem; margin: 0 0 .8rem; border-bottom: 1px solid var(--line); }
-.phases button:not(.chapter-button) { background: transparent; border-color: transparent; border-radius: .4rem .4rem 0 0; }
-.phases button:not(.chapter-button):hover { background: var(--quiet); }
-.phases button[aria-current]:not(.chapter-button) { background: var(--selected); border-bottom-color: var(--accent); font-weight: 700; }
-.phases button span { color: var(--accent); margin-right: .15rem; font-variant-numeric: tabular-nums; }
+.phases :is(button, a):not(.chapter-button) { background: transparent; border-color: transparent; border-radius: .4rem .4rem 0 0; }
+.phases :is(button, a):not(.chapter-button):hover { background: var(--quiet); }
+.phases :is(button, a)[aria-current]:not(.chapter-button) { background: var(--selected); border-bottom-color: var(--accent); font-weight: 700; }
+.phases :is(button, a) span { color: var(--accent); margin-right: .15rem; font-variant-numeric: tabular-nums; }
 .panel { padding-block: .8rem 1.5rem; overflow-wrap: anywhere; }
 .panel p, .reading li { max-width: 72ch; }
 .sections { margin-top: 1.1rem; }
@@ -608,7 +611,7 @@ code { font-size: .9em; }
   .sidebar-toggle .mobile-menu-chevron { display: block; }
   .sidebar-toggle[aria-expanded="true"] .mobile-menu-chevron { transform: rotate(180deg); }
   .phases { gap: .3rem; }
-  .phases button { flex: 1; padding-inline: .35rem; }
+  .phases :is(button, a) { flex: 1; padding-inline: .35rem; }
 }
 @media (max-width: 450px) {
   .home-chapter-card { grid-template-columns: auto minmax(0, 1fr); }
@@ -760,7 +763,7 @@ html:has(.image-viewer[open]) { overflow: hidden; }
 .image-viewer-canvas p { margin: 1rem; color: var(--muted); }
 
 .course-concepts { display: grid; gap: .4rem; padding-left: 1.25rem; }
-.course-concepts button { text-align: left; }
+.course-concepts :is(button, a) { text-align: left; }
 .gallery-filters { display: flex; flex-wrap: wrap; gap: 1rem; }
 .gallery-filters label { display: grid; gap: .4rem; flex: 1 1 12rem; min-width: 0; }
 .gallery-filters input, .gallery-filters select { width: 100%; min-width: 0; }
@@ -772,7 +775,12 @@ html:has(.image-viewer[open]) { overflow: hidden; }
 .gallery-select { display: flex; align-items: center; gap: .5rem; margin-bottom: .8rem; }
 .gallery-card figcaption p { margin: 0 0 .8rem; overflow-wrap: anywhere; }
 .image-viewer-footer { display: flex; align-items: center; gap: .75rem; padding: .65rem; border-top: 1px solid var(--line); }
-.image-viewer-footer p { flex: 1; min-width: 0; max-height: 7rem; overflow: auto; margin: 0; font-size: .85rem; white-space: pre-line; }
+#image-viewer-caption { flex: 1; min-width: 0; max-height: min(30vh, 14rem); overflow: auto; margin: 0; padding: .25rem; font-size: .85rem; overflow-wrap: anywhere; }
+#image-viewer-caption:focus-visible { outline: 3px solid var(--focus); outline-offset: -3px; }
+[data-diagram-caption] p { margin: 0 0 .4rem; }
+[data-diagram-caption] ul { margin: .4rem 0; padding-left: 1.4rem; }
+[data-diagram-caption] li { margin-block: .4rem; }
+#image-viewer-caption > .muted { margin: 0 0 .35rem; }
 .image-viewer-footer button { flex: none; }
 
 @media (max-width: 720px) {
@@ -780,3 +788,10 @@ html:has(.image-viewer[open]) { overflow: hidden; }
   .header-links { flex: 1; }
   .header-links a { font-size: .82rem; }
 }
+
+#image-viewer-caption:has(#image-explanation:not([hidden])) { max-height: 40vh; }
+#image-explanation { margin-top: .75rem; padding-top: .75rem; border-top: 1px solid var(--line); }
+#image-explanation h3 { margin: 0 0 .5rem; font-size: 1rem; }
+#image-explanation ul { margin: 0; padding-left: 1.4rem; }
+#image-explanation li { margin-block: .5rem; }
+.image-viewer-actions #image-explanation-toggle[aria-expanded="true"] { background: var(--selected); border-color: var(--accent); }

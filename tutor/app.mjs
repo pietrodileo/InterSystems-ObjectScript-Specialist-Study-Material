@@ -1,9 +1,10 @@
-import { assessmentAnswered, assessmentComplete, chapterStep, correctSelection, finalQuestionRefs, loadCourse, packPath, passedAnswer, practiceQueue, quizBlocks, recordPractice, reviewItems, topics } from './content.mjs?v=course-index-1';
+import { routeHref, readRoute } from './navigation.mjs';
+import { assessmentAnswered, assessmentComplete, chapterStep, correctSelection, finalQuestionRefs, loadCourse, packPath, passedAnswer, practiceQueue, quizBlocks, recordPractice, reviewItems, topics } from './content.mjs?v=compact-diagrams-2';
 import { caseFocus, examAreaDescriptions, guides, variations } from './lesson-guides.mjs?v=practice-feedback-1';
 import { diagramExamples, studyExamples } from './code-examples.mjs';
 import './sidebar-controls.mjs?v=chapter-layout-2';
 import { createZip, galleryDownloadItems } from './gallery-download.mjs';
-import { galleryItems, searchCourse } from './content.mjs?v=course-index-1';
+import { galleryItems, searchCourse } from './content.mjs?v=compact-diagrams-2';
 
 const lesson = document.querySelector('#lesson');
 const nav = document.querySelector('#chapters');
@@ -119,15 +120,15 @@ function renderNavigation() {
   document.querySelector('#progress-label').textContent =
     `${done}/${chapters.length} chapters complete. ${seen}/${total} quiz questions answered.${errors ? ` ${errors} to review.` : ''}${storageWorks ? '' : ' Progress could not be saved in this browser.'}`;
   courseMenu.innerHTML = Object.entries({ roadmap: 'Home', index: 'Index Course', gallery: 'Gallery', review: 'Answer review', final: 'Final assessment' }).map(([page, label]) =>
-    `<button type="button" data-course="${page}" ${phase === page ? 'aria-current="page"' : ''}>${label}</button>`).join('');
+    `<a class="nav-link" data-course="${page}" ${phase === page ? 'aria-current="page"' : ''} href="${escape(routeHref({ page }))}">${label}</a>`).join('');
   const activeArea = phase === 'area' ? state.area : chapter?.topic.split('.')[0];
   nav.innerHTML = Object.entries(topics).map(([code, name]) => {
     const group = chapters.filter(item => item.topic.startsWith(`${code}.`));
     const completed = group.filter(item => !step(item)).length;
-    return `<button type="button" class="area-nav-button" data-area="${escape(code)}" ${activeArea === code ? 'aria-current="page"' : ''}>
+    return `<a class="nav-link area-nav-button" data-area="${escape(code)}" ${activeArea === code ? 'aria-current="page"' : ''} href="${escape(routeHref({ area: code }))}">
       <span class="area-nav-code">${escape(code)}</span>
       <span class="area-nav-copy"><strong>${escape(name)}</strong><small>${completed}/${group.length} chapters complete</small></span>
-    </button>`;
+    </a>`;
   }).join('');
 }
 
@@ -165,6 +166,54 @@ function openArea(code) {
   render();
 }
 
+let restoringRoute = false;
+function restoreRoute() {
+  const route = readRoute(window.location.hash, chapters, topics);
+  if (!route) return false;
+  restoringRoute = true;
+  try {
+    if (route.topic) openChapter(chapters.find(item => item.topic === route.topic), route.phase, route.mode);
+    else if (route.area) openArea(route.area);
+    else {
+      if (route.page === 'past') {
+        if (!state.assessments[route.assessment]) {
+          window.history.replaceState(null, '', routeHref({ page: 'review' }));
+          openCourse('review');
+          return true;
+        }
+        state.assessmentIndex = route.assessment;
+      }
+      openCourse(route.page);
+    }
+    if (mobileMenu.matches) setSidebarOpen(false);
+    if (route.section !== undefined) {
+      const target = lesson.querySelectorAll('.sections > details')[route.section];
+      if (target) {
+        target.open = true;
+        target.scrollIntoView({ block: 'start' });
+        target.querySelector('summary').focus({ preventScroll: true });
+      }
+    }
+    if (route.image) {
+      const target = [...lesson.querySelectorAll('[data-image-viewer]')]
+        .find(link => link.getAttribute('href') === packPath(route.image));
+      for (let parent = target?.parentElement; parent; parent = parent.parentElement) {
+        if (parent.tagName === 'DETAILS') parent.open = true;
+      }
+      target?.scrollIntoView({ block: 'center' });
+      target?.focus({ preventScroll: true });
+    }
+  } finally { restoringRoute = false; }
+  return true;
+}
+window.addEventListener('hashchange', () => {
+  if (window.location.hash === '#lesson') return;
+  if (chapters && !restoreRoute()) {
+    window.history.replaceState(null, '', routeHref({ page: 'roadmap' }));
+    openCourse('roadmap');
+  }
+});
+
 function continueCourse() {
   const next = nextChapter();
   if (next) openChapter(next);
@@ -177,6 +226,12 @@ function focusLesson() {
 }
 
 function render() {
+  const href = routeHref(chapter ? { topic: chapter.topic, phase, mode: practiceMode } :
+    { page: phase, area: phase === 'area' ? state.area : undefined,
+      assessment: phase === 'past' ? state.assessmentIndex : undefined });
+  if (!restoringRoute && window.location.hash !== href) {
+    window.history[window.location.hash ? 'pushState' : 'replaceState'](null, '', href);
+  }
   renderNavigation();
   if (!chapter) {
     renderCourse();
@@ -192,7 +247,7 @@ function render() {
     </header>
     <nav class="phases" aria-label="Chapter steps">
       ${Object.entries(phases).map(([id, label], i) => `
-        <button type="button" data-phase="${id}" ${phase === id ? 'aria-current="step"' : ''}><span>${i + 1}</span> ${label}</button>
+        <a class="nav-link" data-phase="${id}" ${phase === id ? 'aria-current="step"' : ''} href="${escape(routeHref({ phase: id, topic: chapter.topic }))}"><span>${i + 1}</span> ${label}</a>
       `).join('')}
     </nav>
     <section id="panel" class="panel"></section>`;
@@ -222,16 +277,16 @@ function renderHomeChapters(matches, searching = false) {
           const casesDone = completedCases(item);
           const title = item.title.split(': ').slice(1).join(': ');
           const concepts = matches?.find(match => match.item === item).sections;
-          return `<div class="home-chapter"><button type="button" class="home-chapter-card" data-topic="${escape(item.topic)}" ${matches ? 'data-phase="theory"' : ''}>
+          return `<div class="home-chapter"><a class="nav-link home-chapter-card" data-topic="${escape(item.topic)}" href="${escape(routeHref({ topic: item.topic, phase: matches ? 'theory' : step(item) ?? 'theory' }))}">
             <span class="home-chapter-code">${escape(item.topic)}</span>
             <strong class="home-chapter-title">${escape(title)}</strong>
             <span class="home-chapter-open" aria-hidden="true">Open chapter</span>
             <small class="home-chapter-status">${chapterStatus(item, currentStep)} · ${answered}/${item.quiz.length} questions answered · ${casesDone}/${item.cases.length} cases complete</small>
-          </button>${concepts?.length ? `
+          </a>${concepts?.length ? `
             <details class="chapter-concepts" ${searching ? 'open' : ''}>
               <summary aria-label="${searching ? 'Matching concepts' : 'Concepts'} (${concepts.length}) for ${escape(item.topic)} ${escape(title)}"><span>${searching ? 'Matching concepts' : 'Concepts'} <small>(${concepts.length})</small></span></summary>
               <ul class="course-concepts">${concepts.map(({ section, index }) => `
-                <li><button type="button" data-topic="${escape(item.topic)}" data-phase="theory" data-section="${index}">${markdownText(section.title)}</button></li>
+                <li><a class="nav-link" data-topic="${escape(item.topic)}" data-phase="theory" data-section="${index}" href="${escape(routeHref({ topic: item.topic, phase: 'theory', section: index }))}">${markdownText(section.title)}</a></li>
               `).join('')}</ul>
             </details>` : ''}</div>`;
         }).join('')}
@@ -243,7 +298,7 @@ function renderHomeChapters(matches, searching = false) {
     <h2>${matches ? 'Course chapters' : 'Chapters to complete'}</h2>
     <p class="muted">${matches ? 'Expand an exam area to browse its chapters and concepts.' : 'All unfinished chapters are listed here. Choose any one to work on its current step.'}</p>
     ${allComplete
-      ? `<div class="home-all-complete"><p>All chapters are complete. The final assessment is ready.</p><button type="button" class="primary" data-course="final">Start final assessment</button></div>`
+      ? `<div class="home-all-complete"><p>All chapters are complete. The final assessment is ready.</p><a class="nav-link primary" data-course="final" href="${escape(routeHref({ page: 'final' }))}">Start final assessment</a></div>`
       : sections}
   </section>`;
 }
@@ -278,10 +333,10 @@ function renderCourse() {
           const completed = currentStep === null;
           const status = chapterStatus(item, currentStep);
           const title = item.title.split(': ').slice(1).join(': ');
-          return `<button type="button" class="area-chapter-card${completed ? ' is-complete' : ''}" data-topic="${escape(item.topic)}">
+          return `<a class="nav-link area-chapter-card${completed ? ' is-complete' : ''}" data-topic="${escape(item.topic)}" href="${escape(routeHref({ topic: item.topic, phase: step(item) ?? 'theory' }))}">
             <span class="area-chapter-heading"><b>${escape(item.topic)}</b><strong>${escape(title)}</strong></span>
             <span class="area-chapter-status">Chapter ${number} of ${chapters.length} · ${status}</span>
-          </button>`;
+          </a>`;
         }).join('')}
       </section>`;
     return;
@@ -307,12 +362,12 @@ function renderCourse() {
         <p class="muted profile-note">These details are saved in this browser, personalize the home page, and are included in your backup.</p>
         <div class="actions">
           <button type="submit" class="primary">Save profile</button>
-          <button type="button" data-course="roadmap">
+          <a class="nav-link" data-course="roadmap" href="${escape(routeHref({ page: 'roadmap' }))}">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -0.125em" aria-hidden="true" focusable="false">
               <path d="m3 10 9-7 9 7M5 9v11h5v-6h4v6h5V9"></path>
             </svg>
             Back to home
-          </button>
+          </a>
         </div>
         <p class="profile-status" role="status" aria-live="polite">${escape(profileStatus)}</p>
       </form>`;
@@ -339,12 +394,12 @@ function renderCourse() {
     <header class="lesson-header home-header">
       <div class="home-heading">
         <h1 tabindex="-1">${profile.firstName ? `Hi, ${escape(profile.firstName)}` : 'Welcome to your study space'}</h1>
-        <button type="button" class="home-settings-button" data-course="profile" aria-label="Edit profile" title="Edit profile">
+        <a class="nav-link home-settings-button" data-course="profile" aria-label="Edit profile" title="Edit profile" href="${escape(routeHref({ page: 'profile' }))}">
           <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
             <circle cx="12" cy="12" r="3"></circle>
             <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.1a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.1a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.08a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.1a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.08a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.1a1.65 1.65 0 0 0-1.5 1z"></path>
           </svg>
-        </button>
+        </a>
       </div>
       ${profile.role ? `<p class="home-role muted">${escape(profile.role)}</p>` : ''}
       <p class="lead">Your InterSystems ObjectScript Specialist course is ready whenever you are.</p>
@@ -381,7 +436,7 @@ function renderCourseIndex() {
         <li><strong>Apply.</strong> Work through each case and try its variation before opening the solution. Check off the case when you finish.</li>
       </ol>
       <p>After the final assessment, use Answer review to decide what to revisit.</p>
-      <div class="actions"><button type="button" data-course="review">Open answer review</button></div>
+      <div class="actions"><a class="nav-link" data-course="review" href="${escape(routeHref({ page: 'review' }))}">Open answer review</a></div>
     </section>
     <p id="course-count" class="muted" role="status"></p>
     <section id="course-results" class="panel study-outline"></section>`;
@@ -399,12 +454,30 @@ function renderCourseResults() {
     : '<p>No chapters or concepts match your search. Try another keyword.</p>';
 }
 
-function renderDiagrams(diagrams, label) {
-  return `<div class="diagrams">${diagrams.map(({ alt, file, width, height }, index) => {
+function diagramInline(text) {
+  return text.split(/(`[^`]+`)/).map(part => markdownText(part.startsWith('`') ? part :
+    part.replace(/(?<![\w])(?:##super|\.\.#[A-Za-z]\w*|\.\.[A-Za-z]\w*|\.[A-Za-z]\w*|\$[A-Z][A-Za-z]*|ByRef|ClassMethod|Output|oref)(?!\w)/g, '`$&`'))).join('');
+}
+
+function renderDiagramCaption(caption) {
+  const summary = caption.match(/^(.*?visual summary of sections? [\d–-]+):\s*(.+)$/);
+  return `<div data-diagram-caption>${summary
+    ? `<p><strong>${diagramInline(summary[1])}</strong></p><ul>${summary[2].split(/;\s*(?=\d+\.)/)
+      .map(item => `<li>${diagramInline(item.replace(/^\d+\.\s*/, ''))}</li>`).join('')}</ul>`
+    : `<p>${diagramInline(caption)}</p>`}</div>`;
+}
+
+function renderDiagramDescription(description, caption) {
+  return `<template data-diagram-details>${renderDiagramCaption(caption)}${description?.length
+    ? `<ul data-diagram-explanation>${description.map(text => `<li>${diagramInline(text)}</li>`).join('')}</ul>` : ''}</template>`;
+}
+
+function renderDiagrams(diagrams) {
+  return `<div class="diagrams">${diagrams.map(({ alt, caption = alt, shortCaption = caption, description, file, width, height }) => {
     const url = escape(packPath(file));
-    return `<figure><a href="${url}" target="_blank" rel="noopener" data-image-viewer aria-haspopup="dialog" aria-controls="image-viewer" aria-label="Open ${label.toLowerCase()} ${index + 1}">
+    return `<figure><a href="${url}" target="_blank" rel="noopener" data-image-viewer aria-haspopup="dialog" aria-controls="image-viewer" aria-label="Open ${escape(caption)}">
       <img src="${url}" alt="${escape(alt)}" width="${width}" height="${height}" loading="lazy">
-    </a><figcaption>${label} ${index + 1}. Select the image to zoom or download it.</figcaption></figure>`;
+    </a><figcaption>${diagramInline(shortCaption)}</figcaption>${renderDiagramDescription(description, caption)}</figure>`;
   }).join('')}</div>`;
 }
 
@@ -506,13 +579,14 @@ function renderGalleryGrid() {
       <figcaption>
         <label class="gallery-select"><input type="checkbox" data-gallery-select="${escape(item.file)}" ${selectedGalleryImages.has(item.file) ? 'checked' : ''} aria-label="Select ${escape(item.caption)}"> Select</label>
         <p class="muted">Chapter ${item.chapter} · ${escape(item.title)}</p>
-        <p>${escape(item.caption)}</p>
+        <p>${diagramInline(item.shortCaption ?? item.caption)}</p>
         <p class="muted">${item.locations.map(escape).join('<br>')}</p>
         <div class="actions">
-          <button type="button" data-gallery-file="${escape(item.file)}" data-topic="${escape(item.topic)}" data-phase="${item.phase}">View in chapter</button>
+          <a class="nav-link" data-gallery-file="${escape(item.file)}" data-topic="${escape(item.topic)}" data-phase="${item.phase}" href="${escape(routeHref({ topic: item.topic, phase: item.phase, image: item.file }))}">View in chapter</a>
           <a class="button-link" href="${url}" download>Download</a>
         </div>
       </figcaption>
+      ${renderDiagramDescription(item.description, item.caption)}
     </figure>`;
   }).join('') : '<p>No images match these filters. Try another chapter or search term.</p>';
   updateGallerySelection();
@@ -554,7 +628,7 @@ function renderStudyNotes(markdown, diagrams) {
     const image = line.match(/^!\[[^\]]+\]\((visual-guide-[\w-]+\.png)\)$/);
     const diagram = image && diagrams.find(({ file }) => file.endsWith(`/${image[1]}`));
     if (diagram) {
-      html.push(renderDiagrams([diagram], 'Worked diagram'));
+      html.push(renderDiagrams([diagram]));
       i++;
       continue;
     }
@@ -606,7 +680,7 @@ function renderCodeExamples(examples) {
 function renderTheory(panel) {
   panel.innerHTML = `
     <h2 tabindex="-1">Chapter diagrams</h2>
-    ${renderDiagrams(chapter.diagrams, 'Study diagram')}
+    ${renderDiagrams(chapter.diagrams)}
     <div class="sections">${chapter.sections.map((section, i) => {
       const examples = studyExamples[`${chapter.topic}/${i + 1}`] ?? [];
       const exampleSummary = examples.length
@@ -658,7 +732,7 @@ function renderPracticeReferences() {
     const text = explanation.split('\n\n').map(part => '<p>' + quizInline(part) + '</p>').join('');
     const code = example ? renderCodeExamples([[example.title, example.code, example.note]]) : '';
     const docs = references.map(({ label, url }) => '<li>' + link(url, label) + '</li>').join('');
-    const image = diagram ? '<h4>Related diagram</h4>' + renderDiagrams([diagram], 'Practice diagram') : '';
+    const image = diagram ? '<h4>Related diagram</h4>' + renderDiagrams([diagram]) : '';
     return '<details class="reading inset apply-question-reference" data-apply-reference="' + question.id + '">' +
       '<summary>Q' + question.id + ' · ' + escape(questionPrompt(question)) + '</summary>' +
       '<div class="disclosure-body">' +
@@ -688,7 +762,7 @@ function questionExplanation(question) {
     <ul>${references.map(({ label, url }) => `<li>${link(url, label)}</li>`).join('')}</ul>
     ${diagram ? `<details class="reading inset">
       <summary>See the practice diagram</summary>
-      <div class="disclosure-body">${renderDiagrams([diagram], 'Practice diagram')}</div>
+      <div class="disclosure-body">${renderDiagrams([diagram])}</div>
     </details>` : ''}`;
 }
 
@@ -736,21 +810,21 @@ function renderReview() {
         <summary>${escape(item.title)} · ${answers.length - errors} correct · ${errors} incorrect · ${item.quiz.length - answers.length} unanswered</summary>
         <div class="disclosure-body">
           <div class="actions">
-            <button type="button" data-topic="${item.topic}" data-phase="theory">Review theory</button>
-            ${errors ? `<button type="button" data-topic="${item.topic}" data-phase="quiz" data-mode="review">Retry missed questions</button>` : ''}
+            <a class="nav-link" data-topic="${item.topic}" data-phase="theory" href="${escape(routeHref({ topic: item.topic, phase: 'theory' }))}">Review theory</a>
+            ${errors ? `<a class="nav-link" data-topic="${item.topic}" data-phase="quiz" data-mode="review" href="${escape(routeHref({ topic: item.topic, phase: 'quiz', mode: 'review' }))}">Retry missed questions</a>` : ''}
           </div>
           ${[...answers].sort((a, b) => Number(a.passed) - Number(b.passed))
             .map(({ question, attempts }) => answerDetails(question, attempts)).join('')}
         </div>
       </details>`).join('')}
       <div class="actions">
-        <button type="button" data-course="roadmap">Back to study plan</button>
-        <button type="button" data-course="final">Final assessment results</button>
+        <a class="nav-link" data-course="roadmap" href="${escape(routeHref({ page: 'roadmap' }))}">Back to study plan</a>
+        <a class="nav-link" data-course="final" href="${escape(routeHref({ page: 'final' }))}">Final assessment results</a>
       </div>
       ${state.assessments.length ? `<h3>Past assessments</h3>
-        <ol class="roadmap">${state.assessments.map((final, index) => `<li><button type="button" data-assessment="${index}">
+        <ol class="roadmap">${state.assessments.map((final, index) => `<li><a class="nav-link" href="${escape(routeHref({ page: 'past', assessment: index }))}">
           Attempt ${index + 1} · ${final.answers.filter(passedAnswer).length}/${final.refs.length} correct
-        </button></li>`).join('')}</ol>` : ''}
+        </a></li>`).join('')}</ol>` : ''}
     </section>`;
 }
 
@@ -806,10 +880,10 @@ function renderQuizSummary(panel) {
     </p>
     <div class="actions">
       <button type="button" class="primary" data-question="${cursor}">Back to questions</button>
-      ${errors ? '<button type="button" data-phase="quiz" data-mode="review">Retry missed questions</button>' : ''}
-      <button type="button" data-phase="cases">Open worked cases</button>
-      <button type="button" data-course="review">Open answer review</button>
-      ${!remaining ? '<button type="button" data-phase="quiz" data-mode="repeat">Retake full quiz</button>' : ''}
+      ${errors ? `<a class="nav-link" href="${escape(routeHref({ topic: chapter.topic, phase: 'quiz', mode: 'review' }))}">Retry missed questions</a>` : ''}
+      <a class="nav-link" data-phase="cases" href="${escape(routeHref({ phase: 'cases', topic: chapter.topic }))}">Open worked cases</a>
+      <a class="nav-link" data-course="review" href="${escape(routeHref({ page: 'review' }))}">Open answer review</a>
+      ${!remaining ? `<a class="nav-link" href="${escape(routeHref({ topic: chapter.topic, phase: 'quiz', mode: 'repeat' }))}">Retake full quiz</a>` : ''}
       ${!errors && chapters.some(missed) ? '<button type="button" data-review-next>Review next chapter</button>' : ''}
     </div>`;
   focusQuestion(panel);
@@ -836,7 +910,7 @@ function renderQuiz(panel, final = null) {
     <nav class="question-picker" aria-label="Jump to question"></nav>
     <div class="question-meta">
       <h2 tabindex="-1">Question ${final ? index + 1 : id}</h2>
-      ${!final && practiceMode !== 'review' && missed(chapter) ? '<button type="button" data-phase="quiz" data-mode="review">Retry missed questions</button>' : ''}
+      ${!final && practiceMode !== 'review' && missed(chapter) ? `<a class="nav-link" href="${escape(routeHref({ topic: chapter.topic, phase: 'quiz', mode: 'review' }))}">Retry missed questions</a>` : ''}
     </div>
     <div class="question-prompt quiz-text">${quizText(question.question, true)}</div>
     <form autocomplete="off">
@@ -946,13 +1020,13 @@ function renderAssessmentSummary(panel, final) {
       const question = item.quiz.find(q => q.id === ref.id);
       return `<section class="assessment-item">
         <div class="result-line"><strong>${escape(item.title)}</strong>
-          <button type="button" data-topic="${item.topic}" data-phase="theory">Review theory</button></div>
+          <a class="nav-link" data-topic="${item.topic}" data-phase="theory" href="${escape(routeHref({ topic: item.topic, phase: 'theory' }))}">Review theory</a></div>
         ${answerDetails(question, [attempt])}
       </section>`;
     }).join('')}
     <div class="actions">
-      ${phase === 'final' ? '<button type="button" data-start-final>Start a new assessment</button>' : '<button type="button" data-course="final">Current assessment</button>'}
-      <button type="button" data-course="review">Open answer review</button>
+      ${phase === 'final' ? '<button type="button" data-start-final>Start a new assessment</button>' : `<a class="nav-link" href="${escape(routeHref({ page: 'final' }))}">Current assessment</a>`}
+      <a class="nav-link" data-course="review" href="${escape(routeHref({ page: 'review' }))}">Open answer review</a>
     </div>`;
 }
 
@@ -999,7 +1073,7 @@ function renderCases(panel) {
     }).join('')}
     ${renderPracticeReferences()}
     <h3>Exercise diagrams</h3>
-    ${renderDiagrams(chapter.exerciseDiagrams, 'Exercise diagram')}
+    ${renderDiagrams(chapter.exerciseDiagrams)}
     <details class="reading"><summary><span>Examples behind the diagrams
       <small class="summary-note">${additionalPanels.length} explanations${codeCount ? ` and ${codeCount} code ${codeCount === 1 ? 'example' : 'examples'}` : ''}</small>
     </span></summary>
@@ -1018,8 +1092,8 @@ function renderCases(panel) {
       <div class="disclosure-body"><p>${markdownText(guides[chapter.topic][1])}</p></div>
     </details>
     <div class="actions">
-      ${attempted(chapter) < chapter.quiz.length ? '<button type="button" class="primary" data-phase="quiz">Finish quiz</button>' : ''}
-      ${errors ? '<button type="button" data-phase="quiz" data-mode="review">Retry missed questions</button>' : ''}
+      ${attempted(chapter) < chapter.quiz.length ? `<a class="nav-link primary" href="${escape(routeHref({ topic: chapter.topic, phase: 'quiz' }))}">Finish quiz</a>` : ''}
+      ${errors ? `<a class="nav-link" href="${escape(routeHref({ topic: chapter.topic, phase: 'quiz', mode: 'review' }))}">Retry missed questions</a>` : ''}
       <button type="button" class="primary" data-continue id="continue-after-cases" hidden></button>
     </div>`;
   renderCaseProgress();
@@ -1043,20 +1117,6 @@ lesson.addEventListener('toggle', event => {
   } else state.openTopics = state.openTopics.filter(area => area !== code);
   save();
 }, true);
-
-nav.addEventListener('click', event => {
-  const button = event.target.closest('[data-area]');
-  if (!button) return;
-  if (mobileMenu.matches) setSidebarOpen(false);
-  openArea(button.dataset.area);
-});
-
-courseMenu.addEventListener('click', event => {
-  const button = event.target.closest('[data-course]');
-  if (!button) return;
-  if (mobileMenu.matches) setSidebarOpen(false);
-  openCourse(button.dataset.course);
-});
 
 lesson.addEventListener('submit', event => {
   if (event.target.id !== 'profile-form') return;
@@ -1125,30 +1185,6 @@ lesson.addEventListener('click', event => {
     if (state.final && assessmentComplete(state.final)) state.assessments.push(state.final);
     state.final = { refs: finalQuestionRefs(chapters), answers: [], submitted: false };
     openCourse('final');
-  } else if (button.dataset.assessment !== undefined) {
-    state.assessmentIndex = Number(button.dataset.assessment);
-    openCourse('past');
-  } else if (button.dataset.course) {
-    openCourse(button.dataset.course);
-  } else if (button.dataset.topic) {
-    openChapter(chapters.find(item => item.topic === button.dataset.topic), button.dataset.phase, button.dataset.mode);
-    if (button.dataset.section !== undefined) {
-      const target = lesson.querySelectorAll('.sections > details')[Number(button.dataset.section)];
-      if (target) {
-        target.open = true;
-        target.scrollIntoView({ block: 'start' });
-        target.querySelector('summary').focus({ preventScroll: true });
-      }
-    }
-    if (button.dataset.galleryFile) {
-      const target = [...lesson.querySelectorAll('[data-image-viewer]')]
-        .find(link => link.getAttribute('href') === packPath(button.dataset.galleryFile));
-      for (let parent = target?.parentElement; parent; parent = parent.parentElement) {
-        if (parent.tagName === 'DETAILS') parent.open = true;
-      }
-      target?.scrollIntoView({ block: 'center' });
-      target?.focus({ preventScroll: true });
-    }
   } else if (button.dataset.phase) {
     if (button.hasAttribute('data-study')) state.studied[chapter.topic] = true;
     openChapter(chapter, button.dataset.phase, button.dataset.mode);
@@ -1172,10 +1208,16 @@ try {
     return response.text();
   });
   const previous = chapters.find(item => item.topic === state.topic);
-  if (previous && Object.hasOwn(phases, state.phase)) openChapter(previous, state.phase);
-  else if (state.phase === 'past' && state.assessments[state.assessmentIndex]) openCourse('past');
-  else if (state.phase === 'area' && Object.hasOwn(topics, state.area)) openArea(state.area);
-  else openCourse(['final', 'review', 'profile', 'gallery', 'index'].includes(state.phase) ? state.phase : 'roadmap');
+  if (!restoreRoute()) {
+    if (window.location.hash && window.location.hash !== '#lesson') {
+      window.history.replaceState(null, '', routeHref({ page: 'roadmap' }));
+      openCourse('roadmap');
+    }
+    else if (previous && Object.hasOwn(phases, state.phase)) openChapter(previous, state.phase);
+    else if (state.phase === 'past' && state.assessments[state.assessmentIndex]) openCourse('past');
+    else if (state.phase === 'area' && Object.hasOwn(topics, state.area)) openArea(state.area);
+    else openCourse(['final', 'review', 'profile', 'gallery', 'index'].includes(state.phase) ? state.phase : 'roadmap');
+  }
 } catch (error) {
   lesson.innerHTML = '<h1>Could not load the Study Pack</h1><p>Start the tutor from the repository root using the command in the README, then reload this page.</p>';
   console.error(error);

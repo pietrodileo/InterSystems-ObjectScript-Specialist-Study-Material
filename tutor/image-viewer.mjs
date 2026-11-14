@@ -6,6 +6,9 @@ const zoomOut = document.querySelector('#image-zoom-out');
 const zoomIn = document.querySelector('#image-zoom-in');
 const zoomLevel = document.querySelector('#image-zoom-level');
 const download = document.querySelector('#image-download');
+const explanationToggle = document.querySelector('#image-explanation-toggle');
+const explanation = document.querySelector('#image-explanation');
+const explanationBody = document.querySelector('#image-explanation-body');
 const minZoom = 100;
 const maxZoom = 400;
 const zoomStep = 25;
@@ -21,8 +24,22 @@ function showImage(link) {
   image.style.removeProperty('width');
   image.alt = thumbnail.alt;
   download.href = link.href;
-  document.querySelector('#image-viewer-caption').textContent =
-    `${imageIndex + 1} / ${imageLinks.length} · ${link.closest('figure')?.querySelector('figcaption')?.innerText.replace(/^\s*Select\s*/, '').replace(/View in chapter\s*Download\s*$/, '').trim() || thumbnail.alt}`;
+  const caption = document.querySelector('#image-viewer-caption');
+  const count = document.createElement('p');
+  count.className = 'muted';
+  count.textContent = `${imageIndex + 1} / ${imageLinks.length}`;
+  const details = link.closest('figure')?.querySelector('[data-diagram-details]')?.content;
+  const description = details?.querySelector('[data-diagram-caption]')?.cloneNode(true);
+  if (description) caption.replaceChildren(count, description, explanation);
+  else {
+    const text = document.createElement('p');
+    text.textContent = thumbnail.alt;
+    caption.replaceChildren(count, text, explanation);
+  }
+  const explanationText = details?.querySelector('[data-diagram-explanation]')?.cloneNode(true);
+  explanationBody.replaceChildren(...(explanationText ? [explanationText] : []));
+  explanationToggle.disabled = !explanationText;
+  setExplanationOpen(Boolean(explanationText) && explanationToggle.getAttribute('aria-expanded') === 'true');
   previous.disabled = imageIndex === 0;
   next.disabled = imageIndex === imageLinks.length - 1;
   zoom = minZoom;
@@ -35,6 +52,15 @@ function showImage(link) {
   viewport.scrollTo(0, 0);
   image.src = link.href;
 }
+
+function setExplanationOpen(open) {
+  explanation.hidden = !open;
+  explanationToggle.setAttribute('aria-expanded', String(open));
+  const label = `${open ? 'Hide' : 'Show'} diagram explanation`;
+  explanationToggle.setAttribute('aria-label', label);
+  explanationToggle.title = label;
+}
+explanationToggle.addEventListener('click', () => setExplanationOpen(explanation.hidden));
 
 function moveImage(offset) {
   const index = imageIndex + offset;
@@ -113,5 +139,8 @@ viewer.addEventListener('click', event => {
   if (event.target === viewer) viewer.close();
 });
 viewer.addEventListener('close', () => {
-  if (!viewer.open) image.removeAttribute('src');
+  if (!viewer.open) {
+    image.removeAttribute('src');
+    setExplanationOpen(false);
+  }
 });

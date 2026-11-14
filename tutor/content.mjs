@@ -187,14 +187,27 @@ export async function loadCourse(read) {
     const diagrams = Array.from(study.matchAll(/^!\[([^\]]+)\]\(([^)]+\.png)\)$/gm),
       ([, alt, file]) => {
         const [width, height] = studyDiagramSizes[`${chapter.topic}/${file}`] ?? [1536, 1024];
-        return { alt, file: `${chapter.folder}/${file}`, width, height };
+        const section = sections.find(section => section.detail.includes(file));
+        const range = alt.match(/sections? (\d+)(?:[–-](\d+))?/);
+        const covered = range ? sections.slice(Number(range[1]) - 1, Number(range[2] ?? range[1])) : sections;
+        const description = range ? covered.map(section => `${section.title}: ${section.prose}`) :
+          section ? [section.prose, ...section.points] : sections.map(section => `${section.title}: ${section.prose}`);
+        const shortCaption = range ? `${chapter.title} · ${range[0]}` : ({
+          'visual-guide-object-lifecycle.png': 'Object lifecycle, callbacks and storage.',
+          'visual-guide-account-lock-timeline.png': 'Two processes safely update the same account.',
+          'index-structures-standard-bitmap-bitslice.png': 'Standard, bitmap and bitslice index structures.',
+          'index-bitwise-operations.png': 'Bitmap filtering and bitslice aggregation.',
+        }[file] ?? alt);
+        return { alt, shortCaption, description, file: `${chapter.folder}/${file}`, width, height };
       });
     const exerciseDiagrams = Array.from(illustrated.matchAll(/^!\[([^\]]+)\]\(<(schema-esercizi([\w-]*)\.png)>\)$/gm),
       match => {
         const [, alt, file, suffix] = match;
         const heading = [...illustrated.slice(0, match.index).matchAll(/^## (.+)$/gm)].at(-1)?.[1];
         const [width, height] = wideExerciseSizes[chapter.topic + suffix] ?? [1536, 1024];
-        return { alt, caption: heading ? `${alt}: ${heading}` : alt, file: `${exercise.folder}/${file}`, width, height };
+        const text = illustrated.slice(match.index + match[0].length).split(/^## /m)[0];
+        const description = exercisePanels(text).map(panel => `${panel.title}. Example: ${panel.example} Reasoning: ${panel.reason}`);
+        return { alt, shortCaption: heading?.split(': ').at(-1) ?? alt, description, caption: heading ? `${chapter.topic} — ${heading}` : alt, file: `${exercise.folder}/${file}`, width, height };
       });
     const panels = exercisePanels(illustrated);
     if (questions.length !== chapter.questions || sections.length !== chapter.sections ||
