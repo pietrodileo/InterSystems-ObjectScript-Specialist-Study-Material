@@ -145,10 +145,10 @@ Several operations are not affected by TROLLBACK:
 - **Incremental unlock**: `LOCK -lockname` releases a specific lock without affecting others
 - **Classic LOCK**: `LOCK lockname` releases ALL existing locks and acquires the new one (rarely used)
 - **Lock timeout**: `LOCK +lockname:timeout` specifies maximum wait time in seconds; check $TEST for success
-- **Exclusive locks**: Any lock without `#"S"` is exclusive (the default); blocks all other locks on that resource
+- **Exclusive locks**: Any lock without `#"S"` is exclusive (the default); blocks incompatible requests by other processes on that resource
 - **Shared locks**: `LOCK +lockname#"S"` allows multiple readers; exclusive locks block other processes
-- **Lock type flags**: `#"S"` (shared), `#"E"` (escalating), `#"I"` (immediate unlock), `#"D"` (deferred unlock) — combinable (e.g., `#"SI"`)
-- **Immediate unlock**: `LOCK -lockname#"I"` releases a lock immediately even within a transaction, overriding the default deferred behavior
+- **Lock type flags**: `#"S"` (shared), `#"E"` (escalating), `#"I"` (immediate unlock), `#"D"` (restore prior unlock state) — combinable (e.g., `#"SI"`)
+- **Immediate unlock**: `LOCK -lockname#"I"` releases a lock immediately even within a transaction, when its lock count reaches zero
 - **Lock table**: System-wide resource viewable in Management Portal under System Operation &gt; Locks
 
 ### Detailed Notes
@@ -207,45 +207,65 @@ Any lock without the `#"S"` flag is an **exclusive lock** (also called a write l
  }
 ```
 
-#### Lock Type Flags
+#### Three independent questions: compatibility, release timing, escalation
 
-The LOCK command supports type flags specified after `#` in quotes. Available flags:
+![Shared and exclusive compatibility, default versus immediate and history-dependent deferred unlocks, and E-type escalation from child locks to a counted parent lock.](visual-guide-lock-modes-lifetime.png)
 
-| Flag | Meaning | Lock | Unlock | Description |
-| --- | --- | --- | --- | --- |
-| `"S"` | Shared | Yes | Yes | Multiple readers allowed |
-| `"E"` | Escalating | Yes | Yes | Participates in lock escalation |
-| `"I"` | Immediate | No | Yes | Releases lock immediately, even within a transaction |
-| `"D"` | Deferred | No | Yes | Defers unlock until transaction ends (default behavior within transactions) |
+| Question | Modifier | Meaning |
+| --- | --- | --- |
+| Who can hold a compatible lock? | `#"S"` | Shared; omitting S means exclusive. Different processes can share S, but S/exclusive and exclusive/exclusive conflict. |
+| When does an unlock take effect? | `#"I"` / `#"D"` | I releases immediately when the count reaches zero; D restores the previous unlock state and depends on lock history. Both apply only to unlocks. |
+| Can many sibling locks merge? | `#"E"` | Enables escalation; use E on the matching unlock too. `#"SE"` combines shared and escalating. |
 
-Flags can be combined: `#"SE"` (shared escalating), `#"SI"` (shared immediate unlock), `#"EI"` (escalating immediate unlock).
+#### Default unlock, immediate unlock, and D are different
 
-#### Immediate vs Deferred Unlock Within Transactions
-
-By default, locks acquired within a transaction are held until TCOMMIT or TROLLBACK, even if explicitly released with `LOCK -`. This is **deferred unlock** behavior (`#"D"`, the default within transactions).
-
-**Immediate unlock** (`#"I"`) overrides this behavior and releases the lock right away, even inside a transaction:
+For a lock with count 1, an ordinary `LOCK -` inside a transaction normally leaves a pending release (**Delock**) until the transaction ends. `#"I"` makes that release immediate. `#"D"` restores prior unlock behavior: on the first lock/unlock cycle it can release immediately; after a previous ordinary unlock it can restore Delock. It is therefore inaccurate to describe D as simply the default unlock. Decrementing a count greater than 1 leaves the resource locked. Outside a transaction, release is immediate when the count reaches zero.
 
 ```objectscript
+ // Separate examples, each starting with no existing lock and no outer transaction:
  TSTART
- LOCK +^Data("temp"):5
- // ... work with ^Data("temp") ...
- LOCK -^Data("temp")#"I"          // Released NOW, not at TCOMMIT
- // ... other work continues in the transaction ...
+ LOCK +^Demo(1):5
+ IF $TEST {
+     LOCK -^Demo(1)       // Delock until transaction end
+ }
+ TCOMMIT
+
+ TSTART
+ LOCK +^Demo(1):5
+ IF $TEST {
+     LOCK -^Demo(1)#"I"  // Immediate release
+ }
+ TCOMMIT
+
+ TSTART
+ LOCK +^Demo(1):5
+ IF $TEST {
+     LOCK -^Demo(1)#"D"  // First cycle: can release immediately
+ }
  TCOMMIT
 ```
 
-Use immediate unlock when you need to release a lock within a transaction because the protected resource is no longer needed and you want to minimize lock contention. Use the default deferred behavior when the lock must be held for the full duration of the transaction to ensure data integrity.
+An application lock that remains held still needs its matching unlocks: transaction completion does not replace application lock cleanup. Immediate release is suitable only when another process may safely use the resource before the remaining transaction finishes.
 
-#### Lock Table
+#### E-type escalation: a concrete parent/child example
 
-The lock table is a system-wide in-memory structure that tracks all current locks. It can be viewed through the Management Portal (System Operation &gt; Locks) or programmatically. The lock table has a configurable size (locksiz parameter). When the lock table is full, new lock requests fail with a  error.
+Suppose process A holds E locks on `^Batch(1,1)` through `^Batch(1,1000)` with the default threshold of 1000. Its next request, `LOCK +^Batch(1,1001)#"E":5`, attempts to lock the parent `^Batch(1)`. If successful, the children merge into one counted parent lock. Process B's incompatible request for `^Batch(1,1500)` now conflicts even though A never explicitly locked that child. If the parent cannot be acquired, escalation does not take place. Check `$TEST` after timed requests.
+
+Balance every successful E acquisition with an E unlock, for example `LOCK -^Batch(1,1001)#"E"`. Once escalated, the parent retains a count rather than individual child identities. Ordinary ObjectScript locks without E do not participate in this escalation. SQL commonly uses E locking for supported storage/IDKey layouts; section 4 explains its table-level effect.
+
+#### Lock table: the registry, not a table-level lock
+
+The **lock table** is IRIS's in-memory registry of resources, owning processes, modes, counts and waiting requests. It records both narrow and broad locks. A **table lock** protects an SQL table; a **row lock** protects a record. They are scopes of protection recorded in the registry, rather than alternatives to using the lock table. View it in Management Portal under **System Operation > Locks**. Exhausting its capacity can cause `<LOCKTABLEFULL>`.
+
+ObjectScript application locks coordinate code that requests compatible names. A direct `SET` or `KILL` does not automatically request the application lock, and an arbitrary lock name need not match the name generated for SQL rows. SQL DML normally acquires its row locks automatically. Use a consistent locking protocol when mixing access paths.
 
 ### Documentation References
 
 - [LOCK Command](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_clock)
 - [Lock Management](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_concurrency)
 - [Database Integrity Tutorial](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=TOS_Integrity)
+
+- [Managing the Lock Table](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_locktable)
 
 ### Visual study guide — sections 4–6
 
@@ -257,51 +277,62 @@ The lock table is a system-wide in-memory structure that tracks all current lock
 
 ### Key Points
 
-- **Default threshold**: 1000 row-level locks per table triggers automatic escalation to a table-level lock
-- **Escalation behavior**: All individual row locks are replaced by a single table-level lock
-- **Performance trade-off**: Table locks reduce lock table overhead but block all concurrent access to the table
-- **Configurable threshold**: Adjustable via $SYSTEM.SQL.Util.SetOption("LockThreshold", value) or Management Portal
-- **Scope**: Threshold applies per-process, per-table
+- **Default threshold**: 1000; requesting the next eligible lock attempts escalation.
+- **Trade-off**: Fewer lock-table entries, but a wider conflict scope.
+- **Scope**: Locks accumulated by a process for a table; `LockThreshold` is a system-wide configuration value.
+- **Access**: Compatibility and isolation determine waiting; a table lock does not block every read.
+- **%NOLOCK**: SELECT reads uncommitted data; DML skips automatic row locking. These are different effects.
 
 ### Detailed Notes
 
-#### How Lock Escalation Works
+SQL normally locks rows changed by INSERT, UPDATE and DELETE until the transaction ends. As locks accumulate, IRIS can replace narrow protection with a broader table lock to reduce pressure on the lock registry. The default threshold is 1000: escalation is attempted on request 1001, not merely because 1000 rows exist in the table. SQL supports E-type and traditional escalation strategies depending on storage and IDKey layout; ordinary ObjectScript LOCK without E does not automatically escalate.
 
-When a process acquires row-level locks through SQL operations (INSERT, UPDATE, DELETE), InterSystems IRIS tracks the number of locks per table. Once the number of row locks for a single table exceeds the lock escalation threshold (default 1000), the system automatically escalates to a table-level lock. This replaces all individual row locks with a single lock on the entire table.
+#### Registry versus protection scope
+
+![The in-memory lock registry compared with SQL row and table locks; automatic SQL versus explicit ObjectScript locking; request 1001 broadens protection; DML NOLOCK requires another protection strategy.](visual-guide-sql-lock-table.png)
+
+| Concept | What it does | Typical use or trade-off |
+| --- | --- | --- |
+| Lock table | Records current locks and their owners in memory | Inspect contention and waiting; monitor capacity. |
+| Row lock | Protects a particular record | Independent rows can be updated concurrently; many locks consume registry space. |
+| Table lock | Protects a whole SQL table in shared or exclusive mode | Deliberate bulk work or escalation; broader conflicts, fewer entries. |
+
+#### Worked example: another row becomes affected
+
+A transaction in process A updates Orders rows 1–1000. An exclusive request by B for another row, 1500, can succeed while A only protects its own rows. A then requests eligible row lock 1001. If escalation succeeds, A now holds broad table protection, and B's new incompatible request for row 1500 waits or times out. If B already holds an incompatible row lock, it can prevent A from obtaining the broader lock; overlapping transactions can deadlock. Do not assume escalation always succeeds immediately.
+
+A broad exclusive lock blocks conflicting locking requests. Reads that do not request conflicting locks can still observe data according to their isolation rules, including uncommitted data at READ UNCOMMITTED. Thus “locks the whole table” does not mean “blocks all access.”
 
 ```objectscript
- // Check current lock escalation threshold
- WRITE $SYSTEM.SQL.Util.GetOption("LockThreshold"), !   // Default: 1000
-
- // Change the threshold
- DO $SYSTEM.SQL.Util.SetOption("LockThreshold", 2000)
+ // Inspect the actual system setting; do not change it just to run an example.
+ WRITE $SYSTEM.SQL.Util.GetOption("LockThreshold"), !
 ```
 
-#### Impact on Concurrency
+For explicit table protection, SQL supports `LOCK TABLE Demo.Orders IN EXCLUSIVE MODE` or `IN SHARE MODE`. Row locking is appropriate when transactions work on separate records; a deliberate table lock can suit controlled bulk operations where broad contention is acceptable. Follow the SQL LOCK/UNLOCK transaction-lifetime rules. Keep transactions short and monitor the registry before changing system-wide thresholds.
 
-- **Before escalation**: Other processes can access rows that are not individually locked. Fine-grained concurrency is maintained.
-- **After escalation**: The entire table is locked. Other processes attempting to lock any row in the same table will block (or fail on timeout). This can cause significant concurrency bottlenecks.
+#### %NOLOCK: query visibility versus write protection
 
-#### When Escalation Occurs
+`%NOLOCK` is an IRIS SQL keyword option, placed after the statement verb. It is not the SQL Server-style syntax `FROM Account %NOLOCK`.
 
-Lock escalation typically happens during:
+```sql
+SELECT %NOLOCK ID, Balance FROM Demo.Account WHERE ID = 7;
+```
 
-- Large batch INSERT operations
-- Bulk UPDATE affecting many rows
-- DELETE operations on large result sets
-- Long-running transactions that accumulate row locks
+For SELECT, it performs no locking on the query's tables and uses **READ UNCOMMITTED** regardless of the transaction's current isolation mode. For example, A changes Balance from 100 to 120 without committing; B can read 120 using SELECT %NOLOCK; A rolls back, leaving 100. B's observed 120 was a dirty read. This is inappropriate when a decision requires committed data.
 
-#### Best Practices
+```sql
+UPDATE %NOLOCK Demo.Account SET Balance = Balance + 10 WHERE ID = 7;
+```
 
-- Keep transactions short to minimize the number of accumulated row locks
-- For intentional bulk operations, consider explicitly acquiring a table-level lock first (to avoid gradual escalation) and using %NOLOCK on concurrent read queries, or increasing the threshold temporarily
-- Monitor the lock table in Management Portal to detect escalation events
-- The threshold is a system-wide setting; changing it affects all processes
+For INSERT, UPDATE and DELETE, it suppresses automatic row locking. Reserve this for controlled exclusive access, such as a single-writer load or deliberately held table protection. Without another protection strategy, concurrent writers can race. It requires the corresponding namespace administrative privilege and does not itself disable journaling, transactions or rollback. It is distinct from `%NOJOURN`.
 
 ### Documentation References
 
-- [Lock Escalation Threshold](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_concurrency)
-- [SQL Configuration Settings](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_tables)
+- [ObjectScript LOCK and E-type escalation](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_clock)
+- [SQL UPDATE: transaction locking and %NOLOCK](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RSQL_UPDATE)
+- [SQL SELECT: %NOLOCK and isolation](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RSQL_SELECT)
+- [Explicit SQL table locks](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RSQL_lock)
+- [Managing the Lock Table](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_locktable)
 
 ## 5. Differentiates between pessimistic and optimistic concurrency controls
 
@@ -309,9 +340,9 @@ Lock escalation typically happens during:
 
 - **Pessimistic concurrency**: Locks resources BEFORE reading; guarantees no conflicts but reduces throughput
 - **Optimistic concurrency**: Reads without locking; checks for conflicts at commit time; better throughput for low-contention scenarios
-- **%ConcurrencyMode**: Object property controlling lock behavior (0=None, 1=Atomic, 2=SharedAtomicRetain, 3=SharedRetain, 4=PessimisticRetain)
+- **Object concurrency**: Default 1 (Atomic read); inspect an object with `%Concurrency`. The method argument, class and process defaults can override the effective mode.
 - **Optimistic via %VersionId**: Uses a version counter to detect concurrent modifications
-- **SQL ISOLATION LEVEL**: READ UNCOMMITTED, READ COMMITTED (default), READ VERIFIED provide different concurrency guarantees
+- **SQL ISOLATION LEVEL**: Default READ UNCOMMITTED (`IsolationMode = 0`); separate from object concurrency and its numeric modes
 
 ### Detailed Notes
 
@@ -348,13 +379,17 @@ In optimistic concurrency, a process reads data without acquiring locks. Before 
  }
 ```
 
-#### Object Concurrency Modes (%ConcurrencyMode)
+#### Object concurrency: default 1 (Atomic read)
+
+The usual object concurrency default is **1 (Atomic read)**. An omitted `%OpenId` concurrency argument means `-1`: use the class's `DEFAULTCONCURRENCY`, which normally obtains the process default (initially 1). An explicit method argument or class override can change this. The process default can be changed with `$SYSTEM.OBJ.SetConcurrencyMode()`.
+
+**Naming:** the effective object property is `%Concurrency`, not `%ConcurrencyMode`. Mode 1 provides an atomic read, acquiring a temporary shared lock when needed; it does not retain a lock while you edit the object or automatically detect a stale copy.
 
 InterSystems IRIS persistent objects support several concurrency modes:
 
 - **0 (None)**: No locking; fastest but no protection
-- **1 (Atomic)**: Lock during %Save only; protects writes but reads may be stale
-- **2 (SharedAtomicRetain)**: Shared lock on read, exclusive on write; balanced approach
+- **1 (Atomic read, default)**: Temporary shared lock during open when needed for an atomic read; no retained read lock
+- **2 (Shared locks)**: Always takes a shared lock during open, then releases it after the read
 - **3 (SharedRetain)**: Shared lock on open retained until close
 - **4 (PessimisticRetain)**: Exclusive lock on open retained until close; maximum protection
 
@@ -363,17 +398,26 @@ InterSystems IRIS persistent objects support several concurrency modes:
  SET obj = ##class(MyApp.Customer).%OpenId(custId, 4, .sc)  // concurrency = 4
 ```
 
-#### SQL Isolation Levels
+#### SQL isolation: default READ UNCOMMITTED
 
-- **READ UNCOMMITTED**: No locks; may read uncommitted data (dirty reads)
-- **READ COMMITTED** (default): Reads only committed data; uses brief shared locks
-- **READ VERIFIED**: Re-reads data at end of operation to verify consistency
+The initial SQL isolation setting is **READ UNCOMMITTED (`IsolationMode = 0`)**, not READ COMMITTED. It controls query visibility independently of object concurrency: object mode 1 and SQL isolation mode 1 are different settings. A connection or application can change the process setting; inspect the current value rather than assuming the initial default still applies.
+
+```objectscript
+ WRITE $SYSTEM.SQL.Util.GetOption("IsolationMode"), !
+ // 0 = READ UNCOMMITTED; 1 = READ COMMITTED; 3 = READ VERIFIED
+```
+
+- **READ UNCOMMITTED (default)**: Can see another transaction's uncommitted changes, including values later rolled back.
+- **READ COMMITTED**: Normally waits for pending inserts/updates. IRIS has exceptions, including pending deletes, aggregates, DISTINCT, GROUP BY and SELECT %NOLOCK; consult the SQL reference.
+- **READ VERIFIED**: Still permits uncommitted data; rechecks relevant query conditions. It does not mean committed-only reads.
+
+For example, if A changes a balance from 100 to 120 and later rolls back, a default SQL read can observe 120. Starting a transaction alone does not guarantee committed-only reads. Set the intended isolation explicitly, for example `SET TRANSACTION ISOLATION LEVEL READ COMMITTED`; the setting persists for the process until changed, including after COMMIT/ROLLBACK.
 
 ### Documentation References
 
 - [Concurrency Control](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_concurrency)
 - [Object Concurrency](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_concurrency)
-- [SQL Transaction Isolation Levels](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_concurrency)
+- [SQL isolation and its lifetime](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RSQL_starttransaction)
 
 ## 6. Uses transactions and applies concurrency controls in SQL scripts
 
@@ -383,7 +427,7 @@ InterSystems IRIS persistent objects support several concurrency modes:
 - **&sql(COMMIT)**: Commits the SQL transaction
 - **&sql(ROLLBACK)**: Rolls back the SQL transaction
 - **SQLCODE**: Check after each SQL statement; 0 = success, 100 = no data, negative = error
-- **%NOLOCK hint**: Bypasses row locking for SELECT operations in read-only scenarios
+- **%NOLOCK hint**: For SELECT, forces READ UNCOMMITTED without query locks; for DML, suppresses automatic row locking
 - **Parameterized queries**: Use host variables (:variable) in embedded SQL for safe value binding
 
 ### Detailed Notes
@@ -422,17 +466,17 @@ TSTART and &sql(START TRANSACTION) work with the same underlying transaction mec
  TCOMMIT
 ```
 
-#### Using %NOLOCK for Read-Only Operations
+#### Using %NOLOCK: accept dirty reads explicitly
 
-The %NOLOCK hint tells SQL not to acquire shared locks during SELECT operations, improving performance for read-only queries where strict consistency is not required:
+SELECT %NOLOCK reads in READ UNCOMMITTED mode regardless of the current transaction isolation mode. Place the option after SELECT:
 
 ```objectscript
- &sql(SELECT Name, Balance INTO :name, :bal
-      FROM Account %NOLOCK
+ &sql(SELECT %NOLOCK Name, Balance INTO :name, :bal
+      FROM Account
       WHERE AccountId = :acctId)
 ```
 
-This is particularly useful for reporting queries that should not block concurrent write operations and do not need to participate in transaction isolation.
+The query can see another transaction's changes that are later rolled back. Section 4 shows a dirty-read example and explains the separate DML meaning of %NOLOCK. It does not remove the need for a safe write-locking strategy.
 
 #### Checking SQL Permissions Within Transactions
 
@@ -453,7 +497,7 @@ SQL operations within transactions respect the same privilege model. Combine tra
 
 - [Embedded SQL](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_esql)
 - [SQL Transaction Processing](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GAPPS_tp)
-- [%NOLOCK Query Hint](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_concurrency)
+- [SELECT %NOLOCK](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RSQL_SELECT)
 
 ## Exam Preparation Summary
 
@@ -461,9 +505,9 @@ SQL operations within transactions respect the same privilege model. Combine tra
 
 1. **Transaction lifecycle**: TSTART increments $TLEVEL, TCOMMIT decrements it, actual commit happens only at $TLEVEL = 0
 2. **TROLLBACK vs TROLLBACK 1**: Full rollback resets $TLEVEL to 0; partial rollback decrements by 1
-3. **Incremental locks**: Always use LOCK +/- pattern; understand shared (#"S") vs exclusive (default) locks; know lock type flags (#"I" immediate, #"D" deferred, #"E" escalating)
-4. **Lock escalation**: Default 1000 row locks triggers table-level lock; configurable via $SYSTEM.SQL.Util.SetOption
-5. **Pessimistic vs optimistic**: Pessimistic locks before reading, optimistic checks at commit time; know the %ConcurrencyMode values (0-4)
+3. **Incremental locks**: Always use LOCK +/- pattern; understand shared (#"S") vs exclusive (default) locks; know lock type flags (#"I" immediate, #"D" restore prior unlock state, #"E" escalating)
+4. **Lock escalation**: Default 1000: the next eligible lock attempts escalation; configurable via $SYSTEM.SQL.Util.SetOption
+5. **Pessimistic vs optimistic**: Pessimistic locks before reading, optimistic checks at commit time; know the object concurrency values (0-4), the default 1, and the separate SQL isolation default READ UNCOMMITTED
 6. **SQL transactions**: &sql(START TRANSACTION/COMMIT/ROLLBACK) share $TLEVEL with TSTART/TCOMMIT/TROLLBACK
 
 ### Common Exam Scenarios:

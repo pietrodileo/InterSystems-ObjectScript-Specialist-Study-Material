@@ -12,48 +12,59 @@ Saved 2 November 2026 from [exam-prep.es](https://exam-prep.es/exams/objectscrip
 
 ### Key Points
 
-- **Default threshold**: 1000 row-level locks per table triggers automatic escalation to a table-level lock
-- **Escalation behavior**: All individual row locks are replaced by a single table-level lock
-- **Performance trade-off**: Table locks reduce lock table overhead but block all concurrent access to the table
-- **Configurable threshold**: Adjustable via $SYSTEM.SQL.Util.SetOption("LockThreshold", value) or Management Portal
-- **Scope**: Threshold applies per-process, per-table
+- **Default threshold**: 1000; requesting the next eligible lock attempts escalation.
+- **Trade-off**: Fewer lock-table entries, but a wider conflict scope.
+- **Scope**: Locks accumulated by a process for a table; `LockThreshold` is a system-wide configuration value.
+- **Access**: Compatibility and isolation determine waiting; a table lock does not block every read.
+- **%NOLOCK**: SELECT reads uncommitted data; DML skips automatic row locking. These are different effects.
 
 ### Detailed Notes
 
-#### How Lock Escalation Works
+SQL normally locks rows changed by INSERT, UPDATE and DELETE until the transaction ends. As locks accumulate, IRIS can replace narrow protection with a broader table lock to reduce pressure on the lock registry. The default threshold is 1000: escalation is attempted on request 1001, not merely because 1000 rows exist in the table. SQL supports E-type and traditional escalation strategies depending on storage and IDKey layout; ordinary ObjectScript LOCK without E does not automatically escalate.
 
-When a process acquires row-level locks through SQL operations (INSERT, UPDATE, DELETE), InterSystems IRIS tracks the number of locks per table. Once the number of row locks for a single table exceeds the lock escalation threshold (default 1000), the system automatically escalates to a table-level lock. This replaces all individual row locks with a single lock on the entire table.
+#### Registry versus protection scope
+
+![The in-memory lock registry compared with SQL row and table locks; automatic SQL versus explicit ObjectScript locking; request 1001 broadens protection; DML NOLOCK requires another protection strategy.](../visual-guide-sql-lock-table.png)
+
+| Concept | What it does | Typical use or trade-off |
+| --- | --- | --- |
+| Lock table | Records current locks and their owners in memory | Inspect contention and waiting; monitor capacity. |
+| Row lock | Protects a particular record | Independent rows can be updated concurrently; many locks consume registry space. |
+| Table lock | Protects a whole SQL table in shared or exclusive mode | Deliberate bulk work or escalation; broader conflicts, fewer entries. |
+
+#### Worked example: another row becomes affected
+
+A transaction in process A updates Orders rows 1–1000. An exclusive request by B for another row, 1500, can succeed while A only protects its own rows. A then requests eligible row lock 1001. If escalation succeeds, A now holds broad table protection, and B's new incompatible request for row 1500 waits or times out. If B already holds an incompatible row lock, it can prevent A from obtaining the broader lock; overlapping transactions can deadlock. Do not assume escalation always succeeds immediately.
+
+A broad exclusive lock blocks conflicting locking requests. Reads that do not request conflicting locks can still observe data according to their isolation rules, including uncommitted data at READ UNCOMMITTED. Thus “locks the whole table” does not mean “blocks all access.”
 
 ```objectscript
- // Check current lock escalation threshold
- WRITE $SYSTEM.SQL.Util.GetOption("LockThreshold"), !   // Default: 1000
-
- // Change the threshold
- DO $SYSTEM.SQL.Util.SetOption("LockThreshold", 2000)
+ // Inspect the actual system setting; do not change it just to run an example.
+ WRITE $SYSTEM.SQL.Util.GetOption("LockThreshold"), !
 ```
 
-#### Impact on Concurrency
+For explicit table protection, SQL supports `LOCK TABLE Demo.Orders IN EXCLUSIVE MODE` or `IN SHARE MODE`. Row locking is appropriate when transactions work on separate records; a deliberate table lock can suit controlled bulk operations where broad contention is acceptable. Follow the SQL LOCK/UNLOCK transaction-lifetime rules. Keep transactions short and monitor the registry before changing system-wide thresholds.
 
-- **Before escalation**: Other processes can access rows that are not individually locked. Fine-grained concurrency is maintained.
-- **After escalation**: The entire table is locked. Other processes attempting to lock any row in the same table will block (or fail on timeout). This can cause significant concurrency bottlenecks.
+#### %NOLOCK: query visibility versus write protection
 
-#### When Escalation Occurs
+`%NOLOCK` is an IRIS SQL keyword option, placed after the statement verb. It is not the SQL Server-style syntax `FROM Account %NOLOCK`.
 
-Lock escalation typically happens during:
+```sql
+SELECT %NOLOCK ID, Balance FROM Demo.Account WHERE ID = 7;
+```
 
-- Large batch INSERT operations
-- Bulk UPDATE affecting many rows
-- DELETE operations on large result sets
-- Long-running transactions that accumulate row locks
+For SELECT, it performs no locking on the query's tables and uses **READ UNCOMMITTED** regardless of the transaction's current isolation mode. For example, A changes Balance from 100 to 120 without committing; B can read 120 using SELECT %NOLOCK; A rolls back, leaving 100. B's observed 120 was a dirty read. This is inappropriate when a decision requires committed data.
 
-#### Best Practices
+```sql
+UPDATE %NOLOCK Demo.Account SET Balance = Balance + 10 WHERE ID = 7;
+```
 
-- Keep transactions short to minimize the number of accumulated row locks
-- For intentional bulk operations, consider explicitly acquiring a table-level lock first (to avoid gradual escalation) and using %NOLOCK on concurrent read queries, or increasing the threshold temporarily
-- Monitor the lock table in Management Portal to detect escalation events
-- The threshold is a system-wide setting; changing it affects all processes
+For INSERT, UPDATE and DELETE, it suppresses automatic row locking. Reserve this for controlled exclusive access, such as a single-writer load or deliberately held table protection. Without another protection strategy, concurrent writers can race. It requires the corresponding namespace administrative privilege and does not itself disable journaling, transactions or rollback. It is distinct from `%NOJOURN`.
 
 ### Documentation References
 
-- [Lock Escalation Threshold](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_concurrency)
-- [SQL Configuration Settings](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_tables)
+- [ObjectScript LOCK and E-type escalation](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_clock)
+- [SQL UPDATE: transaction locking and %NOLOCK](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RSQL_UPDATE)
+- [SQL SELECT: %NOLOCK and isolation](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RSQL_SELECT)
+- [Explicit SQL table locks](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RSQL_lock)
+- [Managing the Lock Table](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_locktable)

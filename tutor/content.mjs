@@ -195,6 +195,8 @@ export async function loadCourse(read) {
         const shortCaption = range ? `${chapter.title} · ${range[0]}` : ({
           'visual-guide-object-lifecycle.png': 'Object lifecycle, callbacks and storage.',
           'visual-guide-account-lock-timeline.png': 'Two processes safely update the same account.',
+          'visual-guide-lock-modes-lifetime.png': 'Lock compatibility, release timing and E-type escalation.',
+          'visual-guide-sql-lock-table.png': 'SQL row/table locks, the lock registry and %NOLOCK.',
           'index-structures-standard-bitmap-bitslice.png': 'Standard, bitmap and bitslice index structures.',
           'index-bitwise-operations.png': 'Bitmap filtering and bitslice aggregation.',
         }[file] ?? alt);

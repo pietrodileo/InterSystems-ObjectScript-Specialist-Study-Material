@@ -25,3 +25,9 @@ The images were visually reviewed and revised for observed mistakes. Coverage, P
 ## Image provenance
 
 The original 31 overviews were generated with ImageGen. The worked diagrams for T1.1 and T2.1 were drawn from the examples in the notes. The two additional T1.2 diagrams were supplied from the chat gallery and integrated unchanged; their reusable prompts are reconstructed and marked as such in [the prompt and asset metadata](image-generation-prompts.json). The metadata records chapter coverage, file paths, dimensions, hashes, and prompts. Images contain concise labels rather than every paragraph of the source notes.
+
+## T2.1 lock detail additions — 15 November 2026
+
+Two ImageGen companion sheets expand sections 3 and 4 using the existing chapter images as style references. The section notes and full guide distinguish shared/exclusive compatibility, I/D unlock behavior, E-type escalation and the in-memory registry versus SQL row/table lock scope. The SQL example in section 6 now places `%NOLOCK` after SELECT and explains READ UNCOMMITTED. SELECT and DML effects are described separately, with official command references in the chapter. The original quiz wording has not been comprehensively revised. No IRIS runtime verification was performed.
+
+Exact prompts and the refinement prompt are saved in [T2.1 image prompts](T2%20-%20Basic%20Programming/T2.1%20-%20Ensures%20Data%20Integrity/lock-image-generation-prompts.json).

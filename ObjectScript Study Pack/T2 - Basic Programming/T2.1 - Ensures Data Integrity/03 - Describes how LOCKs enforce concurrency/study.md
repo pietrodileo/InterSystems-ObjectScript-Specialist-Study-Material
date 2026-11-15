@@ -16,10 +16,10 @@ Saved 2 November 2026 from [exam-prep.es](https://exam-prep.es/exams/objectscrip
 - **Incremental unlock**: `LOCK -lockname` releases a specific lock without affecting others
 - **Classic LOCK**: `LOCK lockname` releases ALL existing locks and acquires the new one (rarely used)
 - **Lock timeout**: `LOCK +lockname:timeout` specifies maximum wait time in seconds; check $TEST for success
-- **Exclusive locks**: Any lock without `#"S"` is exclusive (the default); blocks all other locks on that resource
+- **Exclusive locks**: Any lock without `#"S"` is exclusive (the default); blocks incompatible requests by other processes on that resource
 - **Shared locks**: `LOCK +lockname#"S"` allows multiple readers; exclusive locks block other processes
-- **Lock type flags**: `#"S"` (shared), `#"E"` (escalating), `#"I"` (immediate unlock), `#"D"` (deferred unlock) — combinable (e.g., `#"SI"`)
-- **Immediate unlock**: `LOCK -lockname#"I"` releases a lock immediately even within a transaction, overriding the default deferred behavior
+- **Lock type flags**: `#"S"` (shared), `#"E"` (escalating), `#"I"` (immediate unlock), `#"D"` (restore prior unlock state) — combinable (e.g., `#"SI"`)
+- **Immediate unlock**: `LOCK -lockname#"I"` releases a lock immediately even within a transaction, when its lock count reaches zero
 - **Lock table**: System-wide resource viewable in Management Portal under System Operation &gt; Locks
 
 ### Detailed Notes
@@ -78,42 +78,62 @@ Any lock without the `#"S"` flag is an **exclusive lock** (also called a write l
  }
 ```
 
-#### Lock Type Flags
+#### Three independent questions: compatibility, release timing, escalation
 
-The LOCK command supports type flags specified after `#` in quotes. Available flags:
+![Shared and exclusive compatibility, default versus immediate and history-dependent deferred unlocks, and E-type escalation from child locks to a counted parent lock.](../visual-guide-lock-modes-lifetime.png)
 
-| Flag | Meaning | Lock | Unlock | Description |
-| --- | --- | --- | --- | --- |
-| `"S"` | Shared | Yes | Yes | Multiple readers allowed |
-| `"E"` | Escalating | Yes | Yes | Participates in lock escalation |
-| `"I"` | Immediate | No | Yes | Releases lock immediately, even within a transaction |
-| `"D"` | Deferred | No | Yes | Defers unlock until transaction ends (default behavior within transactions) |
+| Question | Modifier | Meaning |
+| --- | --- | --- |
+| Who can hold a compatible lock? | `#"S"` | Shared; omitting S means exclusive. Different processes can share S, but S/exclusive and exclusive/exclusive conflict. |
+| When does an unlock take effect? | `#"I"` / `#"D"` | I releases immediately when the count reaches zero; D restores the previous unlock state and depends on lock history. Both apply only to unlocks. |
+| Can many sibling locks merge? | `#"E"` | Enables escalation; use E on the matching unlock too. `#"SE"` combines shared and escalating. |
 
-Flags can be combined: `#"SE"` (shared escalating), `#"SI"` (shared immediate unlock), `#"EI"` (escalating immediate unlock).
+#### Default unlock, immediate unlock, and D are different
 
-#### Immediate vs Deferred Unlock Within Transactions
-
-By default, locks acquired within a transaction are held until TCOMMIT or TROLLBACK, even if explicitly released with `LOCK -`. This is **deferred unlock** behavior (`#"D"`, the default within transactions).
-
-**Immediate unlock** (`#"I"`) overrides this behavior and releases the lock right away, even inside a transaction:
+For a lock with count 1, an ordinary `LOCK -` inside a transaction normally leaves a pending release (**Delock**) until the transaction ends. `#"I"` makes that release immediate. `#"D"` restores prior unlock behavior: on the first lock/unlock cycle it can release immediately; after a previous ordinary unlock it can restore Delock. It is therefore inaccurate to describe D as simply the default unlock. Decrementing a count greater than 1 leaves the resource locked. Outside a transaction, release is immediate when the count reaches zero.
 
 ```objectscript
+ // Separate examples, each starting with no existing lock and no outer transaction:
  TSTART
- LOCK +^Data("temp"):5
- // ... work with ^Data("temp") ...
- LOCK -^Data("temp")#"I"          // Released NOW, not at TCOMMIT
- // ... other work continues in the transaction ...
+ LOCK +^Demo(1):5
+ IF $TEST {
+     LOCK -^Demo(1)       // Delock until transaction end
+ }
+ TCOMMIT
+
+ TSTART
+ LOCK +^Demo(1):5
+ IF $TEST {
+     LOCK -^Demo(1)#"I"  // Immediate release
+ }
+ TCOMMIT
+
+ TSTART
+ LOCK +^Demo(1):5
+ IF $TEST {
+     LOCK -^Demo(1)#"D"  // First cycle: can release immediately
+ }
  TCOMMIT
 ```
 
-Use immediate unlock when you need to release a lock within a transaction because the protected resource is no longer needed and you want to minimize lock contention. Use the default deferred behavior when the lock must be held for the full duration of the transaction to ensure data integrity.
+An application lock that remains held still needs its matching unlocks: transaction completion does not replace application lock cleanup. Immediate release is suitable only when another process may safely use the resource before the remaining transaction finishes.
 
-#### Lock Table
+#### E-type escalation: a concrete parent/child example
 
-The lock table is a system-wide in-memory structure that tracks all current locks. It can be viewed through the Management Portal (System Operation &gt; Locks) or programmatically. The lock table has a configurable size (locksiz parameter). When the lock table is full, new lock requests fail with a  error.
+Suppose process A holds E locks on `^Batch(1,1)` through `^Batch(1,1000)` with the default threshold of 1000. Its next request, `LOCK +^Batch(1,1001)#"E":5`, attempts to lock the parent `^Batch(1)`. If successful, the children merge into one counted parent lock. Process B's incompatible request for `^Batch(1,1500)` now conflicts even though A never explicitly locked that child. If the parent cannot be acquired, escalation does not take place. Check `$TEST` after timed requests.
+
+Balance every successful E acquisition with an E unlock, for example `LOCK -^Batch(1,1001)#"E"`. Once escalated, the parent retains a count rather than individual child identities. Ordinary ObjectScript locks without E do not participate in this escalation. SQL commonly uses E locking for supported storage/IDKey layouts; section 4 explains its table-level effect.
+
+#### Lock table: the registry, not a table-level lock
+
+The **lock table** is IRIS's in-memory registry of resources, owning processes, modes, counts and waiting requests. It records both narrow and broad locks. A **table lock** protects an SQL table; a **row lock** protects a record. They are scopes of protection recorded in the registry, rather than alternatives to using the lock table. View it in Management Portal under **System Operation > Locks**. Exhausting its capacity can cause `<LOCKTABLEFULL>`.
+
+ObjectScript application locks coordinate code that requests compatible names. A direct `SET` or `KILL` does not automatically request the application lock, and an arbitrary lock name need not match the name generated for SQL rows. SQL DML normally acquires its row locks automatically. Use a consistent locking protocol when mixing access paths.
 
 ### Documentation References
 
 - [LOCK Command](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_clock)
 - [Lock Management](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_concurrency)
 - [Database Integrity Tutorial](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=TOS_Integrity)
+
+- [Managing the Lock Table](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_locktable)

@@ -29,3 +29,17 @@ Covers:
 ## Two processes updating the same account
 
 ![Two processes request the same account lock. A commits a balance of 120 and releases the lock. B then reads 120 and commits a balance of 110, or skips its update if the lock times out.](visual-guide-account-lock-timeline.png)
+
+## Lock modes and lifetime — section 3
+
+![Shared/exclusive compatibility, unlock timing with I and D, and E-type parent/child escalation.](visual-guide-lock-modes-lifetime.png)
+
+Read [section 3](03%20-%20Describes%20how%20LOCKs%20enforce%20concurrency/study.md) for matching unlocks, lock counts, and the request-1001 example.
+
+## SQL locks and the lock table — section 4
+
+![Lock registry versus row/table scope, SQL versus ObjectScript, escalation and NOLOCK for DML and SELECT.](visual-guide-sql-lock-table.png)
+
+Read [section 4](04%20-%20Describes%20lock%20escalation%20threshold%20and%20effect%20on%20row%20locks%20versus%20table%20locks/study.md) for examples, isolation and protection requirements.
+
+[ImageGen prompts and style references](lock-image-generation-prompts.json).

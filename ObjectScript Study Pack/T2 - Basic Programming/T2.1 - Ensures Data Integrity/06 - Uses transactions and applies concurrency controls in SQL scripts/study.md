@@ -16,7 +16,7 @@ Saved 2 November 2026 from [exam-prep.es](https://exam-prep.es/exams/objectscrip
 - **&sql(COMMIT)**: Commits the SQL transaction
 - **&sql(ROLLBACK)**: Rolls back the SQL transaction
 - **SQLCODE**: Check after each SQL statement; 0 = success, 100 = no data, negative = error
-- **%NOLOCK hint**: Bypasses row locking for SELECT operations in read-only scenarios
+- **%NOLOCK hint**: For SELECT, forces READ UNCOMMITTED without query locks; for DML, suppresses automatic row locking
 - **Parameterized queries**: Use host variables (:variable) in embedded SQL for safe value binding
 
 ### Detailed Notes
@@ -55,17 +55,17 @@ TSTART and &sql(START TRANSACTION) work with the same underlying transaction mec
  TCOMMIT
 ```
 
-#### Using %NOLOCK for Read-Only Operations
+#### Using %NOLOCK: accept dirty reads explicitly
 
-The %NOLOCK hint tells SQL not to acquire shared locks during SELECT operations, improving performance for read-only queries where strict consistency is not required:
+SELECT %NOLOCK reads in READ UNCOMMITTED mode regardless of the current transaction isolation mode. Place the option after SELECT:
 
 ```objectscript
- &sql(SELECT Name, Balance INTO :name, :bal
-      FROM Account %NOLOCK
+ &sql(SELECT %NOLOCK Name, Balance INTO :name, :bal
+      FROM Account
       WHERE AccountId = :acctId)
 ```
 
-This is particularly useful for reporting queries that should not block concurrent write operations and do not need to participate in transaction isolation.
+The query can see another transaction's changes that are later rolled back. Section 4 shows a dirty-read example and explains the separate DML meaning of %NOLOCK. It does not remove the need for a safe write-locking strategy.
 
 #### Checking SQL Permissions Within Transactions
 
@@ -86,4 +86,4 @@ SQL operations within transactions respect the same privilege model. Combine tra
 
 - [Embedded SQL](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_esql)
 - [SQL Transaction Processing](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GAPPS_tp)
-- [%NOLOCK Query Hint](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_concurrency)
+- [SELECT %NOLOCK](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RSQL_SELECT)

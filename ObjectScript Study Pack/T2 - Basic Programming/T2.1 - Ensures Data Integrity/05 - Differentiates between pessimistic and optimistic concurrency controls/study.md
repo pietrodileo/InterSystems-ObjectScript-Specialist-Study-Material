@@ -14,9 +14,9 @@ Saved 2 November 2026 from [exam-prep.es](https://exam-prep.es/exams/objectscrip
 
 - **Pessimistic concurrency**: Locks resources BEFORE reading; guarantees no conflicts but reduces throughput
 - **Optimistic concurrency**: Reads without locking; checks for conflicts at commit time; better throughput for low-contention scenarios
-- **%ConcurrencyMode**: Object property controlling lock behavior (0=None, 1=Atomic, 2=SharedAtomicRetain, 3=SharedRetain, 4=PessimisticRetain)
+- **Object concurrency**: Default 1 (Atomic read); inspect an object with `%Concurrency`. The method argument, class and process defaults can override the effective mode.
 - **Optimistic via %VersionId**: Uses a version counter to detect concurrent modifications
-- **SQL ISOLATION LEVEL**: READ UNCOMMITTED, READ COMMITTED (default), READ VERIFIED provide different concurrency guarantees
+- **SQL ISOLATION LEVEL**: Default READ UNCOMMITTED (`IsolationMode = 0`); separate from object concurrency and its numeric modes
 
 ### Detailed Notes
 
@@ -53,13 +53,17 @@ In optimistic concurrency, a process reads data without acquiring locks. Before 
  }
 ```
 
-#### Object Concurrency Modes (%ConcurrencyMode)
+#### Object concurrency: default 1 (Atomic read)
+
+The usual object concurrency default is **1 (Atomic read)**. An omitted `%OpenId` concurrency argument means `-1`: use the class's `DEFAULTCONCURRENCY`, which normally obtains the process default (initially 1). An explicit method argument or class override can change this. The process default can be changed with `$SYSTEM.OBJ.SetConcurrencyMode()`.
+
+**Naming:** the effective object property is `%Concurrency`, not `%ConcurrencyMode`. Mode 1 provides an atomic read, acquiring a temporary shared lock when needed; it does not retain a lock while you edit the object or automatically detect a stale copy.
 
 InterSystems IRIS persistent objects support several concurrency modes:
 
 - **0 (None)**: No locking; fastest but no protection
-- **1 (Atomic)**: Lock during %Save only; protects writes but reads may be stale
-- **2 (SharedAtomicRetain)**: Shared lock on read, exclusive on write; balanced approach
+- **1 (Atomic read, default)**: Temporary shared lock during open when needed for an atomic read; no retained read lock
+- **2 (Shared locks)**: Always takes a shared lock during open, then releases it after the read
 - **3 (SharedRetain)**: Shared lock on open retained until close
 - **4 (PessimisticRetain)**: Exclusive lock on open retained until close; maximum protection
 
@@ -68,14 +72,23 @@ InterSystems IRIS persistent objects support several concurrency modes:
  SET obj = ##class(MyApp.Customer).%OpenId(custId, 4, .sc)  // concurrency = 4
 ```
 
-#### SQL Isolation Levels
+#### SQL isolation: default READ UNCOMMITTED
 
-- **READ UNCOMMITTED**: No locks; may read uncommitted data (dirty reads)
-- **READ COMMITTED** (default): Reads only committed data; uses brief shared locks
-- **READ VERIFIED**: Re-reads data at end of operation to verify consistency
+The initial SQL isolation setting is **READ UNCOMMITTED (`IsolationMode = 0`)**, not READ COMMITTED. It controls query visibility independently of object concurrency: object mode 1 and SQL isolation mode 1 are different settings. A connection or application can change the process setting; inspect the current value rather than assuming the initial default still applies.
+
+```objectscript
+ WRITE $SYSTEM.SQL.Util.GetOption("IsolationMode"), !
+ // 0 = READ UNCOMMITTED; 1 = READ COMMITTED; 3 = READ VERIFIED
+```
+
+- **READ UNCOMMITTED (default)**: Can see another transaction's uncommitted changes, including values later rolled back.
+- **READ COMMITTED**: Normally waits for pending inserts/updates. IRIS has exceptions, including pending deletes, aggregates, DISTINCT, GROUP BY and SELECT %NOLOCK; consult the SQL reference.
+- **READ VERIFIED**: Still permits uncommitted data; rechecks relevant query conditions. It does not mean committed-only reads.
+
+For example, if A changes a balance from 100 to 120 and later rolls back, a default SQL read can observe 120. Starting a transaction alone does not guarantee committed-only reads. Set the intended isolation explicitly, for example `SET TRANSACTION ISOLATION LEVEL READ COMMITTED`; the setting persists for the process until changed, including after COMMIT/ROLLBACK.
 
 ### Documentation References
 
 - [Concurrency Control](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_concurrency)
 - [Object Concurrency](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_concurrency)
-- [SQL Transaction Isolation Levels](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_concurrency)
+- [SQL isolation and its lifetime](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RSQL_starttransaction)
