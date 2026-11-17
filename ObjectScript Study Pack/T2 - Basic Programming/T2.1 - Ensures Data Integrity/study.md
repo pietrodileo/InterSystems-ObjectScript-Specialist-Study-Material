@@ -70,11 +70,38 @@ InterSystems IRIS supports nested transactions up to 255 levels. Each TSTART inc
 
 This design allows modular code where called methods can issue their own TSTART/TCOMMIT without knowing whether the caller already started a transaction.
 
+#### Transaction errors: use the complete error name
+
+`<TRANSACTION>` is not the standard name for every transaction failure. Diagnose the exact error and the command that raised it:
+
+| Situation | Actual result | What to check |
+| --- | --- | --- |
+| `TCOMMIT` when `$TLEVEL=0` | `<COMMAND>` with `*NoTransaction` in `$ZERROR` | An extra commit, a missing start, or a commit after full rollback |
+| A 256th nested `TSTART` | `<TRANSACTION LEVEL>` | Unbalanced starts or recursive calls opening transactions |
+| `TROLLBACK` when `$TLEVEL=0` | No operation | Different from an extra `TCOMMIT` |
+| Timed ObjectScript `LOCK` cannot be acquired | `$TEST=0` | Handle contention explicitly; this is not a transaction exception |
+
+Assuming `$TLEVEL=0`, this deliberately incorrect sequence raises `<COMMAND>`:
+
+```objectscript
+ TSTART
+ TROLLBACK                       // Ends ALL transaction levels
+ TRY {
+     TCOMMIT                    // No transaction remains
+ } CATCH ex {
+     WRITE ex.DisplayString(), !
+     WRITE "$TLEVEL = ", $TLEVEL, !
+ }
+```
+
+A `CATCH` does not by itself roll back changes or release explicit locks. Define who owns the transaction and clean up resources acquired by this unit of work. Examples using full `TROLLBACK` here assume no caller-owned outer transaction. See [TCOMMIT](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_ctcommit), [$TLEVEL](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_vtlevel), and [system errors](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RERR_system).
+
 ### Documentation References
 
 - [Transaction Processing](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GAPPS_tp)
 - [TSTART Command](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_ctstart)
 - [TCOMMIT Command](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_ctcommit)
+- [Transaction Levels and Errors](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_vtlevel)
 
 ## 2. Manages rollbacks
 
@@ -119,7 +146,7 @@ Several operations are not affected by TROLLBACK:
 
 - **Local variables**: Changes to local variables persist after rollback
 - **$INCREMENT / $SEQUENCE**: These atomic operations are not transactional
-- **LOCK operations**: Locks acquired within a transaction are released at the end of the transaction, but TROLLBACK does not "undo" lock operations
+- **LOCK operations**: Rollback does not reverse lock acquisitions. Explicit ObjectScript locks need matching unlocks; an unlock deferred in the transaction completes at its end. SQL-managed transaction locks follow their automatic release rules (sections 3–4).
 - **Process-private globals** (^||PPG): Not journaled, therefore not rolled back
 
 ```objectscript
@@ -145,13 +172,75 @@ Several operations are not affected by TROLLBACK:
 - **Incremental unlock**: `LOCK -lockname` releases a specific lock without affecting others
 - **Classic LOCK**: `LOCK lockname` releases ALL existing locks and acquires the new one (rarely used)
 - **Lock timeout**: `LOCK +lockname:timeout` specifies maximum wait time in seconds; check $TEST for success
-- **Exclusive locks**: Any lock without `#"S"` is exclusive (the default); blocks incompatible requests by other processes on that resource
+- **Exclusive locks**: Any lock without `#"S"` is exclusive (the default); blocks all other locks on that resource
 - **Shared locks**: `LOCK +lockname#"S"` allows multiple readers; exclusive locks block other processes
-- **Lock type flags**: `#"S"` (shared), `#"E"` (escalating), `#"I"` (immediate unlock), `#"D"` (restore prior unlock state) — combinable (e.g., `#"SI"`)
-- **Immediate unlock**: `LOCK -lockname#"I"` releases a lock immediately even within a transaction, when its lock count reaches zero
+- **Lock type flags**: `#"S"` (shared), `#"E"` (escalating), `#"I"` (immediate unlock), `#"D"` (history-dependent unlock timing); some combinations are supported (e.g., `#"SI"`), but `I` and `D` are mutually exclusive
+- **Immediate unlock**: `LOCK -lockname#"I"` releases a lock immediately even within a transaction, overriding the default deferred behavior
 - **Lock table**: System-wide resource viewable in Management Portal under System Operation &gt; Locks
 
 ### Detailed Notes
+
+![LOCK revision: acquisition timeout, no timeout versus :0, and ancestor/descendant/sibling conflicts](visual-guide-lock-timeout-hierarchy.png)
+
+![LOCK revision: cooperative reads and writes, incremental counts, deferred release, and rollback cleanup](visual-guide-lock-cooperation-release.png)
+
+These worked fragments assume the stated transaction and ownership conditions. In the cooperation diagram, the conflicting `:0` request returns failure immediately in the normal case; “wait” marks contention, not a five-second wait. [Copyable examples and four-sheet revision route](revision-examples.md).
+
+#### Timeout is an acquisition deadline
+
+In `LOCK +^Data("account",1001):5`, five seconds limit the wait to acquire the lock. They do not give an acquired lock a five-second lifetime. Acquisition after one second can be followed by work lasting beyond the original deadline; the owner must still release the lock.
+
+| Request | If a conflicting lock exists | Result when the command returns |
+| --- | --- | --- |
+| `LOCK +^Data("account",1001)` | Waits indefinitely until acquisition, unless interrupted or the process ends | Does not change `$TEST` |
+| `LOCK +^Data("account",1001):0` | Normally one attempt, then returns immediately | `$TEST=1` on success; `0` on failure |
+| `LOCK +^Data("account",1001):5` | Waits until acquisition or the five-second deadline | `$TEST=1` on success; `0` on expiry |
+
+Read `$TEST` immediately after a timed request. Failure grants no permission to enter protected code and does not automatically roll back work or release other incremental locks.
+
+```objectscript
+ LOCK +^Data("account",1001):0
+ IF '$TEST {
+     WRITE "Account busy; no update performed", !
+     QUIT
+ }
+ // Protected work, even if it takes more than zero seconds
+ LOCK -^Data("account",1001)
+```
+
+A conflict initially causes waiting, not an exception. Expiry of this timeout sets `$TEST=0`; it does not automatically throw `<TIMEOUT>`. `TRY/CATCH` alone therefore does not handle it. An API can expose its own timeout exception or status: consult that API's contract rather than treating `<TIMEOUT>` as the universal ObjectScript lock result.
+
+There is a documented edge case for `:0`: requesting a parent while already owning a child lock uses an internal one-second timeout. See [LOCK timeout](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_clock) and [creating locks with timeouts](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GAPPS_lockbasics).
+
+#### A global lock and its subnodes
+
+Lock names form a hierarchy. An exclusive lock on `^Data` conflicts with other processes' locks anywhere below it. Locking `^Data("account",1001)` covers that branch: descendants and ancestors conflict; sibling accounts can be locked independently. This does not create a separate explicit entry for every descendant.
+
+Assume A holds `LOCK +^Data("account",1001)` and B tries each request separately:
+
+| B's request | Outcome while A holds the exclusive lock |
+| --- | --- |
+| `LOCK +^Data("account",1001):0` | Conflict: same node |
+| `LOCK +^Data("account",1001,"balance"):0` | Conflict: descendant |
+| `LOCK +^Data("account"):0` or `LOCK +^Data:0` | Conflict: ancestor covers A's branch |
+| `LOCK +^Data("account",1002):0` | Compatible sibling, assuming no other conflict |
+
+Unlock the name acquired: `LOCK -^Data("account",1001)`. Unlocking its `"balance"` child does not release the parent. A name need not refer to existing data; locking does not create a global value. These examples assume both sessions resolve the name to the same database. See [lock names and implicit locks](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GAPPS_lockbasics).
+
+#### What other processes can read and write
+
+ObjectScript locking is cooperative: it coordinates lock requests, without intercepting ordinary global reads or writes. The owner continues running; other processes can work on unrelated resources.
+
+| What B does while A holds an exclusive account lock | Result |
+| --- | --- |
+| Reads `^Data("account",1001,"balance")` without a lock | Read proceeds; can see an uncommitted value |
+| Writes it with `SET`, without a lock | Write proceeds, subject to permissions; can break the intended update sequence |
+| Requests the same branch with a shared or exclusive lock first | Waits or times out; B must skip protected work on failure |
+| Requests another account's lock | Can proceed if that branch has no conflict |
+
+Cooperating readers take shared locks and writers take exclusive locks **before** accessing data. A shared owner permits another shared reader, while an exclusive writer waits. A shared lock does not make `SET` illegal: application code must respect the protocol. SQL adds automatic locking and isolation rules (section 6).
+
+For example, A reads balance 100, B bypasses the protocol and writes 999, then A writes its calculated 120: B's update is lost despite A's lock. Both must cooperate. See [locking and concurrency control](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GAPPS_lockbasics).
 
 #### Incremental Lock Pattern
 
@@ -173,6 +262,7 @@ An incremental `LOCK +` acquires a lock without releasing the process's other lo
  }
  CATCH ex {
      TROLLBACK
+     WRITE "Update failed: ", ex.DisplayString(), !
  }
  LOCK -^Data("account", acctId)     // Always release the lock
 ```
@@ -185,7 +275,7 @@ The account starts at 100. Process A adds 20 and process B subtracts 10. Both re
 
 #### Shared vs Exclusive Locks
 
-Any lock without the `#"S"` flag is an **exclusive lock** (also called a write lock). There is no explicit "exclusive" flag — the absence of `#"S"` makes a lock exclusive by default. Shared locks allow multiple processes to read concurrently, while exclusive locks provide sole access:
+Any lock without the `#"S"` flag is an **exclusive lock** (also called a write lock). There is no explicit "exclusive" flag — the absence of `#"S"` makes a lock exclusive by default. For cooperating processes, shared locks permit concurrent readers, while exclusive locks prevent competing lock acquisition. Direct access without locking still proceeds:
 
 - An existing **shared lock** prevents other processes from acquiring an **exclusive lock** on that resource
 - An existing **exclusive lock** prevents other processes from acquiring **any lock** (shared or exclusive) on that resource
@@ -253,19 +343,58 @@ Suppose process A holds E locks on `^Batch(1,1)` through `^Batch(1,1000)` with t
 
 Balance every successful E acquisition with an E unlock, for example `LOCK -^Batch(1,1001)#"E"`. Once escalated, the parent retains a count rather than individual child identities. Ordinary ObjectScript locks without E do not participate in this escalation. SQL commonly uses E locking for supported storage/IDKey layouts; section 4 explains its table-level effect.
 
-#### Lock table: the registry, not a table-level lock
+#### Immediate vs Deferred Unlock Within Transactions
 
-The **lock table** is IRIS's in-memory registry of resources, owning processes, modes, counts and waiting requests. It records both narrow and broad locks. A **table lock** protects an SQL table; a **row lock** protects a record. They are scopes of protection recorded in the registry, rather than alternatives to using the lock table. View it in Management Portal under **System Operation > Locks**. Exhausting its capacity can cause `<LOCKTABLEFULL>`.
+Each successful incremental acquisition adds to that name's count for the process and lock mode. Two acquisitions require two matching releases. Outside a transaction, reaching zero releases the lock immediately. Inside a transaction, a normal final `LOCK -name` puts it in **Delock**: other processes remain blocked until the outer transaction ends. An inner commit with `$TLEVEL>0` is insufficient.
 
-ObjectScript application locks coordinate code that requests compatible names. A direct `SET` or `KILL` does not automatically request the application lock, and an arbitrary lock name need not match the name generated for SQL rows. SQL DML normally acquires its row locks automatically. Use a consistent locking protocol when mixing access paths.
+For example, outside a transaction, start with no lock on this name:
+
+```objectscript
+ LOCK +^DemoCount:0
+ IF '$TEST { QUIT }
+ LOCK +^DemoCount:0               // Same owner: count becomes 2
+ LOCK -^DemoCount                // Count becomes 1: still held
+ LOCK -^DemoCount                // Count becomes 0: released
+```
+
+Compare independent sequences starting with `$TLEVEL=0` and no existing lock on the name:
+
+| Sequence | When another process can acquire it |
+| --- | --- |
+| `TSTART`, acquire, `LOCK -name`, `TCOMMIT` | After commit: unlock was deferred |
+| `TSTART`, acquire, `TCOMMIT`, with no unlock | Still held; issue matching `LOCK -name` |
+| `TSTART`, acquire, `TROLLBACK`, with no unlock | Still held; rollback does not undo acquisition |
+| `TSTART`, acquire, `LOCK -name#"I"`, `TCOMMIT` | At the immediate final unlock |
+
+`#"D"` is an advanced modifier depending on prior unlock history; it can even release immediately. Use ordinary `LOCK -name` to demonstrate default deferral. See [LOCK unlock timing](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_clock) and [transaction lock behavior](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GAPPS_tp).
+
+**Immediate unlock** (`#"I"`) overrides this behavior and releases the lock right away, even inside a transaction:
+
+```objectscript
+ TSTART
+ LOCK +^Data("temp"):5
+ // ... work with ^Data("temp") ...
+ LOCK -^Data("temp")#"I"          // Released NOW, not at TCOMMIT
+ // ... other work continues in the transaction ...
+ TCOMMIT
+```
+
+Use immediate unlock only when early release preserves correctness. Releasing a lock protecting uncommitted changes can expose an unsafe intermediate state. In the main account pattern, finish commit/rollback before releasing the explicit acquisition.
+
+An argumentless `LOCK` releases all locks owned by this process, including accumulated counts, across namespaces; inside a transaction release is deferred. It cannot release another process's locks. Use it only when this code owns the entire lock set. Process termination also releases its locks.
+
+#### Lock Table
+
+The **lock table** is IRIS's in-memory registry of resources, owning processes, modes, counts and waiting requests. It records both narrow and broad locks. A **table lock** protects an SQL table; a **row lock** protects a record. They are scopes of protection recorded in the registry, rather than alternatives to using the lock table. View it in Management Portal under **System Operation > Locks**.
+
+The lock table is a system-wide in-memory structure tracking lock ownership and requests, viewable in Management Portal (System Operation &gt; Locks). When capacity is exhausted, `LOCK TABLE FULL` is logged and requests can wait for space. This is separate from a conflict on one account; timed requests still require outcome handling. See [managing the lock table](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GAPPS_locktable).
 
 ### Documentation References
 
 - [LOCK Command](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_clock)
+- [Lock Names, Hierarchy, and Timeouts](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GAPPS_lockbasics)
 - [Lock Management](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_concurrency)
 - [Database Integrity Tutorial](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=TOS_Integrity)
-
-- [Managing the Lock Table](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_locktable)
 
 ### Visual study guide — sections 4–6
 
@@ -310,6 +439,34 @@ A broad exclusive lock blocks conflicting locking requests. Reads that do not re
 
 For explicit table protection, SQL supports `LOCK TABLE Demo.Orders IN EXCLUSIVE MODE` or `IN SHARE MODE`. Row locking is appropriate when transactions work on separate records; a deliberate table lock can suit controlled bulk operations where broad contention is acceptable. Follow the SQL LOCK/UNLOCK transaction-lifetime rules. Keep transactions short and monitor the registry before changing system-wide thresholds.
 
+#### Releasing a whole-table lock: identify its origin
+
+| How the table became locked | Normal release |
+| --- | --- |
+| SQL-managed row locks escalated during a transaction | SQL manages their counts and releases the transaction's locks at its end; an inner ObjectScript commit is insufficient |
+| Explicit SQL `LOCK TABLE Account IN EXCLUSIVE MODE` | Matching `UNLOCK TABLE Account IN EXCLUSIVE MODE`; commit/rollback alone does not balance the explicit acquisition |
+| Explicit ObjectScript `LOCK +^Data` as an application-wide gate | Matching `LOCK -^Data`, respecting count and transaction timing |
+
+Escalating child unlocks reduce the count; once sufficiently reduced, the implicit parent lock can disappear. SQL manages its own row-lock bookkeeping. Do not unlock guessed storage-global names to undo SQL escalation. A root global lock is not necessarily an SQL table lock: tables can use several globals.
+
+For an explicit SQL table lock, request release before ending the transaction. Assuming no outer transaction, the successful path is:
+
+```objectscript
+ &sql(START TRANSACTION)
+ &sql(LOCK TABLE Account IN EXCLUSIVE MODE WAIT 5)
+ IF SQLCODE < 0 {
+     WRITE "Lock failed: ", SQLCODE, " ", %msg, !
+     &sql(ROLLBACK)
+     QUIT
+ }
+ // Perform batch work and handle statement errors here
+ &sql(UNLOCK TABLE Account IN EXCLUSIVE MODE)
+ // Release is deferred while the transaction is active
+ &sql(COMMIT)
+```
+
+The error path after successful acquisition must also balance the lock and roll back. Repeated explicit acquisitions require the same number of unlocks in the same mode. `UNLOCK TABLE Account IN EXCLUSIVE MODE IMMEDIATE` releases at once when its count reaches zero, even inside a transaction; use only when early release is correct. See [SQL LOCK](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RSQL_lock), [SQL UNLOCK](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RSQL_unlock), and [escalating locks](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GAPPS_lockbasics).
+
 #### %NOLOCK: query visibility versus write protection
 
 `%NOLOCK` is an IRIS SQL keyword option, placed after the statement verb. It is not the SQL Server-style syntax `FROM Account %NOLOCK`.
@@ -328,6 +485,8 @@ For INSERT, UPDATE and DELETE, it suppresses automatic row locking. Reserve this
 
 ### Documentation References
 
+- [Releasing explicit table locks](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RSQL_unlock)
+
 - [ObjectScript LOCK and E-type escalation](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_clock)
 - [SQL UPDATE: transaction locking and %NOLOCK](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RSQL_UPDATE)
 - [SQL SELECT: %NOLOCK and isolation](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RSQL_SELECT)
@@ -338,17 +497,21 @@ For INSERT, UPDATE and DELETE, it suppresses automatic row locking. Reserve this
 
 ### Key Points
 
-- **Pessimistic concurrency**: Locks resources BEFORE reading; guarantees no conflicts but reduces throughput
+- **Pessimistic concurrency**: Locks resources BEFORE reading; serializes cooperating conflicting access but can cause waiting or deadlocks
 - **Optimistic concurrency**: Reads without locking; checks for conflicts at commit time; better throughput for low-contention scenarios
 - **Object concurrency**: Default 1 (Atomic read); inspect an object with `%Concurrency`. The method argument, class and process defaults can override the effective mode.
 - **Optimistic via %VersionId**: Uses a version counter to detect concurrent modifications
-- **SQL ISOLATION LEVEL**: Default READ UNCOMMITTED (`IsolationMode = 0`); separate from object concurrency and its numeric modes
+- **SQL ISOLATION LEVEL**: READ UNCOMMITTED (default), READ COMMITTED, and READ VERIFIED provide different read guarantees; verify the process setting
 
 ### Detailed Notes
 
+![Concurrency revision: exact errors, ordered account locking to prevent deadlocks, and valid versus invalid two-phase locking](visual-guide-errors-deadlock-2pl.png)
+
+Read the three panels together: an error result needs cleanup, a shared acquisition order prevents circular waiting, and 2PL governs acquisition versus release. [Copyable examples](revision-examples.md#4-errors-deadlocks-and-2pl).
+
 #### Pessimistic Concurrency
 
-In pessimistic concurrency, a process acquires an exclusive lock on a resource before reading or modifying it. This prevents other processes from accessing the resource until the lock is released. It is suitable for high-contention scenarios where conflicts are frequent.
+In pessimistic concurrency, a process acquires an exclusive lock before reading or modifying a resource. Other cooperating processes wait for incompatible locks; direct global access without locking can still proceed. It is suitable for high-contention scenarios where conflicts are frequent.
 
 ```objectscript
  // Pessimistic approach: lock first, then read and modify
@@ -398,6 +561,43 @@ InterSystems IRIS persistent objects support several concurrency modes:
  SET obj = ##class(MyApp.Customer).%OpenId(custId, 4, .sc)  // concurrency = 4
 ```
 
+#### Deadlock prevention and two-phase locking
+
+These terms appear as alternatives in the T2.1 quiz; the study pack previously had no dedicated explanation in another chapter. They address different concerns from optimistic version checking:
+
+| Concept | Question it answers | Example |
+| --- | --- | --- |
+| Pessimistic control | When do I reserve access? | Lock before reading |
+| Optimistic control | How do I detect a stale update? | Compare a version before accepting the write |
+| Deadlock prevention | How do I avoid circular waiting? | Every transfer locks accounts in increasing ID order |
+| Two-phase locking (2PL) | When may I acquire and release locks? | After the first release, acquire no new locks |
+
+**Deadlock example:** A owns account 1001 and waits for 1002; B owns 1002 and waits for 1001. Without timeouts, neither reaches its unlock. Prevent the cycle by using the same acquisition order everywhere. A timeout bounds waiting, but recovery must release locks already owned. Retrying while retaining them can preserve the cycle.
+
+This acquisition fragment assumes no outer transaction and no existing acquisitions of these names. Both transfer directions must calculate the same order:
+
+```objectscript
+ SET first=$SELECT(fromAcct<toAcct:fromAcct,1:toAcct)
+ SET second=$SELECT(fromAcct<toAcct:toAcct,1:fromAcct)
+ LOCK +^Data("account",first):5
+ IF '$TEST { QUIT }
+ LOCK +^Data("account",second):5
+ IF '$TEST {
+     LOCK -^Data("account",first)  // Unwind before retrying later
+     QUIT
+ }
+ // Transactional transfer body with TRY/CATCH cleanup goes here
+ // Finish commit/rollback before releasing either lock
+ LOCK -^Data("account",second)
+ LOCK -^Data("account",first)
+```
+
+The fragment omits the transfer body. A complete operation releases both acquired locks on success and exceptions, and retries the entire logical operation after cleanup. See [avoiding deadlocks](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GAPPS_lockbasics).
+
+**2PL** has a growing phase (acquire locks, release none) and a shrinking phase (release locks, acquire none). `acquire A → acquire B → work → release A → release B` follows it; `acquire A → release A → acquire B` does not. Strict 2PL additionally holds exclusive locks until commit/rollback. It can still deadlock while participants are acquiring locks; a shared order addresses that separate problem.
+
+2PL is a concurrency protocol. Two-phase commit (2PC) coordinates distributed commitment. `TSTART` plus arbitrary `LOCK` calls does not automatically enforce 2PL; application code must follow the protocol. See [CMU Database Systems: two-phase locking](https://15445.courses.cs.cmu.edu/spring2026/notes/18-twophaselocking.pdf).
+
 #### SQL isolation: default READ UNCOMMITTED
 
 The initial SQL isolation setting is **READ UNCOMMITTED (`IsolationMode = 0`)**, not READ COMMITTED. It controls query visibility independently of object concurrency: object mode 1 and SQL isolation mode 1 are different settings. A connection or application can change the process setting; inspect the current value rather than assuming the initial default still applies.
@@ -416,14 +616,15 @@ For example, if A changes a balance from 100 to 120 and later rolls back, a defa
 ### Documentation References
 
 - [Concurrency Control](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_concurrency)
+- [Deadlock Prevention](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GAPPS_lockbasics)
 - [Object Concurrency](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_concurrency)
-- [SQL isolation and its lifetime](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RSQL_starttransaction)
+- [SQL Transaction Isolation Levels](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RSQL_starttransaction)
 
 ## 6. Uses transactions and applies concurrency controls in SQL scripts
 
 ### Key Points
 
-- **&sql(START TRANSACTION)**: Begins an SQL transaction (equivalent to TSTART)
+- **&sql(START TRANSACTION)**: Begins an SQL transaction using the same state as ObjectScript; repeated SQL starts do not nest like repeated `TSTART`
 - **&sql(COMMIT)**: Commits the SQL transaction
 - **&sql(ROLLBACK)**: Rolls back the SQL transaction
 - **SQLCODE**: Check after each SQL statement; 0 = success, 100 = no data, negative = error
@@ -431,6 +632,10 @@ For example, if A changes a balance from 100 to 120 and later rolls back, a defa
 - **Parameterized queries**: Use host variables (:variable) in embedded SQL for safe value binding
 
 ### Detailed Notes
+
+![SQL revision: inspect IsolationMode, demonstrate a dirty read with %NOLOCK, and balance explicit table locking](visual-guide-sql-isolation-table-locks.png)
+
+The SQL table-lock diagram is a success-path skeleton; check every statement and balance acquired locks on error paths. [Copyable examples](revision-examples.md#3-sql-isolation-nolock-and-table-locks).
 
 #### Basic Embedded SQL Transaction Pattern
 
@@ -453,7 +658,7 @@ For example, if A changes a balance from 100 to 120 and later rolls back, a defa
 
 #### Mixing ObjectScript and SQL Transactions
 
-TSTART and &sql(START TRANSACTION) work with the same underlying transaction mechanism. They share $TLEVEL:
+TSTART and &sql(START TRANSACTION) share transaction state and $TLEVEL. Their nesting semantics differ: repeated SQL starts do not increment an active transaction like repeated TSTART commands. Define transaction ownership before mixing them:
 
 ```objectscript
  TSTART
@@ -466,6 +671,28 @@ TSTART and &sql(START TRANSACTION) work with the same underlying transaction mec
  TCOMMIT
 ```
 
+#### Inspect and choose isolation in the current process
+
+The API expression `$SYSTEM.SQL.Util.GetOption("IsolationMode")` returns the current process setting. Use `WRITE` in ObjectScript Terminal to display it; this is ObjectScript, not a Bash command:
+
+```objectscript
+ WRITE $SYSTEM.SQL.Util.GetOption("IsolationMode"),!
+ // 0 = READ UNCOMMITTED; 1 = READ COMMITTED; 3 = READ VERIFIED
+```
+
+To choose READ COMMITTED for this process and check the result:
+
+```objectscript
+ &sql(SET TRANSACTION ISOLATION LEVEL READ COMMITTED)
+ IF SQLCODE < 0 {
+     WRITE SQLCODE, " ", %msg, !
+     QUIT
+ }
+ WRITE $SYSTEM.SQL.Util.GetOption("IsolationMode"),!  // 1
+```
+
+Check both sessions independently when experimenting. This setting controls SQL reads; it does not make direct global reads honor SQL isolation or force uncooperative writers to acquire locks. READ VERIFIED can still read uncommitted values. See [SQL isolation configuration](https://docs.intersystems.com/irislatest/csp/documatic/%25CSP.Documatic.cls?CLASSNAME=%25SYSTEM.SQL.Util&LIBRARY=%25SYS).
+
 #### Using %NOLOCK: accept dirty reads explicitly
 
 SELECT %NOLOCK reads in READ UNCOMMITTED mode regardless of the current transaction isolation mode. Place the option after SELECT:
@@ -477,6 +704,21 @@ SELECT %NOLOCK reads in READ UNCOMMITTED mode regardless of the current transact
 ```
 
 The query can see another transaction's changes that are later rolled back. Section 4 shows a dirty-read example and explains the separate DML meaning of %NOLOCK. It does not remove the need for a safe write-locking strategy.
+
+#### SQL reads, writes, and timeout errors
+
+SQL automatically requests locks for ordinary `INSERT`, `UPDATE`, and `DELETE`. An exclusive table lock conflicts with these operations. A default READ UNCOMMITTED `SELECT` can still read the table; a normal READ COMMITTED read can wait for an uncommitted update. `%NOLOCK`, aggregates, `DISTINCT`, and `GROUP BY` have documented exceptions to READ COMMITTED behavior. See [SELECT locking](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RSQL_select) and [transaction isolation](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RSQL_starttransaction).
+
+| Operation whose wait expires | Reported outcome | Required response |
+| --- | --- | --- |
+| ObjectScript `LOCK +name:5` | `$TEST=0`, without an automatic `<TIMEOUT>` exception | Skip protected work; release earlier acquisitions owned by this operation |
+| SQL `LOCK TABLE ... WAIT 5` | `SQLCODE=-110` and diagnostic `%msg` | Check the result and clean up |
+| SQL `INSERT`, `UPDATE`, or `DELETE` unable to acquire its lock | Normally `SQLCODE=-110` | Handle the failed statement and surrounding transaction |
+| READ COMMITTED query waiting for an update | `SQLCODE=-114` on lock timeout | Handle the failed read; output variables are not valid results |
+
+`SQLCODE` and `%msg` belong to embedded SQL; Dynamic SQL exposes errors through its result object. Save diagnostics before cleanup statements overwrite them. A timeout identifies an expired wait, not necessarily a deadlock: a long-running owner can cause it too. See [SQL error codes](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RERR_sql).
+
+For a two-session exercise, A explicitly locks `Account` in exclusive mode. B tries `LOCK TABLE Account IN EXCLUSIVE MODE WAIT 2` and gets `-110` if A keeps holding the lock. A issues the matching `UNLOCK`; B's next attempt succeeds. Use persistent Terminal/SQL Shell sessions in the same namespace: a short-lived Portal SQL process may end and release its lock before B tests it. See [SQL LOCK examples](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RSQL_lock).
 
 #### Checking SQL Permissions Within Transactions
 
@@ -497,7 +739,8 @@ SQL operations within transactions respect the same privilege model. Combine tra
 
 - [Embedded SQL](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_esql)
 - [SQL Transaction Processing](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GAPPS_tp)
-- [SELECT %NOLOCK](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RSQL_SELECT)
+- [SELECT and %NOLOCK](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RSQL_select)
+- [SQL Timeout Error Codes](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RERR_sql)
 
 ## Exam Preparation Summary
 
@@ -505,10 +748,11 @@ SQL operations within transactions respect the same privilege model. Combine tra
 
 1. **Transaction lifecycle**: TSTART increments $TLEVEL, TCOMMIT decrements it, actual commit happens only at $TLEVEL = 0
 2. **TROLLBACK vs TROLLBACK 1**: Full rollback resets $TLEVEL to 0; partial rollback decrements by 1
-3. **Incremental locks**: Always use LOCK +/- pattern; understand shared (#"S") vs exclusive (default) locks; know lock type flags (#"I" immediate, #"D" restore prior unlock state, #"E" escalating)
+3. **Incremental locks**: Balance LOCK +/- counts; timeout limits acquisition waiting; direct global access is cooperative; distinguish shared/exclusive locks and unlock timing
 4. **Lock escalation**: Default 1000: the next eligible lock attempts escalation; configurable via $SYSTEM.SQL.Util.SetOption
 5. **Pessimistic vs optimistic**: Pessimistic locks before reading, optimistic checks at commit time; know the object concurrency values (0-4), the default 1, and the separate SQL isolation default READ UNCOMMITTED
-6. **SQL transactions**: &sql(START TRANSACTION/COMMIT/ROLLBACK) share $TLEVEL with TSTART/TCOMMIT/TROLLBACK
+6. **SQL transactions**: Share state with ObjectScript, but SQL starts do not nest like TSTART; distinguish SQLCODE failures from $TEST=0
+7. **Deadlocks and 2PL**: Use a consistent acquisition order; 2PL separates acquisition and release phases but does not itself prevent deadlocks
 
 ### Common Exam Scenarios:
 

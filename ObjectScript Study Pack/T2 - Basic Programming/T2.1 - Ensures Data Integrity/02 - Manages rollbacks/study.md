@@ -51,7 +51,7 @@ Several operations are not affected by TROLLBACK:
 
 - **Local variables**: Changes to local variables persist after rollback
 - **$INCREMENT / $SEQUENCE**: These atomic operations are not transactional
-- **LOCK operations**: Locks acquired within a transaction are released at the end of the transaction, but TROLLBACK does not "undo" lock operations
+- **LOCK operations**: Rollback does not reverse lock acquisitions. Explicit ObjectScript locks need matching unlocks; an unlock deferred in the transaction completes at its end. SQL-managed transaction locks follow their automatic release rules (sections 3–4).
 - **Process-private globals** (^||PPG): Not journaled, therefore not rolled back
 
 ```objectscript

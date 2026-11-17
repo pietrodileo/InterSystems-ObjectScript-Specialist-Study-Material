@@ -6,6 +6,26 @@
 
 Generated learning summaries. Read the full notes for detailed explanations and exact code. [Technical review notes](../../visual-technical-notes.md).
 
+## Focused revision — four worked sheets
+
+These sheets expand the chapter's difficult distinctions with annotated code, expected results, and process/state diagrams. [Open the revision route and copyable examples](revision-examples.md). Snippets assume the stated ownership and transaction conditions; they are not complete application methods.
+
+### 1. LOCK timeout and hierarchy
+
+![Acquisition timeout versus lifetime, no timeout versus :0, and ancestor/descendant/sibling conflicts](visual-guide-lock-timeout-hierarchy.png)
+
+### 2. Cooperative access and release
+
+![Raw reads and writes, incremental counts, deferred unlock, immediate unlock, and explicit-lock cleanup after rollback](visual-guide-lock-cooperation-release.png)
+
+### 3. SQL isolation and table locks
+
+![GetOption IsolationMode and LockThreshold, READ COMMITTED, a two-session %NOLOCK dirty read, and matched SQL table unlock](visual-guide-sql-isolation-table-locks.png)
+
+### 4. Errors, deadlock prevention, and 2PL
+
+![Exact error channels, diagnostic capture before rollback, consistent acquisition order, and valid versus invalid 2PL](visual-guide-errors-deadlock-2pl.png)
+
 ## Visual guide — sections 1–3
 
 ![T2.1 visual summary of sections 1–3: 1. Manages transactions; 2. Manages rollbacks; 3. Describes how LOCKs enforce concurrency](visual-guide-01-v2.png)

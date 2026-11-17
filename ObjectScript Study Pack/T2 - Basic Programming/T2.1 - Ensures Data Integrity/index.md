@@ -6,6 +6,8 @@
 
 [Open the visual study guides](visuals.md)
 
+[Four-sheet revision: annotated code and copyable examples](revision-examples.md)
+
 
 [Read the full topic guide](study.md) · [Practice quiz (18 questions)](quiz.md)
 
