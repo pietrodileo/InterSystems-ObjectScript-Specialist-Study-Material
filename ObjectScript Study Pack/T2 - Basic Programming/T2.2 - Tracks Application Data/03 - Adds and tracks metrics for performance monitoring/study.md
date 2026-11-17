@@ -13,6 +13,7 @@ Saved 2 November 2026 from [exam-prep.es](https://exam-prep.es/exams/objectscrip
 ### Key Points
 
 - **$SYSTEM.Process**: Provides per-process performance counters (global references, lines executed, etc.)
+- **%SYS.ProcessQuery**: Exposes per-process counters such as `GlobalReferences` through SQL
 - **^IRIS.Temp globals**: Temporary globals for storing transient metrics without journaling overhead
 - **$SYSTEM.SQL.Stats**: SQL query statistics and performance data
 - **^%SYS.MONLBL**: Line-by-line monitoring data for code profiling
@@ -50,6 +51,18 @@ $SYSTEM.Process provides access to detailed process performance counters:
  WRITE "Global refs: ", globalRefs, !
  WRITE "Lines executed: ", linesExec, !
 ```
+
+#### Reading per-process counters with SQL
+
+The `%SYS.ProcessQuery` SQL projection can retrieve the global-reference count for a process:
+
+```sql
+SELECT GlobalReferences
+FROM %SYS.ProcessQuery
+WHERE PID = :pid
+```
+
+`GlobalReferences` is cumulative for the process. To estimate the references made during an operation, take two readings around it and subtract; the process may end before the second reading.
 
 #### Using ^IRIS.Temp for Transient Metrics
 
@@ -122,5 +135,6 @@ ClassMethod CollectMetrics() As %Status
 ### Documentation References
 
 - [$SYSTEM.Process](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_vsystem_process)
+- [%SYS.ProcessQuery class reference](https://docs.intersystems.com/irislatest/csp/documatic/%25CSP.Documatic.cls?CLASSNAME=%25SYS.ProcessQuery&LIBRARY=%25SYS)
 - [Monitoring Performance](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCM_monitor)
 - [SQL Performance Analysis](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQLOPT)

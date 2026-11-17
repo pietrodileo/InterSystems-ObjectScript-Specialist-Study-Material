@@ -16,7 +16,9 @@ Saved 2 November 2026 from [exam-prep.es](https://exam-prep.es/exams/objectscrip
 - **ZWRITE**: Displays the contents of a global or subtree in a readable format
 - **$DATA**: Tests whether a global node exists and whether it has descendants
 - **$ORDER**: Iterates through global subscripts at a given level
+- **$QUERY**: Traverses nodes across levels and returns each full node reference
 - **$GET**: Safely retrieves a global node value, returning a default if the node does not exist
+- **%Library.Global**: Provides `Find` and `Get` class queries for searching or reading globals without a persistent class definition
 - **Management Portal**: System Explorer &gt; Globals provides a visual global viewer and editor
 
 ### Detailed Notes
@@ -54,6 +56,50 @@ $ORDER returns the next subscript at a given level, enabling traversal of global
      WRITE "Customer ", id, ": ", ^Customer(id, "Name"), !
  }
 ```
+
+#### Searching globals with `%Library.Global`
+
+An IRIS global does not need a persistent class definition to be searched through the `%Library.Global` class queries. `Find` and `Get` can be invoked directly with SQL `CALL` syntax. These `CALL` statements belong in an SQL context; from the ObjectScript prompt in IRIS Terminal, prepare the class query with `%PrepareClassQuery`. For example, search under `^Persons` for the `Email` subscript, or request the value at a reference containing that subscript:
+
+```sql
+CALL %Library.Global_Find('USER', '^Persons', 'Email')
+CALL %Library.Global_Get('USER', '^Persons(,"Email"', '')
+```
+
+The same class queries can be prepared and executed from ObjectScript with `%SQL.Statement`:
+
+```objectscript
+ SET statement = ##class(%SQL.Statement).%New()
+ SET status = statement.%PrepareClassQuery("%Library.Global", "Find")
+ SET resultset = statement.%Execute("USER", "^Persons", "Email")
+```
+
+To invoke `Get`, prepare the `Get` query and pass its global reference as a string. In an ObjectScript string, double the quotes that are part of the global reference:
+
+```objectscript
+ SET statement = ##class(%SQL.Statement).%New()
+ SET status = statement.%PrepareClassQuery("%Library.Global", "Get")
+ SET resultset = statement.%Execute("USER", "^Persons(,""Email""")
+```
+
+These are dedicated class queries for accessing global data. They do not make an arbitrary global a table that can be queried with syntax such as `SELECT * FROM %Global.MyGlobal`.
+
+#### Choosing a traversal strategy
+
+Use `ZWRITE` for a readable snapshot of a global or a selected subtree. Use `$ORDER` when you need to control the keys you visit, apply a condition, or stop early. `$ORDER` returns siblings at the level named in the reference; it does not descend into every child automatically. To walk selected levels with `$ORDER`, nest one loop per level.
+
+When the structure is nested and you want to visit nodes at all levels in one loop, `$QUERY` returns each full node reference. Indirection (`@ref`) then reads the value at that reference:
+
+```objectscript
+ SET ref = "^Customer"
+ FOR {
+     SET ref = $QUERY(@ref)
+     QUIT:ref=""
+     WRITE ref, " = ", @ref, !
+ }
+```
+
+The starting reference is a position in the traversal; if the global root itself has a value, inspect it separately. For a quick inspection in the Terminal, `ZWRITE ^Customer` is often the simplest choice. For a filtered or partial scan, use `$ORDER`; for a traversal across nested levels, use nested `$ORDER` loops or `$QUERY`.
 
 #### Using $DATA to Check Node Existence
 
@@ -101,4 +147,6 @@ Persistent classes store data in globals named after the class. Use the storage 
 - [Introduction to Globals](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GGBL_intro)
 - [Global Structure](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GGBL_structure)
 - [$ORDER Function](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_forder)
+- [$QUERY Function](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fquery)
+- [Search within globals without class definitions](https://community.intersystems.com/post/search-within-globals-without-class-definitions)
 - [$DATA Function](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fdata)
