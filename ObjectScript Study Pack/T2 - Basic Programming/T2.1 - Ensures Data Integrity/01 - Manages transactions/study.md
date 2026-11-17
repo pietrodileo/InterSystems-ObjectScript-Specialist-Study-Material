@@ -57,8 +57,35 @@ InterSystems IRIS supports nested transactions up to 255 levels. Each TSTART inc
 
 This design allows modular code where called methods can issue their own TSTART/TCOMMIT without knowing whether the caller already started a transaction.
 
+#### Transaction errors: use the complete error name
+
+`<TRANSACTION>` is not the standard name for every transaction failure. Diagnose the exact error and the command that raised it:
+
+| Situation | Actual result | What to check |
+| --- | --- | --- |
+| `TCOMMIT` when `$TLEVEL=0` | `<COMMAND>` with `*NoTransaction` in `$ZERROR` | An extra commit, a missing start, or a commit after full rollback |
+| A 256th nested `TSTART` | `<TRANSACTION LEVEL>` | Unbalanced starts or recursive calls opening transactions |
+| `TROLLBACK` when `$TLEVEL=0` | No operation | Different from an extra `TCOMMIT` |
+| Timed ObjectScript `LOCK` cannot be acquired | `$TEST=0` | Handle contention explicitly; this is not a transaction exception |
+
+Assuming `$TLEVEL=0`, this deliberately incorrect sequence raises `<COMMAND>`:
+
+```objectscript
+ TSTART
+ TROLLBACK                       // Ends ALL transaction levels
+ TRY {
+     TCOMMIT                    // No transaction remains
+ } CATCH ex {
+     WRITE ex.DisplayString(), !
+     WRITE "$TLEVEL = ", $TLEVEL, !
+ }
+```
+
+A `CATCH` does not by itself roll back changes or release explicit locks. Define who owns the transaction and clean up resources acquired by this unit of work. Examples using full `TROLLBACK` here assume no caller-owned outer transaction. See [TCOMMIT](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_ctcommit), [$TLEVEL](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_vtlevel), and [system errors](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RERR_system).
+
 ### Documentation References
 
 - [Transaction Processing](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GAPPS_tp)
 - [TSTART Command](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_ctstart)
 - [TCOMMIT Command](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_ctcommit)
+- [Transaction Levels and Errors](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_vtlevel)
