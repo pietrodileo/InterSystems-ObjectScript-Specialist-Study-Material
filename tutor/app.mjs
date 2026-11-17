@@ -597,12 +597,19 @@ function renderStudyNotes(markdown, diagrams) {
   if (!markdown?.trim()) return '';
   const lines = markdown.trim().split(/\r?\n/);
   const html = [];
-  const inline = value => escape(value)
-    .replace(/\x60([^\x60]+)\x60/g, '<code translate="no">$1</code>')
-    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
-    .replace(/\*([^*]+)\*/g, '<em>$1</em>')
-    .replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g,
-      (_, label, url) => '<a href="' + escape(url) + '" target="_blank" rel="noopener">' + escape(label) + ' ↗</a>');
+  const inline = value => {
+    const code = [];
+    const withCodePlaceholders = value.replace(/\x60([^\x60]+)\x60/g, (_, text) => {
+      code.push('<code translate="no">' + escape(text) + '</code>');
+      return `\uE000${code.length - 1}\uE001`;
+    });
+    return escape(withCodePlaceholders.replaceAll('-&gt;', '→').replaceAll('&lt;', '<').replaceAll('&gt;', '>'))
+      .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*([^*]+)\*/g, '<em>$1</em>')
+      .replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g,
+        (_, label, url) => '<a href="' + escape(url) + '" target="_blank" rel="noopener">' + escape(label) + ' ↗</a>')
+      .replace(/\uE000(\d+)\uE001/g, (_, index) => code[index]);
+  };
   const cells = line => line.trim().replace(/^\|/, '').replace(/\|$/, '').split('|').map(cell => cell.trim());
   const tableSeparator = line => /^\|.*\|$/.test(line.trim()) &&
     cells(line).every(cell => /^:?-{3,}:?$/.test(cell));
