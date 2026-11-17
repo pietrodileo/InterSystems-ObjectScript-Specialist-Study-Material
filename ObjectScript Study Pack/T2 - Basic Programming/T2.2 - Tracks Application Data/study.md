@@ -14,11 +14,13 @@ Saved 2 November 2026 from [exam-prep.es](https://exam-prep.es/exams/objectscrip
 
 ### Visual study guide — sections 1–3
 
-![T2.2 visual summary of sections 1–3: 1. Locates and accesses application globals; 2. Uses logging to track application data; 3. Adds and tracks metrics for performance monitoring](visual-guide-01-v2.png)
+![T2.2 visual summary of sections 1–3: 1. Locates and accesses application globals; 2. Uses logging to track application data; 3. Adds and tracks metrics for performance monitoring](visual-guide-01-v3.png)
 
 [View all chapter diagrams](visuals.md) · [Technical review notes](../../visual-technical-notes.md)
 
 ## 1. Locates and accesses application globals
+
+![T2.2 detailed guide to global navigation, the four $DATA results, and locating a class global through DataLocation and namespace mappings](visual-guide-02.png)
 
 ### Key Points
 
@@ -119,12 +121,14 @@ Read the result as `system^directory`. An empty system part means a local databa
 
 ## 2. Uses logging to track application data
 
+![T2.2 reference for system diagnostics, application logs, process counters, and performance monitoring tools](visual-guide-03.png)
+
 ### Key Points
 
 - **^%ISCLOG**: Built-in diagnostic logging used by InterSystems framework code (CSP gateway, web services, productions); controlled by the ^%ISCLOG global, entries stored in ^ISCLOG in %SYS namespace
 - **Custom logging globals**: Application-defined globals (e.g., ^MyApp.Log) for structured application-level logging
 - **%Library.File**: Write log data to external files for integration with external log management systems
-- **$HOROLOG / $ZTIMESTAMP**: Timestamps for log entries; $ZTIMESTAMP includes UTC time with fractional seconds
+- **Time sources for logs**: `$HOROLOG` is local date/time at whole-second precision; `$ZTIMESTAMP` is UTC date/time with fractional seconds for cross-time-zone event stamps. Neither is the elapsed-time counter; see [the comparison in section 3](#choosing-a-clock-timestamp-or-elapsed-timer).
 - **Log levels**: Implement severity levels (ERROR, WARN, INFO, DEBUG) for filtering and analysis
 
 ### Detailed Notes
@@ -135,7 +139,7 @@ Read the result as `system^directory`. An empty system part means a local databa
 
 **How it works:**
 
-- The **^%ISCLOG** global (top-level value) controls the logging level: 0=disabled, 1=errors only, 2=warnings and errors, 3=all messages (most verbose)
+- The top-level **^%ISCLOG** value controls diagnostic logging; 0 disables it. Interpret nonzero levels for the specific logger or feature. For CSP logging, levels 1, 2, and 3 mean exceptional events, detailed information, and raw request data, respectively.
 - Log entries are written to the **^ISCLOG** global (without the % prefix) in the **%SYS namespace**
 - Entries can be viewed using the **%Library.SysLog** class or by doing `ZWRITE ^ISCLOG` in the %SYS namespace
 
@@ -222,7 +226,11 @@ For integration with external log management systems, write to files:
 ### Documentation References
 
 - [Using ^%ISCLOG](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCM_monitor)
+- [Enabling CSP logging and interpreting its levels](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCSP_LOGGING)
+- [$HOROLOG](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_vhorolog)
 - [$ZTIMESTAMP Special Variable](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_vztimestamp)
+- [$NOW](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fnow)
+- [Date and time values](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_datetime)
 - [%Library.File](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_file)
 
 ## 3. Adds and tracks metrics for performance monitoring
@@ -230,6 +238,7 @@ For integration with external log management systems, write to files:
 ### Key Points
 
 - **$SYSTEM.Process**: Provides per-process performance counters (global references, lines executed, etc.)
+- **$ZHOROLOG**: Counts elapsed seconds since the latest IRIS startup, with fractional seconds; take an after-minus-before difference to measure a duration.
 - **^IRIS.Temp globals**: Temporary globals for storing transient metrics without journaling overhead
 - **$SYSTEM.SQL.Stats**: SQL query statistics and performance data
 - **^%SYS.MONLBL**: Line-by-line monitoring data for code profiling
@@ -254,7 +263,7 @@ $SYSTEM.Process provides access to detailed process performance counters:
  // Measure performance of a code block
  SET startGref = $SYSTEM.Process.GlobalReferences()
  SET startLines = $SYSTEM.Process.LinesExecuted()
- SET startTime = $ZHOROLOG  // High-precision timestamp
+ SET startTime = $ZHOROLOG  // Elapsed-seconds counter; subtract the starting value
 
  // ... code being measured ...
  DO ##class(MyApp.DataLoader).ProcessBatch()
@@ -268,6 +277,27 @@ $SYSTEM.Process provides access to detailed process performance counters:
  WRITE "Lines executed: ", linesExec, !
 ```
 
+#### Choosing a clock, timestamp, or elapsed timer
+
+These values answer different questions. `$HOROLOG`, `$ZTIMESTAMP`, and `$NOW()` describe a date and time; `$ZHOROLOG` measures elapsed time.
+
+| Value | What it represents | Good use | Important limit |
+| --- | --- | --- | --- |
+| `$HOROLOG` (`$H`) | Local IRIS date and time as `days,seconds`; whole seconds only. It applies local seasonal time changes such as DST. | Local date/time fields and date-based indexes when second precision is enough. | It is wall-clock time. A clock, time-zone, or DST change can affect comparisons across that boundary. |
+| `$ZTIMESTAMP` (`$ZTS`) | Current UTC date and time in IRIS storage format, with fractional seconds. | Consistent event timestamps in logs read across time zones. | It is a wall-clock timestamp, not a duration counter. Fractional precision depends on the platform clock. |
+| `$ZHOROLOG` (`$ZH`) | Floating-point seconds elapsed since the most recent IRIS startup; independent of wall-clock changes and midnight. | Benchmarking: save a start value and subtract it from the end value. | It is not a calendar timestamp. Windows hibernate or standby can make readings unpredictable. |
+| `$NOW()` / `$NOW(tzmins)` | Current process date and time with fractional seconds, in IRIS storage format; uses `$ZTIMEZONE` by default or the supplied offset. `$NOW(0)` returns UTC. | A fractional-second timestamp at the process's local offset or an explicit offset. | `$NOW()` does not apply DST or other seasonal local-time changes, so it may differ from the wall clock. It is not an elapsed timer. |
+
+Use `$ZDATETIME`, `$ZDATE`, and `$ZTIME` to format or convert date/time values; these functions do not read a clock. `$SYSTEM.SYS.Horolog()` is a callable alternative to `$HOROLOG`; `$SYSTEM.SYS.TimeStamp()` and `##class(%SYSTEM.SYS).TimeStamp()` are alternatives to `$ZTIMESTAMP`. `$ZTIMEZONE` is a fixed offset: it affects `$HOROLOG` and the default `$NOW()`, while `$HOROLOG` separately applies the operating system's seasonal-time rules.
+
+For date-dependent tests, `%SYSTEM.Process.FixedDate()` overrides the date portion of `$HOROLOG` for the current process while the time of day continues. It does not change the system clock or the values of `$NOW()` and `$ZTIMESTAMP`; pass `0` to restore the current date:
+
+```objectscript
+ DO ##class(%SYSTEM.Process).FixedDate(12345)  // Set a test date for this process
+ // ... run date-dependent code ...
+ DO ##class(%SYSTEM.Process).FixedDate(0)      // Restore the current date
+```
+
 #### Using ^IRIS.Temp for Transient Metrics
 
 ^IRIS.Temp globals reside in the IRISTEMP database, which is never journaled. This makes them ideal for storing performance counters and temporary metrics without impacting transaction performance or journal volume:
@@ -278,7 +308,7 @@ $SYSTEM.Process provides access to detailed process performance counters:
      $INCREMENT(^IRIS.Temp.Metrics("API", endpoint, $PIECE($HOROLOG, ",", 1)))
 
  // Track method execution times
- SET startTime = $ZHOROLOG
+ SET startTime = $ZHOROLOG  // Elapsed seconds, not a calendar timestamp
  // ... method execution ...
  SET elapsed = $ZHOROLOG - startTime
  SET ^IRIS.Temp.Metrics("Timing", methodName, $JOB) = elapsed
@@ -339,6 +369,10 @@ ClassMethod CollectMetrics() As %Status
 ### Documentation References
 
 - [$SYSTEM.Process](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_vsystem_process)
+- [$ZHOROLOG](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_vzhorolog)
+- [$ZDATETIME](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fzdatetime)
+- [$NOW](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fnow)
+- [$HOROLOG and $ZTIMESTAMP](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_vhorolog)
 - [Monitoring Performance](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCM_monitor)
 - [SQL Performance Analysis](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQLOPT)
 
@@ -349,7 +383,7 @@ ClassMethod CollectMetrics() As %Status
 1. **Global navigation**: Fluency with $ORDER, $DATA, $GET, and ZWRITE for examining and traversing globals
 2. **$DATA return values**: Know what 0, 1, 10, and 11 mean and how to use modular arithmetic (#2, #10) to test specific conditions
 3. **Logging strategies**: Understand ^%ISCLOG for system/framework diagnostics vs custom logging globals for application data vs file-based logging for external integration
-4. **Performance counters**: Know how to use $SYSTEM.Process methods to measure global references, lines executed, and timing
+4. **Performance counters and time sources**: Use $SYSTEM.Process methods for operation counts; use $ZHOROLOG differences for elapsed duration; distinguish these from the wall-clock values $HOROLOG, $ZTIMESTAMP, and $NOW()
 5. **^IRIS.Temp**: Understand that IRISTEMP globals are not journaled, making them ideal for transient data and metrics
 
 ### Common Exam Scenarios:
@@ -357,7 +391,7 @@ ClassMethod CollectMetrics() As %Status
 - Writing $ORDER loops to iterate through a global structure
 - Interpreting $DATA return values for various global node configurations
 - Choosing appropriate logging mechanisms for different scenarios
-- Measuring code performance using $SYSTEM.Process counters and $ZHOROLOG
+- Measuring code performance with $SYSTEM.Process counters and $ZHOROLOG, and selecting a calendar timestamp with $HOROLOG, $ZTIMESTAMP, or $NOW()
 - Identifying the correct global name for a persistent class's data storage
 - Using ZWRITE to debug global contents
 

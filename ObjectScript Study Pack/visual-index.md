@@ -2,7 +2,7 @@
 
 [Approfondimenti dagli esercizi](approfondimenti-esercizi.md) — casi commentati, varianti e nuovi schemi.
 
-35 study diagrams covering all 22 chapters and 93 numbered content sections. Open a chapter gallery or read the illustrated chapter guide.
+37 study diagrams covering all 22 chapters and 93 numbered content sections. Open a chapter gallery or read the illustrated chapter guide.
 
 [All topics](index.md) · [Technical review notes](visual-technical-notes.md)
 
@@ -13,7 +13,7 @@
 | [T1.3: Creates ObjectScript Methods](T1%20-%20Manages%20Data%20Model/T1.3%20-%20Creates%20ObjectScript%20Methods/visuals.md) | 2 | [Read](T1%20-%20Manages%20Data%20Model/T1.3%20-%20Creates%20ObjectScript%20Methods/study.md) |
 | [T1.4: Uses Complex Structures](T1%20-%20Manages%20Data%20Model/T1.4%20-%20Uses%20Complex%20Structures/visuals.md) | 1 | [Read](T1%20-%20Manages%20Data%20Model/T1.4%20-%20Uses%20Complex%20Structures/study.md) |
 | [T2.1: Ensures Data Integrity](T2%20-%20Basic%20Programming/T2.1%20-%20Ensures%20Data%20Integrity/visuals.md) | 3 | [Read](T2%20-%20Basic%20Programming/T2.1%20-%20Ensures%20Data%20Integrity/study.md) |
-| [T2.2: Tracks Application Data](T2%20-%20Basic%20Programming/T2.2%20-%20Tracks%20Application%20Data/visuals.md) | 1 | [Read](T2%20-%20Basic%20Programming/T2.2%20-%20Tracks%20Application%20Data/study.md) |
+| [T2.2: Tracks Application Data](T2%20-%20Basic%20Programming/T2.2%20-%20Tracks%20Application%20Data/visuals.md) | 3 | [Read](T2%20-%20Basic%20Programming/T2.2%20-%20Tracks%20Application%20Data/study.md) |
 | [T2.3: Implements Security Features](T2%20-%20Basic%20Programming/T2.3%20-%20Implements%20Security%20Features/visuals.md) | 1 | [Read](T2%20-%20Basic%20Programming/T2.3%20-%20Implements%20Security%20Features/study.md) |
 | [T3.1: Differentiates Storage Media](T3%20-%20IRIS%20Features/T3.1%20-%20Differentiates%20Storage%20Media/visuals.md) | 1 | [Read](T3%20-%20IRIS%20Features/T3.1%20-%20Differentiates%20Storage%20Media/study.md) |
 | [T3.2: Leverages ObjectScript/SQL Features](T3%20-%20IRIS%20Features/T3.2%20-%20Leverages%20ObjectScript%20-%20SQL%20Features/visuals.md) | 2 | [Read](T3%20-%20IRIS%20Features/T3.2%20-%20Leverages%20ObjectScript%20-%20SQL%20Features/study.md) |

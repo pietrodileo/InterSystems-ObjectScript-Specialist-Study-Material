@@ -6,9 +6,11 @@ Saved 2 November 2026 from [exam-prep.es](https://exam-prep.es/exams/objectscrip
 
 ## 1. Locates and accesses application globals
 
-![T2.2 visual summary of sections 1–3: 1. Locates and accesses application globals; 2. Uses logging to track application data; 3. Adds and tracks metrics for performance monitoring](../visual-guide-01-v2.png)
+![T2.2 visual summary of sections 1–3: 1. Locates and accesses application globals; 2. Uses logging to track application data; 3. Adds and tracks metrics for performance monitoring](../visual-guide-01-v3.png)
 
 *This diagram covers sections 1–3; use the matching numbered panel for this page.* [Chapter diagrams](../visuals.md) · [Technical review notes](../../../visual-technical-notes.md)
+
+![Detailed guide to global navigation, $DATA values, and class data mapping](../visual-guide-02.png)
 
 ### Key Points
 

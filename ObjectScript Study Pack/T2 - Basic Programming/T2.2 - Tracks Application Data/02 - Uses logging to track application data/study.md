@@ -6,16 +6,18 @@ Saved 2 November 2026 from [exam-prep.es](https://exam-prep.es/exams/objectscrip
 
 ## 2. Uses logging to track application data
 
-![T2.2 visual summary of sections 1–3: 1. Locates and accesses application globals; 2. Uses logging to track application data; 3. Adds and tracks metrics for performance monitoring](../visual-guide-01-v2.png)
+![T2.2 visual summary of sections 1–3: 1. Locates and accesses application globals; 2. Uses logging to track application data; 3. Adds and tracks metrics for performance monitoring](../visual-guide-01-v3.png)
 
 *This diagram covers sections 1–3; use the matching numbered panel for this page.* [Chapter diagrams](../visuals.md) · [Technical review notes](../../../visual-technical-notes.md)
+
+![Detailed guide to ^%ISCLOG, application logging, and diagnostic destinations](../visual-guide-03.png)
 
 ### Key Points
 
 - **^%ISCLOG**: Built-in diagnostic logging used by InterSystems framework code (CSP gateway, web services, productions); controlled by the ^%ISCLOG global, entries stored in ^ISCLOG in %SYS namespace
 - **Custom logging globals**: Application-defined globals (e.g., ^MyApp.Log) for structured application-level logging
 - **%Library.File**: Write log data to external files for integration with external log management systems
-- **$HOROLOG / $ZTIMESTAMP**: Timestamps for log entries; $ZTIMESTAMP includes UTC time with fractional seconds
+- **Time sources for logs**: `$HOROLOG` is local date/time at whole-second precision; `$ZTIMESTAMP` is UTC date/time with fractional seconds for cross-time-zone event stamps. Neither is the elapsed-time counter; see [the comparison in section 3 of the full guide](../study.md#choosing-a-clock-timestamp-or-elapsed-timer).
 - **Log levels**: Implement severity levels (ERROR, WARN, INFO, DEBUG) for filtering and analysis
 
 ### Detailed Notes
@@ -26,7 +28,7 @@ Saved 2 November 2026 from [exam-prep.es](https://exam-prep.es/exams/objectscrip
 
 **How it works:**
 
-- The **^%ISCLOG** global (top-level value) controls the logging level: 0=disabled, 1=errors only, 2=warnings and errors, 3=all messages (most verbose)
+- The top-level **^%ISCLOG** value controls diagnostic logging; 0 disables it. Interpret nonzero levels for the specific logger or feature. For CSP logging, levels 1, 2, and 3 mean exceptional events, detailed information, and raw request data, respectively.
 - Log entries are written to the **^ISCLOG** global (without the % prefix) in the **%SYS namespace**
 - Entries can be viewed using the **%Library.SysLog** class or by doing `ZWRITE ^ISCLOG` in the %SYS namespace
 
@@ -113,5 +115,9 @@ For integration with external log management systems, write to files:
 ### Documentation References
 
 - [Using ^%ISCLOG](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCM_monitor)
+- [Enabling CSP logging and interpreting its levels](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCSP_LOGGING)
+- [$HOROLOG](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_vhorolog)
 - [$ZTIMESTAMP Special Variable](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_vztimestamp)
+- [$NOW](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fnow)
+- [Date and time values](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_datetime)
 - [%Library.File](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_file)

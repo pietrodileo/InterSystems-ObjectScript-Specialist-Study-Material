@@ -2,7 +2,7 @@
 
 [Visual index](visual-index.md) · [All topics](index.md)
 
-The 31 chapter overviews summarize all 93 numbered sections across the 22 chapters. Two worked diagrams illustrate object callbacks and concurrent account updates, and two supplied T1.2 diagrams expand the index structures and bitwise examples. These diagrams are conceptual learning aids; exact declarations, complete implementations, and detailed explanations belong in the chapter notes. Images are stored beside their chapter Markdown and work offline.
+The 31 chapter overviews summarize all 93 numbered sections across the 22 chapters. Two worked diagrams illustrate object callbacks and concurrent account updates, two supplied T1.2 diagrams expand the index structures and bitwise examples, and two new T2.2 guides expand global navigation and logging/performance details. These diagrams are conceptual learning aids; exact declarations, complete implementations, and detailed explanations belong in the chapter notes. Images are stored beside their chapter Markdown and work offline.
 
 The downloaded notes are a third-party source, and review found several statements that needed qualification. The diagrams use the following distinctions; the original downloaded text and quizzes have not been comprehensively corrected.
 
@@ -17,6 +17,7 @@ The downloaded notes are a third-party source, and review found several statemen
 | Stack inspection | `$STACK` reports current depth; `$STACK(-1)` identifies the highest context with information and can include the saved error stack during handling. | [$STACK function](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fstack) |
 | Pattern matching | Native `?` patterns and ICU regular expressions are separate syntaxes. `$MATCH` tests the full string; `$LOCATE` searches within it. | [Regular expressions](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_regex) |
 | List iteration | `$LISTNEXT` uses an opaque pointer initialized to zero; it is not an element counter. | [$LISTNEXT](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_flistnext) |
+| Diagnostic logging | `^%ISCLOG` controls logging; nonzero level meanings depend on the logger/feature. For CSP, level 1 logs exceptional events, level 2 detailed information, and level 3 raw request data. CSP entries are stored in `^ISCLOG` in `%SYS`. | [Enabling CSP logging](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCSP_LOGGING) |
 
 Other editorial choices: computed-property storage depends on its keywords; stream selection is shown by text/binary and global/file storage rather than universal compression claims; lock escalation is shown without a fixed threshold or a promise that every access is blocked. Exact storage layouts, permissions, and query plans depend on the class and configuration.
 
@@ -24,7 +25,7 @@ The images were visually reviewed and revised for observed mistakes. Coverage, P
 
 ## Image provenance
 
-The original 31 overviews were generated with ImageGen. The worked diagrams for T1.1 and T2.1 were drawn from the examples in the notes. The two additional T1.2 diagrams were supplied from the chat gallery and integrated unchanged; their reusable prompts are reconstructed and marked as such in [the prompt and asset metadata](image-generation-prompts.json). The metadata records chapter coverage, file paths, dimensions, hashes, and prompts. Images contain concise labels rather than every paragraph of the source notes.
+The original 31 overviews and the two new T2.2 guides were generated with ImageGen. The worked diagrams for T1.1 and T2.1 were drawn from the examples in the notes. The two additional T1.2 diagrams were supplied from the chat gallery and integrated unchanged; their reusable prompts are reconstructed and marked as such in [the prompt and asset metadata](image-generation-prompts.json). The metadata records chapter coverage, file paths, dimensions, hashes, and prompts. Images contain concise labels rather than every paragraph of the source notes.
 
 ## T2.1 lock detail additions — 15 November 2026
 

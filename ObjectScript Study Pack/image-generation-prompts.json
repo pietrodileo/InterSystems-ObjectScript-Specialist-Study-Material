@@ -169,6 +169,59 @@
       "sha256": "cb6251020f944651ceb20c6dd0cc2b75a6d43d6d6e4bdd21ae88931f017fb670"
     },
     {
+      "topic": "T2.2",
+      "folder": "T2 - Basic Programming/T2.2 - Tracks Application Data",
+      "filename": "visual-guide-01-v3.png",
+      "sections": [
+        "1. Locates and accesses application globals",
+        "2. Uses logging to track application data",
+        "3. Adds and tracks metrics for performance monitoring"
+      ],
+      "prompt": "Use case: precise-object-edit. Edit the existing T2.2 overview image. Change only the title-bar counter from Visual study guide 1/1 to Visual study guide 1/3; keep all other pixels and content unchanged.",
+      "prompt_status": "Generated with built-in ImageGen as a non-destructive title-counter revision.",
+      "source": "C:\\Users\\p.dileo\\.codex\\generated_images\\01a1e9cd-691d-77b0-a524-fe749b54f7eb\\exec-c5ed8b02-66ce-48fc-93f7-42dabaaca088.png",
+      "refined": true,
+      "width": 1536,
+      "height": 1024,
+      "file": "T2 - Basic Programming/T2.2 - Tracks Application Data/visual-guide-01-v3.png",
+      "sha256": "287ed71343fd1e1de39a12b4a4d6f6553e12511ca14341f0a8f34b5e58025374"
+    },
+    {
+      "topic": "T2.2",
+      "folder": "T2 - Basic Programming/T2.2 - Tracks Application Data",
+      "filename": "visual-guide-02.png",
+      "sections": [
+        "1. Locates and accesses application globals",
+        "$DATA return values 0, 1, 10, and 11",
+        "Class DataLocation and namespace global mappings"
+      ],
+      "prompt": "Use case: scientific-educational. Create a landscape 3:2 T2.2 study infographic matching the existing T2.2 image: pale grid, navy headings, teal arrows, violet/blue cards, amber cautions, flat technical icons, readable English text. Cover global navigation with ZWRITE, $DATA, $GET, $ORDER; show the exact $ORDER loop from the chapter. Explain the two independent $DATA facts with the exact 0/1/10/11 value matrix; emphasize that 10 means descendants without a direct value and show $DATA(node)#2 and $DATA(node)\\10. Show the path from class storage definition to DataLocation, global name, namespace Global Mappings, and database directory. Include the exact GetGlobalDest example and explain system^directory, local destinations, and subscript-specific mappings. Preserve code exactly; do not assume a class global name.",
+      "prompt_status": "Generated and revised with built-in ImageGen using the existing T2.2 guide as a style reference.",
+      "source": "C:\\Users\\p.dileo\\.codex\\generated_images\\01a1e9cd-691d-77b0-a524-fe749b54f7eb\\exec-f9e3d01f-9bd6-4383-ad4e-7941e3bccd7f.png",
+      "refined": true,
+      "width": 1536,
+      "height": 1024,
+      "file": "T2 - Basic Programming/T2.2 - Tracks Application Data/visual-guide-02.png",
+      "sha256": "bdf31e862b978c1800197fde843291b88a75864c5ae020174a4c55fff07e0b86"
+    },
+    {
+      "topic": "T2.2",
+      "folder": "T2 - Basic Programming/T2.2 - Tracks Application Data",
+      "filename": "visual-guide-03.png",
+      "sections": [
+        "2. Uses logging to track application data",
+        "3. Adds and tracks metrics for performance monitoring"
+      ],
+      "prompt": "Use case: scientific-educational. Create a landscape 3:2 T2.2 study infographic matching the existing T2.2 image: pale grid, navy headings, teal arrows, violet/blue cards, amber cautions, flat technical icons, readable English text. Cover the distinction between ^%ISCLOG settings and ^ISCLOG entries in %SYS, exact ZN/ZWRITE commands, application log fields, process-private log lifetime, and safe secret handling. Explain process-level counters and before/after deltas; include exact WRITE $SYSTEM.Process.GlobalReferences(), ! and WRITE $SYSTEM.Process.LinesExecuted(), ! commands and $ZHOROLOG duration measurement. Show ^IRIS.Temp in the IRISTEMP database, SQL statistics with DO $SYSTEM.SQL.Stats.DisplayStats() and a query plan with DO stmt.%ShowPlan(), plus the exact line-monitor Start, run, Stop, and ZWRITE ^%SYS.MONLBL commands. Qualify that logging detail depends on logger/category. Preserve all code exactly.",
+      "prompt_status": "Generated and revised with built-in ImageGen using the existing T2.2 guide as a style reference.",
+      "source": "C:\\Users\\p.dileo\\.codex\\generated_images\\01a1e9cd-691d-77b0-a524-fe749b54f7eb\\exec-ce089be1-c2c0-469d-826f-e84784dde4ad.png",
+      "refined": true,
+      "width": 1536,
+      "height": 1024,
+      "file": "T2 - Basic Programming/T2.2 - Tracks Application Data/visual-guide-03.png",
+      "sha256": "9cecfef5a1366dafe3022c01ec66872b279f688c22ee243990462353dd1601ed"
+    },
+    {
       "topic": "T2.3",
       "folder": "T2 - Basic Programming/T2.3 - Implements Security Features",
       "filename": "visual-guide-01-v3.png",
