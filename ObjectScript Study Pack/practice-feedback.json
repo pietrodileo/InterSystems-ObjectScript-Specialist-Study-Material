@@ -116,6 +116,10 @@
       "label": "Enabling CSP Logging",
       "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCSP_logging"
     },
+    "GGBL_global_classqueries": {
+      "label": "Search within globals without class definitions (InterSystems Community)",
+      "url": "https://community.intersystems.com/post/search-within-globals-without-class-definitions"
+    },
     "GGBL_limits": {
       "label": "Global node address limits",
       "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=BPYNAT_globals"
@@ -1212,11 +1216,17 @@
         ]
       },
       "11": {
-        "explanation": "ZWRITE can show the global's nodes and values for a small inspection. $ORDER lets you walk one subscript level and apply a filter or stop early. If nested levels matter, traverse them separately or use $QUERY for full node references.",
+        "explanation": "ZWRITE can show the global's nodes and values for a small inspection. $ORDER lets you walk one subscript level and apply a filter or stop early. If nested levels matter, traverse them separately or use $QUERY for full node references. Another less familiar option is the %Library.Global class queries Find and Get: they can be called from SQL or prepared with %PrepareClassQuery in ObjectScript, allowing access to globals without a persistent class definition. This dedicated API does not make SELECT * FROM %Global.MyGlobal valid.",
         "sources": [
           "RCOS_czwrite",
-          "RCOS_forder"
-        ]
+          "RCOS_forder",
+          "RCOS_fquery",
+          "GGBL_global_classqueries"
+        ],
+        "example": {
+          "title": "Prepare the Global.Find class query from ObjectScript",
+          "code": "Set statement = ##class(%SQL.Statement).%New()\nSet status = statement.%PrepareClassQuery(\"%Library.Global\", \"Find\")\nSet resultset = statement.%Execute(\"USER\", \"^Persons\", \"Email\")"
+        }
       },
       "12": {
         "explanation": "The key finds a log record. Its first encoded element is the recorded date. For each matching key, use $LISTGET to compare that field with today's date, then display or count the selected entries.",

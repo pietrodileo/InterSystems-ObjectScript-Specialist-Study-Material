@@ -595,8 +595,8 @@
     {
       "title": "Requisito dell’interfaccia di osservazione",
       "reason": "La domanda richiede il Terminal: ZWRITE e una scansione $ORDER rispondono a quel requisito. Una pagina del Portal può essere utile ma non è il Terminal.",
-      "insight": "Una risposta tecnicamente valida in un altro strumento può non soddisfare il vincolo operativo. Leggi dove e come devi svolgere l’ispezione.",
-      "challenge": "$ORDER da solo visita automaticamente tutti i livelli? No: una scansione di primo livello richiede ulteriori passaggi per i discendenti."
+      "insight": "Tra le opzioni elencate sono corrette ZWRITE e $ORDER. In aggiunta, %Library.Global espone le class query Find e Get per cercare o leggere global senza una definizione persistente, anche da ObjectScript con %PrepareClassQuery.",
+      "challenge": "SELECT * FROM %Global.MyGlobal è il modo SQL generico per leggere un global? No: usa le class query dedicate %Library.Global.Find/Get oppure gli strumenti ObjectScript come ZWRITE, $ORDER e $QUERY."
     },
     {
       "title": "Filtrare il giorno da un timestamp",
