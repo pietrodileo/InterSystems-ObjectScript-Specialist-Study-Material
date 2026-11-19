@@ -2,7 +2,7 @@ name: Publish GitHub Pages
 
 on:
   push:
-    branches: [codex/study-pack-content-only]
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -24,6 +24,26 @@ jobs:
       - uses: actions/checkout@v6
       - name: Package the study pack and tutor
         run: mkdir _site && git archive "$GITHUB_SHA" | tar -x -C _site
+      - name: Stamp the site build time
+        run: |
+          node <<'JS'
+          const fs = require('node:fs');
+          const page = '_site/tutor/index.html';
+          const html = fs.readFileSync(page, 'utf8');
+          const placeholder = '<span id="build-timestamp">Available after deployment</span>';
+          if (html.split(placeholder).length !== 2) {
+            throw new Error('Expected exactly one build timestamp placeholder');
+          }
+          const builtAt = new Date();
+          const parts = Object.fromEntries(new Intl.DateTimeFormat('en-GB', {
+            timeZone: 'Europe/Rome', hourCycle: 'h23',
+            year: 'numeric', month: '2-digit', day: '2-digit',
+            hour: '2-digit', minute: '2-digit', second: '2-digit'
+          }).formatToParts(builtAt).map(({ type, value }) => [type, value]));
+          const label = `${parts.year}-${parts.month}-${parts.day} ${parts.hour}:${parts.minute}:${parts.second}`;
+          const timestamp = `<time id="build-timestamp" datetime="${builtAt.toISOString()}">${label}</time>`;
+          fs.writeFileSync(page, html.replace(placeholder, timestamp));
+          JS
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v4
         with:
