@@ -609,6 +609,32 @@ Multidimensional variables (arrays) are a fundamental data structure in ObjectSc
 
 A multidimensional array can contain nodes such as `scores("Ada","Math")`. Passing `.scores` to a `ByRef` parameter lets the method read or change the whole tree, including its subscripts; passing `.scores("Ada")` refers only to that branch. After the method changes `scores("Ada","Math")`, the caller sees the new value. Use this pattern when a method fills or updates a caller-owned array.
 
+Without the dot, only the value at the unsubscripted node is passed; the subscripted values are excluded. If the unsubscripted node has no value, passing it by value raises an `<UNDEFINED>` error.
+
+For example, with this method in the same class as the calling code:
+
+```objectscript
+ClassMethod Show(data)
+{
+    Write $Get(data("name"), "Missing"), !
+}
+```
+
+```objectscript
+Set person = "Root value"
+Set person("name") = "Alice"
+
+Do ..Show(person)   // Prints "Missing": only "Root value" is passed
+Do ..Show(.person)  // Prints "Alice": the subscripts are available
+
+Kill person        // Remove the root value and all subscripts
+Set person("name") = "Alice"
+
+Do ..Show(person)   // Raises <UNDEFINED>: person itself has no value
+// Run separately after the error:
+Do ..Show(.person)  // Prints "Alice"
+```
+
 #### Multidimensional Variable Basics
 
 ```objectscript
@@ -686,6 +712,8 @@ ClassMethod ProcessTree(ByRef tree, level As %Integer = 0)
     For {
         Set key = $ORDER(tree(key))
         Quit:key=""
+        // Move to column level*4 (4 columns per depth), print the key and value
+        // ($GET returns "" if the node has no value), then start a new line (!).
         Write ?level*4, key, ": ", $GET(tree(key)), !
         // Recursively process sub-nodes
         // Note: must merge to a temp variable for recursive call

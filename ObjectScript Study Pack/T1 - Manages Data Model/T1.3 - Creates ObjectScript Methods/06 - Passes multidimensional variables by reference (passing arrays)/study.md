@@ -24,6 +24,32 @@ Saved 2 November 2026 from [exam-prep.es](https://exam-prep.es/exams/objectscrip
 
 Multidimensional variables (arrays) are a fundamental data structure in ObjectScript. They store data at multiple subscript levels within a single variable name. Passing arrays to methods requires by-reference passing to include all subscript levels.
 
+Without the dot, only the value at the unsubscripted node is passed; the subscripted values are excluded. If the unsubscripted node has no value, passing it by value raises an `<UNDEFINED>` error.
+
+For example, with this method in the same class as the calling code:
+
+```objectscript
+ClassMethod Show(data)
+{
+    Write $Get(data("name"), "Missing"), !
+}
+```
+
+```objectscript
+Set person = "Root value"
+Set person("name") = "Alice"
+
+Do ..Show(person)   // Prints "Missing": only "Root value" is passed
+Do ..Show(.person)  // Prints "Alice": the subscripts are available
+
+Kill person        // Remove the root value and all subscripts
+Set person("name") = "Alice"
+
+Do ..Show(person)   // Raises <UNDEFINED>: person itself has no value
+// Run separately after the error:
+Do ..Show(.person)  // Prints "Alice"
+```
+
 #### Multidimensional Variable Basics
 
 ```objectscript
@@ -101,6 +127,8 @@ ClassMethod ProcessTree(ByRef tree, level As %Integer = 0)
     For {
         Set key = $ORDER(tree(key))
         Quit:key=""
+        // Move to column level*4 (4 columns per depth), print the key and value
+        // ($GET returns "" if the node has no value), then start a new line (!).
         Write ?level*4, key, ": ", $GET(tree(key)), !
         // Recursively process sub-nodes
         // Note: must merge to a temp variable for recursive call
