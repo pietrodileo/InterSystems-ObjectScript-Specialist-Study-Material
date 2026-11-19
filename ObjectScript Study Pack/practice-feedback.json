@@ -116,9 +116,13 @@
       "label": "Enabling CSP Logging",
       "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCSP_logging"
     },
+    "RCOS_fquery": {
+      "label": "$QUERY (ObjectScript)",
+      "url": "https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_fquery"
+    },
     "GGBL_global_classqueries": {
-      "label": "Search within globals without class definitions (InterSystems Community)",
-      "url": "https://community.intersystems.com/post/search-within-globals-without-class-definitions"
+      "label": "%Library.Global class queries",
+      "url": "https://docs.intersystems.com/irislatest/csp/documatic/%25CSP.Documatic.cls?CLASSNAME=%25Library.Global&LIBRARY=%25SYS"
     },
     "GGBL_limits": {
       "label": "Global node address limits",
