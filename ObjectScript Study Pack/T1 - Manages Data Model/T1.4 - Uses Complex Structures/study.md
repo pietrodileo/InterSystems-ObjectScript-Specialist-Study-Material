@@ -11,6 +11,12 @@ Saved 2 November 2026 from [exam-prep.es](https://exam-prep.es/exams/objectscrip
 1. [Creates dynamic objects/arrays (JSON) - %DynamicObject, %DynamicArray, %FromJSON, %ToJSON](#1-creates-dynamic-objectsarrays-json---dynamicobject-dynamicarray-fromjson-tojson)
 2. [Uses stream objects of the appropriate type (%Stream.GlobalCharacter, %Stream.GlobalBinary, %Stream.FileCharacter, %Stream.FileBinary, Write(), Read(), Rewind())](#2-uses-stream-objects-of-the-appropriate-type-streamglobalcharacter-streamglobalbinary-streamfilecharacter-streamfilebinary-write-read-rewind)
 
+[Glossary & Cheat Sheet](#glossary--cheat-sheet)
+
+[Glossary & Cheat Sheet](#glossary--cheat-sheet)
+
+[Glossary & Cheat Sheet](#glossary--cheat-sheet)
+
 ### Visual study guide — sections 1–2
 
 ![T1.4 visual summary of sections 1–2: 1. Creates dynamic objects/arrays (JSON) - %DynamicObject, %DynamicArray, %FromJSON, %ToJSON; 2. Uses stream objects of the appropriate type (%Stream.GlobalCharacter, %Stream.GlobalBinary, %Stream.FileCharacter, %Stream.FileBinary, Write(), Read(), Rewind())](visual-guide-01.png)
@@ -495,3 +501,31 @@ If stream1.Size '= stream2.Size {
 - Practice CopyFrom() to transfer data between global and file streams
 - Use %GetIterator() to iterate over dynamic objects and arrays
 - Build a simple REST handler that accepts and returns JSON using dynamic objects
+
+## Glossary & Cheat Sheet
+
+### Key terms
+
+- **Dynamic containers** — %DynamicObject has named properties. %DynamicArray uses zero-based indexes. %FromJSON parses JSON and %ToJSON serializes it.
+- **Presence and access** — %IsDefined tests presence. %Get reads a value and %GetTypeOf exposes its dynamic type. Distinguish missing values from JSON null.
+- **Mutation and iteration** — %Set and %Remove change entries. %Push and %Pop operate on the end of the array. %GetIterator and %GetNext enumerate entries.
+- **Streams** — Choose Global or File storage and Character or Binary content. Read and ReadLine consume data. Rewind resets the position. CopyFrom transfers content. AtEnd guides read loops.
+
+### Commands, methods and syntax
+
+- **ObjectScript commands** — `DO`, `FOR`, `IF`, `QUIT`, `RETURN`, `SET`, `WHILE`, `WRITE`.
+- **ObjectScript functions and special variables** — `$H`, `$LIST`, `$SYSTEM`.
+- **IRIS classes and packages** — `%Stream.FileBinary`, `%Stream.FileCharacter`, `%Stream.GlobalBinary`, `%Stream.GlobalCharacter`, `%Stream.TmpCharacter`.
+- **Qualified calls and terminal utilities** — `$SYSTEM.Status.IsError()`.
+- **Method names and generated entry points** — `%ConstructClone()`, `%FromJSON()`, `%Get()`, `%GetIterator()`, `%GetNext()`, `%GetTypeOf()`, `%IsDefined()`, `%New()`, `%Pop()`, `%Push()`, `%Remove()`, `%Save()`, `%Set()`, `%Size()`, `%ToJSON()`, `Clear()`, `CopyFrom()`, `CopyFromAndSave()`, `Equals()`, `MoveToEnd()`, `Read()`, `ReadLine()`, `Rewind()`, `Write()`, `WriteLine()`.
+- **Dynamic classes and stream properties** — `%DynamicObject`, `%DynamicArray`, `%Iterator.Object`, `AtEnd`, `Size`, `Filename`, `TranslateTable`.
+- **Container syntax** — `{}`, `[]`, `JSON null`, `zero-based index`.
+- **Methods defined in chapter examples** — `CreateDoc()`.
+
+Official reference: [Creating dynamic entities](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GJSON_create).
+
+### Visual recap
+
+![T1.4 Glossary & Cheat Sheet — Key terms and core syntax](visual-guide-glossary-01.png)
+
+![T1.4 Glossary & Cheat Sheet — Commands and APIs](visual-guide-glossary-02.png)

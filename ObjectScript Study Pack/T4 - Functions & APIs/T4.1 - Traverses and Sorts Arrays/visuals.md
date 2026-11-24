@@ -16,3 +16,9 @@ Covers:
 - 2. Traversing subscript subset with $ORDER
 - 3. Multi-level traversal with $ORDER
 - 4. $DATA to check node existence
+
+## Glossary & Cheat Sheet
+
+![T4.1 Glossary & Cheat Sheet — Key terms and syntax](visual-guide-glossary-01.png)
+
+[Open the text recap](study.md#glossary--cheat-sheet).

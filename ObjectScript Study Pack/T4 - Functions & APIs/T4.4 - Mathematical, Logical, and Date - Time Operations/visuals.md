@@ -16,3 +16,9 @@ Covers:
 - 2. Logical operators
 - 3. $ZDATE, $ZTIME, $HOROLOG
 - 4. Date arithmetic
+
+## Glossary & Cheat Sheet
+
+![T4.4 Glossary & Cheat Sheet — Key terms and syntax](visual-guide-glossary-01.png)
+
+[Open the text recap](study.md#glossary--cheat-sheet).

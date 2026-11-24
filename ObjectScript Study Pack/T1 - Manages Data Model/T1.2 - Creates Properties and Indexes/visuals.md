@@ -38,3 +38,11 @@ Covers:
 - 5. Selects appropriate index type based on data distribution (standard, bitmap, bitslice)
 - 6. Uses unique index methods (unique index, %ExistsId)
 - 7. Recalls how foreign keys enforce referential integrity (ForeignKey, OnDelete, NoAction, Cascade)
+
+## Glossary & Cheat Sheet
+
+![T1.2 Glossary & Cheat Sheet — Key terms and core syntax](visual-guide-glossary-01.png)
+
+![T1.2 Glossary & Cheat Sheet — Commands and APIs](visual-guide-glossary-02.png)
+
+[Open the text recap](study.md#glossary--cheat-sheet).

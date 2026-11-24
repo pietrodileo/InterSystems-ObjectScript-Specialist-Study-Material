@@ -35,3 +35,11 @@ Covers:
 - Built-in diagnostics versus application logs and their storage locations
 - `$SYSTEM.Process` counters and before/after measurements with `$ZHOROLOG`
 - `^IRIS.Temp`, SQL statistics and query plans, and `^%SYS.MONLBL`
+
+## Glossary & Cheat Sheet
+
+![T2.2 Glossary & Cheat Sheet — Key terms and core syntax](visual-guide-glossary-01.png)
+
+![T2.2 Glossary & Cheat Sheet — Commands and APIs](visual-guide-glossary-02.png)
+
+[Open the text recap](study.md#glossary--cheat-sheet).

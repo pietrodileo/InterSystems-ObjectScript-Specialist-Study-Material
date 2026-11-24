@@ -15,3 +15,11 @@ Covers:
 - 1. Adding indexes to existing properties
 - 2. Impact of changing property name or datatype
 - 3. Purging cached queries after schema changes
+
+## Glossary & Cheat Sheet
+
+![T3.4 Glossary & Cheat Sheet — Key terms and core syntax](visual-guide-glossary-01.png)
+
+![T3.4 Glossary & Cheat Sheet — Commands and APIs](visual-guide-glossary-02.png)
+
+[Open the text recap](study.md#glossary--cheat-sheet).

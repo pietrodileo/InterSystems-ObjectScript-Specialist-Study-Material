@@ -14,3 +14,11 @@ Covers:
 
 - 1. Creates dynamic objects/arrays (JSON) - %DynamicObject, %DynamicArray, %FromJSON, %ToJSON
 - 2. Uses stream objects of the appropriate type (%Stream.GlobalCharacter, %Stream.GlobalBinary, %Stream.FileCharacter, %Stream.FileBinary, Write(), Read(), Rewind())
+
+## Glossary & Cheat Sheet
+
+![T1.4 Glossary & Cheat Sheet — Key terms and core syntax](visual-guide-glossary-01.png)
+
+![T1.4 Glossary & Cheat Sheet — Commands and APIs](visual-guide-glossary-02.png)
+
+[Open the text recap](study.md#glossary--cheat-sheet).

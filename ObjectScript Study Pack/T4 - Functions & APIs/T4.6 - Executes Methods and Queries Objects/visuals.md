@@ -15,3 +15,11 @@ Covers:
 - 1. $METHOD and $CLASSMETHOD for dynamic dispatch
 - 2. %IsA and %ClassName for type checking
 - 3. %Dictionary for class inspection
+
+## Glossary & Cheat Sheet
+
+![T4.6 Glossary & Cheat Sheet — Key terms and core syntax](visual-guide-glossary-01.png)
+
+![T4.6 Glossary & Cheat Sheet — Commands and APIs](visual-guide-glossary-02.png)
+
+[Open the text recap](study.md#glossary--cheat-sheet).

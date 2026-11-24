@@ -15,3 +15,9 @@ Covers:
 - 1. Post-conditionals
 - 2. Quit vs Return
 - 3. Boolean evaluation
+
+## Glossary & Cheat Sheet
+
+![T4.5 Glossary & Cheat Sheet — Key terms and syntax](visual-guide-glossary-01.png)
+
+[Open the text recap](study.md#glossary--cheat-sheet).

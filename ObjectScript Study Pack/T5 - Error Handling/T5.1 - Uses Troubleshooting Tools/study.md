@@ -11,6 +11,12 @@ Saved 2 November 2026 from [exam-prep.es](https://exam-prep.es/exams/objectscrip
 1. [Tools for monitoring code performance](#1-tools-for-monitoring-code-performance)
 2. [Interprets class compilation errors](#2-interprets-class-compilation-errors)
 
+[Glossary & Cheat Sheet](#glossary--cheat-sheet)
+
+[Glossary & Cheat Sheet](#glossary--cheat-sheet)
+
+[Glossary & Cheat Sheet](#glossary--cheat-sheet)
+
 ### Visual study guide — sections 1–2
 
 ![T5.1 visual summary of sections 1–2: 1. Tools for monitoring code performance; 2. Interprets class compilation errors](visual-guide-01-v2.png)
@@ -369,3 +375,33 @@ Common compilation error patterns and their causes:
 - Navigate the Management Portal System Operation pages to understand available metrics
 - Copy text from a word processor into Studio/VS Code and observe invalid character errors
 - Use `$SYSTEM.OBJ.Compile()` with different flag combinations and compare output
+
+## Glossary & Cheat Sheet
+
+### Key terms
+
+- **Performance baseline** — Compare repeated equivalent workloads. Review elapsed time, global references, lines executed and SQL activity together.
+- **Line and SQL tools** — MONLBL measures routine line execution. PTools SQLStats captures SQL activity. Query plans explain access paths.
+- **Class compilation** — Compile the intended source in the intended namespace. Read the full status. Fix missing includes, dependencies and malformed source before interpreting later errors.
+- **Flags and generated routines** — Inspect compiler flags, generated code and reported lines when diagnosing a failure. Verify spellings of classes, methods and includes.
+
+### Commands, methods and syntax
+
+- **ObjectScript commands** — `DO`, `FOR`, `HANG`, `IF`, `QUIT`, `RETURN`, `SET`, `WRITE`.
+- **ObjectScript functions and special variables** — `$HOROLOG`, `$JUSTIFY`, `$P`, `$PIECE`, `$RANDOM`, `$SYSTEM`, `$TRANSLATE`, `$ZH`, `$ZHOROLOG`, `$ZTIMESTAMP`.
+- **Macros and extrinsics** — `$$$AppVersion`, `$$$DbName`, `$$$FindAreaCode`, `$$$ISERR`, `$$$LogError`, `$$$LogInfo`, `$$$LogMsg`, `$$$MacroName`.
+- **IRIS classes and packages** — `%occStatus.inc`, `%SYSTEM.OBJ`.
+- **Qualified calls and terminal utilities** — `$SYSTEM.OBJ.Compile()`, `$SYSTEM.OBJ.CompileAll()`, `$SYSTEM.OBJ.CompileList()`, `$SYSTEM.OBJ.CompilePackage()`, `$SYSTEM.Status.DisplayError()`, `$SYSTEM.Status.GetErrorText()`, `$SYSTEM.Status.IsError()`.
+- **Method names and generated entry points** — `%ExecDirect()`, `%New()`, `%Prepare()`, `%Save()`, `%ShowPlan()`, `DisplayStats()`, `LogMsg()`, `MONLBL()`, `MyMethod()`, `Process()`, `ProcessBatch()`, `SetSQLStatsJob()`, `ShowFlags()`.
+- **Terminal and compiler syntax** — `ZN`, `ZNAMESPACE`, `DO ^PERFMON`, `MONLBL`, `Include`, `#include`, `#define`, `#if`, `%occStatus`, `r`, `d`, `b`, `y`.
+- **Diagnostics and SQL** — `%SQL.Statement`, `%SYS.PTools`, `%SYS.PTools.SQLStats`, `%SYS.MONLBL`, `SQLCODE`, `%msg`.
+- **Methods defined in chapter examples** — `Calculate()`, `CompareApproaches()`, `Info()`, `ProcessAddress()`, `Run()`, `Save()`, `TimedOperation()`.
+- **Incorrect forms in the exercises** — `/sort=dependency`, `%Strig`, `%SYS.PTools.Start`, `%SYS.PTools.Start()`, `$SYSTEM.Performance.Start()`.
+
+Official reference: [Performance Monitor](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCM_perfmon).
+
+### Visual recap
+
+![T5.1 Glossary & Cheat Sheet — Key terms and core syntax](visual-guide-glossary-01.png)
+
+![T5.1 Glossary & Cheat Sheet — Commands and APIs](visual-guide-glossary-02.png)

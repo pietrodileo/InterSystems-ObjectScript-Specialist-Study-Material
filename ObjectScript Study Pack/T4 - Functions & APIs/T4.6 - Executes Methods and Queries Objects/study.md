@@ -12,6 +12,12 @@ Saved 2 November 2026 from [exam-prep.es](https://exam-prep.es/exams/objectscrip
 2. [%IsA and %ClassName for type checking](#2-isa-and-classname-for-type-checking)
 3. [%Dictionary for class inspection](#3-dictionary-for-class-inspection)
 
+[Glossary & Cheat Sheet](#glossary--cheat-sheet)
+
+[Glossary & Cheat Sheet](#glossary--cheat-sheet)
+
+[Glossary & Cheat Sheet](#glossary--cheat-sheet)
+
 ### Visual study guide — sections 1–3
 
 ![T4.6 visual summary of sections 1–3: 1. $METHOD and $CLASSMETHOD for dynamic dispatch; 2. %IsA and %ClassName for type checking; 3. %Dictionary for class inspection](visual-guide-01.png)
@@ -409,3 +415,33 @@ The %Dictionary package provides classes that represent class definitions as per
 - Compare ClassDefinition vs CompiledClass to see inherited members
 - Query %Dictionary tables via SQL for class metadata
 - Build a utility that dumps all properties and values of any object using %Dictionary and $PROPERTY
+
+## Glossary & Cheat Sheet
+
+### Key terms
+
+- **Dynamic dispatch** — $METHOD calls an instance method by runtime name. $CLASSMETHOD selects a class method. $PROPERTY accesses a named property. Constrain permitted targets.
+- **Object type** — %ClassName() returns the short name. %ClassName(1) and $CLASSNAME return the full name. %IsA tests the primary inheritance chain and %Extends includes secondary superclasses.
+- **Metadata dictionaries** — ClassDefinition, MethodDefinition and PropertyDefinition describe source. CompiledClass, CompiledMethod and CompiledProperty describe compiled metadata, including inherited members.
+- **Metadata lookup** — Open a known ID or query dictionary metadata with bound parameters. Distinguish missing metadata from errors invoking a method.
+
+### Commands, methods and syntax
+
+- **ObjectScript commands** — `CATCH`, `CONTINUE`, `DO`, `ELSE`, `ELSEIF`, `FOR`, `IF`, `QUIT`, `SET`, `TRY`, `WHILE`, `WRITE`.
+- **ObjectScript functions and special variables** — `$CLASSMETHOD`, `$CLASSNAME`, `$E`, `$ISOBJECT`, `$LB`, `$LISTNEXT`, `$METHOD`, `$PIECE`, `$PROPERTY`, `$SYSTEM`.
+- **Macros and extrinsics** — `$$$ISERR`.
+- **IRIS classes and packages** — `%Library.DynamicObject`, `%Library.Integer`, `%Library.Persistent`, `%Library.RegisteredObject`, `%Library.String`, `%SQL.Statement`.
+- **Qualified calls and terminal utilities** — `$SYSTEM.OBJ.GetClassDef()`.
+- **Method names and generated entry points** — `%Execute()`, `%ExistsId()`, `%Extends()`, `%Get()`, `%New()`, `%Next()`, `%OpenId()`, `%PackageName()`, `%Prepare()`, `Add()`, `Count()`, `DisplayString()`, `GetAt()`, `GetFullName()`, `GrantAccess()`, `Insert()`, `Print()`, `Process()`, `ProcessCustomer()`, `ProcessEmployee()`, `Send()`.
+- **Invocation syntax** — `##class`, `$METHOD(oref,name,args)`, `$CLASSMETHOD(class,name,args)`, `$PROPERTY(oref,name)`, `%IsA()`, `%ClassName()`.
+- **Metadata queries** — `SELECT`, `FROM`, `WHERE`, `%Dictionary.ClassDefinition`, `%Dictionary.CompiledClass`, `%Dictionary.MethodDefinition`, `%Dictionary.CompiledMethod`, `%Dictionary.PropertyDefinition`, `%Dictionary.CompiledProperty`.
+- **Methods defined in chapter examples** — `AreSameType()`, `LogObject()`, `ProcessPatient()`.
+- **Incorrect forms in the exercises** — `%IsClass()`, `%TypeOf()`.
+
+Official reference: [ObjectScript object interface](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=ROBJ).
+
+### Visual recap
+
+![T4.6 Glossary & Cheat Sheet — Key terms and core syntax](visual-guide-glossary-01.png)
+
+![T4.6 Glossary & Cheat Sheet — Commands and APIs](visual-guide-glossary-02.png)

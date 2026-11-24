@@ -10,6 +10,12 @@ Saved 2 November 2026 from [exam-prep.es](https://exam-prep.es/exams/objectscrip
 
 1. [Understands $CHAR(0) vs empty string vs SQL NULL](#1-understands-char0-vs-empty-string-vs-sql-null)
 
+[Glossary & Cheat Sheet](#glossary--cheat-sheet)
+
+[Glossary & Cheat Sheet](#glossary--cheat-sheet)
+
+[Glossary & Cheat Sheet](#glossary--cheat-sheet)
+
 ### Visual study guide — section 1
 
 ![T3.3 visual summary of section 1: 1. Understands $CHAR(0) vs empty string vs SQL NULL](visual-guide-01-v2.png)
@@ -208,3 +214,27 @@ WRITE "NULLs: ", cnt, !
 - Experiment with NULL propagation in expressions: `NULL + 5`, `NULL || 'text'`
 - Test COUNT(\*) vs COUNT(column) with NULL-containing data
 - Verify the mapping empirically: `obj.Email = ""` → row matches `IS NULL`; `obj.Email = $C(0)` → row matches `= ''`
+
+## Glossary & Cheat Sheet
+
+### Key terms
+
+- **Undefined and empty values** — An undefined variable has no assigned value. An empty string has length zero. $CHAR(0) is a single character used as the SQL empty-string representation at the ObjectScript interface.
+- **SQL NULL** — Represents a missing SQL value. Test with IS NULL or IS NOT NULL. Comparing to NULL with = gives unknown, and WHERE keeps only true rows.
+- **Host variable and result** — Check SQLCODE first. An SQL NULL can set a host variable to a defined empty string. $DATA checks variable presence and cannot identify SQL NULL on its own.
+- **Fallback and aggregates** — COALESCE and IFNULL provide fallbacks. COUNT(*) counts rows. COUNT(column), SUM and AVG omit SQL NULL input values.
+
+### Commands, methods and syntax
+
+- **ObjectScript commands** — `ELSE`, `ELSEIF`, `IF`, `QUIT`, `SET`, `WRITE`.
+- **ObjectScript functions and special variables** — `$ASCII`, `$C`, `$CHAR`, `$DATA`, `$GET`, `$LENGTH`, `$PIECE`.
+- **Method names and generated entry points** — `%Id()`, `%New()`, `%OpenId()`, `%Save()`.
+- **SQL expressions** — `CREATE TABLE`, `INSERT INTO`, `VALUES`, `SELECT`, `FROM`, `WHERE`, `AS`, `AND`, `OR`, `IS NULL`, `IS NOT NULL`, `NOT NULL`, `COALESCE()`, `IFNULL()`, `COUNT(*)`, `COUNT(column)`, `SUM()`, `AVG()`.
+- **SQL host integration** — `&sql`, `:hostVariable`, `SQLCODE`, `%ROWID`.
+- **Methods defined in chapter examples** — `IsEmpty()`.
+
+Official reference: [Null values in Embedded SQL](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_esql).
+
+### Visual recap
+
+![T3.3 Glossary & Cheat Sheet — Key terms and syntax](visual-guide-glossary-01.png)

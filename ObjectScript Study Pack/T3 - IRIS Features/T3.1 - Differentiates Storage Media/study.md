@@ -10,6 +10,12 @@ Saved 2 November 2026 from [exam-prep.es](https://exam-prep.es/exams/objectscrip
 
 1. [Differentiates between PPGs, variables, temporary globals, and globals](#1-differentiates-between-ppgs-variables-temporary-globals-and-globals)
 
+[Glossary & Cheat Sheet](#glossary--cheat-sheet)
+
+[Glossary & Cheat Sheet](#glossary--cheat-sheet)
+
+[Glossary & Cheat Sheet](#glossary--cheat-sheet)
+
 ### Visual study guide — section 1
 
 ![T3.1 visual summary of section 1: 1. Differentiates between PPGs, variables, temporary globals, and globals](visual-guide-01.png)
@@ -133,3 +139,28 @@ SET ^Patient(12345, "DOB") = "1985-03-15"
 - Examine the IRISTEMP database in the Management Portal to understand its role
 - Practice KILL commands to clean up each storage type
 - Use `$ORDER` to iterate over PPGs and temporary globals to understand their subscript structure
+
+## Glossary & Cheat Sheet
+
+### Key terms
+
+- **Local variable** — Lives in the process. Procedure scope and NEW govern visibility. Use scalar or subscripted locals for per-operation data.
+- **Process-private global** — ^||name is private to the owning process, can be shared by its routines and is cleaned up when that process ends.
+- **Temporary global** — A shared global mapped to a temporary database supports work across processes. Verify mapping, cleanup and restart behavior.
+- **Persistent global** — A global mapped to a regular database can outlive both process and restart. Durability and journaling depend on the database configuration.
+- **Storage choice** — Compare visibility, lifetime and ownership. Use $JOB for process identity, $DATA for node state and $GET for a defaulted read.
+
+### Commands, methods and syntax
+
+- **ObjectScript commands** — `DO`, `FOR`, `HANG`, `KILL`, `NEW`, `QUIT`, `SET`, `WHILE`, `WRITE`.
+- **ObjectScript functions and special variables** — `$DATA`, `$GET`, `$INCREMENT`, `$ORDER`, `$PIECE`, `$ZERROR`, `$ZSTRIP`, `$ZTS`.
+- **Macros and extrinsics** — `$$$OK`.
+- **Method names and generated entry points** — `%New()`, `LinkToFile()`, `MyApp()`, `ReadLine()`, `WorkQueue()`.
+- **Storage syntax** — `^global`, `^||global`, `^IRIS.Temp.*`, `^CacheTemp*`, `$JOB`, `%Stream.FileCharacter`.
+- **Methods defined in chapter examples** — `Consumer()`, `GetProgress()`, `GetTotalExecutions()`, `ProcessFile()`, `Producer()`, `RecordExecution()`, `UpdateProgress()`.
+
+Official reference: [Globals and storage](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_globals).
+
+### Visual recap
+
+![T3.1 Glossary & Cheat Sheet — Key terms and syntax](visual-guide-glossary-01.png)

@@ -15,6 +15,12 @@ Saved 2 November 2026 from [exam-prep.es](https://exam-prep.es/exams/objectscrip
 5. [Runtime mode and select modes (Logical/ODBC/Display)](#5-runtime-mode-and-select-modes-logicalodbcdisplay)
 6. [SQL variables: SQLCODE, %ROWCOUNT, %ROWID](#6-sql-variables-sqlcode-rowcount-rowid)
 
+[Glossary & Cheat Sheet](#glossary--cheat-sheet)
+
+[Glossary & Cheat Sheet](#glossary--cheat-sheet)
+
+[Glossary & Cheat Sheet](#glossary--cheat-sheet)
+
 ### Visual study guide — sections 1–3
 
 ![T3.2 visual summary of sections 1–3: 1. ObjectScript as a weakly typed language; 2. System macros and include files; 3. Object-to-SQL projection](visual-guide-01-v2.png)
@@ -660,3 +666,35 @@ WRITE "Rows affected: ", rs.%ROWCOUNT, !
 - Practice SQLCODE checking patterns for both single-row and cursor-based queries
 - Create and use custom macros in include files
 - Write code using `$$$ThrowOnError` and `$$$ISERR` patterns with %Status returns
+
+## Glossary & Cheat Sheet
+
+### Key terms
+
+- **Weak typing and coercion** — ObjectScript converts runtime values in numeric, string and Boolean contexts. Class and SQL datatypes can enforce checks at their boundaries.
+- **Macros and includes** — $$$name expands at compile time. #define declares it. #include or Include supplies its definition. %occStatus provides standard status helpers.
+- **Object-to-SQL projection** — Persistent classes project tables and properties project columns. SqlName changes the projection name in its context. SqlProc exposes a method or query as a SQL procedure.
+- **Embedded and dynamic SQL** — &sql embeds SQL with :hostVariable binding. %SQL.Statement uses %Prepare and %Execute with ? parameters and %Next to traverse the result.
+- **Select modes** — Logical gives internal values, ODBC gives interoperability formats and Display gives human-oriented values. %EXTERNAL, %INTERNAL and %ODBCOUT make conversions explicit where applicable.
+- **Result metadata** — SQLCODE is zero for success, 100 for no row or end of fetch, and negative for an error. %ROWCOUNT reports row count in context. %ROWID identifies a row where supplied.
+
+### Commands, methods and syntax
+
+- **ObjectScript commands** — `ELSE`, `ELSEIF`, `FOR`, `IF`, `QUIT`, `RETURN`, `THROW`, `WHILE`, `WRITE`.
+- **ObjectScript functions and special variables** — `$C`, `$CHAR`, `$HOROLOG`, `$P`, `$SYSTEM`, `$ZDATE`.
+- **Macros and extrinsics** — `$$$ERROR`, `$$$FindAreaCode`, `$$$GeneralError`, `$$$ISERR`, `$$$ISOK`, `$$$macroName`, `$$$NULLOREF`, `$$$OK`, `$$$TaxRate`, `$$$ThrowOnError`, `$$$ThrowStatus`.
+- **IRIS classes and packages** — `%Exception.StatusException`, `%occErrors.inc`, `%occStatus.inc`, `%SQL.Statement`, `%SQL.StatementResult`, `%SYS.System`.
+- **Qualified calls and terminal utilities** — `$SYSTEM.SQL.Util.SetOption()`, `$SYSTEM.Status.AppendStatus()`, `$SYSTEM.Status.GetErrorText()`.
+- **Method names and generated entry points** — `%Execute()`, `%Get()`, `%ID()`, `%New()`, `%Next()`, `%OpenId()`, `%Prepare()`, `%Save()`, `CreateFromStatus()`, `Log()`, `ThrowIfError()`, `WriteToConsoleLog()`.
+- **Preprocessor and members** — `#define`, `#include`, `#ifdef`, `#else`, `#endif`, `Include`, `%occStatus`, `%occErrors`, `Class`, `Property`, `ClassMethod`, `Query`, `SqlProc`, `SqlName`, `SqlFieldName`, `SqlTableName`, `%Date`, `%Persistent`, `%Status`.
+- **SQL statements and result fields** — `&sql`, `DECLARE CURSOR`, `OPEN`, `FETCH`, `CLOSE`, `SELECT`, `FROM`, `WHERE`, `COUNT()`, `IS NULL`, `INSERT INTO`, `VALUES`, `UPDATE`, `SET`, `INTO`, `SQLCODE`, `%ROWCOUNT`, `%ROWID`, `%ID`, `%msg`, `%Message`.
+- **Mode conversion** — `%SelectMode`, `%EXTERNAL()`, `%INTERNAL()`, `%ODBCOUT()`, `Logical`, `ODBC`, `Display`.
+- **Methods defined in chapter examples** — `Calculate()`, `GetTax()`, `GetTopEarners()`, `ProcessAddress()`.
+
+Official reference: [Using Embedded SQL](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_esql).
+
+### Visual recap
+
+![T3.2 Glossary & Cheat Sheet — Key terms and core syntax](visual-guide-glossary-01.png)
+
+![T3.2 Glossary & Cheat Sheet — Commands and APIs](visual-guide-glossary-02.png)

@@ -12,6 +12,12 @@ Saved 2 November 2026 from [exam-prep.es](https://exam-prep.es/exams/objectscrip
 2. [Uses logging to track application data](#2-uses-logging-to-track-application-data)
 3. [Adds and tracks metrics for performance monitoring](#3-adds-and-tracks-metrics-for-performance-monitoring)
 
+[Glossary & Cheat Sheet](#glossary--cheat-sheet)
+
+[Glossary & Cheat Sheet](#glossary--cheat-sheet)
+
+[Glossary & Cheat Sheet](#glossary--cheat-sheet)
+
 ### Visual study guide — sections 1–3
 
 ![T2.2 visual summary of sections 1–3: 1. Locates and accesses application globals; 2. Uses logging to track application data; 3. Adds and tracks metrics for performance monitoring](visual-guide-01-v3.png)
@@ -465,3 +471,35 @@ ClassMethod CollectMetrics() As %Status
 - Explore the Management Portal's global viewer (System Explorer &gt; Globals) across different namespaces
 - Enable ^%ISCLOG at different levels, then switch to %SYS namespace to examine ^ISCLOG entries
 - Write code that stores metrics in ^IRIS.Temp and verify that the data is not journaled
+
+## Glossary & Cheat Sheet
+
+### Key terms
+
+- **Global and namespace mapping** — A global is a sparse tree. A namespace maps the name to a database. Inspect deployed storage before assuming the global behind a class.
+- **Safe inspection** — $DATA distinguishes value and descendants. $GET supplies a default. $ORDER walks siblings. $QUERY walks full references. ZWRITE inspects the tree.
+- **Application logging** — Record timestamp, event and correlation context while excluding sensitive values. $INCREMENT can allocate a sequence atomically. Keep application and platform diagnostics distinct.
+- **Time sources** — $HOROLOG gives local day/second fields. $ZTIMESTAMP gives UTC day/second fields. Use differences in $ZHOROLOG to measure elapsed seconds since IRIS startup.
+- **Performance metrics** — Take before and after readings at the same scope. Compare elapsed seconds, global references, executed lines and disk activity under similar workloads.
+- **Global browsing with SQL** — Global_Find finds global names and Global_Get inspects nodes. Verify the target namespace and privileges before reading data.
+
+### Commands, methods and syntax
+
+- **ObjectScript commands** — `DO`, `FOR`, `IF`, `QUIT`, `RETURN`, `SET`, `WHILE`, `WRITE`.
+- **ObjectScript functions and special variables** — `$DATA`, `$GET`, `$H`, `$HOROLOG`, `$INCREMENT`, `$JOB`, `$LB`, `$LIST`, `$LISTBUILD`, `$LISTGET`, `$NAMESPACE`, `$NOW`, `$ORDER`, `$PIECE`, `$QUERY`, `$RANDOM`, `$SYSTEM`, `$USERNAME`, `$ZDATE`, `$ZDATETIME`, `$ZH`, `$ZHOROLOG`, `$ZTIME`, `$ZTIMESTAMP`, `$ZTIMEZONE`, `$ZTS`.
+- **Macros and extrinsics** — `$$$ISCLOG`, `$$$OK`, `$$$SysLog`.
+- **IRIS classes and packages** — `%Library.File`, `%Library.Global`, `%Library.SysLog`, `%occDiagnostics.inc`, `%SYS.MONLBL`, `%SYS.Namespace`, `%SYS.ProcessQuery`, `%SYSTEM.Process`, `%SYSTEM.SYS`.
+- **Qualified calls and terminal utilities** — `$SYSTEM.Monitor.LineLevelMonStart()`, `$SYSTEM.Monitor.LineLevelMonStop()`, `$SYSTEM.OBJ.ShowGlobal()`, `$SYSTEM.Process.DiskReadCount()`, `$SYSTEM.Process.GetMetrics()`, `$SYSTEM.Process.GlobalReferences()`, `$SYSTEM.Process.JournalEntryCount()`, `$SYSTEM.Process.LinesExecuted()`, `$SYSTEM.SQL.Stats.DisplayStats()`, `$SYSTEM.SYS.Horolog()`, `$SYSTEM.SYS.TimeStamp()`.
+- **Method names and generated entry points** — `%Execute()`, `%Get()`, `%New()`, `%Next()`, `%Prepare()`, `%PrepareClassQuery()`, `%ShowPlan()`, `Close()`, `FindAll()`, `FixedDate()`, `GetGlobalDest()`, `GetMetric()`, `GetNSInfo()`, `Global_Find()`, `Global_Get()`, `Log()`, `MONLBL()`, `Open()`, `PerfLog()`, `ProcessBatch()`, `WriteLine()`.
+- **Inspection and timing** — `ZWRITE`, `ZN`, `ZNAMESPACE`, `MONLBL`, `^global`, `^||global`, `%SYS`, `DataLocation`, `IdLocation`, `IndexLocation`, `USEEXTENTSET`.
+- **SQL** — `SELECT`, `FROM`, `CALL`, `%SQL.Statement`, `%Library.Global_Find`, `%Library.Global_Get`.
+- **Methods defined in chapter examples** — `CalculateReport()`, `CollectMetrics()`, `LogError()`.
+- **Incorrect forms in the exercises** — `%Global.MyGlobal`, `$SYSTEM.Process.GlobalRefs()`, `GlobalRefs()`.
+
+Official reference: [Elapsed seconds with $ZHOROLOG](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_vzhorolog).
+
+### Visual recap
+
+![T2.2 Glossary & Cheat Sheet — Key terms and core syntax](visual-guide-glossary-01.png)
+
+![T2.2 Glossary & Cheat Sheet — Commands and APIs](visual-guide-glossary-02.png)

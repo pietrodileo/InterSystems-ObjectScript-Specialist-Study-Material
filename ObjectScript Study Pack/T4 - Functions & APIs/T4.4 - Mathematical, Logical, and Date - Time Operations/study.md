@@ -13,6 +13,12 @@ Saved 2 November 2026 from [exam-prep.es](https://exam-prep.es/exams/objectscrip
 3. [$ZDATE, $ZTIME, $HOROLOG](#3-zdate-ztime-horolog)
 4. [Date arithmetic](#4-date-arithmetic)
 
+[Glossary & Cheat Sheet](#glossary--cheat-sheet)
+
+[Glossary & Cheat Sheet](#glossary--cheat-sheet)
+
+[Glossary & Cheat Sheet](#glossary--cheat-sheet)
+
 ### Visual study guide — sections 1–4
 
 ![T4.4 visual summary of sections 1–4: 1. Mathematical operators; 2. Logical operators; 3. $ZDATE, $ZTIME, $HOROLOG; 4. Date arithmetic](visual-guide-01-v2.png)
@@ -524,3 +530,28 @@ Because $HOROLOG represents dates as integer day counts and times as integer sec
 - Use $SYSTEM.SQL.DATEDIFF and $SYSTEM.SQL.DATEADD with different units
 - Experiment with $NOW() and $ZTIMESTAMP for precision timing
 - Practice with the NOT operator (') and negated comparisons ('=, '&lt;, '&gt;)
+
+## Glossary & Cheat Sheet
+
+### Key terms
+
+- **Arithmetic evaluation** — Binary arithmetic evaluates left to right without conventional operator precedence. Parenthesize explicitly. Integer division, modulo and exponentiation use distinct operators.
+- **Logical evaluation** — Group Boolean terms and comparisons explicitly. Apostrophe negates. ObjectScript includes numeric comparisons and string operators such as contains and follows.
+- **Clocks and duration** — $HOROLOG gives local days and seconds. $ZTIMESTAMP gives UTC days and fractional seconds. $ZHOROLOG measures elapsed seconds since IRIS startup.
+- **Formatting and arithmetic** — $ZDATE and $ZDATEH convert dates. $ZTIME and $ZTIMEH convert times. Add days to the internal day count and account for midnight when computing durations.
+
+### Commands, methods and syntax
+
+- **ObjectScript commands** — `FOR`, `IF`, `SET`, `WRITE`.
+- **ObjectScript functions and special variables** — `$H`, `$INCREMENT`, `$JUSTIFY`, `$NOW`, `$P`, `$PIECE`, `$SYSTEM`, `$ZD`, `$ZDATE`, `$ZDATEH`, `$ZDH`, `$ZT`, `$ZTH`, `$ZTIME`, `$ZTIMEH`, `$ZTS`.
+- **Qualified calls and terminal utilities** — `$SYSTEM.SQL.DATEADD()`, `$SYSTEM.SQL.DATEDIFF()`, `$SYSTEM.SQL.Functions.DATEADD()`.
+- **Arithmetic** — `+`, `-`, `*`, `\`, `/`, `#`, `**`, `unary +`, `unary -`.
+- **Logical and comparison** — `&`, `!`, `'`, `'=`, `=`, `<`, `>`, `<=`, `>=`, `[`, `]`, `&&`, `||`.
+- **Date and time API** — `DATEADD()`, `DATEDIFF()`, `$ZDATE()`, `$ZDATEH()`, `$ZTIME()`, `$ZTIMEH()`, `$HOROLOG`, `$ZTIMESTAMP`, `$ZHOROLOG`, `$NOW()`.
+- **Incorrect forms in the exercises** — `$DATE`, `$DATEADD`.
+
+Official reference: [ObjectScript operators](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_operators).
+
+### Visual recap
+
+![T4.4 Glossary & Cheat Sheet — Key terms and syntax](visual-guide-glossary-01.png)

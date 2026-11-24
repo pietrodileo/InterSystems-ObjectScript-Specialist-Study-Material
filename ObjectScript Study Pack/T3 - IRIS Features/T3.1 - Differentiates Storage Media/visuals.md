@@ -13,3 +13,9 @@ Generated learning summaries. Read the full notes for detailed explanations and 
 Covers:
 
 - 1. Differentiates between PPGs, variables, temporary globals, and globals
+
+## Glossary & Cheat Sheet
+
+![T3.1 Glossary & Cheat Sheet — Key terms and syntax](visual-guide-glossary-01.png)
+
+[Open the text recap](study.md#glossary--cheat-sheet).

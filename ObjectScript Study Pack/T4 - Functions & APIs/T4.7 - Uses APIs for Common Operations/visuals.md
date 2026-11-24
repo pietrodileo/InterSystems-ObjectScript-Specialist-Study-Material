@@ -14,3 +14,11 @@ Covers:
 
 - 1. %Stream for file I/O
 - 2. %Net for HTTP, FTP, and email
+
+## Glossary & Cheat Sheet
+
+![T4.7 Glossary & Cheat Sheet — Key terms and core syntax](visual-guide-glossary-01.png)
+
+![T4.7 Glossary & Cheat Sheet — Commands and APIs](visual-guide-glossary-02.png)
+
+[Open the text recap](study.md#glossary--cheat-sheet).

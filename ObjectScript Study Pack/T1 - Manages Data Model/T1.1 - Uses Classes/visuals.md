@@ -37,3 +37,11 @@ Covers:
 ## ObjectScript multiple inheritance
 
 ![Inheritance left/right method resolution with a persistent parent and mixin](visual-guide-multiple-inheritance.png)
+
+## Glossary & Cheat Sheet
+
+![T1.1 Glossary & Cheat Sheet — Key terms and core syntax](visual-guide-glossary-01.png)
+
+![T1.1 Glossary & Cheat Sheet — Commands and APIs](visual-guide-glossary-02.png)
+
+[Open the text recap](study.md#glossary--cheat-sheet).

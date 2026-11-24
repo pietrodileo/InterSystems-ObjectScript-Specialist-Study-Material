@@ -12,6 +12,12 @@ Saved 2 November 2026 from [exam-prep.es](https://exam-prep.es/exams/objectscrip
 2. [$LISTGET and $LISTNEXT for retrieval](#2-listget-and-listnext-for-retrieval)
 3. [Converting lists to/from strings](#3-converting-lists-tofrom-strings)
 
+[Glossary & Cheat Sheet](#glossary--cheat-sheet)
+
+[Glossary & Cheat Sheet](#glossary--cheat-sheet)
+
+[Glossary & Cheat Sheet](#glossary--cheat-sheet)
+
 ### Visual study guide — sections 1–3
 
 ![T4.2 visual summary of sections 1–3: 1. $LIST/$LISTBUILD to insert, update, and delete list elements; 2. $LISTGET and $LISTNEXT for retrieval; 3. Converting lists to/from strings](visual-guide-01-v2.png)
@@ -419,3 +425,24 @@ Conversion is convenient for interchange, but it is not always a lossless round 
 - Practice appending and removing elements from lists
 - Use $LISTVALID to test various values for list validity
 - Build a utility that reads CSV data, converts to lists, and processes each record
+
+## Glossary & Cheat Sheet
+
+### Key terms
+
+- **Encoded list** — $LISTBUILD creates a native encoded list. Indexes are one-based. Distinguish empty and omitted elements.
+- **Access and update** — $LIST reads, slices or updates positions. $LISTGET supplies a default. $LISTLENGTH counts positions. $LISTVALID checks encoding.
+- **Sequential operations** — $LISTNEXT advances an offset and reports whether another element was found. $LISTFIND searches values and $LISTSAME compares lists.
+- **Delimited text** — $LISTFROMSTRING and $LISTTOSTRING bridge native lists and delimited strings. Account for delimiters and empty fields when round-tripping.
+
+### Commands, methods and syntax
+
+- **ObjectScript commands** — `ELSE`, `FOR`, `IF`, `SET`, `WHILE`, `WRITE`.
+- **ObjectScript functions and special variables** — `$CHAR`, `$DATA`, `$LB`, `$LG`, `$LI`, `$LIST`, `$LISTBUILD`, `$LISTFIND`, `$LISTFROMSTRING`, `$LISTGET`, `$LISTLENGTH`, `$LISTNEXT`, `$LISTSAME`, `$LISTTOSTRING`, `$LISTVALID`, `$LL`.
+- **List operations** — `$LIST(list,n)`, `$LIST(list,from,to)`, `SET $LIST(list,n)`, `$LISTNEXT(list,position,value)`, `$LISTBUILD()`, `$LISTGET(list,n,default)`.
+
+Official reference: [ObjectScript $LIST](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_flist).
+
+### Visual recap
+
+![T4.2 Glossary & Cheat Sheet — Key terms and syntax](visual-guide-glossary-01.png)

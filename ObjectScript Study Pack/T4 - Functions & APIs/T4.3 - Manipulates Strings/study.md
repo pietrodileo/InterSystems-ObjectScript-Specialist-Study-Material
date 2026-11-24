@@ -16,6 +16,12 @@ Saved 2 November 2026 from [exam-prep.es](https://exam-prep.es/exams/objectscrip
 6. [$ZCONVERT for encoding](#6-zconvert-for-encoding)
 7. [Escaping special characters](#7-escaping-special-characters)
 
+[Glossary & Cheat Sheet](#glossary--cheat-sheet)
+
+[Glossary & Cheat Sheet](#glossary--cheat-sheet)
+
+[Glossary & Cheat Sheet](#glossary--cheat-sheet)
+
 ### Visual study guide — sections 1–4
 
 ![T4.3 visual summary of sections 1–4: 1. $PIECE for delimited strings; 2. $EXTRACT for substrings; 3. $REPLACE, $TRANSLATE, $ZSTRIP; 4. String concatenation](visual-guide-01-v2.png)
@@ -806,3 +812,25 @@ Inside ObjectScript source, include a quotation mark by doubling it: `Set text =
 - Write $MATCH patterns for email, phone, and date validation
 - Use $LOCATE to find and extract all matches from a text string
 - Experiment with the native pattern operator (?) for simple validations
+
+## Glossary & Cheat Sheet
+
+### Key terms
+
+- **Fields and character positions** — $PIECE addresses delimited fields. $EXTRACT addresses character positions. Both are one-based and can be assignment targets.
+- **Replacement and stripping** — $REPLACE substitutes substrings. $TRANSLATE maps or removes individual characters. $ZSTRIP applies character-class rules.
+- **Concatenation and matching** — Underscore joins strings. $LENGTH counts characters or fields. $MATCH checks the whole input and $LOCATE searches within it. The ? operator uses native pattern syntax.
+- **Encoding and escapes** — $ZCONVERT changes case or applies an encoding such as URL or HTML. Match encoding to the output context. Double quotes inside ObjectScript string literals.
+
+### Commands, methods and syntax
+
+- **ObjectScript commands** — `FOR`, `IF`, `QUIT`, `RETURN`, `SET`, `WRITE`.
+- **ObjectScript functions and special variables** — `$A`, `$ASCII`, `$C`, `$CHAR`, `$E`, `$EXTRACT`, `$L`, `$LENGTH`, `$LOCATE`, `$MATCH`, `$P`, `$PIECE`, `$REPLACE`, `$TR`, `$TRANSLATE`, `$ZCONVERT`, `$ZCVT`, `$ZSTRIP`.
+- **String and pattern syntax** — `_`, `?`, `'?`, `[`, `]`, `doubled quotes`, `$CHAR(34)`.
+- **Encoding modes** — `U`, `L`, `O`, `I`, `URL`, `HTML`, `UTF-8`.
+
+Official reference: [Strings in ObjectScript](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_strings).
+
+### Visual recap
+
+![T4.3 Glossary & Cheat Sheet — Key terms and syntax](visual-guide-glossary-01.png)

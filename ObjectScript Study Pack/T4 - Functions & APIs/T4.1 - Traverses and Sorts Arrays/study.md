@@ -13,6 +13,12 @@ Saved 2 November 2026 from [exam-prep.es](https://exam-prep.es/exams/objectscrip
 3. [Multi-level traversal with $ORDER](#3-multi-level-traversal-with-order)
 4. [$DATA to check node existence](#4-data-to-check-node-existence)
 
+[Glossary & Cheat Sheet](#glossary--cheat-sheet)
+
+[Glossary & Cheat Sheet](#glossary--cheat-sheet)
+
+[Glossary & Cheat Sheet](#glossary--cheat-sheet)
+
 ### Visual study guide — sections 1–4
 
 ![T4.1 visual summary of sections 1–4: 1. Subscript sorting (canonical numeric order); 2. Traversing subscript subset with $ORDER; 3. Multi-level traversal with $ORDER; 4. $DATA to check node existence](visual-guide-01.png)
@@ -438,3 +444,24 @@ $DATA tells you IF something exists; $GET retrieves the value with a default. Th
 - Use $ORDER with the third argument and compare performance to separate reads
 - Practice reverse traversal and traversal from a specific starting point
 - Try $QUERY on multi-level globals and compare to nested $ORDER approach
+
+## Glossary & Cheat Sheet
+
+### Key terms
+
+- **Sparse multidimensional array** — Subscripts form a tree. A node can have a value, children, both or neither.
+- **Collation** — Canonical numeric subscripts sort numerically before text under standard collation. A text subscript such as 02 is distinct from canonical 2.
+- **Traversal** — $ORDER walks sibling keys and takes -1 for reverse order. Nested loops visit individual levels. $QUERY walks complete references.
+- **Node state** — $DATA returns 0, 1, 10 or 11 for absent, value only, descendants only or both. $GET reads with a default. KILL removes a subtree.
+
+### Commands, methods and syntax
+
+- **ObjectScript commands** — `ELSE`, `FOR`, `IF`, `KILL`, `QUIT`, `SET`, `WHILE`, `WRITE`.
+- **ObjectScript functions and special variables** — `$D`, `$DATA`, `$GET`, `$ORDER`, `$QUERY`.
+- **Subscript and control syntax** — `^global`, `$ORDER(node,1)`, `$ORDER(node,-1)`, `$DATA(node)`, `$GET(node,default)`, `MultiDimensional`.
+
+Official reference: [ObjectScript $ORDER](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_forder).
+
+### Visual recap
+
+![T4.1 Glossary & Cheat Sheet — Key terms and syntax](visual-guide-glossary-01.png)

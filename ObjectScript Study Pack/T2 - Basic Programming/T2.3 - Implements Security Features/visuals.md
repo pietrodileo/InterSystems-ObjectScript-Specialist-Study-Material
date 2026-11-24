@@ -16,3 +16,11 @@ Covers:
 - 2. Checks roles for permission control
 - 3. Prevents SQL injection attacks
 - 4. Implements embedded SQL permission checks
+
+## Glossary & Cheat Sheet
+
+![T2.3 Glossary & Cheat Sheet — Key terms and core syntax](visual-guide-glossary-01.png)
+
+![T2.3 Glossary & Cheat Sheet — Commands and APIs](visual-guide-glossary-02.png)
+
+[Open the text recap](study.md#glossary--cheat-sheet).

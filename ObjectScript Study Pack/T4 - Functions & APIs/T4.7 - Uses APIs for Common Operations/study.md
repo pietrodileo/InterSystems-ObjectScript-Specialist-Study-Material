@@ -11,6 +11,12 @@ Saved 2 November 2026 from [exam-prep.es](https://exam-prep.es/exams/objectscrip
 1. [%Stream for file I/O](#1-stream-for-file-io)
 2. [%Net for HTTP, FTP, and email](#2-net-for-http-ftp-and-email)
 
+[Glossary & Cheat Sheet](#glossary--cheat-sheet)
+
+[Glossary & Cheat Sheet](#glossary--cheat-sheet)
+
+[Glossary & Cheat Sheet](#glossary--cheat-sheet)
+
 ### Visual study guide — sections 1–2
 
 ![T4.7 visual summary of sections 1–2: 1. %Stream for file I/O; 2. %Net for HTTP, FTP, and email](visual-guide-01.png)
@@ -421,3 +427,33 @@ Treat transport and application outcomes as separate checks. A failed `%Status` 
 - Practice stream navigation: write, rewind, read, move to end, append
 - Use CopyFrom to copy content between streams
 - Experiment with HTTP response status codes and headers
+
+## Glossary & Cheat Sheet
+
+### Key terms
+
+- **Stream types** — Choose file, global or temporary storage. Character streams handle text and Binary streams preserve bytes.
+- **File stream navigation** — LinkToFile associates a path. Read and ReadLine consume content. AtEnd and Size describe the stream. Rewind resets position and CopyFrom transfers content.
+- **HTTP transport and response** — %Net.HttpRequest configures endpoint, headers, body and TLS. Inspect HttpResponse.StatusCode and Data separately from the returned transport status.
+- **FTP and SMTP** — %Net.FtpSession handles FTP connections and transfers. %Net.MailMessage builds mail and %Net.SMTP sends it. Check statuses and close sessions appropriately.
+
+### Commands, methods and syntax
+
+- **ObjectScript commands** — `DO`, `ELSE`, `ELSEIF`, `FOR`, `IF`, `QUIT`, `SET`, `WHILE`, `WRITE`.
+- **ObjectScript functions and special variables** — `$CHAR`, `$LENGTH`, `$SYSTEM`.
+- **Macros and extrinsics** — `$$$ISERR`, `$$$ISOK`.
+- **IRIS classes and packages** — `%Net.FtpSession`, `%Net.HttpRequest`, `%Net.HttpResponse`, `%Net.MailMessage`, `%Net.SMTP`, `%Stream.FileBinary`, `%Stream.FileCharacter`, `%Stream.GlobalBinary`, `%Stream.GlobalCharacter`, `%Stream.TmpBinary`, `%Stream.TmpCharacter`.
+- **Qualified calls and terminal utilities** — `$SYSTEM.Status.DisplayError()`, `$SYSTEM.Status.GetErrorText()`, `$SYSTEM.Status.IsError()`.
+- **Method names and generated entry points** — `%FromJSON()`, `%New()`, `%Save()`, `%ToJSON()`, `Append()`, `AttachFile()`, `Clear()`, `Close()`, `Connect()`, `CopyFrom()`, `Delete()`, `Flush()`, `Get()`, `GetAll()`, `GetHeader()`, `HasNext()`, `Head()`, `Insert()`, `LinkToFile()`, `List()`, `Logout()`, `MoveToEnd()`, `MoveToStart()`, `Next()`, `Open()`, `Options()`, `Patch()`, `Post()`, `Put()`, `Read()`, `ReadAll()`, `ReadChar()`, `ReadLine()`, `Reset()`, `Retrieve()`, `Rewind()`, `Send()`, `SetDirectory()`, `SetFilename()`, `SetHeader()`, `Store()`, `Write()`, `WriteLine()`.
+- **Stream members** — `.Filename`, `.AtEnd`, `.Size`, `.TranslateTable`.
+- **HTTP verbs and members** — `GET`, `HEAD`, `POST`, `PUT`, `PATCH`, `DELETE`, `OPTIONS`, `.Server`, `.Port`, `.Https`, `.SSLConfiguration`, `.Timeout`, `.HttpResponse`, `.StatusCode`, `.Data`, `.EntityBody`, `.ContentType`.
+- **FTP and mail members** — `.SmtpServer`, `.Port`, `.From`, `.To`, `.Subject`, `.TextData`, `.IsHTML`.
+- **Incorrect forms in the exercises** — `%Net.EmailClient`, `%Net.EmailMessage`, `%Net.FileTransfer`, `%Net.FTP`, `%Net.FtpClient`, `%Stream.MemoryCharacter`, `Execute()`, `GetResponseBody()`, `SendMail()`.
+
+Official reference: [HTTP requests from IRIS](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GNET_http).
+
+### Visual recap
+
+![T4.7 Glossary & Cheat Sheet — Key terms and core syntax](visual-guide-glossary-01.png)
+
+![T4.7 Glossary & Cheat Sheet — Commands and APIs](visual-guide-glossary-02.png)

@@ -35,3 +35,11 @@ Covers:
 - 7. <METHOD DOES NOT EXIST> errors
 - 8. <PROPERTY DOES NOT EXIST> errors
 - 9. <SYNTAX> errors
+
+## Glossary & Cheat Sheet
+
+![T5.3 Glossary & Cheat Sheet — Key terms and core syntax](visual-guide-glossary-01.png)
+
+![T5.3 Glossary & Cheat Sheet — Commands and APIs](visual-guide-glossary-02.png)
+
+[Open the text recap](study.md#glossary--cheat-sheet).

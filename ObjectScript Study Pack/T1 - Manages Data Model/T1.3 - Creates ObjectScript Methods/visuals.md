@@ -27,3 +27,11 @@ Covers:
 - 6. Passes multidimensional variables by reference (passing arrays)
 - 7. Uses and overrides inherited methods (overriding, calling parent)
 - 8. Determines when to use ##super for calling superclass methods
+
+## Glossary & Cheat Sheet
+
+![T1.3 Glossary & Cheat Sheet — Key terms and core syntax](visual-guide-glossary-01.png)
+
+![T1.3 Glossary & Cheat Sheet — Commands and APIs](visual-guide-glossary-02.png)
+
+[Open the text recap](study.md#glossary--cheat-sheet).

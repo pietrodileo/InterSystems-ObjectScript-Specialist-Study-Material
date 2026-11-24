@@ -23,7 +23,7 @@ export function searchCourse(chapters, query) {
 export function galleryItems(chapters) {
   return chapters.flatMap((chapter, index) => [
     ...chapter.diagrams.map(diagram => ({ ...diagram, phase: 'theory',
-      locations: ['Study · Chapter diagrams', ...chapter.sections.filter(section => section.detail?.includes(diagram.file.split('/').at(-1)))
+      locations: [diagram.glossary ? 'Study · Glossary & Cheat Sheet' : 'Study · Chapter diagrams', ...chapter.sections.filter(section => section.detail?.includes(diagram.file.split('/').at(-1)))
         .map(section => `Study · ${section.title}`)],
     })),
     ...chapter.exerciseDiagrams.map(diagram => ({ ...diagram, phase: 'cases',
@@ -184,9 +184,15 @@ export async function loadCourse(read) {
     ]);
     const { questions } = rawQuiz.quiz;
     const sections = studySections(study);
+    const glossary = study.split(/^## Glossary & Cheat Sheet$/m)[1]?.trim();
     const diagrams = Array.from(study.matchAll(/^!\[([^\]]+)\]\(([^)]+\.png)\)$/gm),
       ([, alt, file]) => {
         const [width, height] = studyDiagramSizes[`${chapter.topic}/${file}`] ?? [1536, 1024];
+        if (glossary?.includes(`](${file})`)) {
+          const description = glossary.split(/\r?\n/).filter(line => line.startsWith('- ')).map(line => line.slice(2));
+          return { alt, shortCaption: alt, description,
+            file: `${chapter.folder}/${file}`, width, height, glossary: true };
+        }
         const section = sections.find(section => section.detail.includes(file));
         const range = alt.match(/sections? (\d+)(?:[–-](\d+))?/);
         const covered = range ? sections.slice(Number(range[1]) - 1, Number(range[2] ?? range[1])) : sections;
@@ -233,6 +239,6 @@ export async function loadCourse(read) {
       }
       return { ...question, feedback: { explanation: entry.explanation, example: entry.example, references, diagram } };
     });
-    return { ...chapter, cases, panels, sections, diagrams, exerciseDiagrams, quiz };
+    return { ...chapter, cases, panels, sections, glossary, diagrams, exerciseDiagrams, quiz };
   }));
 }

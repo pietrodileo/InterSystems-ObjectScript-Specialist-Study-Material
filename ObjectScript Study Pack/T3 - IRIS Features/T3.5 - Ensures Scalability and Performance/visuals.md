@@ -15,3 +15,11 @@ Covers:
 - 1. TUNE TABLE for gathering table statistics
 - 2. Interpreting basic query plans
 - 3. Testing code correctness and performance
+
+## Glossary & Cheat Sheet
+
+![T3.5 Glossary & Cheat Sheet — Key terms and core syntax](visual-guide-glossary-01.png)
+
+![T3.5 Glossary & Cheat Sheet — Commands and APIs](visual-guide-glossary-02.png)
+
+[Open the text recap](study.md#glossary--cheat-sheet).

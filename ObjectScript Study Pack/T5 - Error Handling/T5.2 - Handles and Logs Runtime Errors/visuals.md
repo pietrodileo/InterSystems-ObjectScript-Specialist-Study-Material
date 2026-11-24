@@ -25,3 +25,11 @@ Covers:
 - 4. $STACK for tracing
 - 5. Converting error status codes
 - 6. Statuses vs exceptions
+
+## Glossary & Cheat Sheet
+
+![T5.2 Glossary & Cheat Sheet — Key terms and core syntax](visual-guide-glossary-01.png)
+
+![T5.2 Glossary & Cheat Sheet — Commands and APIs](visual-guide-glossary-02.png)
+
+[Open the text recap](study.md#glossary--cheat-sheet).

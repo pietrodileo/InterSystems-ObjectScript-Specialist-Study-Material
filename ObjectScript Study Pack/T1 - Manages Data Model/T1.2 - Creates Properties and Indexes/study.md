@@ -16,6 +16,12 @@ Saved 2 November 2026 from [exam-prep.es](https://exam-prep.es/exams/objectscrip
 6. [Uses unique index methods (unique index, %ExistsId)](#6-uses-unique-index-methods-unique-index-existsid)
 7. [Recalls how foreign keys enforce referential integrity (ForeignKey, OnDelete, NoAction, Cascade)](#7-recalls-how-foreign-keys-enforce-referential-integrity-foreignkey-ondelete-noaction-cascade)
 
+[Glossary & Cheat Sheet](#glossary--cheat-sheet)
+
+[Glossary & Cheat Sheet](#glossary--cheat-sheet)
+
+[Glossary & Cheat Sheet](#glossary--cheat-sheet)
+
 ### Visual study guide — sections 1–4
 
 ![T1.2 visual summary of sections 1–4: 1. Sets max length for string properties (MAXLEN parameter, TRUNCATE); 2. Uses stream properties for large data sets (%Stream.GlobalCharacter, %Stream.FileBinary); 3. Creates properties that calculate values dynamically or are auto-updated (Calculated, SqlComputed, SqlComputeOnChange); 4. Creates and validates class member parameters and attributes (Required, InitialExpression, parameter keywords)](visual-guide-01-v2.png)
@@ -764,3 +770,34 @@ ForeignKey LocationFK(Country, City)
 - Create Calculated and SqlComputed properties and query them via SQL to see the difference
 - Set up bitmap and standard indexes, then compare query plans
 - Define foreign keys with different OnDelete actions and test deletion behavior
+
+## Glossary & Cheat Sheet
+
+### Key terms
+
+- **String validation** — MAXLEN bounds a string property. TRUNCATE controls whether excess characters can be truncated. Check the validation or save status.
+- **Stream types** — Global streams store content in IRIS. File streams use the file system. Character streams process text. Binary streams preserve bytes.
+- **Computed values** — Calculated uses a getter. SqlComputed uses SqlComputeCode. SqlComputeOnChange selects when SQL refreshes the value. Verify existing rows during a migration.
+- **Class member parameters** — Required imposes a value constraint. InitialExpression supplies a starting value. Parameter declarations and datatype parameters customize behavior.
+- **Index selection** — Standard indexes map keys to IDs. Bitmap indexes store row membership by key. Bitslice indexes organize numeric values by bit for aggregation. Choose based on data distribution and workload.
+- **Unique keys and references** — Generated index-name Open, Exists and Delete methods use the indexed key. %ExistsId takes a persistent ID. ForeignKey enforces a reference, with OnDelete specifying the deletion action.
+
+### Commands, methods and syntax
+
+- **ObjectScript commands** — `DO`, `ELSE`, `IF`, `RETURN`, `WHILE`, `WRITE`.
+- **ObjectScript functions and special variables** — `$CHAR`, `$H`, `$HOROLOG`, `$LENGTH`, `$LISTBUILD`, `$SELECT`, `$SYSTEM`, `$ZDT`.
+- **Macros and extrinsics** — `$$$ISERR`, `$$$ISOK`.
+- **Qualified calls and terminal utilities** — `$System.Status.DisplayError()`, `$SYSTEM.Status.IsError()`.
+- **Method names and generated entry points** — `%BuildIndices()`, `%DeleteId()`, `%ExistsId()`, `%Id()`, `%New()`, `%OpenId()`, `%PurgeIndices()`, `%Save()`, `%ValidateObject()`, `Clear()`, `CopyFrom()`, `EmailIdxDelete()`, `EmailIdxExists()`, `EmailIdxOpen()`, `EmployeeIDIdxExists()`, `MoveToEnd()`, `Open()`, `Read()`, `ReadLine()`, `Rewind()`, `TitleIdxDelete()`, `TitleIdxExists()`, `TitleIdxOpen()`, `Write()`, `WriteLine()`.
+- **Class and index keywords** — `Class`, `Property`, `Parameter`, `Index`, `On`, `As`, `ForeignKey`, `OnDelete`, `NoAction`, `Cascade`, `SetNull`, `Unique`, `Bitmap`, `Bitslice`, `Required`, `InitialExpression`, `Calculated`, `SqlComputed`, `SqlComputeCode`, `SqlComputeOnChange`, `Transient`, `MAXLEN`, `TRUNCATE`.
+- **Datatypes** — `%String(MAXLEN=…)`, `%Numeric`, `%Stream.GlobalCharacter`, `%Stream.GlobalBinary`, `%Stream.FileCharacter`, `%Stream.FileBinary`, `%Stream.FileBinaryGzip`.
+- **SQL** — `SELECT`, `FROM`, `WHERE`, `ORDER BY`, `AND`, `UPDATE`, `SET`, `COUNT()`, `SUM()`, `&sql`, `SQLCODE`.
+- **Methods defined in chapter examples** — `FullNameGet()`, `GetCategory()`.
+
+Official reference: [Defining persistent classes and indexes](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_defpersobj).
+
+### Visual recap
+
+![T1.2 Glossary & Cheat Sheet — Key terms and core syntax](visual-guide-glossary-01.png)
+
+![T1.2 Glossary & Cheat Sheet — Commands and APIs](visual-guide-glossary-02.png)

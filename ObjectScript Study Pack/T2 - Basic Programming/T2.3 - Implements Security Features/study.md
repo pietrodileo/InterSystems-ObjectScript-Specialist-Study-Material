@@ -13,6 +13,8 @@ Saved 2 November 2026 from [exam-prep.es](https://exam-prep.es/exams/objectscrip
 3. [Prevents SQL injection attacks](#3-prevents-sql-injection-attacks)
 4. [Implements embedded SQL permission checks](#4-implements-embedded-sql-permission-checks)
 
+[Glossary & Cheat Sheet](#glossary--cheat-sheet)
+
 ### Visual study guide — sections 1–4
 
 ![T2.3 visual summary of sections 1–4: 1. Ensures appropriate variable and global use to avoid security leaks; 2. Checks roles for permission control; 3. Prevents SQL injection attacks; 4. Implements embedded SQL permission checks](visual-guide-01-v3.png)
@@ -503,3 +505,34 @@ Query the SQL security metadata to see what privileges exist:
 - Create process-private globals and verify they are invisible from other processes using a second Terminal session
 - Attempt SQL operations without proper privileges to observe SQLCODE -99 behavior
 - Practice column-level GRANT to restrict access to sensitive fields (SSN, diagnosis codes)
+
+## Glossary & Cheat Sheet
+
+### Key terms
+
+- **Variable and global scope** — Method locals follow procedure scope. Process-private globals can survive in a reused process. Shared globals need database privileges. Remove sensitive temporary data when finished.
+- **Role, resource and privilege** — $ROLES contains active roles. Test exact membership with $LISTFIND and $LISTFROMSTRING. $SYSTEM.Security.Check tests a named resource privilege. Requires guards entry to a method.
+- **Visibility and authorization** — Private controls member visibility. Role checks, resource checks and SQL grants govern allowed operations. Propagate a failed %Status and exclude sensitive data from logs.
+- **Bound SQL values** — Use ? placeholders in dynamic SQL and bind values at %Execute. Check prepare status and execution SQLCODE. Select dynamic identifiers from a fixed allowlist.
+- **SQL and embedded privileges** — GRANT and REVOKE manage SQL permissions. WITH GRANT OPTION allows delegation. Embedded SQL binds :hostVariable and requires an application privilege check where applicable.
+
+### Commands, methods and syntax
+
+- **ObjectScript commands** — `CATCH`, `DO`, `ELSE`, `ELSEIF`, `FOR`, `IF`, `KILL`, `QUIT`, `RETURN`, `TCOMMIT`, `TROLLBACK`, `TRY`, `TSTART`, `WHILE`, `WRITE`.
+- **ObjectScript functions and special variables** — `$I`, `$LISTBUILD`, `$LISTFIND`, `$LISTFROMSTRING`, `$PIECE`, `$ROLES`, `$SYSTEM`, `$USERNAME`.
+- **Macros and extrinsics** — `$$$AccessDenied`, `$$$ERROR`, `$$$GeneralError`, `$$$ISERR`, `$$$ISOK`, `$$$OK`, `$$$ThrowStatus`.
+- **IRIS classes and packages** — `%SQL.Statement`.
+- **Qualified calls and terminal utilities** — `$SYSTEM.Security.Check()`, `$SYSTEM.Status.GetErrorText()`, `$SYSTEM.Status.IsError()`.
+- **Method names and generated entry points** — `%DeleteId()`, `%Execute()`, `%GetData()`, `%New()`, `%Next()`, `%Prepare()`, `AsStatus()`, `AuditLog()`, `DisplayLog()`, `Get()`, `GetPatient()`, `Log()`, `ProcessPatientData()`.
+- **Authorization and scope** — `Requires`, `Private`, `ProcedureBlock`, `PublicList`, `%All`, `^||global`, `%Status`, `%occStatus`, `%CHECKPRIV`.
+- **SQL privileges** — `GRANT`, `REVOKE`, `GRANT ALL`, `WITH GRANT OPTION`, `ON`, `TO`, `FROM`, `EXECUTE`, `SELECT`, `UPDATE`, `INSERT`, `DELETE`.
+- **Queries and cursors** — `&sql`, `DECLARE CURSOR`, `OPEN`, `FETCH`, `CLOSE`, `SELECT`, `FROM`, `WHERE`, `ORDER BY`, `INSERT INTO`, `UPDATE`, `SET`, `INTO`, `?`, `:hostVariable`, `SQLCODE`, `%msg`.
+- **Methods defined in chapter examples** — `CreateAccount()`, `DeletePatient()`, `FindOrders()`, `Manage()`, `ManageUser()`, `ProcessOrder()`, `ProcessReport()`, `RequestLabel()`, `Search()`, `Transfer()`, `UpdatePatientRecord()`, `ViewAuditLog()`.
+
+Official reference: [Using Embedded SQL](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_esql).
+
+### Visual recap
+
+![T2.3 Glossary & Cheat Sheet — Key terms and core syntax](visual-guide-glossary-01.png)
+
+![T2.3 Glossary & Cheat Sheet — Commands and APIs](visual-guide-glossary-02.png)

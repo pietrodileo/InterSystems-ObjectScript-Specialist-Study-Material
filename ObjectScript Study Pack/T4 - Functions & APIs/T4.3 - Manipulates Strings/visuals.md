@@ -26,3 +26,9 @@ Covers:
 - 5. Regular expressions
 - 6. $ZCONVERT for encoding
 - 7. Escaping special characters
+
+## Glossary & Cheat Sheet
+
+![T4.3 Glossary & Cheat Sheet — Key terms and syntax](visual-guide-glossary-01.png)
+
+[Open the text recap](study.md#glossary--cheat-sheet).

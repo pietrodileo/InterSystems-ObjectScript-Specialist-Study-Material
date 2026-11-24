@@ -17,6 +17,12 @@ Saved 2 November 2026 from [exam-prep.es](https://exam-prep.es/exams/objectscrip
 7. [Uses and overrides inherited methods (overriding, calling parent)](#7-uses-and-overrides-inherited-methods-overriding-calling-parent)
 8. [Determines when to use ##super for calling superclass methods](#8-determines-when-to-use-super-for-calling-superclass-methods)
 
+[Glossary & Cheat Sheet](#glossary--cheat-sheet)
+
+[Glossary & Cheat Sheet](#glossary--cheat-sheet)
+
+[Glossary & Cheat Sheet](#glossary--cheat-sheet)
+
 ### Visual study guide — sections 1–4
 
 ![T1.3 visual summary of sections 1–4: 1. Differentiates between instance and class methods (Method vs ClassMethod, ..property syntax); 2. Uses class parameters inside methods (..#ParameterName); 3. Specifies method arguments and return type (As clause, Output, ByRef); 4. Passes objects to methods (oref passing)](visual-guide-01.png)
@@ -1014,3 +1020,34 @@ Forgetting to call `##super()` in `%OnNew()` or `%OnValidateObject()` can break 
 - Pass objects to methods and verify that property modifications are visible to the caller
 - Build and iterate over multidimensional arrays passed by reference
 - Override callback methods with and without ##super() and observe the differences
+
+## Glossary & Cheat Sheet
+
+### Key terms
+
+- **Instance and class methods** — Method has an instance context for ..Property. Call ClassMethod through ##class. Use ..#ParameterName for a class parameter.
+- **Signature and types** — As declares argument and return types. A default makes an argument optional. ByRef lets the callee read or update a caller variable. Output supplies a result to the caller.
+- **Object reference** — Passing an OREF by value copies the reference. Mutating the object affects the shared instance. Replacing the caller’s binding requires reference passing.
+- **Multidimensional arguments** — Pass an array by reference using a dotted actual argument such as .scores. The callee can traverse and update the caller’s subscripts.
+- **Override and parent call** — Match the inherited signature. ##super calls the parent implementation of the current method. $CLASSNAME returns a fully qualified class name.
+- **Status and return** — Check the %Status from fallible operations. QUIT value and RETURN value return results according to the method and block context.
+
+### Commands, methods and syntax
+
+- **ObjectScript commands** — `DO`, `ELSE`, `ELSEIF`, `FOR`, `IF`, `KILL`, `MERGE`, `QUIT`, `RETURN`, `SET`, `WRITE`.
+- **ObjectScript functions and special variables** — `$CHAR`, `$CLASSNAME`, `$DATA`, `$FN`, `$FNUMBER`, `$GET`, `$HOROLOG`, `$ISOBJECT`, `$LB`, `$LIST`, `$LISTBUILD`, `$LISTLENGTH`, `$ORDER`, `$PIECE`, `$SYSTEM`, `$THIS`, `$USERNAME`, `$ZCONVERT`, `$ZDATE`, `$ZPI`, `$ZSTRIP`.
+- **Macros and extrinsics** — `$$$ERROR`, `$$$GeneralError`, `$$$ISERR`, `$$$ISOK`, `$$$OK`.
+- **Qualified calls and terminal utilities** — `$SYSTEM.Status.DisplayError()`, `$SYSTEM.Status.GetErrorText()`.
+- **Method names and generated entry points** — `%ClassName()`, `%IsA()`, `%New()`, `%OnAfterSave()`, `%OnBeforeSave()`, `%OnNew()`, `%OnOpen()`, `%OnValidateObject()`, `%OpenId()`, `%Save()`, `DoSend()`, `GetAt()`, `Log()`, `LogActivity()`, `MethodName()`.
+- **Class declaration and call syntax** — `Class`, `Extends`, `ClassMethod`, `Method`, `Property`, `Parameter`, `As`, `ByRef`, `Output`, `..Property`, `..#ParameterName`, `.variable`, `##class`, `##super`, `Final`, `Abstract`, `ProcedureBlock`, `%This`, `%Status`.
+- **SQL cursor and query** — `&sql`, `DECLARE CURSOR`, `OPEN`, `FETCH`, `CLOSE`, `SELECT`, `FROM`, `WHERE`, `GROUP BY`, `COUNT()`, `INTO`, `SQLCODE`.
+- **Methods defined in chapter examples** — `Add()`, `AddOne()`, `AddResult()`, `AddSuffix()`, `AppendSuffix()`, `ApplyDiscount()`, `Area()`, `BuildReport()`, `Calculate()`, `CurrentTaxRate()`, `Describe()`, `Description()`, `DisplayColors()`, `DisplayInfo()`, `Divide()`, `Draw()`, `FetchData()`, `FindByName()`, `FormatDate()`, `FromDiameter()`, `GetAge()`, `GetCount()`, `GetInfo()`, `GetProvider()`, `GetStateCounts()`, `GetStats()`, `HandleItem()`, `Increment()`, `Init()`, `InitialCount()`, `OnEvent()`, `PrintShapeInfo()`, `Process()`, `ProcessAll()`, `ProcessData()`, `ProcessOrder()`, `ProcessPatient()`, `ProcessTree()`, `ResetOrder()`, `Round()`, `Send()`, `Show()`, `Swap()`, `Tax()`, `ToList()`, `Total()`, `Transform()`, `UpdateName()`, `UpdateRecord()`, `Validate()`, `ValidateAge()`, `ValidatePerson()`, `ValidateRecord()`.
+- **Incorrect forms in the exercises** — `%TypeOf()`.
+
+Official reference: [ObjectScript object interface](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=ROBJ).
+
+### Visual recap
+
+![T1.3 Glossary & Cheat Sheet — Key terms and core syntax](visual-guide-glossary-01.png)
+
+![T1.3 Glossary & Cheat Sheet — Commands and APIs](visual-guide-glossary-02.png)

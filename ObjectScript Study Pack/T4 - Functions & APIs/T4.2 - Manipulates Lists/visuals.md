@@ -15,3 +15,9 @@ Covers:
 - 1. $LIST/$LISTBUILD to insert, update, and delete list elements
 - 2. $LISTGET and $LISTNEXT for retrieval
 - 3. Converting lists to/from strings
+
+## Glossary & Cheat Sheet
+
+![T4.2 Glossary & Cheat Sheet — Key terms and syntax](visual-guide-glossary-01.png)
+
+[Open the text recap](study.md#glossary--cheat-sheet).

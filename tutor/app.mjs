@@ -1,10 +1,10 @@
 import { routeHref, readRoute } from './navigation.mjs';
-import { assessmentAnswered, assessmentComplete, chapterStep, correctSelection, finalQuestionRefs, loadCourse, packPath, passedAnswer, practiceQueue, quizBlocks, recordPractice, reviewItems, topics } from './content.mjs?v=compact-diagrams-2';
+import { assessmentAnswered, assessmentComplete, chapterStep, correctSelection, finalQuestionRefs, loadCourse, packPath, passedAnswer, practiceQueue, quizBlocks, recordPractice, reviewItems, topics } from './content.mjs?v=chapter-glossary-1';
 import { caseFocus, examAreaDescriptions, guides, variations } from './lesson-guides.mjs?v=practice-feedback-1';
 import { diagramExamples, studyExamples } from './code-examples.mjs';
 import './sidebar-controls.mjs?v=chapter-layout-2';
 import { createZip, galleryDownloadItems } from './gallery-download.mjs';
-import { galleryItems, searchCourse } from './content.mjs?v=compact-diagrams-2';
+import { galleryItems, searchCourse } from './content.mjs?v=chapter-glossary-1';
 
 const lesson = document.querySelector('#lesson');
 const nav = document.querySelector('#chapters');
@@ -687,7 +687,7 @@ function renderCodeExamples(examples) {
 function renderTheory(panel) {
   panel.innerHTML = `
     <h2 tabindex="-1">Chapter diagrams</h2>
-    ${renderDiagrams(chapter.diagrams)}
+    ${renderDiagrams(chapter.diagrams.filter(diagram => !diagram.glossary))}
     <div class="sections">${chapter.sections.map((section, i) => {
       const examples = studyExamples[`${chapter.topic}/${i + 1}`] ?? [];
       const exampleSummary = examples.length
@@ -713,6 +713,10 @@ function renderTheory(panel) {
         </div>
       </details>`;
     }).join('')}</div>
+    <details class="reading">
+      <summary>Glossary &amp; Cheat Sheet</summary>
+      <div class="disclosure-body">${renderStudyNotes(chapter.glossary, chapter.diagrams)}</div>
+    </details>
     <section class="controls-panel" aria-labelledby="chapter-controls-title">
       <h3 id="chapter-controls-title">Chapter controls</h3>
       <div class="controls-row">

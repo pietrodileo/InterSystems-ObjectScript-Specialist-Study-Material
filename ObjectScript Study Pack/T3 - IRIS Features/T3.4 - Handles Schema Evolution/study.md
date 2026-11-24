@@ -12,6 +12,12 @@ Saved 2 November 2026 from [exam-prep.es](https://exam-prep.es/exams/objectscrip
 2. [Impact of changing property name or datatype](#2-impact-of-changing-property-name-or-datatype)
 3. [Purging cached queries after schema changes](#3-purging-cached-queries-after-schema-changes)
 
+[Glossary & Cheat Sheet](#glossary--cheat-sheet)
+
+[Glossary & Cheat Sheet](#glossary--cheat-sheet)
+
+[Glossary & Cheat Sheet](#glossary--cheat-sheet)
+
 ### Visual study guide — sections 1–3
 
 ![T3.4 visual summary of sections 1–3: 1. Adding indexes to existing properties; 2. Impact of changing property name or datatype; 3. Purging cached queries after schema changes](visual-guide-01.png)
@@ -397,3 +403,32 @@ You can check frozen status by querying `INFORMATION_SCHEMA.STATEMENTS` for the 
 - Execute a query, check the cached query in Management Portal, purge it, and observe recompilation
 - Practice the full schema change workflow: edit class, compile, build indices, tune table, purge queries
 - Examine storage XML before and after property changes to understand position mapping
+
+## Glossary & Cheat Sheet
+
+### Key terms
+
+- **Schema evolution** — Compiling changes class metadata. Existing data and index entries can need backfill, rebuilding and validation.
+- **Index build and purge** — Compile the revised index definition and use %BuildIndices for existing rows. %PurgeIndices removes entries. Check statuses and representative queries.
+- **Rename and datatype change** — Review physical storage and projected names separately. SqlFieldName can retain a SQL name. Convert incompatible data in a planned migration.
+- **Cached and frozen plans** — Cached SQL can depend on old metadata. Purge affected cache entries when necessary. Decide explicitly how to handle frozen plans.
+
+### Commands, methods and syntax
+
+- **ObjectScript commands** — `DO`, `FOR`, `IF`, `QUIT`, `SET`, `WRITE`.
+- **ObjectScript functions and special variables** — `$LB`, `$LIST`, `$LISTBUILD`, `$ORDER`, `$SYSTEM`.
+- **Macros and extrinsics** — `$$$ISERR`.
+- **IRIS classes and packages** — `%SQL.Statement`, `%SYS.PTools`.
+- **Qualified calls and terminal utilities** — `$SYSTEM.OBJ.Compile()`, `$SYSTEM.SQL.Purge()`, `$SYSTEM.SQL.PurgeForTable()`, `$SYSTEM.SQL.Schema.ImportDDL()`, `$SYSTEM.SQL.Statement.FreezeRelation()`, `$SYSTEM.SQL.Statement.FreezeStatement()`, `$SYSTEM.SQL.Statement.UnfreezeRelation()`, `$SYSTEM.SQL.Statement.UnfreezeStatement()`, `$SYSTEM.SQL.TuneTable()`, `$SYSTEM.Status.GetErrorText()`.
+- **Method names and generated entry points** — `%BuildIndices()`, `%New()`, `%OpenId()`, `%PurgeIndices()`.
+- **Schema and query SQL** — `CREATE INDEX`, `DROP INDEX`, `ALTER TABLE`, `SELECT`, `FROM`, `WHERE`, `COUNT()`, `ON`, `&sql`, `SQLCODE`, `%NOFPLAN`.
+- **Property and mapping syntax** — `Class`, `Property`, `Index`, `SqlFieldName`, `DataLocation`, `Unique`, `Bitmap`, `InitialExpression`, `%Dictionary`, `%Date`, `%Integer`, `%String`.
+- **Incorrect forms in the exercises** — `$SYSTEM.SQL.BuildIndex()`, `BuildIndex()`.
+
+Official reference: [Persistent class indexes](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_defpersobj).
+
+### Visual recap
+
+![T3.4 Glossary & Cheat Sheet — Key terms and core syntax](visual-guide-glossary-01.png)
+
+![T3.4 Glossary & Cheat Sheet — Commands and APIs](visual-guide-glossary-02.png)

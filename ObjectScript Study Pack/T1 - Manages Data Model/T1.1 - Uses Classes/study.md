@@ -15,6 +15,12 @@ Saved 2 November 2026 from [exam-prep.es](https://exam-prep.es/exams/objectscrip
 5. [Implements multiple inheritance (order matters, method resolution)](#5-implements-multiple-inheritance-order-matters-method-resolution)
 6. [Documents classes (Description keyword, /// comments)](#6-documents-classes-description-keyword--comments)
 
+[Glossary & Cheat Sheet](#glossary--cheat-sheet)
+
+[Glossary & Cheat Sheet](#glossary--cheat-sheet)
+
+[Glossary & Cheat Sheet](#glossary--cheat-sheet)
+
 ### Visual study guide — sections 1–3
 
 ![T1.1 visual summary of sections 1–3: 1. Identifies use cases for persistent and registered object classes; 2. Creates and saves a persistent object (%New(), %Save(), %Id()); 3. Deletes objects (%DeleteId(), %DeleteExtent())](visual-guide-01.png)
@@ -927,3 +933,36 @@ Class documentation can be viewed through:
 - Build a multiple inheritance scenario and verify which method wins
 - Add /// documentation to a class and view it in the Class Reference
 - Examine storage definitions of existing system classes to understand the structure
+
+## Glossary & Cheat Sheet
+
+### Key terms
+
+- **Class lifecycle** — %Persistent instances have database IDs and SQL projection. %RegisteredObject supplies in-process object state. %SerialObject embeds a value in a parent’s storage.
+- **OREF, OID and ID** — An OREF identifies an in-memory object. %Id returns the persistent ID. %Oid carries object identity. A unique application key can locate the same object through its index.
+- **Create, validate and save** — %New invokes %OnNew. %ValidateObject can invoke %OnValidateObject. Check the %Status from %Save before using the assigned ID. An outer transaction can still roll back.
+- **Open and delete** — %OpenId reopens by ID. %DeleteId removes one record. %DeleteExtent operates on a class extent. %KillExtent has different callback and integrity implications.
+- **Lifecycle callbacks** — %OnBeforeSave and %OnAfterSave bracket the save. %OnOpen and %OnDelete run at the relevant object operation. SQL triggers follow their own execution rules.
+- **Storage mapping** — DataLocation, IdLocation and IndexLocation identify globals. Per-index Location can override the default. USEEXTENTSET enables extent membership tracking. Namespace mappings determine the physical database.
+- **Inheritance and documentation** — Extends lists superclasses. Inheritance settings influence method resolution. Description and /// document class members.
+
+### Commands, methods and syntax
+
+- **ObjectScript commands** — `DO`, `FOR`, `IF`, `OPEN`, `QUIT`, `RETURN`, `SET`, `WRITE`, `ZWRITE`.
+- **ObjectScript functions and special variables** — `$H`, `$HOROLOG`, `$INCREMENT`, `$ISOBJECT`, `$LB`, `$LISTBUILD`, `$NAMESPACE`, `$PIECE`, `$SYSTEM`, `$ZDATE`, `$ZDATEH`, `$ZDT`.
+- **Macros and extrinsics** — `$$$ERROR`, `$$$GeneralError`, `$$$ISERR`, `$$$oidPrimary`, `$$$OK`.
+- **IRIS classes and packages** — `%Dictionary.StorageDefinition`, `%Library.Persistent`, `%Storage.Persistent`, `%SYS.Namespace`.
+- **Qualified calls and terminal utilities** — `$SYSTEM.OBJ.DeleteExtent()`, `$SYSTEM.Status.DisplayError()`, `$SYSTEM.Status.GetErrorText()`, `$SYSTEM.Status.IsError()`.
+- **Method names and generated entry points** — `%Delete()`, `%DeleteExtent()`, `%DeleteId()`, `%Exists()`, `%ExistsId()`, `%Id()`, `%KillExtent()`, `%New()`, `%Oid()`, `%OnAfterDelete()`, `%OnAfterSave()`, `%OnBeforeSave()`, `%OnDelete()`, `%OnNew()`, `%OnOpen()`, `%OnValidateObject()`, `%Open()`, `%OpenId()`, `%Save()`, `%ValidateObject()`, `A()`, `AccountIdxOpen()`, `Delete()`, `DeleteData()`, `GetGlobalDest()`, `Log()`, `MIIdxDelete()`, `MIIdxExists()`, `MIIdxOpen()`, `Person()`, `Truck()`.
+- **Class and storage** — `Class`, `Extends`, `Property`, `Method`, `ClassMethod`, `Index`, `Parameter`, `Trigger`, `Storage`, `Description`, `Inheritance`, `DataLocation`, `IdLocation`, `IndexLocation`, `Location`, `IdKey`, `USEEXTENTSET`, `DefaultData`, `BME`, `///`.
+- **Core object classes and methods** — `%Persistent`, `%RegisteredObject`, `%SerialObject`, `%Status`, `%Dictionary`, `%Populate()`.
+- **SQL** — `SELECT`, `FROM`, `WHERE`, `UPDATE`, `INSERT`, `DELETE`, `%ID`.
+- **Methods defined in chapter examples** — `BadgeLabel()`, `Describe()`, `Double()`, `FormatDate()`, `GetAge()`, `Greet()`, `Increment()`, `Square()`, `Total()`.
+
+Official reference: [Persistent object API](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_persobj).
+
+### Visual recap
+
+![T1.1 Glossary & Cheat Sheet — Key terms and core syntax](visual-guide-glossary-01.png)
+
+![T1.1 Glossary & Cheat Sheet — Commands and APIs](visual-guide-glossary-02.png)

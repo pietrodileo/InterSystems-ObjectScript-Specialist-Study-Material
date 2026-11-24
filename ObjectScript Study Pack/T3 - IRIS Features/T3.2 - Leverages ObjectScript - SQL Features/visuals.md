@@ -25,3 +25,11 @@ Covers:
 - 4. Embedded SQL vs Dynamic SQL
 - 5. Runtime mode and select modes (Logical/ODBC/Display)
 - 6. SQL variables: SQLCODE, %ROWCOUNT, %ROWID
+
+## Glossary & Cheat Sheet
+
+![T3.2 Glossary & Cheat Sheet — Key terms and core syntax](visual-guide-glossary-01.png)
+
+![T3.2 Glossary & Cheat Sheet — Commands and APIs](visual-guide-glossary-02.png)
+
+[Open the text recap](study.md#glossary--cheat-sheet).

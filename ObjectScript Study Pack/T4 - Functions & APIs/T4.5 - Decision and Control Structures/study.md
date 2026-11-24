@@ -12,6 +12,12 @@ Saved 2 November 2026 from [exam-prep.es](https://exam-prep.es/exams/objectscrip
 2. [Quit vs Return](#2-quit-vs-return)
 3. [Boolean evaluation](#3-boolean-evaluation)
 
+[Glossary & Cheat Sheet](#glossary--cheat-sheet)
+
+[Glossary & Cheat Sheet](#glossary--cheat-sheet)
+
+[Glossary & Cheat Sheet](#glossary--cheat-sheet)
+
 ### Visual study guide — sections 1–3
 
 ![T4.5 visual summary of sections 1–3: 1. Post-conditionals; 2. Quit vs Return; 3. Boolean evaluation](visual-guide-01.png)
@@ -432,3 +438,29 @@ ObjectScript evaluates values numerically when they are used as conditions, so a
 - Write a method that uses QUIT:condition as a guard clause
 - Practice the pattern of QUIT:errorCondition $$$ERROR(...)
 - Test double negation ('') to normalize values to boolean 0/1
+
+## Glossary & Cheat Sheet
+
+### Key terms
+
+- **Postconditionals** — COMMAND:condition gates one command. Use a block IF to group related statements.
+- **Loop exit and method return** — QUIT exits the current block, loop or invocation according to context. RETURN can exit the method or procedure from a nested block.
+- **Boolean evaluation** — & and ! evaluate both operands. && and || short-circuit once the result is known. Group predicates explicitly.
+- **Loop and selection flow** — FOR and WHILE repeat work. CONTINUE skips an iteration. $SELECT returns the first matching branch and needs a fallback when no condition is guaranteed.
+
+### Commands, methods and syntax
+
+- **ObjectScript commands** — `DO`, `KILL`, `SET`, `THROW`, `WRITE`.
+- **ObjectScript functions and special variables** — `$DATA`, `$GET`, `$LENGTH`, `$LIST`, `$LISTBUILD`, `$LISTLENGTH`, `$RANDOM`, `$SELECT`.
+- **Macros and extrinsics** — `$$$ERROR`, `$$$GeneralError`, `$$$OK`.
+- **IRIS classes and packages** — `%Exception.StatusException`.
+- **Method names and generated entry points** — `Calculate()`, `Count()`, `CreateFromStatus()`, `GetAt()`, `LogError()`, `ProcessAdult()`, `ProcessMinor()`.
+- **Control syntax** — `IF`, `ELSE`, `ELSEIF`, `FOR`, `WHILE`, `CONTINUE`, `QUIT`, `RETURN`, `COMMAND:condition`, `$SELECT(condition:value,1:default)`.
+- **Boolean operators in the exercises** — `&`, `!`, `'`, `&&`, `||`.
+- **Methods defined in chapter examples** — `Add()`, `Divide()`, `Example1()`, `Example2()`, `FindFirst()`, `FindFirstZero()`, `FindItem()`, `MyMethod()`, `NestedExample()`, `NestedReturn()`, `Process()`.
+
+Official reference: [Boolean evaluation in ObjectScript](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_booleans).
+
+### Visual recap
+
+![T4.5 Glossary & Cheat Sheet — Key terms and syntax](visual-guide-glossary-01.png)

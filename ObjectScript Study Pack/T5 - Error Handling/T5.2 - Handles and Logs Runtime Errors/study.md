@@ -15,6 +15,12 @@ Saved 2 November 2026 from [exam-prep.es](https://exam-prep.es/exams/objectscrip
 5. [Converting error status codes](#5-converting-error-status-codes)
 6. [Statuses vs exceptions](#6-statuses-vs-exceptions)
 
+[Glossary & Cheat Sheet](#glossary--cheat-sheet)
+
+[Glossary & Cheat Sheet](#glossary--cheat-sheet)
+
+[Glossary & Cheat Sheet](#glossary--cheat-sheet)
+
 ### Visual study guide — sections 1–3
 
 ![T5.2 visual summary of sections 1–3: 1. TRY-CATCH blocks; 2. Throwing exceptions; 3. Application error log](visual-guide-01.png)
@@ -972,3 +978,33 @@ ClassMethod StandardTemplate(input As %String) As %Status
 - Navigate to Management Portal Application Error Log and review entries
 - Use $SYSTEM.Status.GetErrorText() and DisplayError() on various error statuses
 - Implement nested TRY-CATCH blocks and observe which CATCH handles each error
+
+## Glossary & Cheat Sheet
+
+### Key terms
+
+- **TRY, CATCH and THROW** — TRY protects work. THROW propagates an exception. CATCH receives the exception OREF for handling, conversion or rethrowing.
+- **%Status and exception** — Status is an explicit return value. $$$ISERR and $$$ISOK test it. CreateFromStatus or a throw helper bridges to exception flow. AsStatus converts back.
+- **Diagnostics** — Capture exception name, code, location and context. $STACK exposes stack information. Capture $ZERROR before later errors overwrite it.
+- **Application logging** — Log actionable failure context while excluding secrets. Roll back only owned work and preserve the original error if cleanup also fails.
+
+### Commands, methods and syntax
+
+- **ObjectScript commands** — `CATCH`, `DO`, `ELSE`, `ELSEIF`, `FOR`, `IF`, `QUIT`, `RETURN`, `SET`, `THROW`, `TRY`, `WRITE`, `ZWRITE`.
+- **ObjectScript functions and special variables** — `$CHAR`, `$H`, `$HOROLOG`, `$I`, `$INCREMENT`, `$LISTBUILD`, `$LISTGET`, `$METHOD`, `$PIECE`, `$STACK`, `$SYSTEM`, `$ZDATETIME`, `$ZDT`.
+- **Macros and extrinsics** — `$$$ADDSC`, `$$$ERROR`, `$$$GeneralError`, `$$$InvalidArgument`, `$$$ISERR`, `$$$ISOK`, `$$$OK`, `$$$ThrowOnError`, `$$$ThrowStatus`.
+- **IRIS classes and packages** — `%occStatus.inc`, `%SYS.Trace`, `%SYSTEM.Status`.
+- **Qualified calls and terminal utilities** — `$SYSTEM.OBJ.DisplayError()`, `$SYSTEM.Status.AppendStatus()`, `$SYSTEM.Status.DecomposeStatus()`, `$SYSTEM.Status.DisplayError()`, `$SYSTEM.Status.Error()`, `$SYSTEM.Status.GetErrorCodes()`, `$SYSTEM.Status.GetErrorText()`, `$SYSTEM.Status.GetOneStatusText()`, `$SYSTEM.Status.IsError()`.
+- **Method names and generated entry points** — `%Id()`, `%New()`, `%Open()`, `%OpenId()`, `%Save()`, `AdditionalProcessing()`, `AsSQLCODE()`, `AsSQLMessage()`, `AsStatus()`, `CreateFromStatus()`, `DisplayString()`, `DoCleanup()`, `DoWork1()`, `DoWork2()`, `ErrorLog()`, `HandleOrder()`, `HandleStorageError()`, `ImportCustomers()`, `ImportOrders()`, `ImportProducts()`, `LoadData()`, `Log()`, `Process()`, `RiskyOperation()`, `SaveResults()`, `SomeOperation()`, `StartPID()`, `Step1()`, `Step2()`, `ThrowIfError()`, `ThrowStatus()`, `TransformData()`, `ValidateInput()`.
+- **Error metadata and logging** — `.Name`, `.Code`, `.Location`, `.Data`, `$STACK(level,"PLACE")`, `$STACK(level,"MCODE")`, `$ZERROR`, `$ZTRAP`, `^ERRORS`, `DO ^%ER`.
+- **Status and exceptions** — `%Status`, `%Exception.AbstractException`, `%Exception.General`, `%Exception.StatusException`, `Include %occStatus`, `SQLCODE`.
+- **Methods defined in chapter examples** — `BasicExample()`, `CaptureStackTrace()`, `ComparePatterns()`, `CompareThrowMacros()`, `CreateErrors()`, `CreateStatusException()`, `DemonstrateErrorDisplay()`, `DisplayStatusExamples()`, `DumpStack()`, `ExamineException()`, `ExceptionStyle()`, `ExceptionToStatus()`, `HandleByType()`, `HandleError()`, `ImportAll()`, `InnerMethod()`, `LogError()`, `MethodA()`, `MethodB()`, `MethodC()`, `NestedExample()`, `OuterMethod()`, `ProcessBatch()`, `ProcessData()`, `RecommendedPattern()`, `RobustSave()`, `RunJob()`, `Save()`, `SaveRecord()`, `ShowStack()`, `StandardTemplate()`, `StatusStyle()`, `TestStatus()`, `ValidateAge()`.
+- **Incorrect forms in the exercises** — `$$$CHECK`, `$$$ISGOOD`, `$$$STATUS`, `$STACK(level,"CALLER")`, `$SYSTEM.Error.Throw()`, `RAISE`, `SIGNAL`.
+
+Official reference: [Status values](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_status).
+
+### Visual recap
+
+![T5.2 Glossary & Cheat Sheet — Key terms and core syntax](visual-guide-glossary-01.png)
+
+![T5.2 Glossary & Cheat Sheet — Commands and APIs](visual-guide-glossary-02.png)

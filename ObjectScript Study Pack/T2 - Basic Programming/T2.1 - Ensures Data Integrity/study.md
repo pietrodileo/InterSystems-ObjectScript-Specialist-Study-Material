@@ -15,6 +15,12 @@ Saved 2 November 2026 from [exam-prep.es](https://exam-prep.es/exams/objectscrip
 5. [Differentiates between pessimistic and optimistic concurrency controls](#5-differentiates-between-pessimistic-and-optimistic-concurrency-controls)
 6. [Uses transactions and applies concurrency controls in SQL scripts](#6-uses-transactions-and-applies-concurrency-controls-in-sql-scripts)
 
+[Glossary & Cheat Sheet](#glossary--cheat-sheet)
+
+[Glossary & Cheat Sheet](#glossary--cheat-sheet)
+
+[Glossary & Cheat Sheet](#glossary--cheat-sheet)
+
 ### Visual study guide — sections 1–3
 
 ![T2.1 visual summary of sections 1–3: 1. Manages transactions; 2. Manages rollbacks; 3. Describes how LOCKs enforce concurrency](visual-guide-01-v2.png)
@@ -771,3 +777,36 @@ SQL operations within transactions respect the same privilege model. Combine tra
 - Use Management Portal (System Operation &gt; Locks) to view the lock table during testing
 - Write embedded SQL transactions with intentional errors and verify ROLLBACK behavior
 - Test lock escalation by inserting more than 1000 rows in a single transaction and monitoring the lock table
+
+## Glossary & Cheat Sheet
+
+### Key terms
+
+- **Transaction and nesting** — TSTART opens a level. TCOMMIT closes a level and the outermost commit finalizes changes. TROLLBACK 1 rolls back one level. TROLLBACK without an argument rolls back all levels. Inspect $TLEVEL.
+- **Rollback scope** — Rollback can undo journaled database changes. Local variables and external effects require separate handling. Check which transaction level your code owns.
+- **Cooperative lock** — LOCK + acquires and LOCK - releases. Use a consistent resource name. A timed LOCK sets $TEST. Update only after successful acquisition.
+- **Modes and escalation** — Shared and exclusive locks have different compatibility. Under SQL, many row locks can escalate to a table lock. Inspect isolation, granularity and the active lock table.
+- **Optimistic and pessimistic control** — Pessimistic locking protects the read–modify–write interval. Optimistic checking detects a concurrent change before saving and requires handling conflicts.
+- **SQL transaction controls** — START TRANSACTION, COMMIT and ROLLBACK govern the transaction. SET TRANSACTION sets isolation. LOCK TABLE and UNLOCK TABLE control explicit table locks. %NOLOCK changes query locking.
+- **Deadlock and lifetime** — Inconsistent lock order can create a cycle. Keep transactions short and acquire locks in a consistent order. Explicit and transaction locks have distinct release rules.
+
+### Commands, methods and syntax
+
+- **ObjectScript commands** — `CATCH`, `FOR`, `IF`, `LOCK`, `QUIT`, `TCOMMIT`, `TROLLBACK`, `TRY`, `TSTART`, `WHILE`, `WRITE`.
+- **ObjectScript functions and special variables** — `$GET`, `$HOROLOG`, `$I`, `$INCREMENT`, `$LISTNEXT`, `$SELECT`, `$SEQUENCE`, `$SYSTEM`, `$ZERROR`, `$ZTRAP`.
+- **Macros and extrinsics** — `$$$ERROR`, `$$$GeneralError`, `$$$ISERR`, `$$$OK`.
+- **IRIS classes and packages** — `%SQL.Statement`.
+- **Qualified calls and terminal utilities** — `$SYSTEM.OBJ.SetConcurrencyMode()`, `$SYSTEM.SQL.Util.GetOption()`, `$SYSTEM.SQL.Util.SetOption()`.
+- **Method names and generated entry points** — `%Execute()`, `%New()`, `%OpenId()`, `%Prepare()`, `%Save()`, `DisplayString()`.
+- **Lock and transaction syntax** — `LOCK +`, `LOCK -`, `LOCK +ref:timeout`, `LOCK +ref#"S"`, `LOCK +ref#"E"`, `TROLLBACK 1`, `$TEST`, `$TLEVEL`, `%Concurrency`, `%ConcurrencyMode`, `%NOJOURN`.
+- **SQL** — `START TRANSACTION`, `SET TRANSACTION`, `LOCK TABLE`, `UNLOCK TABLE`, `SELECT`, `SELECT DISTINCT`, `FROM`, `WHERE`, `GROUP BY`, `INSERT INTO`, `INTO`, `VALUES`, `UPDATE`, `SET`, `COMMIT`, `ROLLBACK`, `%NOLOCK`, `&sql`, `SQLCODE`, `%msg`.
+- **SQL isolation levels** — `READ UNCOMMITTED`, `READ COMMITTED`, `REPEATABLE READ`, `SERIALIZABLE`.
+- **Methods defined in chapter examples** — `BatchUpdate()`, `ProcessOrder()`, `SavePatient()`, `Transfer()`.
+
+Official reference: [ObjectScript LOCK](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_clock).
+
+### Visual recap
+
+![T2.1 Glossary & Cheat Sheet — Key terms and core syntax](visual-guide-glossary-01.png)
+
+![T2.1 Glossary & Cheat Sheet — Commands and APIs](visual-guide-glossary-02.png)

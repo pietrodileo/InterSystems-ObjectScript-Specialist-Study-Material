@@ -63,3 +63,11 @@ Read [section 3](03%20-%20Describes%20how%20LOCKs%20enforce%20concurrency/study.
 Read [section 4](04%20-%20Describes%20lock%20escalation%20threshold%20and%20effect%20on%20row%20locks%20versus%20table%20locks/study.md) for examples, isolation and protection requirements.
 
 [ImageGen prompts and style references](lock-image-generation-prompts.json).
+
+## Glossary & Cheat Sheet
+
+![T2.1 Glossary & Cheat Sheet — Key terms and core syntax](visual-guide-glossary-01.png)
+
+![T2.1 Glossary & Cheat Sheet — Commands and APIs](visual-guide-glossary-02.png)
+
+[Open the text recap](study.md#glossary--cheat-sheet).

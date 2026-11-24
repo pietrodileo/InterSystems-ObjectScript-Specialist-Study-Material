@@ -12,6 +12,12 @@ Saved 2 November 2026 from [exam-prep.es](https://exam-prep.es/exams/objectscrip
 2. [Interpreting basic query plans](#2-interpreting-basic-query-plans)
 3. [Testing code correctness and performance](#3-testing-code-correctness-and-performance)
 
+[Glossary & Cheat Sheet](#glossary--cheat-sheet)
+
+[Glossary & Cheat Sheet](#glossary--cheat-sheet)
+
+[Glossary & Cheat Sheet](#glossary--cheat-sheet)
+
 ### Visual study guide — sections 1–3
 
 ![T3.5 visual summary of sections 1–3: 1. TUNE TABLE for gathering table statistics; 2. Interpreting basic query plans; 3. Testing code correctness and performance](visual-guide-01.png)
@@ -467,3 +473,32 @@ WRITE "Average open time: ", $FN(totalTime/iterations*1000, "", 3), " ms", !
 - Execute Show Plan in the Management Portal for various query types (SELECT, JOIN, subquery)
 - Compare query plans before and after TUNE TABLE to see how statistics affect optimizer decisions
 - Measure the performance impact of purging cached queries (first execution vs subsequent)
+
+## Glossary & Cheat Sheet
+
+### Key terms
+
+- **Statistics and selectivity** — TUNE TABLE updates statistics used for optimizer estimates. Refresh relevant statistics before comparing plans.
+- **Plan interpretation** — Identify scans, index probes, filters, ordering and joins. An index can help a selective predicate. Check result equivalence before benchmarking a rewrite.
+- **Correctness tests** — %UnitTest.TestCase and %UnitTest.Manager support regression tests. Assert values and statuses under controlled setup and teardown.
+- **Benchmarking** — Repeat equivalent workloads under comparable conditions. Record duration and operation counters together.
+
+### Commands, methods and syntax
+
+- **ObjectScript commands** — `DO`, `FOR`, `IF`, `QUIT`, `READ`, `RETURN`, `SET`, `WHILE`, `WRITE`.
+- **ObjectScript functions and special variables** — `$FN`, `$H`, `$HOROLOG`, `$LIST`, `$LISTBUILD`, `$LISTGET`, `$PIECE`, `$SYSTEM`, `$ZH`, `$ZHOROLOG`.
+- **Macros and extrinsics** — `$$$AssertEquals`, `$$$AssertNotEquals`, `$$$AssertStatusNotOK`, `$$$AssertStatusOK`, `$$$AssertTrue`, `$$$ISOK`, `$$$OK`.
+- **IRIS classes and packages** — `%SQL.Statement`, `%SYS.PTools`, `%SYS.PTools.SQLQuery`.
+- **Qualified calls and terminal utilities** — `$SYSTEM.SQL.Purge()`, `$SYSTEM.SQL.PurgeForTable()`, `$SYSTEM.SQL.Stats.Table.GatherTableStats()`, `$SYSTEM.SQL.TuneAllTables()`, `$SYSTEM.SQL.TuneTable()`.
+- **Method names and generated entry points** — `%DeleteId()`, `%Display()`, `%Execute()`, `%GetData()`, `%GetImplementationDetails()`, `%Id()`, `%New()`, `%Next()`, `%OpenId()`, `%Prepare()`, `%Save()`, `DebugRunTestCase()`, `Execute()`, `RunTest()`.
+- **Query diagnostics and SQL** — `TUNE TABLE`, `EXPLAIN`, `Show Plan`, `SELECT`, `FROM`, `INTO`, `WHERE`, `ORDER BY`, `JOIN`, `COUNT()`, `CHAR_LENGTH()`, `%SQLUPPER()`, `&sql`.
+- **Test configuration** — `%UnitTest.TestCase`, `%UnitTest.Manager`, `^UnitTest`, `OnBeforeOneTest()`, `OnAfterOneTest()`, `%SAVE_VALUES`.
+- **Methods defined in chapter examples** — `BenchmarkQuery()`, `TestCreatePatient()`, `TestSSNUniqueness()`.
+
+Official reference: [TUNE TABLE](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RSQL_tunetable).
+
+### Visual recap
+
+![T3.5 Glossary & Cheat Sheet — Key terms and core syntax](visual-guide-glossary-01.png)
+
+![T3.5 Glossary & Cheat Sheet — Commands and APIs](visual-guide-glossary-02.png)
