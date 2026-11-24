@@ -17,10 +17,6 @@ Saved 2 November 2026 from [exam-prep.es](https://exam-prep.es/exams/objectscrip
 
 [Glossary & Cheat Sheet](#glossary--cheat-sheet)
 
-[Glossary & Cheat Sheet](#glossary--cheat-sheet)
-
-[Glossary & Cheat Sheet](#glossary--cheat-sheet)
-
 ### Visual study guide — sections 1–3
 
 ![T2.1 visual summary of sections 1–3: 1. Manages transactions; 2. Manages rollbacks; 3. Describes how LOCKs enforce concurrency](visual-guide-01-v2.png)

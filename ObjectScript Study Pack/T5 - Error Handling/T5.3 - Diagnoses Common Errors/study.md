@@ -20,10 +20,6 @@ Saved 2 November 2026 from [exam-prep.es](https://exam-prep.es/exams/objectscrip
 
 [Glossary & Cheat Sheet](#glossary--cheat-sheet)
 
-[Glossary & Cheat Sheet](#glossary--cheat-sheet)
-
-[Glossary & Cheat Sheet](#glossary--cheat-sheet)
-
 ### Visual study guide — sections 1–3
 
 ![T5.3 visual summary of sections 1–3: 1. <SUBSCRIPT> errors; 2. <PROTECT> errors; 3. <FRAMESTACK> errors](visual-guide-01.png)
@@ -1190,7 +1186,7 @@ ClassMethod IndirectionError()
 - **&lt;SUBSCRIPT&gt; and &lt;UNDEFINED&gt;** — Check subscript validity and initialization. Use $DATA for presence and $GET when a missing value has a meaningful default.
 - **&lt;PROTECT&gt; and &lt;FRAMESTACK&gt;** — Check namespace mapping and privilege for the failing operation. For stack exhaustion check base cases, recursion depth and cycles.
 - **&lt;INVALID OREF&gt;** — Check construction and open results. Use $ISOBJECT before accessing object members if the reference may be invalid.
-- **Missing class, method or property** — Check exact names, namespace, compilation and dispatch kind. Inspect source and compiled metadata and the concrete type.
+- **Missing class, method or property** — Check names, namespace, compilation and dispatch kind. Inspect metadata and verify qualified system calls, such as $SYSTEM.SQL.Stats.Table.GatherTableStats().
 - **&lt;SYNTAX&gt;** — Fix the earliest error. Check brackets, braces, arguments, postconditionals and indirection. Recompile after correcting the source.
 
 ### Commands, methods and syntax
@@ -1199,12 +1195,12 @@ ClassMethod IndirectionError()
 - **ObjectScript functions and special variables** — `$EXTRACT`, `$FIND`, `$JOB`, `$LB`, `$LENGTH`, `$LIST`, `$LISTBUILD`, `$LISTGET`, `$LISTLENGTH`, `$ORDER`, `$PIECE`, `$ROLES`, `$SELECT`, `$SYSTEM`, `$USERNAME`, `$XECUTE`, `$ZCONVERT`.
 - **Macros and extrinsics** — `$$$ERROR`, `$$$GeneralError`, `$$$ISERR`, `$$$OK`, `$$$ThrowOnError`.
 - **IRIS classes and packages** — `%Dictionary.ClassDefinition`, `%Dictionary.MethodDefinition`, `%Dictionary.PropertyDefinition`, `%Exception.General`, `%SQL.Statement`, `%Stream.FileCharacter`, `%SYS.Namespace`.
-- **Qualified calls and terminal utilities** — `$SYSTEM.Process.SetStackSize()`, `$SYSTEM.SQL.Stats.GatherTableStats()`, `$SYSTEM.SQL.Stats.Table.GatherTableStats()`.
+- **Qualified calls and terminal utilities** — `$SYSTEM.SQL.Stats.Table.GatherTableStats()`.
 - **Method names and generated entry points** — `%ClassName()`, `%ExistsId()`, `%IsA()`, `%New()`, `%OpenId()`, `%Prepare()`, `%Save()`, `AsStatus()`, `GetGlobalDest()`, `LinkToFile()`, `MyMethod()`, `ReadLine()`, `SendConfirmation()`, `SetAt()`, `Walk()`.
 - **Error and lookup syntax** — `<SUBSCRIPT>`, `<PROTECT>`, `<FRAMESTACK>`, `<UNDEFINED>`, `<INVALID OREF>`, `<CLASS DOES NOT EXIST>`, `<METHOD DOES NOT EXIST>`, `<PROPERTY DOES NOT EXIST>`, `<SYNTAX>`.
 - **Dispatch and inspection** — `##class`, `$METHOD`, `$CLASSMETHOD`, `$PROPERTY`, `@`, `XECUTE`, `ZN`, `ZNAMESPACE`, `$DATA`, `$GET`, `$ISOBJECT`.
 - **Methods defined in chapter examples** — `BadFactorial()`, `BraceError()`, `BuildTree()`, `CallerBug()`, `CanWrite()`, `CheckDatabaseAccess()`, `CompileError()`, `ComputeAverage()`, `ConditionalBug()`, `ConditionalFixed()`, `CreatePerson()`, `DataCheckExamples()`, `DeepRecursiveProcess()`, `DisplayPerson()`, `DisplayPersonSafe()`, `DynamicCall()`, `DynamicCodeError()`, `Factorial()`, `GetPropertyValue()`, `GetPropertyValueSafe()`, `IndirectionError()`, `LoadOrders()`, `OpenRecord()`, `OrefScopeIssue()`, `ProcessA()`, `ProcessB()`, `ProcessExample()`, `ProcessFile()`, `ProcessItem()`, `ProcessItems()`, `ProcessItemsSafe()`, `ProcessList()`, `ProcessOrder()`, `ProcessRecord()`, `QueryExample()`, `SafeAccessExamples()`, `SafeCreateObject()`, `SafeRecursion()`, `SaveData()`, `SavePerson()`, `StoreValue()`, `TraverseList()`, `TraverseTree()`, `TraverseTreeIterative()`, `TypoExample()`, `UndefinedExample()`, `UpdatePatients()`.
-- **Incorrect forms in the exercises** — `Preapre()`, `Save()`.
+- **Incorrect forms in the exercises** — `$SYSTEM.Process.SetStackSize()`, `$SYSTEM.SQL.Stats.GatherTableStats()`, `Preapre()`, `Save()`.
 
 Official reference: [ObjectScript errors](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_errors).
 

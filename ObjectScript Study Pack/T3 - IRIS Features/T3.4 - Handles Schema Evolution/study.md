@@ -14,10 +14,6 @@ Saved 2 November 2026 from [exam-prep.es](https://exam-prep.es/exams/objectscrip
 
 [Glossary & Cheat Sheet](#glossary--cheat-sheet)
 
-[Glossary & Cheat Sheet](#glossary--cheat-sheet)
-
-[Glossary & Cheat Sheet](#glossary--cheat-sheet)
-
 ### Visual study guide — sections 1–3
 
 ![T3.4 visual summary of sections 1–3: 1. Adding indexes to existing properties; 2. Impact of changing property name or datatype; 3. Purging cached queries after schema changes](visual-guide-01.png)

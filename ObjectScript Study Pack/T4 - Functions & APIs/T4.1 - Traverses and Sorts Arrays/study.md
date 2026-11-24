@@ -15,10 +15,6 @@ Saved 2 November 2026 from [exam-prep.es](https://exam-prep.es/exams/objectscrip
 
 [Glossary & Cheat Sheet](#glossary--cheat-sheet)
 
-[Glossary & Cheat Sheet](#glossary--cheat-sheet)
-
-[Glossary & Cheat Sheet](#glossary--cheat-sheet)
-
 ### Visual study guide — sections 1–4
 
 ![T4.1 visual summary of sections 1–4: 1. Subscript sorting (canonical numeric order); 2. Traversing subscript subset with $ORDER; 3. Multi-level traversal with $ORDER; 4. $DATA to check node existence](visual-guide-01.png)

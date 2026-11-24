@@ -12,10 +12,6 @@ Saved 2 November 2026 from [exam-prep.es](https://exam-prep.es/exams/objectscrip
 
 [Glossary & Cheat Sheet](#glossary--cheat-sheet)
 
-[Glossary & Cheat Sheet](#glossary--cheat-sheet)
-
-[Glossary & Cheat Sheet](#glossary--cheat-sheet)
-
 ### Visual study guide — section 1
 
 ![T3.3 visual summary of section 1: 1. Understands $CHAR(0) vs empty string vs SQL NULL](visual-guide-01-v2.png)

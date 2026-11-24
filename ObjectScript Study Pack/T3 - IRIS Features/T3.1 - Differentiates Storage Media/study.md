@@ -12,10 +12,6 @@ Saved 2 November 2026 from [exam-prep.es](https://exam-prep.es/exams/objectscrip
 
 [Glossary & Cheat Sheet](#glossary--cheat-sheet)
 
-[Glossary & Cheat Sheet](#glossary--cheat-sheet)
-
-[Glossary & Cheat Sheet](#glossary--cheat-sheet)
-
 ### Visual study guide — section 1
 
 ![T3.1 visual summary of section 1: 1. Differentiates between PPGs, variables, temporary globals, and globals](visual-guide-01.png)

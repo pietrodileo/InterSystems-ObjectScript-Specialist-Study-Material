@@ -13,10 +13,6 @@ Saved 2 November 2026 from [exam-prep.es](https://exam-prep.es/exams/objectscrip
 
 [Glossary & Cheat Sheet](#glossary--cheat-sheet)
 
-[Glossary & Cheat Sheet](#glossary--cheat-sheet)
-
-[Glossary & Cheat Sheet](#glossary--cheat-sheet)
-
 ### Visual study guide — sections 1–2
 
 ![T4.7 visual summary of sections 1–2: 1. %Stream for file I/O; 2. %Net for HTTP, FTP, and email](visual-guide-01.png)

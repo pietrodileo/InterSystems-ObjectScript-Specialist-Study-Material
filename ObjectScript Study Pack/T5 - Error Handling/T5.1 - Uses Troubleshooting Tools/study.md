@@ -13,10 +13,6 @@ Saved 2 November 2026 from [exam-prep.es](https://exam-prep.es/exams/objectscrip
 
 [Glossary & Cheat Sheet](#glossary--cheat-sheet)
 
-[Glossary & Cheat Sheet](#glossary--cheat-sheet)
-
-[Glossary & Cheat Sheet](#glossary--cheat-sheet)
-
 ### Visual study guide — sections 1–2
 
 ![T5.1 visual summary of sections 1–2: 1. Tools for monitoring code performance; 2. Interprets class compilation errors](visual-guide-01-v2.png)
@@ -381,7 +377,7 @@ Common compilation error patterns and their causes:
 ### Key terms
 
 - **Performance baseline** — Compare repeated equivalent workloads. Review elapsed time, global references, lines executed and SQL activity together.
-- **Line and SQL tools** — MONLBL measures routine line execution. PTools SQLStats captures SQL activity. Query plans explain access paths.
+- **Line and SQL tools** — DO ^%SYS.MONLBL opens line-by-line monitoring. %Monitor.System.LineByLine is its programming interface. PTools collects SQL statistics; StatsSQL replaces the older SQLStats class.
 - **Class compilation** — Compile the intended source in the intended namespace. Read the full status. Fix missing includes, dependencies and malformed source before interpreting later errors.
 - **Flags and generated routines** — Inspect compiler flags, generated code and reported lines when diagnosing a failure. Verify spellings of classes, methods and includes.
 
@@ -390,11 +386,12 @@ Common compilation error patterns and their causes:
 - **ObjectScript commands** — `DO`, `FOR`, `HANG`, `IF`, `QUIT`, `RETURN`, `SET`, `WRITE`.
 - **ObjectScript functions and special variables** — `$HOROLOG`, `$JUSTIFY`, `$P`, `$PIECE`, `$RANDOM`, `$SYSTEM`, `$TRANSLATE`, `$ZH`, `$ZHOROLOG`, `$ZTIMESTAMP`.
 - **Macros and extrinsics** — `$$$AppVersion`, `$$$DbName`, `$$$FindAreaCode`, `$$$ISERR`, `$$$LogError`, `$$$LogInfo`, `$$$LogMsg`, `$$$MacroName`.
-- **IRIS classes and packages** — `%occStatus.inc`, `%SYSTEM.OBJ`.
+- **IRIS classes and packages** — `%occStatus.inc`, `%SYS.MONLBL`, `%SYSTEM.OBJ`.
 - **Qualified calls and terminal utilities** — `$SYSTEM.OBJ.Compile()`, `$SYSTEM.OBJ.CompileAll()`, `$SYSTEM.OBJ.CompileList()`, `$SYSTEM.OBJ.CompilePackage()`, `$SYSTEM.Status.DisplayError()`, `$SYSTEM.Status.GetErrorText()`, `$SYSTEM.Status.IsError()`.
 - **Method names and generated entry points** — `%ExecDirect()`, `%New()`, `%Prepare()`, `%Save()`, `%ShowPlan()`, `DisplayStats()`, `LogMsg()`, `MONLBL()`, `MyMethod()`, `Process()`, `ProcessBatch()`, `SetSQLStatsJob()`, `ShowFlags()`.
-- **Terminal and compiler syntax** — `ZN`, `ZNAMESPACE`, `DO ^PERFMON`, `MONLBL`, `Include`, `#include`, `#define`, `#if`, `%occStatus`, `r`, `d`, `b`, `y`.
-- **Diagnostics and SQL** — `%SQL.Statement`, `%SYS.PTools`, `%SYS.PTools.SQLStats`, `%SYS.MONLBL`, `SQLCODE`, `%msg`.
+- **Terminal and compiler syntax** — `ZN`, `ZNAMESPACE`, `DO ^PERFMON`, `DO ^%SYS.MONLBL`, `MONLBL`, `Include`, `#include`, `#define`, `#if`, `%occStatus`, `r`, `d`, `b`, `y`.
+- **Diagnostics and SQL** — `%SQL.Statement`, `%SYS.PTools`, `%SYS.PTools.SQLStats`, `%SYS.PTools.StatsSQL`, `%Monitor.System.LineByLine`, `SQLCODE`, `%msg`.
+- **Routine labels cited in the lesson** — `Start^%MONLBL`, `Stop^%MONLBL`, `Report^%MONLBL`.
 - **Methods defined in chapter examples** — `Calculate()`, `CompareApproaches()`, `Info()`, `ProcessAddress()`, `Run()`, `Save()`, `TimedOperation()`.
 - **Incorrect forms in the exercises** — `/sort=dependency`, `%Strig`, `%SYS.PTools.Start`, `%SYS.PTools.Start()`, `$SYSTEM.Performance.Start()`.
 
