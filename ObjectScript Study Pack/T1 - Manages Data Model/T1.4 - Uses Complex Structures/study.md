@@ -502,21 +502,75 @@ If stream1.Size '= stream2.Size {
 
 ### Key terms
 
-- **Dynamic containers** — %DynamicObject has named properties. %DynamicArray uses zero-based indexes. %FromJSON parses JSON and %ToJSON serializes it.
-- **Presence and access** — %IsDefined tests presence. %Get reads a value and %GetTypeOf exposes its dynamic type. Distinguish missing values from JSON null.
-- **Mutation and iteration** — %Set and %Remove change entries. %Push and %Pop operate on the end of the array. %GetIterator and %GetNext enumerate entries.
-- **Streams** — Choose Global or File storage and Character or Binary content. Read and ReadLine consume data. Rewind resets the position. CopyFrom transfers content. AtEnd guides read loops.
+- **Dynamic containers**
+  - `%DynamicObject` — Stores named JSON-style properties.
+  - `%DynamicArray` — Stores elements by zero-based index.
+  - `%FromJSON` — Parses JSON into a dynamic entity.
+  - `%ToJSON` — Serializes a dynamic entity as JSON.
+- **Presence and access**
+  - `%IsDefined` — Tests whether the key or index is present.
+  - `%Get` — Reads an entry with optional default or type conversion.
+  - `%GetTypeOf` — Reports the entry's dynamic type.
+  - **JSON null** — Represents an explicit null value and is distinct from a missing entry.
+- **Mutation and iteration**
+  - `%Set` — Assigns an entry.
+  - `%Remove` — Removes an entry.
+  - `%Push` — Appends an array element.
+  - `%Pop` — Removes and returns the final array element.
+  - `%GetIterator` — Creates an iterator over entries.
+  - `%GetNext` — Advances the iterator and fills key and value outputs.
+- **Streams**
+  - **Global or File** — Chooses database or file-system storage.
+  - **Character or Binary** — Chooses text or byte-oriented content.
+  - **Read** — Reads a chunk of data.
+  - **ReadLine** — Reads a line of text.
+  - **Rewind** — Moves the cursor back to the beginning.
+  - **CopyFrom** — Copies data from another stream.
+  - **AtEnd** — Indicates whether the cursor has reached the end.
+- **ObjectScript commands**
+  - `DO` — Invokes a routine, label or method.
+  - `FOR` — Repeats a block or command according to a loop specification.
+  - `IF` — Runs the following command or block when its condition is true.
+  - `QUIT` — Leaves the current loop, block or invocation as determined by context.
+  - `RETURN` — Returns control, optionally with a value, to the caller.
+  - `SET` — Assigns a value to a variable, property or assignable expression.
+  - `WHILE` — Repeats the block while its condition holds.
+  - `WRITE` — Sends formatted output to the current device.
+- **System variables and macros**
+  - `$HOROLOG` — Reports local date and time as day and seconds fields.
+  - `$SYSTEM` — Provides shorthand access to the IRIS %SYSTEM package.
 
-### Commands, methods and syntax
+### System methods and functions
 
-- **ObjectScript commands** — `DO`, `FOR`, `IF`, `QUIT`, `RETURN`, `SET`, `WHILE`, `WRITE`.
-- **ObjectScript functions and special variables** — `$H`, `$LIST`, `$SYSTEM`.
-- **IRIS classes and packages** — `%Stream.FileBinary`, `%Stream.FileCharacter`, `%Stream.GlobalBinary`, `%Stream.GlobalCharacter`, `%Stream.TmpCharacter`.
-- **Qualified calls and terminal utilities** — `$SYSTEM.Status.IsError()`.
-- **Method names and generated entry points** — `%ConstructClone()`, `%FromJSON()`, `%Get()`, `%GetIterator()`, `%GetNext()`, `%GetTypeOf()`, `%IsDefined()`, `%New()`, `%Pop()`, `%Push()`, `%Remove()`, `%Save()`, `%Set()`, `%Size()`, `%ToJSON()`, `Clear()`, `CopyFrom()`, `CopyFromAndSave()`, `Equals()`, `MoveToEnd()`, `Read()`, `ReadLine()`, `Rewind()`, `Write()`, `WriteLine()`.
-- **Dynamic classes and stream properties** — `%DynamicObject`, `%DynamicArray`, `%Iterator.Object`, `AtEnd`, `Size`, `Filename`, `TranslateTable`.
-- **Container syntax** — `{}`, `[]`, `JSON null`, `zero-based index`.
-- **Methods defined in chapter examples** — `CreateDoc()`.
+- `##class(%DynamicArray).%New()` — Creates an empty dynamic array.
+- `##class(%DynamicObject).%FromJSON(json)` — Parses JSON into a dynamic entity.
+- `##class(%DynamicObject).%New()` — Creates an empty dynamic object.
+- `##class(%Stream.FileCharacter).%New()` — Creates a character stream backed by a file.
+- `##class(%Stream.GlobalCharacter).%New()` — Creates a character stream backed by an IRIS global.
+- `$LIST(list, position)` — Reads the element at the specified position.
+- `$SYSTEM.Status.IsError(status)` — Tests whether the status represents an error.
+- `array.%Pop()` — Removes and returns the last array element.
+- `array.%Push(value)` — Appends a value to the array.
+- `iterator.%GetNext(.key, .value)` — Advances the iterator and fills the key and value variables.
+- `obj.%ConstructClone()` — Creates a copy of a dynamic entity.
+- `obj.%Get(key, default)` — Reads a dynamic entry or returns the default.
+- `obj.%GetIterator()` — Returns an iterator over the dynamic entity's entries.
+- `obj.%GetTypeOf(key)` — Returns the dynamic type of the specified entry.
+- `obj.%IsDefined(key)` — Tests whether a key or index is defined.
+- `obj.%Remove(key)` — Removes a property or array element.
+- `obj.%Save()` — Persists the object and returns a status.
+- `obj.%Set(key, value)` — Assigns a dynamic property or array element.
+- `obj.%Size()` — Counts members of the dynamic entity.
+- `obj.%ToJSON()` — Serializes the dynamic entity as JSON.
+- `stream.Clear()` — Clears contents and resets the stream.
+- `stream.CopyFrom(source)` — Copies data from the source stream into the destination.
+- `stream.CopyFromAndSave(source)` — Copies the source and saves the result to permanent stream storage.
+- `stream.MoveToEnd()` — Moves the stream cursor to the end.
+- `stream.Read(length)` — Reads up to the requested number of characters or bytes.
+- `stream.ReadLine()` — Reads a line at the current stream position.
+- `stream.Rewind()` — Moves the stream cursor back to the start.
+- `stream.Write(data)` — Writes the supplied data to the stream.
+- `stream.WriteLine(text)` — Writes text followed by a line terminator.
 
 Official reference: [Creating dynamic entities](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GJSON_create).
 

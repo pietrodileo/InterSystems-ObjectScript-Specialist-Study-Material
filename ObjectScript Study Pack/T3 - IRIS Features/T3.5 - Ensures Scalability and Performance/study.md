@@ -474,22 +474,82 @@ WRITE "Average open time: ", $FN(totalTime/iterations*1000, "", 3), " ms", !
 
 ### Key terms
 
-- **Statistics and selectivity** — TUNE TABLE updates statistics used for optimizer estimates. Refresh relevant statistics before comparing plans.
-- **Plan interpretation** — Identify scans, index probes, filters, ordering and joins. An index can help a selective predicate. Check result equivalence before benchmarking a rewrite.
-- **Correctness tests** — %UnitTest.TestCase and %UnitTest.Manager support regression tests. Assert values and statuses under controlled setup and teardown.
-- **Benchmarking** — Repeat equivalent workloads under comparable conditions. Record duration and operation counters together.
+- **Statistics and selectivity**
+  - `TUNE TABLE` — Updates table statistics used in optimizer estimates.
+  - **Selectivity** — Describes how much a predicate narrows the result.
+  - **Stale statistics** — Can distort estimates after significant data changes.
+- **Plan interpretation**
+  - **Scan and index probe** — Show how the engine accesses rows.
+  - **Filter and join** — Show how rows are narrowed and combined.
+  - **Result equivalence** — Verifies that alternative queries still return the same data.
+- **Correctness tests**
+  - `%UnitTest.TestCase` — Provides the base class for regression tests.
+  - `%UnitTest.Manager` — Runs and reports test suites.
+  - **Setup, assertion and teardown** — Control state, check outcomes and clean up afterward.
+- **Benchmarking**
+  - **Repeatability** — Keeps workloads and conditions comparable.
+  - **Duration and counters** — Show elapsed time alongside the work performed.
+- **ObjectScript commands**
+  - `DO` — Invokes a routine, label or method.
+  - `FOR` — Repeats a block or command according to a loop specification.
+  - `IF` — Runs the following command or block when its condition is true.
+  - `QUIT` — Leaves the current loop, block or invocation as determined by context.
+  - `READ` — Reads input from the current device.
+  - `RETURN` — Returns control, optionally with a value, to the caller.
+  - `SET` — Assigns a value to a variable, property or assignable expression.
+  - `WHILE` — Repeats the block while its condition holds.
+  - `WRITE` — Sends formatted output to the current device.
+  - `%ID` — Exposes the row's persistent identifier in SQL.
+- **System variables and macros**
+  - `$HOROLOG` — Reports local date and time as day and seconds fields.
+  - `$SYSTEM` — Provides shorthand access to the IRIS %SYSTEM package.
+  - `$ZHOROLOG` — Reports elapsed time in seconds since IRIS startup.
+  - `$$$AssertEquals` — Checks that actual and expected values are equal.
+  - `$$$AssertNotEquals` — Checks that actual and expected values differ.
+  - `$$$AssertStatusNotOK` — Checks that a status indicates an error.
+  - `$$$AssertStatusOK` — Checks that a status indicates success.
+  - `$$$AssertTrue` — Checks that a test expression is true.
+  - `$$$ISOK` — Tests whether a status indicates success.
+  - `$$$OK` — Supplies a success status.
+- **SQL statements and clauses**
+  - `EXPLAIN` — Shows a query execution plan in the SQL Shell.
+  - `SHOW PLAN` — Displays the execution plan for the most recent query in the SQL Shell.
+  - `SELECT` — Reads rows and expressions from one or more sources.
+  - `FROM` — Names the source tables or queries.
+  - `WHERE` — Keeps rows whose predicate is true.
+  - `ORDER BY` — Chooses the order in which result rows appear.
+  - `JOIN` — Combines rows from related sources.
+  - `&sql` — Embeds a SQL statement in ObjectScript.
 
-### Commands, methods and syntax
+### System methods and functions
 
-- **ObjectScript commands** — `DO`, `FOR`, `IF`, `QUIT`, `READ`, `RETURN`, `SET`, `WHILE`, `WRITE`.
-- **ObjectScript functions and special variables** — `$FN`, `$H`, `$HOROLOG`, `$LIST`, `$LISTBUILD`, `$LISTGET`, `$PIECE`, `$SYSTEM`, `$ZH`, `$ZHOROLOG`.
-- **Macros and extrinsics** — `$$$AssertEquals`, `$$$AssertNotEquals`, `$$$AssertStatusNotOK`, `$$$AssertStatusOK`, `$$$AssertTrue`, `$$$ISOK`, `$$$OK`.
-- **IRIS classes and packages** — `%SQL.Statement`, `%SYS.PTools`, `%SYS.PTools.SQLQuery`.
-- **Qualified calls and terminal utilities** — `$SYSTEM.SQL.Purge()`, `$SYSTEM.SQL.PurgeForTable()`, `$SYSTEM.SQL.Stats.Table.GatherTableStats()`, `$SYSTEM.SQL.TuneAllTables()`, `$SYSTEM.SQL.TuneTable()`.
-- **Method names and generated entry points** — `%DeleteId()`, `%Display()`, `%Execute()`, `%GetData()`, `%GetImplementationDetails()`, `%Id()`, `%New()`, `%Next()`, `%OpenId()`, `%Prepare()`, `%Save()`, `DebugRunTestCase()`, `Execute()`, `RunTest()`.
-- **Query diagnostics and SQL** — `TUNE TABLE`, `EXPLAIN`, `Show Plan`, `SELECT`, `FROM`, `INTO`, `WHERE`, `ORDER BY`, `JOIN`, `COUNT()`, `CHAR_LENGTH()`, `%SQLUPPER()`, `&sql`.
-- **Test configuration** — `%UnitTest.TestCase`, `%UnitTest.Manager`, `^UnitTest`, `OnBeforeOneTest()`, `OnAfterOneTest()`, `%SAVE_VALUES`.
-- **Methods defined in chapter examples** — `BenchmarkQuery()`, `TestCreatePatient()`, `TestSSNUniqueness()`.
+- `##class(%SQL.Statement).%New()` — Creates a dynamic SQL statement object.
+- `##class(%UnitTest.Manager).DebugRunTestCase(suite, testCase)` — Runs a unit test case interactively for debugging.
+- `##class(%UnitTest.Manager).RunTest(testSpec)` — Runs the specified unit test suite.
+- `##class(App.Record).%DeleteId(id)` — Deletes the record with the supplied persistent ID.
+- `##class(App.Record).%New()` — Creates a new in-memory instance of the class.
+- `##class(App.Record).%OpenId(id, concurrency, .status)` — Opens a record by ID. The concurrency and status arguments are optional.
+- `%SQLUPPER(column)` — Applies the SQLUPPER collation transformation.
+- `$FNUMBER(number, format, decimals)` — Formats a numeric value to the specified precision.
+- `$LIST(list, position)` — Reads the element at the specified position.
+- `$LISTBUILD(value1, value2)` — Encodes values as an ObjectScript list.
+- `$LISTGET(list, position, default)` — Reads an element or supplies a default.
+- `$PIECE(text, delimiter, from, to)` — Returns one or more delimited fields.
+- `$SYSTEM.SQL.Explain(sql)` — Generates and displays an execution plan for the SQL query.
+- `$SYSTEM.SQL.PurgeQueries()` — Purges cached queries in the current namespace.
+- `$SYSTEM.SQL.PurgeQueries({"table":[tableName]})` — Purges cached queries that reference the named table.
+- `$SYSTEM.SQL.Stats.Table.GatherTableStats(tableName)` — Gathers optimizer statistics for the named table.
+- `$SYSTEM.SQL.TuneTable(tableName)` — Updates optimizer statistics for the target table.
+- `CHAR_LENGTH(text)` — Counts the characters in the SQL string.
+- `COUNT(*)` — Counts rows, regardless of whether individual fields are NULL.
+- `obj.%Id()` — Returns the persistent ID of the open object.
+- `obj.%Save()` — Persists the object and returns a status.
+- `result.%GetData(columnNumber)` — Reads a result column by its one-based ordinal.
+- `result.%Next()` — Advances to the next SQL row and reports whether it exists.
+- `stmt.%Display()` — Displays the prepared statement text and implementation information.
+- `stmt.%Execute(value)` — Runs the prepared statement with the given bound value.
+- `stmt.%GetImplementationDetails(.className, .sql)` — Retrieves implementation details of a prepared statement.
+- `stmt.%Prepare(sql)` — Prepares a dynamic statement and returns a status.
 
 Official reference: [TUNE TABLE](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RSQL_tunetable).
 

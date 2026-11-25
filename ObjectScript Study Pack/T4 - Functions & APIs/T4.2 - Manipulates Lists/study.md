@@ -426,16 +426,48 @@ Conversion is convenient for interchange, but it is not always a lossless round 
 
 ### Key terms
 
-- **Encoded list** — $LISTBUILD creates a native encoded list. Indexes are one-based. Distinguish empty and omitted elements.
-- **Access and update** — $LIST reads, slices or updates positions. $LISTGET supplies a default. $LISTLENGTH counts positions. $LISTVALID checks encoding.
-- **Sequential operations** — $LISTNEXT advances an offset and reports whether another element was found. $LISTFIND searches values and $LISTSAME compares lists.
-- **Delimited text** — $LISTFROMSTRING and $LISTTOSTRING bridge native lists and delimited strings. Account for delimiters and empty fields when round-tripping.
+- **Encoded list**
+  - `$LISTBUILD` — Creates an encoded one-based list.
+  - **Empty element** — Stores an empty value at an existing position.
+  - **Omitted element** — Leaves that position without a defined value.
+- **Access and update**
+  - `$LIST` — Reads a position, slices a range or sets an element.
+  - `$LISTGET` — Reads an element with a default for an omitted value.
+  - `$LISTLENGTH` — Counts positions in a list.
+  - `$LISTVALID` — Checks whether a value is a valid encoded list.
+- **Sequential operations**
+  - `$LISTNEXT` — Advances a position variable and supplies the next value.
+  - `$LISTFIND` — Returns the position of a matching value.
+  - `$LISTSAME` — Checks for equivalent lists.
+- **Delimited text**
+  - `$LISTFROMSTRING` — Splits delimited text into an encoded list.
+  - `$LISTTOSTRING` — Joins list values with a delimiter.
+  - **Round-trip** — Requires attention to delimiters and empty fields.
+- **ObjectScript commands**
+  - `ELSE` — Runs the alternative branch when the condition is false.
+  - `FOR` — Repeats a block or command according to a loop specification.
+  - `IF` — Runs the following command or block when its condition is true.
+  - `SET` — Assigns a value to a variable, property or assignable expression.
+  - `WHILE` — Repeats the block while its condition holds.
+  - `WRITE` — Sends formatted output to the current device.
 
-### Commands, methods and syntax
+### System methods and functions
 
-- **ObjectScript commands** — `ELSE`, `FOR`, `IF`, `SET`, `WHILE`, `WRITE`.
-- **ObjectScript functions and special variables** — `$CHAR`, `$DATA`, `$LB`, `$LG`, `$LI`, `$LIST`, `$LISTBUILD`, `$LISTFIND`, `$LISTFROMSTRING`, `$LISTGET`, `$LISTLENGTH`, `$LISTNEXT`, `$LISTSAME`, `$LISTTOSTRING`, `$LISTVALID`, `$LL`.
-- **List operations** — `$LIST(list,n)`, `$LIST(list,from,to)`, `SET $LIST(list,n)`, `$LISTNEXT(list,position,value)`, `$LISTBUILD()`, `$LISTGET(list,n,default)`.
+- `$CHAR(code1, code2)` — Builds a string from character codes.
+- `$DATA(node)` — Reports whether a node has data, descendants, both or neither.
+- `$LIST(list, first, last)` — Returns an encoded sublist from first through last.
+- `$LIST(list, position)` — Reads the element at the specified position.
+- `$LISTBUILD()` — Creates an empty encoded list.
+- `$LISTBUILD(value1, value2)` — Encodes values as an ObjectScript list.
+- `$LISTFIND(list, value, startAfter)` — Returns the position of a matching list value.
+- `$LISTFROMSTRING(text, delimiter)` — Splits delimited text into an encoded list.
+- `$LISTGET(list, position, default)` — Reads an element or supplies a default.
+- `$LISTLENGTH(list)` — Counts list positions.
+- `$LISTNEXT(list, position, value)` — Advances the position variable and outputs the next element.
+- `$LISTSAME(list1, list2)` — Tests whether two encoded lists contain equivalent elements.
+- `$LISTTOSTRING(list, delimiter)` — Joins list elements as delimited text.
+- `$LISTVALID(value)` — Tests whether a value is a valid encoded list.
+- `SET $LIST(list, position) = value` — Writes to the specified position in the encoded list.
 
 Official reference: [ObjectScript $LIST](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_flist).
 

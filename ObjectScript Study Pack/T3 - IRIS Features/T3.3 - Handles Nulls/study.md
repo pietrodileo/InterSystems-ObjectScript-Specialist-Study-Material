@@ -215,19 +215,60 @@ WRITE "NULLs: ", cnt, !
 
 ### Key terms
 
-- **Undefined and empty values** — An undefined variable has no assigned value. An empty string has length zero. $CHAR(0) is a single character used as the SQL empty-string representation at the ObjectScript interface.
-- **SQL NULL** — Represents a missing SQL value. Test with IS NULL or IS NOT NULL. Comparing to NULL with = gives unknown, and WHERE keeps only true rows.
-- **Host variable and result** — Check SQLCODE first. An SQL NULL can set a host variable to a defined empty string. $DATA checks variable presence and cannot identify SQL NULL on its own.
-- **Fallback and aggregates** — COALESCE and IFNULL provide fallbacks. COUNT(*) counts rows. COUNT(column), SUM and AVG omit SQL NULL input values.
+- **Undefined and empty values**
+  - **Undefined variable** — Has no assigned value.
+  - **Empty string** — Has zero characters.
+  - `$CHAR(0)` — Represents a SQL empty string at the ObjectScript interface.
+- **SQL NULL**
+  - `NULL` — Represents a missing SQL value.
+  - **IS NULL and IS NOT NULL** — Test a value for nullness.
+  - **Three-valued logic** — A comparison with NULL can return unknown. WHERE keeps only true rows.
+- **Host variable and result**
+  - `SQLCODE` — Distinguishes a returned row from end of data or error.
+  - **Host variable** — Can be set to a defined empty string for SQL NULL.
+  - `$DATA` — Checks variable presence independently of SQL nullness.
+- **Fallback and aggregates**
+  - `COALESCE` — Returns the first non-NULL expression.
+  - `IFNULL` — Supplies a fallback based on whether its first argument is NULL.
+  - `COUNT(*)` — Counts all qualifying rows.
+  - **COUNT(column)** — Counts non-NULL values in a column.
+  - `SUM` — Sums non-NULL inputs.
+  - `AVG` — Averages non-NULL inputs.
+- **ObjectScript commands**
+  - `ELSE` — Runs the alternative branch when the condition is false.
+  - `ELSEIF` — Tests an additional condition after a false branch.
+  - `IF` — Runs the following command or block when its condition is true.
+  - `QUIT` — Leaves the current loop, block or invocation as determined by context.
+  - `SET` — Assigns a value to a variable, property or assignable expression.
+  - `WRITE` — Sends formatted output to the current device.
+  - `%ID` — Exposes the row's persistent identifier in SQL.
+- **SQL statements and clauses**
+  - `CREATE TABLE` — Defines a table and its columns.
+  - `INSERT INTO` — Creates rows in the named table.
+  - `VALUES` — Supplies row values for an insert.
+  - `SELECT` — Reads rows and expressions from one or more sources.
+  - `FROM` — Names the source tables or queries.
+  - `WHERE` — Keeps rows whose predicate is true.
+  - `&sql` — Embeds a SQL statement in ObjectScript.
 
-### Commands, methods and syntax
+### System methods and functions
 
-- **ObjectScript commands** — `ELSE`, `ELSEIF`, `IF`, `QUIT`, `SET`, `WRITE`.
-- **ObjectScript functions and special variables** — `$ASCII`, `$C`, `$CHAR`, `$DATA`, `$GET`, `$LENGTH`, `$PIECE`.
-- **Method names and generated entry points** — `%Id()`, `%New()`, `%OpenId()`, `%Save()`.
-- **SQL expressions** — `CREATE TABLE`, `INSERT INTO`, `VALUES`, `SELECT`, `FROM`, `WHERE`, `AS`, `AND`, `OR`, `IS NULL`, `IS NOT NULL`, `NOT NULL`, `COALESCE()`, `IFNULL()`, `COUNT(*)`, `COUNT(column)`, `SUM()`, `AVG()`.
-- **SQL host integration** — `&sql`, `:hostVariable`, `SQLCODE`, `%ROWID`.
-- **Methods defined in chapter examples** — `IsEmpty()`.
+- `##class(App.Record).%New()` — Creates a new in-memory instance of the class.
+- `##class(App.Record).%OpenId(id, concurrency, .status)` — Opens a record by ID. The concurrency and status arguments are optional.
+- `$ASCII(text, position)` — Returns the numeric character code at a position.
+- `$CHAR(code1, code2)` — Builds a string from character codes.
+- `$DATA(node)` — Reports whether a node has data, descendants, both or neither.
+- `$GET(node, default)` — Returns the node value or a default.
+- `$LENGTH(text, delimiter)` — Counts delimited fields. Omit the delimiter to count characters.
+- `$PIECE(text, delimiter, from, to)` — Returns one or more delimited fields.
+- `AVG(column)` — Averages non-NULL values.
+- `COALESCE(value1, value2)` — Returns the first non-NULL value in argument order.
+- `COUNT(*)` — Counts rows, regardless of whether individual fields are NULL.
+- `COUNT(column)` — Counts non-NULL values in that column.
+- `IFNULL(value, whenNull, whenPresent)` — Selects the result according to whether the first argument is NULL.
+- `obj.%Id()` — Returns the persistent ID of the open object.
+- `obj.%Save()` — Persists the object and returns a status.
+- `SUM(column)` — Adds the non-NULL values.
 
 Official reference: [Null values in Embedded SQL](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_esql).
 

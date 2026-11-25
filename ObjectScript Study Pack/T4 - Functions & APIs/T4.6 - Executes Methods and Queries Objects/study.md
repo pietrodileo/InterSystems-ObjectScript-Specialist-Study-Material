@@ -416,23 +416,71 @@ The %Dictionary package provides classes that represent class definitions as per
 
 ### Key terms
 
-- **Dynamic dispatch** — $METHOD calls an instance method by runtime name. $CLASSMETHOD selects a class method. $PROPERTY accesses a named property. Constrain permitted targets.
-- **Object type** — %ClassName() returns the short name. %ClassName(1) and $CLASSNAME return the full name. %IsA tests the primary inheritance chain and %Extends includes secondary superclasses.
-- **Metadata dictionaries** — ClassDefinition, MethodDefinition and PropertyDefinition describe source. CompiledClass, CompiledMethod and CompiledProperty describe compiled metadata, including inherited members.
-- **Metadata lookup** — Open a known ID or query dictionary metadata with bound parameters. Distinguish missing metadata from errors invoking a method.
+- **Dynamic dispatch**
+  - `$METHOD` — Calls an instance method selected at runtime.
+  - `$CLASSMETHOD` — Calls a class method selected at runtime.
+  - `$PROPERTY` — Reads or sets a property by runtime name.
+  - **Allowlist** — Restricts invocation to known safe class and member names.
+- **Object type**
+  - `%ClassName` — Returns the short name by default and the full name with argument 1.
+  - `$CLASSNAME` — Returns the full class name.
+  - `%IsA` — Tests the primary inheritance chain.
+  - `%Extends` — Checks inheritance, including secondary superclasses.
+- **Metadata dictionaries**
+  - **ClassDefinition, MethodDefinition and PropertyDefinition** — Describe source metadata.
+  - **CompiledClass, CompiledMethod and CompiledProperty** — Describe compiled metadata including inherited members.
+- **Metadata lookup**
+  - **Known ID** — Opens a dictionary record directly by its key.
+  - **Bound query** — Finds records using parameters instead of concatenating values.
+  - **Missing metadata** — Can be checked before attempting a dynamic invocation.
+- **ObjectScript commands**
+  - `CATCH` — Receives the exception raised in the corresponding TRY block.
+  - `CONTINUE` — Skips the rest of the current loop iteration.
+  - `DO` — Invokes a routine, label or method.
+  - `ELSE` — Runs the alternative branch when the condition is false.
+  - `ELSEIF` — Tests an additional condition after a false branch.
+  - `FOR` — Repeats a block or command according to a loop specification.
+  - `IF` — Runs the following command or block when its condition is true.
+  - `QUIT` — Leaves the current loop, block or invocation as determined by context.
+  - `SET` — Assigns a value to a variable, property or assignable expression.
+  - `TRY` — Begins a block watched for exceptions.
+  - `WHILE` — Repeats the block while its condition holds.
+  - `WRITE` — Sends formatted output to the current device.
+- **System variables and macros**
+  - `$SYSTEM` — Provides shorthand access to the IRIS %SYSTEM package.
+  - `$$$ISERR` — Tests whether a status indicates an error.
+- **SQL statements and clauses**
+  - `SELECT` — Reads rows and expressions from one or more sources.
+  - `FROM` — Names the source tables or queries.
+  - `WHERE` — Keeps rows whose predicate is true.
 
-### Commands, methods and syntax
+### System methods and functions
 
-- **ObjectScript commands** — `CATCH`, `CONTINUE`, `DO`, `ELSE`, `ELSEIF`, `FOR`, `IF`, `QUIT`, `SET`, `TRY`, `WHILE`, `WRITE`.
-- **ObjectScript functions and special variables** — `$CLASSMETHOD`, `$CLASSNAME`, `$E`, `$ISOBJECT`, `$LB`, `$LISTNEXT`, `$METHOD`, `$PIECE`, `$PROPERTY`, `$SYSTEM`.
-- **Macros and extrinsics** — `$$$ISERR`.
-- **IRIS classes and packages** — `%Library.DynamicObject`, `%Library.Integer`, `%Library.Persistent`, `%Library.RegisteredObject`, `%Library.String`, `%SQL.Statement`.
-- **Qualified calls and terminal utilities** — `$SYSTEM.OBJ.GetClassDef()`.
-- **Method names and generated entry points** — `%Execute()`, `%ExistsId()`, `%Extends()`, `%Get()`, `%New()`, `%Next()`, `%OpenId()`, `%PackageName()`, `%Prepare()`, `Add()`, `Count()`, `DisplayString()`, `GetAt()`, `GetFullName()`, `GrantAccess()`, `Insert()`, `Print()`, `Process()`, `ProcessCustomer()`, `ProcessEmployee()`, `Send()`.
-- **Invocation syntax** — `##class`, `$METHOD(oref,name,args)`, `$CLASSMETHOD(class,name,args)`, `$PROPERTY(oref,name)`, `%IsA()`, `%ClassName()`.
-- **Metadata queries** — `SELECT`, `FROM`, `WHERE`, `%Dictionary.ClassDefinition`, `%Dictionary.CompiledClass`, `%Dictionary.MethodDefinition`, `%Dictionary.CompiledMethod`, `%Dictionary.PropertyDefinition`, `%Dictionary.CompiledProperty`.
-- **Methods defined in chapter examples** — `AreSameType()`, `LogObject()`, `ProcessPatient()`.
-- **Incorrect forms in the exercises** — `%IsClass()`, `%TypeOf()`.
+- `##class(%Dictionary.ClassDefinition).%OpenId(className)` — Opens the source definition of the named class.
+- `##class(%Dictionary.CompiledClass).%OpenId(className)` — Opens compiled metadata for the named class.
+- `##class(%SQL.Statement).%New()` — Creates a dynamic SQL statement object.
+- `##class(App.Record).%ExistsId(id)` — Tests whether an object with the given ID exists.
+- `##class(App.Record).%Extends(className)` — Checks whether the class extends the given class, including secondary inheritance.
+- `##class(App.Record).%New()` — Creates a new in-memory instance of the class.
+- `##class(App.Record).%OpenId(id, concurrency, .status)` — Opens a record by ID. The concurrency and status arguments are optional.
+- `##class(App.Record).%PackageName()` — Returns the package portion of the class name.
+- `$CLASSMETHOD(className, methodName, arg)` — Invokes a class method selected at runtime.
+- `$CLASSNAME(obj)` — Returns the object's fully qualified class name.
+- `$EXTRACT(text, from, to)` — Returns a substring by character position.
+- `$ISOBJECT(obj)` — Indicates whether the value is an object reference.
+- `$LISTBUILD(value1, value2)` — Encodes values as an ObjectScript list.
+- `$LISTNEXT(list, position, value)` — Advances the position variable and outputs the next element.
+- `$METHOD(obj, methodName, arg)` — Invokes an instance method selected at runtime.
+- `$PIECE(text, delimiter, from, to)` — Returns one or more delimited fields.
+- `$PROPERTY(obj, propertyName)` — Reads a property selected at runtime.
+- `list.Count()` — Returns the number of elements in the list collection.
+- `list.GetAt(position)` — Returns the collection element at the specified position.
+- `obj.%ClassName(1)` — Returns the fully qualified class name. Omit 1 for the short name.
+- `obj.%IsA(className)` — Tests membership in the object's primary class hierarchy.
+- `result.%Get("ColumnName")` — Reads a result column by name.
+- `result.%Next()` — Advances to the next SQL row and reports whether it exists.
+- `stmt.%Execute(value)` — Runs the prepared statement with the given bound value.
+- `stmt.%Prepare(sql)` — Prepares a dynamic statement and returns a status.
 
 Official reference: [ObjectScript object interface](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=ROBJ).
 

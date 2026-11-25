@@ -778,26 +778,92 @@ SQL operations within transactions respect the same privilege model. Combine tra
 
 ### Key terms
 
-- **Transaction and nesting** — TSTART opens a level. TCOMMIT closes a level and the outermost commit finalizes changes. TROLLBACK 1 rolls back one level. TROLLBACK without an argument rolls back all levels. Inspect $TLEVEL.
-- **Rollback scope** — Rollback can undo journaled database changes. Local variables and external effects require separate handling. Check which transaction level your code owns.
-- **Cooperative lock** — LOCK + acquires and LOCK - releases. Use a consistent resource name. A timed LOCK sets $TEST. Update only after successful acquisition.
-- **Modes and escalation** — Shared and exclusive locks have different compatibility. Under SQL, many row locks can escalate to a table lock. Inspect isolation, granularity and the active lock table.
-- **Optimistic and pessimistic control** — Pessimistic locking protects the read–modify–write interval. Optimistic checking detects a concurrent change before saving and requires handling conflicts.
-- **SQL transaction controls** — START TRANSACTION, COMMIT and ROLLBACK govern the transaction. SET TRANSACTION sets isolation. LOCK TABLE and UNLOCK TABLE control explicit table locks. %NOLOCK changes query locking.
-- **Deadlock and lifetime** — Inconsistent lock order can create a cycle. Keep transactions short and acquire locks in a consistent order. Explicit and transaction locks have distinct release rules.
+- **Transaction and nesting**
+  - `TSTART` — Opens a transaction level.
+  - `TCOMMIT` — Closes a level and commits changes at the outermost level.
+  - `TROLLBACK 1` — Undoes work at the current level.
+  - `TROLLBACK` — Without an argument, rolls back all active levels.
+  - `$TLEVEL` — Reports the transaction nesting depth.
+- **Rollback scope**
+  - **Journaled changes** — Can be undone by transaction rollback.
+  - **Local and external effects** — Require separate recovery where applicable.
+  - **Ownership** — Determines which transaction level a routine may commit or roll back.
+- **Cooperative lock**
+  - **LOCK +** — Incrementally acquires a lock on a named resource.
+  - **LOCK -** — Releases one acquisition of that resource.
+  - **Timed LOCK** — Sets $TEST to indicate whether acquisition succeeded.
+  - **Resource name** — Must be shared by all cooperating code paths.
+- **Modes and escalation**
+  - **Shared lock** — Allows compatible readers to share the resource.
+  - **Exclusive lock** — Conflicts with other processes' shared and exclusive locks.
+  - **Lock escalation** — Can replace many SQL row locks with a table lock.
+- **Optimistic and pessimistic control**
+  - **Pessimistic locking** — Protects the read-to-write interval with a lock.
+  - **Optimistic checking** — Detects intervening changes and requires handling a conflict.
+- **SQL transaction controls**
+  - `START TRANSACTION` — Starts a SQL transaction.
+  - `COMMIT` — Makes the transaction's changes permanent.
+  - `ROLLBACK` — Undoes transactional changes.
+  - `SET TRANSACTION` — Configures the isolation level.
+  - **LOCK TABLE and UNLOCK TABLE** — Acquire and release explicit table locks.
+  - `%NOLOCK` — Changes the query's locking behavior.
+- **Deadlock and lifetime**
+  - **Deadlock** — Occurs when processes wait on resources in a cycle.
+  - **Lock ordering** — Reduces deadlocks by acquiring shared resources consistently.
+  - **Lock lifetime** — Depends on how the lock was taken and the transaction boundary.
+- **ObjectScript commands**
+  - `CATCH` — Receives the exception raised in the corresponding TRY block.
+  - `FOR` — Repeats a block or command according to a loop specification.
+  - `IF` — Runs the following command or block when its condition is true.
+  - `LOCK` — Acquires or releases a cooperative lock on the supplied name.
+  - `QUIT` — Leaves the current loop, block or invocation as determined by context.
+  - `TRY` — Begins a block watched for exceptions.
+  - `WHILE` — Repeats the block while its condition holds.
+  - `WRITE` — Sends formatted output to the current device.
+- **System variables and macros**
+  - `$HOROLOG` — Reports local date and time as day and seconds fields.
+  - `$SYSTEM` — Provides shorthand access to the IRIS %SYSTEM package.
+  - `$ZERROR` — Reports the last ObjectScript error text.
+  - `$ZTRAP` — Identifies the legacy ObjectScript error handler.
+  - `$$$ERROR` — Builds an error status from its code and arguments.
+  - `$$$GeneralError` — Identifies the general-error code used with message text.
+  - `$$$ISERR` — Tests whether a status indicates an error.
+  - `$$$OK` — Supplies a success status.
+  - `$TEST` — Reports the result of commands such as a timed LOCK.
+- **SQL statements and clauses**
+  - `READ UNCOMMITTED` — Allows reads of another transaction's uncommitted changes.
+  - `READ COMMITTED` — Prevents reads of uncommitted changes.
+  - `REPEATABLE READ` — Protects rows already read from concurrent changes within the transaction.
+  - `SERIALIZABLE` — Uses the strongest transaction isolation, protecting against phantom reads.
+  - `SELECT` — Reads rows and expressions from one or more sources.
+  - `FROM` — Names the source tables or queries.
+  - `WHERE` — Keeps rows whose predicate is true.
+  - `GROUP BY` — Forms groups of rows for aggregate operations.
+  - `INSERT INTO` — Creates rows in the named table.
+  - `VALUES` — Supplies row values for an insert.
+  - `UPDATE` — Changes values in existing rows.
+  - **SET (SQL)** — Defines the columns and expressions updated by an UPDATE.
+  - `&sql` — Embeds a SQL statement in ObjectScript.
+  - `SQLCODE` — Reports the result of an Embedded SQL operation.
+  - `%msg` — Contains diagnostic text for a SQL error where supplied.
 
-### Commands, methods and syntax
+### System methods and functions
 
-- **ObjectScript commands** — `CATCH`, `FOR`, `IF`, `LOCK`, `QUIT`, `TCOMMIT`, `TROLLBACK`, `TRY`, `TSTART`, `WHILE`, `WRITE`.
-- **ObjectScript functions and special variables** — `$GET`, `$HOROLOG`, `$I`, `$INCREMENT`, `$LISTNEXT`, `$SELECT`, `$SEQUENCE`, `$SYSTEM`, `$ZERROR`, `$ZTRAP`.
-- **Macros and extrinsics** — `$$$ERROR`, `$$$GeneralError`, `$$$ISERR`, `$$$OK`.
-- **IRIS classes and packages** — `%SQL.Statement`.
-- **Qualified calls and terminal utilities** — `$SYSTEM.OBJ.SetConcurrencyMode()`, `$SYSTEM.SQL.Util.GetOption()`, `$SYSTEM.SQL.Util.SetOption()`.
-- **Method names and generated entry points** — `%Execute()`, `%New()`, `%OpenId()`, `%Prepare()`, `%Save()`, `DisplayString()`.
-- **Lock and transaction syntax** — `LOCK +`, `LOCK -`, `LOCK +ref:timeout`, `LOCK +ref#"S"`, `LOCK +ref#"E"`, `TROLLBACK 1`, `$TEST`, `$TLEVEL`, `%Concurrency`, `%ConcurrencyMode`, `%NOJOURN`.
-- **SQL** — `START TRANSACTION`, `SET TRANSACTION`, `LOCK TABLE`, `UNLOCK TABLE`, `SELECT`, `SELECT DISTINCT`, `FROM`, `WHERE`, `GROUP BY`, `INSERT INTO`, `INTO`, `VALUES`, `UPDATE`, `SET`, `COMMIT`, `ROLLBACK`, `%NOLOCK`, `&sql`, `SQLCODE`, `%msg`.
-- **SQL isolation levels** — `READ UNCOMMITTED`, `READ COMMITTED`, `REPEATABLE READ`, `SERIALIZABLE`.
-- **Methods defined in chapter examples** — `BatchUpdate()`, `ProcessOrder()`, `SavePatient()`, `Transfer()`.
+- `##class(%SQL.Statement).%New()` — Creates a dynamic SQL statement object.
+- `##class(App.Record).%New()` — Creates a new in-memory instance of the class.
+- `##class(App.Record).%OpenId(id, concurrency, .status)` — Opens a record by ID. The concurrency and status arguments are optional.
+- `$GET(node, default)` — Returns the node value or a default.
+- `$INCREMENT(node, amount)` — Atomically adds an amount and returns the new value.
+- `$LISTNEXT(list, position, value)` — Advances the position variable and outputs the next element.
+- `$SELECT(condition:value, 1:default)` — Returns the value for the first true condition.
+- `$SEQUENCE(^counter)` — Allocates the next value from a global sequence counter.
+- `$SYSTEM.OBJ.SetConcurrencyMode(mode)` — Sets the current process's default object concurrency mode.
+- `$SYSTEM.SQL.Util.GetOption(option)` — Reads the current value of an SQL option.
+- `$SYSTEM.SQL.Util.SetOption(option, value)` — Sets a named SQL option.
+- `ex.DisplayString()` — Returns the exception in displayable form.
+- `obj.%Save()` — Persists the object and returns a status.
+- `stmt.%Execute(value)` — Runs the prepared statement with the given bound value.
+- `stmt.%Prepare(sql)` — Prepares a dynamic statement and returns a status.
 
 Official reference: [ObjectScript LOCK](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_clock).
 

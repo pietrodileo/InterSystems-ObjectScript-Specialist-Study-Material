@@ -439,21 +439,48 @@ ObjectScript evaluates values numerically when they are used as conditions, so a
 
 ### Key terms
 
-- **Postconditionals** — COMMAND:condition gates one command. Use a block IF to group related statements.
-- **Loop exit and method return** — QUIT exits the current block, loop or invocation according to context. RETURN can exit the method or procedure from a nested block.
-- **Boolean evaluation** — & and ! evaluate both operands. && and || short-circuit once the result is known. Group predicates explicitly.
-- **Loop and selection flow** — FOR and WHILE repeat work. CONTINUE skips an iteration. $SELECT returns the first matching branch and needs a fallback when no condition is guaranteed.
+- **Postconditionals**
+  - **COMMAND:condition** — Runs one command only when the condition is true.
+  - **Block IF** — Groups multiple statements under one condition.
+- **Loop exit and method return**
+  - `QUIT` — Exits the current loop, block or invocation as determined by context.
+  - `RETURN` — Exits the method or procedure from its current block.
+- **Boolean evaluation**
+  - `& and !` — Evaluate both operands for AND and OR respectively.
+  - `&& and ||` — Stop evaluating as soon as the result is known.
+  - **Parentheses** — Make the intended grouping explicit.
+- **Loop and selection flow**
+  - `FOR` — Repeats work over a range or with explicit exit logic.
+  - `WHILE` — Repeats as long as its condition holds.
+  - `CONTINUE` — Skips to the next iteration.
+  - `$SELECT` — Returns the value for the first true condition.
+- **ObjectScript commands**
+  - `DO` — Invokes a routine, label or method.
+  - `KILL` — Removes a variable or a node and all its descendants.
+  - `SET` — Assigns a value to a variable, property or assignable expression.
+  - `THROW` — Raises an exception object.
+  - `WRITE` — Sends formatted output to the current device.
+  - `IF` — Runs the following command or block when its condition is true.
+  - `ELSE` — Runs the alternative branch when the condition is false.
+  - `ELSEIF` — Tests an additional condition after a false branch.
+- **System variables and macros**
+  - `$$$ERROR` — Builds an error status from its code and arguments.
+  - `$$$GeneralError` — Identifies the general-error code used with message text.
+  - `$$$OK` — Supplies a success status.
 
-### Commands, methods and syntax
+### System methods and functions
 
-- **ObjectScript commands** — `DO`, `KILL`, `SET`, `THROW`, `WRITE`.
-- **ObjectScript functions and special variables** — `$DATA`, `$GET`, `$LENGTH`, `$LIST`, `$LISTBUILD`, `$LISTLENGTH`, `$RANDOM`, `$SELECT`.
-- **Macros and extrinsics** — `$$$ERROR`, `$$$GeneralError`, `$$$OK`.
-- **IRIS classes and packages** — `%Exception.StatusException`.
-- **Method names and generated entry points** — `Calculate()`, `Count()`, `CreateFromStatus()`, `GetAt()`, `LogError()`, `ProcessAdult()`, `ProcessMinor()`.
-- **Control syntax** — `IF`, `ELSE`, `ELSEIF`, `FOR`, `WHILE`, `CONTINUE`, `QUIT`, `RETURN`, `COMMAND:condition`, `$SELECT(condition:value,1:default)`.
-- **Boolean operators in the exercises** — `&`, `!`, `'`, `&&`, `||`.
-- **Methods defined in chapter examples** — `Add()`, `Divide()`, `Example1()`, `Example2()`, `FindFirst()`, `FindFirstZero()`, `FindItem()`, `MyMethod()`, `NestedExample()`, `NestedReturn()`, `Process()`.
+- `##class(%Exception.StatusException).CreateFromStatus(status)` — Creates an exception object from a status.
+- `$DATA(node)` — Reports whether a node has data, descendants, both or neither.
+- `$GET(node, default)` — Returns the node value or a default.
+- `$LENGTH(text, delimiter)` — Counts delimited fields. Omit the delimiter to count characters.
+- `$LIST(list, position)` — Reads the element at the specified position.
+- `$LISTBUILD(value1, value2)` — Encodes values as an ObjectScript list.
+- `$LISTLENGTH(list)` — Counts list positions.
+- `$RANDOM(limit)` — Returns a random integer from zero through limit minus one.
+- `$SELECT(condition:value, 1:default)` — Returns the value for the first true condition.
+- `list.Count()` — Returns the number of elements in the list collection.
+- `list.GetAt(position)` — Returns the collection element at the specified position.
 
 Official reference: [Boolean evaluation in ObjectScript](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_booleans).
 

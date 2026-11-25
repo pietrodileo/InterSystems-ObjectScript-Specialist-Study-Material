@@ -510,24 +510,90 @@ Query the SQL security metadata to see what privileges exist:
 
 ### Key terms
 
-- **Variable and global scope** — Method locals follow procedure scope. Process-private globals can survive in a reused process. Shared globals need database privileges. Remove sensitive temporary data when finished.
-- **Role, resource and privilege** — $ROLES contains active roles. Test exact membership with $LISTFIND and $LISTFROMSTRING. $SYSTEM.Security.Check tests a named resource privilege. Requires guards entry to a method.
-- **Visibility and authorization** — Private controls member visibility. Role checks, resource checks and SQL grants govern allowed operations. Propagate a failed %Status and exclude sensitive data from logs.
-- **Bound SQL values** — Use ? placeholders in dynamic SQL and bind values at %Execute. Check prepare status and execution SQLCODE. Select dynamic identifiers from a fixed allowlist.
-- **SQL and embedded privileges** — GRANT and REVOKE manage SQL permissions. WITH GRANT OPTION allows delegation. Embedded SQL binds :hostVariable and requires an application privilege check where applicable.
+- **Variable and global scope**
+  - **Method locals** — Follow the method's procedure scope.
+  - **Process-private globals** — Remain available to their owning process, potentially across reused requests.
+  - **Shared globals** — Require permissions on the mapped database.
+- **Role, resource and privilege**
+  - `$ROLES` — Reports the active roles.
+  - `$LISTFROMSTRING` — Converts the role string to an encoded list.
+  - `$LISTFIND` — Tests exact membership in that list.
+  - `$SYSTEM.Security.Check` — Tests a privilege on a named resource.
+  - **Requires** — Specifies an entry requirement for a method.
+- **Visibility and authorization**
+  - **Private** — Restricts class member visibility.
+  - **Resource privileges and SQL grants** — Authorize specific actions on protected objects.
+  - `%Status` — Passes a denied operation or other failure back to the caller.
+- **Bound SQL values**
+  - `? placeholder` — Binds a Dynamic SQL value separately from statement text.
+  - `%Prepare` — Parses SQL and reports preparation status.
+  - `%Execute` — Executes with the supplied bind values.
+  - `SQLCODE` — Reports the SQL operation outcome.
+  - **Identifier allowlist** — Limits dynamically chosen names to predefined options.
+- **SQL and embedded privileges**
+  - **GRANT and REVOKE** — Assign and remove SQL privileges.
+  - `WITH GRANT OPTION` — Permits the grantee to delegate a privilege.
+  - **:hostVariable** — Binds an ObjectScript variable in Embedded SQL.
+  - **Application privilege check** — Guards embedded operations where the application must enforce authorization.
+- **ObjectScript commands**
+  - `CATCH` — Receives the exception raised in the corresponding TRY block.
+  - `DO` — Invokes a routine, label or method.
+  - `ELSE` — Runs the alternative branch when the condition is false.
+  - `ELSEIF` — Tests an additional condition after a false branch.
+  - `FOR` — Repeats a block or command according to a loop specification.
+  - `IF` — Runs the following command or block when its condition is true.
+  - `KILL` — Removes a variable or a node and all its descendants.
+  - `QUIT` — Leaves the current loop, block or invocation as determined by context.
+  - `RETURN` — Returns control, optionally with a value, to the caller.
+  - `TCOMMIT` — Ends a transaction level and commits at the outermost level.
+  - `TROLLBACK` — Undoes transaction changes at the requested level.
+  - `TRY` — Begins a block watched for exceptions.
+  - `TSTART` — Starts a new transaction level.
+  - `WHILE` — Repeats the block while its condition holds.
+  - `WRITE` — Sends formatted output to the current device.
+- **System variables and macros**
+  - `$SYSTEM` — Provides shorthand access to the IRIS %SYSTEM package.
+  - `$USERNAME` — Identifies the authenticated user.
+  - `$$$AccessDenied` — Identifies the access-denied error code.
+  - `$$$ERROR` — Builds an error status from its code and arguments.
+  - `$$$GeneralError` — Identifies the general-error code used with message text.
+  - `$$$ISERR` — Tests whether a status indicates an error.
+  - `$$$ISOK` — Tests whether a status indicates success.
+  - `$$$OK` — Supplies a success status.
+  - `$$$ThrowStatus` — Raises an exception from the supplied error status.
+- **SQL statements and clauses**
+  - `FROM` — Names the source tables or queries.
+  - `SELECT` — Reads rows and expressions from one or more sources.
+  - `UPDATE` — Changes values in existing rows.
+  - `INSERT INTO` — Creates rows in the named table.
+  - **DELETE (SQL)** — Removes rows that match the filter.
+  - `&sql` — Embeds a SQL statement in ObjectScript.
+  - `DECLARE CURSOR` — Gives a result set a name for Embedded SQL row-by-row fetch.
+  - **OPEN (cursor)** — Starts a declared cursor.
+  - `FETCH` — Reads the next cursor row into host variables.
+  - **CLOSE (cursor)** — Closes the cursor and releases its resources.
+  - `WHERE` — Keeps rows whose predicate is true.
+  - `ORDER BY` — Chooses the order in which result rows appear.
+  - **SET (SQL)** — Defines the columns and expressions updated by an UPDATE.
+  - `%msg` — Contains diagnostic text for a SQL error where supplied.
 
-### Commands, methods and syntax
+### System methods and functions
 
-- **ObjectScript commands** — `CATCH`, `DO`, `ELSE`, `ELSEIF`, `FOR`, `IF`, `KILL`, `QUIT`, `RETURN`, `TCOMMIT`, `TROLLBACK`, `TRY`, `TSTART`, `WHILE`, `WRITE`.
-- **ObjectScript functions and special variables** — `$I`, `$LISTBUILD`, `$LISTFIND`, `$LISTFROMSTRING`, `$PIECE`, `$ROLES`, `$SYSTEM`, `$USERNAME`.
-- **Macros and extrinsics** — `$$$AccessDenied`, `$$$ERROR`, `$$$GeneralError`, `$$$ISERR`, `$$$ISOK`, `$$$OK`, `$$$ThrowStatus`.
-- **IRIS classes and packages** — `%SQL.Statement`.
-- **Qualified calls and terminal utilities** — `$SYSTEM.Security.Check()`, `$SYSTEM.Status.GetErrorText()`, `$SYSTEM.Status.IsError()`.
-- **Method names and generated entry points** — `%DeleteId()`, `%Execute()`, `%GetData()`, `%New()`, `%Next()`, `%Prepare()`, `AsStatus()`, `AuditLog()`, `DisplayLog()`, `Get()`, `GetPatient()`, `Log()`, `ProcessPatientData()`.
-- **Authorization and scope** — `Requires`, `Private`, `ProcedureBlock`, `PublicList`, `%All`, `^||global`, `%Status`, `%occStatus`, `%CHECKPRIV`.
-- **SQL privileges** — `GRANT`, `REVOKE`, `GRANT ALL`, `WITH GRANT OPTION`, `ON`, `TO`, `FROM`, `EXECUTE`, `SELECT`, `UPDATE`, `INSERT`, `DELETE`.
-- **Queries and cursors** — `&sql`, `DECLARE CURSOR`, `OPEN`, `FETCH`, `CLOSE`, `SELECT`, `FROM`, `WHERE`, `ORDER BY`, `INSERT INTO`, `UPDATE`, `SET`, `INTO`, `?`, `:hostVariable`, `SQLCODE`, `%msg`.
-- **Methods defined in chapter examples** — `CreateAccount()`, `DeletePatient()`, `FindOrders()`, `Manage()`, `ManageUser()`, `ProcessOrder()`, `ProcessReport()`, `RequestLabel()`, `Search()`, `Transfer()`, `UpdatePatientRecord()`, `ViewAuditLog()`.
+- `##class(%SQL.Statement).%New()` — Creates a dynamic SQL statement object.
+- `##class(App.Record).%DeleteId(id)` — Deletes the record with the supplied persistent ID.
+- `$INCREMENT(node, amount)` — Atomically adds an amount and returns the new value.
+- `$LISTBUILD(value1, value2)` — Encodes values as an ObjectScript list.
+- `$LISTFIND(list, value, startAfter)` — Returns the position of a matching list value.
+- `$LISTFROMSTRING(text, delimiter)` — Splits delimited text into an encoded list.
+- `$PIECE(text, delimiter, from, to)` — Returns one or more delimited fields.
+- `$SYSTEM.Security.Check(resource, permission)` — Tests the process's privilege on the named resource.
+- `$SYSTEM.Status.GetErrorText(status)` — Returns status message text.
+- `$SYSTEM.Status.IsError(status)` — Tests whether the status represents an error.
+- `ex.AsStatus()` — Converts an exception object to a status.
+- `result.%GetData(columnNumber)` — Reads a result column by its one-based ordinal.
+- `result.%Next()` — Advances to the next SQL row and reports whether it exists.
+- `stmt.%Execute(value)` — Runs the prepared statement with the given bound value.
+- `stmt.%Prepare(sql)` — Prepares a dynamic statement and returns a status.
 
 Official reference: [Using Embedded SQL](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_esql).
 

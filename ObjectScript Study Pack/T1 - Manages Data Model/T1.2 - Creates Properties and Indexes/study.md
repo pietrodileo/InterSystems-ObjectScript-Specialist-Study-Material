@@ -771,24 +771,91 @@ ForeignKey LocationFK(Country, City)
 
 ### Key terms
 
-- **String validation** — MAXLEN bounds a string property. TRUNCATE controls whether excess characters can be truncated. Check the validation or save status.
-- **Stream types** — Global streams store content in IRIS. File streams use the file system. Character streams process text. Binary streams preserve bytes.
-- **Computed values** — Calculated uses a getter. SqlComputed uses SqlComputeCode. SqlComputeOnChange selects when SQL refreshes the value. Verify existing rows during a migration.
-- **Class member parameters** — Required imposes a value constraint. InitialExpression supplies a starting value. Parameter declarations and datatype parameters customize behavior.
-- **Index selection** — Standard indexes map keys to IDs. Bitmap indexes store row membership by key. Bitslice indexes organize numeric values by bit for aggregation. Choose based on data distribution and workload.
-- **Unique keys and references** — Generated index-name Open, Exists and Delete methods use the indexed key. %ExistsId takes a persistent ID. ForeignKey enforces a reference, with OnDelete specifying the deletion action.
+- **String validation**
+  - `MAXLEN` — Sets the maximum string length.
+  - `TRUNCATE` — Controls truncation of overlong string values.
+  - `%Status` — Reports validation or save failure to the caller.
+- **Stream types**
+  - **Global streams** — Store data in IRIS globals.
+  - **File streams** — Read or write operating-system files.
+  - **Character streams** — Handle text and character encoding.
+  - **Binary streams** — Preserve raw bytes.
+- **Computed values**
+  - **Calculated** — Computes a property through its getter.
+  - **SqlComputed** — Marks a SQL-computed property.
+  - **SqlComputeCode** — Supplies the SQL computation logic.
+  - **SqlComputeOnChange** — Controls which changes trigger recomputation.
+  - **Backfill** — Initializes or verifies rows that predate the new computation.
+- **Class member parameters**
+  - **Required** — Requires a property value at validation time.
+  - **InitialExpression** — Supplies a value when an instance is created.
+  - **Parameter** — Defines class or member configuration such as a datatype limit.
+- **Index selection**
+  - **Standard index** — Maps indexed keys to row IDs.
+  - **Bitmap index** — Represents row membership for each indexed key using bits.
+  - **Bitslice index** — Organizes numeric values by bit to support aggregation.
+  - **Selectivity** — Describes how strongly a predicate narrows the matching rows.
+- **Unique keys and references**
+  - **Index-generated methods** — Open, test or delete rows by the specific index key.
+  - `%ExistsId` — Tests existence using the persistent ID.
+  - **ForeignKey** — Enforces a reference to a related row.
+  - **OnDelete** — Specifies the referential action when the referenced row is deleted.
+- **ObjectScript commands**
+  - `DO` — Invokes a routine, label or method.
+  - `ELSE` — Runs the alternative branch when the condition is false.
+  - `IF` — Runs the following command or block when its condition is true.
+  - `RETURN` — Returns control, optionally with a value, to the caller.
+  - `WHILE` — Repeats the block while its condition holds.
+  - `WRITE` — Sends formatted output to the current device.
+  - `%ID` — Exposes the row's persistent identifier in SQL.
+  - `OPEN` — Opens the specified I/O device.
+  - `READ` — Reads input from the current device.
+- **System variables and macros**
+  - `$HOROLOG` — Reports local date and time as day and seconds fields.
+  - `$SYSTEM` — Provides shorthand access to the IRIS %SYSTEM package.
+  - `$$$ISERR` — Tests whether a status indicates an error.
+  - `$$$ISOK` — Tests whether a status indicates success.
+- **SQL statements and clauses**
+  - `SELECT` — Reads rows and expressions from one or more sources.
+  - `FROM` — Names the source tables or queries.
+  - `WHERE` — Keeps rows whose predicate is true.
+  - `ORDER BY` — Chooses the order in which result rows appear.
+  - `UPDATE` — Changes values in existing rows.
+  - **SET (SQL)** — Defines the columns and expressions updated by an UPDATE.
+  - `&sql` — Embeds a SQL statement in ObjectScript.
+  - `SQLCODE` — Reports the result of an Embedded SQL operation.
 
-### Commands, methods and syntax
+### System methods and functions
 
-- **ObjectScript commands** — `DO`, `ELSE`, `IF`, `RETURN`, `WHILE`, `WRITE`.
-- **ObjectScript functions and special variables** — `$CHAR`, `$H`, `$HOROLOG`, `$LENGTH`, `$LISTBUILD`, `$SELECT`, `$SYSTEM`, `$ZDT`.
-- **Macros and extrinsics** — `$$$ISERR`, `$$$ISOK`.
-- **Qualified calls and terminal utilities** — `$System.Status.DisplayError()`, `$SYSTEM.Status.IsError()`.
-- **Method names and generated entry points** — `%BuildIndices()`, `%DeleteId()`, `%ExistsId()`, `%Id()`, `%New()`, `%OpenId()`, `%PurgeIndices()`, `%Save()`, `%ValidateObject()`, `Clear()`, `CopyFrom()`, `EmailIdxDelete()`, `EmailIdxExists()`, `EmailIdxOpen()`, `EmployeeIDIdxExists()`, `MoveToEnd()`, `Open()`, `Read()`, `ReadLine()`, `Rewind()`, `TitleIdxDelete()`, `TitleIdxExists()`, `TitleIdxOpen()`, `Write()`, `WriteLine()`.
-- **Class and index keywords** — `Class`, `Property`, `Parameter`, `Index`, `On`, `As`, `ForeignKey`, `OnDelete`, `NoAction`, `Cascade`, `SetNull`, `Unique`, `Bitmap`, `Bitslice`, `Required`, `InitialExpression`, `Calculated`, `SqlComputed`, `SqlComputeCode`, `SqlComputeOnChange`, `Transient`, `MAXLEN`, `TRUNCATE`.
-- **Datatypes** — `%String(MAXLEN=…)`, `%Numeric`, `%Stream.GlobalCharacter`, `%Stream.GlobalBinary`, `%Stream.FileCharacter`, `%Stream.FileBinary`, `%Stream.FileBinaryGzip`.
-- **SQL** — `SELECT`, `FROM`, `WHERE`, `ORDER BY`, `AND`, `UPDATE`, `SET`, `COUNT()`, `SUM()`, `&sql`, `SQLCODE`.
-- **Methods defined in chapter examples** — `FullNameGet()`, `GetCategory()`.
+- `##class(%Stream.FileCharacter).%New()` — Creates a character stream backed by a file.
+- `##class(%Stream.GlobalCharacter).%New()` — Creates a character stream backed by an IRIS global.
+- `##class(App.Record).%BuildIndices($LISTBUILD("IndexName"))` — Builds the named index for stored records.
+- `##class(App.Record).%DeleteId(id)` — Deletes the record with the supplied persistent ID.
+- `##class(App.Record).%ExistsId(id)` — Tests whether an object with the given ID exists.
+- `##class(App.Record).%New()` — Creates a new in-memory instance of the class.
+- `##class(App.Record).%OpenId(id, concurrency, .status)` — Opens a record by ID. The concurrency and status arguments are optional.
+- `##class(App.Record).%PurgeIndices($LISTBUILD("IndexName"))` — Clears entries from the named index for a subsequent rebuild.
+- `$CHAR(code1, code2)` — Builds a string from character codes.
+- `$LENGTH(text, delimiter)` — Counts delimited fields. Omit the delimiter to count characters.
+- `$LISTBUILD(value1, value2)` — Encodes values as an ObjectScript list.
+- `$SELECT(condition:value, 1:default)` — Returns the value for the first true condition.
+- `$SYSTEM.Status.DisplayError(status)` — Writes error details to the current device.
+- `$SYSTEM.Status.IsError(status)` — Tests whether the status represents an error.
+- `$ZDATETIME(daySecondPair, dateFormat, timeFormat)` — Formats a day-and-seconds pair as date and time text.
+- `COUNT(*)` — Counts rows, regardless of whether individual fields are NULL.
+- `file.Open("WSA")` — Opens a file for stream writes in append mode.
+- `obj.%Id()` — Returns the persistent ID of the open object.
+- `obj.%Save()` — Persists the object and returns a status.
+- `obj.%ValidateObject()` — Validates the object and returns a status.
+- `stream.Clear()` — Clears contents and resets the stream.
+- `stream.CopyFrom(source)` — Copies data from the source stream into the destination.
+- `stream.MoveToEnd()` — Moves the stream cursor to the end.
+- `stream.Read(length)` — Reads up to the requested number of characters or bytes.
+- `stream.ReadLine()` — Reads a line at the current stream position.
+- `stream.Rewind()` — Moves the stream cursor back to the start.
+- `stream.Write(data)` — Writes the supplied data to the stream.
+- `stream.WriteLine(text)` — Writes text followed by a line terminator.
+- `SUM(column)` — Adds the non-NULL values.
 
 Official reference: [Defining persistent classes and indexes](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_defpersobj).
 

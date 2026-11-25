@@ -428,23 +428,91 @@ Treat transport and application outcomes as separate checks. A failed `%Status` 
 
 ### Key terms
 
-- **Stream types** — Choose file, global or temporary storage. Character streams handle text and Binary streams preserve bytes.
-- **File stream navigation** — LinkToFile associates a path. Read and ReadLine consume content. AtEnd and Size describe the stream. Rewind resets position and CopyFrom transfers content.
-- **HTTP transport and response** — %Net.HttpRequest configures endpoint, headers, body and TLS. Inspect HttpResponse.StatusCode and Data separately from the returned transport status.
-- **FTP and SMTP** — %Net.FtpSession handles FTP connections and transfers. %Net.MailMessage builds mail and %Net.SMTP sends it. Check statuses and close sessions appropriately.
+- **Stream types**
+  - **File, global and temporary streams** — Choose where stream data is stored.
+  - **Character stream** — Works with text and character encoding.
+  - **Binary stream** — Preserves raw bytes.
+- **File stream navigation**
+  - **LinkToFile** — Associates the stream with a file path.
+  - **Read** — Reads a chunk from the current position.
+  - **ReadLine** — Reads a line from the current position.
+  - **AtEnd** — Indicates whether reading has reached the end.
+  - **Size** — Reports stream length.
+  - **Rewind** — Resets the current position.
+  - **CopyFrom** — Copies content from another stream.
+- **HTTP transport and response**
+  - `%Net.HttpRequest` — Defines the endpoint, headers, body and TLS settings.
+  - **Transport status** — Reports whether the send operation succeeded.
+  - **HttpResponse.StatusCode** — Reports the HTTP result returned by the server.
+  - **HttpResponse.Data** — Contains the response body stream.
+- **FTP and SMTP**
+  - `%Net.FtpSession` — Manages FTP connections and file transfers.
+  - `%Net.MailMessage` — Holds message headers, body and attachments.
+  - `%Net.SMTP` — Submits mail to an SMTP server.
+- **ObjectScript commands**
+  - `DO` — Invokes a routine, label or method.
+  - `ELSE` — Runs the alternative branch when the condition is false.
+  - `ELSEIF` — Tests an additional condition after a false branch.
+  - `FOR` — Repeats a block or command according to a loop specification.
+  - `IF` — Runs the following command or block when its condition is true.
+  - `QUIT` — Leaves the current loop, block or invocation as determined by context.
+  - `SET` — Assigns a value to a variable, property or assignable expression.
+  - `WHILE` — Repeats the block while its condition holds.
+  - `WRITE` — Sends formatted output to the current device.
+  - `CLOSE` — Closes the device identified by its argument.
+  - `OPEN` — Opens the specified I/O device.
+- **System variables and macros**
+  - `$SYSTEM` — Provides shorthand access to the IRIS %SYSTEM package.
+  - `$$$ISERR` — Tests whether a status indicates an error.
+  - `$$$ISOK` — Tests whether a status indicates success.
 
-### Commands, methods and syntax
+### System methods and functions
 
-- **ObjectScript commands** — `DO`, `ELSE`, `ELSEIF`, `FOR`, `IF`, `QUIT`, `SET`, `WHILE`, `WRITE`.
-- **ObjectScript functions and special variables** — `$CHAR`, `$LENGTH`, `$SYSTEM`.
-- **Macros and extrinsics** — `$$$ISERR`, `$$$ISOK`.
-- **IRIS classes and packages** — `%Net.FtpSession`, `%Net.HttpRequest`, `%Net.HttpResponse`, `%Net.MailMessage`, `%Net.SMTP`, `%Stream.FileBinary`, `%Stream.FileCharacter`, `%Stream.GlobalBinary`, `%Stream.GlobalCharacter`, `%Stream.TmpBinary`, `%Stream.TmpCharacter`.
-- **Qualified calls and terminal utilities** — `$SYSTEM.Status.DisplayError()`, `$SYSTEM.Status.GetErrorText()`, `$SYSTEM.Status.IsError()`.
-- **Method names and generated entry points** — `%FromJSON()`, `%New()`, `%Save()`, `%ToJSON()`, `Append()`, `AttachFile()`, `Clear()`, `Close()`, `Connect()`, `CopyFrom()`, `Delete()`, `Flush()`, `Get()`, `GetAll()`, `GetHeader()`, `HasNext()`, `Head()`, `Insert()`, `LinkToFile()`, `List()`, `Logout()`, `MoveToEnd()`, `MoveToStart()`, `Next()`, `Open()`, `Options()`, `Patch()`, `Post()`, `Put()`, `Read()`, `ReadAll()`, `ReadChar()`, `ReadLine()`, `Reset()`, `Retrieve()`, `Rewind()`, `Send()`, `SetDirectory()`, `SetFilename()`, `SetHeader()`, `Store()`, `Write()`, `WriteLine()`.
-- **Stream members** — `.Filename`, `.AtEnd`, `.Size`, `.TranslateTable`.
-- **HTTP verbs and members** — `GET`, `HEAD`, `POST`, `PUT`, `PATCH`, `DELETE`, `OPTIONS`, `.Server`, `.Port`, `.Https`, `.SSLConfiguration`, `.Timeout`, `.HttpResponse`, `.StatusCode`, `.Data`, `.EntityBody`, `.ContentType`.
-- **FTP and mail members** — `.SmtpServer`, `.Port`, `.From`, `.To`, `.Subject`, `.TextData`, `.IsHTML`.
-- **Incorrect forms in the exercises** — `%Net.EmailClient`, `%Net.EmailMessage`, `%Net.FileTransfer`, `%Net.FTP`, `%Net.FtpClient`, `%Stream.MemoryCharacter`, `Execute()`, `GetResponseBody()`, `SendMail()`.
+- `##class(%DynamicObject).%FromJSON(json)` — Parses JSON into a dynamic entity.
+- `##class(%Net.FtpSession).%New()` — Creates an FTP session object.
+- `##class(%Net.HttpRequest).%New()` — Creates an HTTP request object.
+- `##class(%Net.MailMessage).%New()` — Creates a mail message object.
+- `##class(%Net.SMTP).%New()` — Creates an SMTP client.
+- `##class(%Stream.FileCharacter).%New()` — Creates a character stream backed by a file.
+- `##class(%Stream.GlobalCharacter).%New()` — Creates a character stream backed by an IRIS global.
+- `$CHAR(code1, code2)` — Builds a string from character codes.
+- `$LENGTH(text, delimiter)` — Counts delimited fields. Omit the delimiter to count characters.
+- `$SYSTEM.Status.DisplayError(status)` — Writes error details to the current device.
+- `$SYSTEM.Status.GetErrorText(status)` — Returns status message text.
+- `$SYSTEM.Status.IsError(status)` — Tests whether the status represents an error.
+- `ftp.Connect(server, username, password, port)` — Opens an FTP session and reports success as a Boolean.
+- `ftp.Delete(fileName)` — Deletes a remote file through the FTP session.
+- `ftp.List(pattern, .entries)` — Writes the matching directory entries to an output stream.
+- `ftp.Logout()` — Closes the FTP session.
+- `ftp.Retrieve(fileName, .download)` — Retrieves the remote file to an output stream.
+- `ftp.SetDirectory(path)` — Changes the remote working directory.
+- `ftp.Store(fileName, upload)` — Uploads a stream to a remote file.
+- `msg.AttachFile(directory, fileName)` — Adds a file attachment to the mail message.
+- `msg.To.Insert(address)` — Adds a recipient to the message's To list.
+- `obj.%Save()` — Persists the object and returns a status.
+- `obj.%ToJSON()` — Serializes the dynamic entity as JSON.
+- `request.Delete(path)` — Sends an HTTP DELETE request.
+- `request.Get(path)` — Sends an HTTP GET request.
+- `request.Head(path)` — Sends an HTTP HEAD request for response headers.
+- `request.Patch(path)` — Sends an HTTP PATCH request for a partial update.
+- `request.Post(path)` — Sends an HTTP POST request.
+- `request.Put(path)` — Sends an HTTP PUT request.
+- `request.Reset()` — Resets HTTP request state for reuse.
+- `request.Send("GET", path)` — Sends a request using an explicit HTTP verb.
+- `request.Send("OPTIONS", path)` — Queries the server's communication options for a resource.
+- `request.SetHeader(name, value)` — Sets an HTTP request header.
+- `response.GetHeader(name)` — Returns the value of the named HTTP response header.
+- `smtp.Send(msg)` — Submits the email message to the configured SMTP server.
+- `stream.Clear()` — Clears contents and resets the stream.
+- `stream.CopyFrom(source)` — Copies data from the source stream into the destination.
+- `stream.Flush()` — Flushes buffered writes.
+- `stream.LinkToFile(fileName)` — Associates a file stream with a path.
+- `stream.MoveToEnd()` — Moves the stream cursor to the end.
+- `stream.Read(length)` — Reads up to the requested number of characters or bytes.
+- `stream.ReadLine()` — Reads a line at the current stream position.
+- `stream.Rewind()` — Moves the stream cursor back to the start.
+- `stream.Write(data)` — Writes the supplied data to the stream.
+- `stream.WriteLine(text)` — Writes text followed by a line terminator.
 
 Official reference: [HTTP requests from IRIS](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GNET_http).
 

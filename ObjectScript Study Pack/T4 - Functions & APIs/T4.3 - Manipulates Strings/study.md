@@ -813,17 +813,44 @@ Inside ObjectScript source, include a quotation mark by doubling it: `Set text =
 
 ### Key terms
 
-- **Fields and character positions** — $PIECE addresses delimited fields. $EXTRACT addresses character positions. Both are one-based and can be assignment targets.
-- **Replacement and stripping** — $REPLACE substitutes substrings. $TRANSLATE maps or removes individual characters. $ZSTRIP applies character-class rules.
-- **Concatenation and matching** — Underscore joins strings. $LENGTH counts characters or fields. $MATCH checks the whole input and $LOCATE searches within it. The ? operator uses native pattern syntax.
-- **Encoding and escapes** — $ZCONVERT changes case or applies an encoding such as URL or HTML. Match encoding to the output context. Double quotes inside ObjectScript string literals.
+- **Fields and character positions**
+  - `$PIECE` — Reads or sets one-based delimited fields.
+  - `$EXTRACT` — Reads or sets characters by one-based position.
+- **Replacement and stripping**
+  - `$REPLACE` — Substitutes occurrences of a substring.
+  - `$TRANSLATE` — Maps or removes single characters.
+  - `$ZSTRIP` — Removes characters according to character-class rules.
+- **Concatenation and matching**
+  - **_** — Concatenates strings.
+  - `$LENGTH` — Counts characters or delimited fields.
+  - `$MATCH` — Tests whether the entire input matches a regular expression.
+  - `$LOCATE` — Finds a regular expression match within an input.
+  - `?` — Tests an ObjectScript pattern.
+- **Encoding and escapes**
+  - `$ZCONVERT` — Changes case or applies an encoding for a specified context.
+  - **URL and HTML** — Use different escaping rules for their output contexts.
+  - **Doubled quotes** — Represent a literal quotation mark inside an ObjectScript string.
+- **ObjectScript commands**
+  - `FOR` — Repeats a block or command according to a loop specification.
+  - `IF` — Runs the following command or block when its condition is true.
+  - `QUIT` — Leaves the current loop, block or invocation as determined by context.
+  - `RETURN` — Returns control, optionally with a value, to the caller.
+  - `SET` — Assigns a value to a variable, property or assignable expression.
+  - `WRITE` — Sends formatted output to the current device.
 
-### Commands, methods and syntax
+### System methods and functions
 
-- **ObjectScript commands** — `FOR`, `IF`, `QUIT`, `RETURN`, `SET`, `WRITE`.
-- **ObjectScript functions and special variables** — `$A`, `$ASCII`, `$C`, `$CHAR`, `$E`, `$EXTRACT`, `$L`, `$LENGTH`, `$LOCATE`, `$MATCH`, `$P`, `$PIECE`, `$REPLACE`, `$TR`, `$TRANSLATE`, `$ZCONVERT`, `$ZCVT`, `$ZSTRIP`.
-- **String and pattern syntax** — `_`, `?`, `'?`, `[`, `]`, `doubled quotes`, `$CHAR(34)`.
-- **Encoding modes** — `U`, `L`, `O`, `I`, `URL`, `HTML`, `UTF-8`.
+- `$ASCII(text, position)` — Returns the numeric character code at a position.
+- `$CHAR(code1, code2)` — Builds a string from character codes.
+- `$EXTRACT(text, from, to)` — Returns a substring by character position.
+- `$LENGTH(text, delimiter)` — Counts delimited fields. Omit the delimiter to count characters.
+- `$LOCATE(text, regex, start)` — Finds a regular expression match.
+- `$MATCH(text, regex)` — Tests whether the entire input matches a regular expression.
+- `$PIECE(text, delimiter, from, to)` — Returns one or more delimited fields.
+- `$REPLACE(text, old, new)` — Substitutes occurrences of a substring.
+- `$TRANSLATE(text, from, to)` — Maps or removes individual characters.
+- `$ZCONVERT(text, mode)` — Converts case or applies an encoding mode.
+- `$ZSTRIP(text, action)` — Removes characters according to class and position rules.
 
 Official reference: [Strings in ObjectScript](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_strings).
 

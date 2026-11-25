@@ -979,23 +979,84 @@ ClassMethod StandardTemplate(input As %String) As %Status
 
 ### Key terms
 
-- **TRY, CATCH and THROW** — TRY protects work. THROW propagates an exception. CATCH receives the exception OREF for handling, conversion or rethrowing.
-- **%Status and exception** — Status is an explicit return value. $$$ISERR and $$$ISOK test it. CreateFromStatus or a throw helper bridges to exception flow. AsStatus converts back.
-- **Diagnostics** — Capture exception name, code, location and context. $STACK exposes stack information. Capture $ZERROR before later errors overwrite it.
-- **Application logging** — Log actionable failure context while excluding secrets. Roll back only owned work and preserve the original error if cleanup also fails.
+- **TRY, CATCH and THROW**
+  - `TRY` — Wraps work that may raise an exception.
+  - `CATCH` — Receives an exception OREF for handling or conversion.
+  - `THROW` — Raises or propagates an exception.
+- **%Status and exception**
+  - `%Status` — Carries success or error details in a return value.
+  - `$$$ISERR` — Detects an error status.
+  - `$$$ISOK` — Tests for success.
+  - **CreateFromStatus** — Creates an exception from a status.
+  - **AsStatus** — Converts an exception to a status.
+- **Diagnostics**
+  - **Name** — Identifies the exception type or reported error.
+  - **Code** — Holds the exception's error code.
+  - **Location** — Identifies the source location where the exception occurred.
+  - **Data** — Supplies additional exception context.
+  - `$STACK` — Reports stack levels and source context.
+  - `$ZERROR` — Holds the last ObjectScript error text.
+- **Application logging**
+  - **Failure context** — Captures details needed to investigate without recording secrets.
+  - **Rollback ownership** — Limits cleanup to the work owned by the failing routine.
+  - **Original error** — Remains available if cleanup raises another error.
+- **ObjectScript commands**
+  - `DO` — Invokes a routine, label or method.
+  - `ELSE` — Runs the alternative branch when the condition is false.
+  - `ELSEIF` — Tests an additional condition after a false branch.
+  - `FOR` — Repeats a block or command according to a loop specification.
+  - `IF` — Runs the following command or block when its condition is true.
+  - `QUIT` — Leaves the current loop, block or invocation as determined by context.
+  - `RETURN` — Returns control, optionally with a value, to the caller.
+  - `SET` — Assigns a value to a variable, property or assignable expression.
+  - `WRITE` — Sends formatted output to the current device.
+  - `ZWRITE` — Displays variable values and subscripts for inspection.
+  - `%ID` — Exposes the row's persistent identifier in SQL.
+  - `SQLCODE` — Reports the result of an Embedded SQL operation.
+- **System variables and macros**
+  - `$HOROLOG` — Reports local date and time as day and seconds fields.
+  - `$SYSTEM` — Provides shorthand access to the IRIS %SYSTEM package.
+  - `$$$ADDSC` — Appends one status to another.
+  - `$$$ERROR` — Builds an error status from its code and arguments.
+  - `$$$GeneralError` — Identifies the general-error code used with message text.
+  - `$$$InvalidArgument` — Identifies the invalid-argument error code.
+  - `$$$OK` — Supplies a success status.
+  - `$$$ThrowOnError` — Throws if the supplied status indicates an error.
+  - `$$$ThrowStatus` — Raises an exception from the supplied error status.
+  - `$ZTRAP` — Identifies the legacy ObjectScript error handler.
 
-### Commands, methods and syntax
+### System methods and functions
 
-- **ObjectScript commands** — `CATCH`, `DO`, `ELSE`, `ELSEIF`, `FOR`, `IF`, `QUIT`, `RETURN`, `SET`, `THROW`, `TRY`, `WRITE`, `ZWRITE`.
-- **ObjectScript functions and special variables** — `$CHAR`, `$H`, `$HOROLOG`, `$I`, `$INCREMENT`, `$LISTBUILD`, `$LISTGET`, `$METHOD`, `$PIECE`, `$STACK`, `$SYSTEM`, `$ZDATETIME`, `$ZDT`.
-- **Macros and extrinsics** — `$$$ADDSC`, `$$$ERROR`, `$$$GeneralError`, `$$$InvalidArgument`, `$$$ISERR`, `$$$ISOK`, `$$$OK`, `$$$ThrowOnError`, `$$$ThrowStatus`.
-- **IRIS classes and packages** — `%occStatus.inc`, `%SYS.Trace`, `%SYSTEM.Status`.
-- **Qualified calls and terminal utilities** — `$SYSTEM.OBJ.DisplayError()`, `$SYSTEM.Status.AppendStatus()`, `$SYSTEM.Status.DecomposeStatus()`, `$SYSTEM.Status.DisplayError()`, `$SYSTEM.Status.Error()`, `$SYSTEM.Status.GetErrorCodes()`, `$SYSTEM.Status.GetErrorText()`, `$SYSTEM.Status.GetOneStatusText()`, `$SYSTEM.Status.IsError()`.
-- **Method names and generated entry points** — `%Id()`, `%New()`, `%Open()`, `%OpenId()`, `%Save()`, `AdditionalProcessing()`, `AsSQLCODE()`, `AsSQLMessage()`, `AsStatus()`, `CreateFromStatus()`, `DisplayString()`, `DoCleanup()`, `DoWork1()`, `DoWork2()`, `ErrorLog()`, `HandleOrder()`, `HandleStorageError()`, `ImportCustomers()`, `ImportOrders()`, `ImportProducts()`, `LoadData()`, `Log()`, `Process()`, `RiskyOperation()`, `SaveResults()`, `SomeOperation()`, `StartPID()`, `Step1()`, `Step2()`, `ThrowIfError()`, `ThrowStatus()`, `TransformData()`, `ValidateInput()`.
-- **Error metadata and logging** — `.Name`, `.Code`, `.Location`, `.Data`, `$STACK(level,"PLACE")`, `$STACK(level,"MCODE")`, `$ZERROR`, `$ZTRAP`, `^ERRORS`, `DO ^%ER`.
-- **Status and exceptions** — `%Status`, `%Exception.AbstractException`, `%Exception.General`, `%Exception.StatusException`, `Include %occStatus`, `SQLCODE`.
-- **Methods defined in chapter examples** — `BasicExample()`, `CaptureStackTrace()`, `ComparePatterns()`, `CompareThrowMacros()`, `CreateErrors()`, `CreateStatusException()`, `DemonstrateErrorDisplay()`, `DisplayStatusExamples()`, `DumpStack()`, `ExamineException()`, `ExceptionStyle()`, `ExceptionToStatus()`, `HandleByType()`, `HandleError()`, `ImportAll()`, `InnerMethod()`, `LogError()`, `MethodA()`, `MethodB()`, `MethodC()`, `NestedExample()`, `OuterMethod()`, `ProcessBatch()`, `ProcessData()`, `RecommendedPattern()`, `RobustSave()`, `RunJob()`, `Save()`, `SaveRecord()`, `ShowStack()`, `StandardTemplate()`, `StatusStyle()`, `TestStatus()`, `ValidateAge()`.
-- **Incorrect forms in the exercises** — `$$$CHECK`, `$$$ISGOOD`, `$$$STATUS`, `$STACK(level,"CALLER")`, `$SYSTEM.Error.Throw()`, `RAISE`, `SIGNAL`.
+- `##class(%Exception.General).%New(name, code, location, data)` — Creates a general exception carrying diagnostic context.
+- `##class(%Exception.StatusException).CreateFromStatus(status)` — Creates an exception object from a status.
+- `##class(App.Record).%New()` — Creates a new in-memory instance of the class.
+- `##class(App.Record).%Open(oid)` — Opens a persistent object by its OID.
+- `##class(App.Record).%OpenId(id, concurrency, .status)` — Opens a record by ID. The concurrency and status arguments are optional.
+- `$CHAR(code1, code2)` — Builds a string from character codes.
+- `$INCREMENT(node, amount)` — Atomically adds an amount and returns the new value.
+- `$LISTBUILD(value1, value2)` — Encodes values as an ObjectScript list.
+- `$LISTGET(list, position, default)` — Reads an element or supplies a default.
+- `$METHOD(obj, methodName, arg)` — Invokes an instance method selected at runtime.
+- `$PIECE(text, delimiter, from, to)` — Returns one or more delimited fields.
+- `$STACK(level, "MCODE")` — Returns ObjectScript source text for the stack level.
+- `$STACK(level, "PLACE")` — Returns the execution location at a stack level.
+- `$SYSTEM.OBJ.DisplayError(status)` — Displays a status error using the object utility API.
+- `$SYSTEM.Status.AppendStatus(first, second)` — Combines two status values.
+- `$SYSTEM.Status.DecomposeStatus(status, .errors)` — Breaks a status into its constituent errors.
+- `$SYSTEM.Status.DisplayError(status)` — Writes error details to the current device.
+- `$SYSTEM.Status.Error(code, argument)` — Constructs an error status from an error code and its argument.
+- `$SYSTEM.Status.GetErrorCodes(status)` — Returns error codes from the status.
+- `$SYSTEM.Status.GetErrorText(status)` — Returns status message text.
+- `$SYSTEM.Status.GetOneStatusText(status, index)` — Returns the message for one indexed error in the status.
+- `$SYSTEM.Status.IsError(status)` — Tests whether the status represents an error.
+- `$ZDATETIME(daySecondPair, dateFormat, timeFormat)` — Formats a day-and-seconds pair as date and time text.
+- `ex.AsSQLCODE()` — Returns an SQLCODE for the exception.
+- `ex.AsSQLMessage()` — Returns SQL-oriented exception message text.
+- `ex.AsStatus()` — Converts an exception object to a status.
+- `ex.DisplayString()` — Returns the exception in displayable form.
+- `ex.Log()` — Records an exception in the application error log.
+- `obj.%Id()` — Returns the persistent ID of the open object.
+- `obj.%Save()` — Persists the object and returns a status.
 
 Official reference: [Status values](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_status).
 

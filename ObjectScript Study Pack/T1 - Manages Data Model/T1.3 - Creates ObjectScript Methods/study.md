@@ -1021,24 +1021,98 @@ Forgetting to call `##super()` in `%OnNew()` or `%OnValidateObject()` can break 
 
 ### Key terms
 
-- **Instance and class methods** — Method has an instance context for ..Property. Call ClassMethod through ##class. Use ..#ParameterName for a class parameter.
-- **Signature and types** — As declares argument and return types. A default makes an argument optional. ByRef lets the callee read or update a caller variable. Output supplies a result to the caller.
-- **Object reference** — Passing an OREF by value copies the reference. Mutating the object affects the shared instance. Replacing the caller’s binding requires reference passing.
-- **Multidimensional arguments** — Pass an array by reference using a dotted actual argument such as .scores. The callee can traverse and update the caller’s subscripts.
-- **Override and parent call** — Match the inherited signature. ##super calls the parent implementation of the current method. $CLASSNAME returns a fully qualified class name.
-- **Status and return** — Check the %Status from fallible operations. QUIT value and RETURN value return results according to the method and block context.
+- **Instance and class methods**
+  - **Method** — Runs with an instance context and can access its properties.
+  - **ClassMethod** — Runs at class scope and can be invoked through ##class.
+  - `..#ParameterName` — Reads a class parameter in the current context.
+- **Signature and types**
+  - **As** — Declares argument and return types.
+  - **Default argument** — Makes an argument optional at the call site.
+  - **ByRef** — Allows the callee to read and update the caller's variable.
+  - **Output** — Declares a value produced through an argument.
+- **Object reference**
+  - **Passing an OREF** — Copies the reference to the same object instance.
+  - **Mutating the object** — Changes shared object state through either reference.
+  - **Passing by reference** — Allows reassignment of the caller's variable.
+- **Multidimensional arguments**
+  - **Dotted argument** — Passes a variable by reference, as in .scores.
+  - **Array subscripts** — Can be traversed and updated through the callee's reference.
+- **Override and parent call**
+  - **Override** — Supplies a replacement implementation with a compatible signature.
+  - `##super` — Invokes the inherited implementation of the current method.
+  - `$CLASSNAME` — Returns the full class name.
+- **Status and return**
+  - `%Status` — Carries success or error information from fallible calls.
+  - **QUIT value** — Returns a value in an appropriate method or invocation context.
+  - **RETURN value** — Returns from the method or procedure, including from nested blocks.
+- **Inherited callbacks**
+  - `%OnNew` — Initializes a new instance.
+  - `%OnOpen` — Runs when IRIS opens a stored object.
+  - `%OnValidateObject` — Adds an application validation check.
+  - `%OnBeforeSave` — Runs before writing the object.
+  - `%OnAfterSave` — Runs after writing the object within the save transaction.
+- **ObjectScript commands**
+  - `DO` — Invokes a routine, label or method.
+  - `ELSE` — Runs the alternative branch when the condition is false.
+  - `ELSEIF` — Tests an additional condition after a false branch.
+  - `FOR` — Repeats a block or command according to a loop specification.
+  - `IF` — Runs the following command or block when its condition is true.
+  - `KILL` — Removes a variable or a node and all its descendants.
+  - `MERGE` — Copies a variable tree, including its descendants.
+  - `QUIT` — Leaves the current loop, block or invocation as determined by context.
+  - `RETURN` — Returns control, optionally with a value, to the caller.
+  - `SET` — Assigns a value to a variable, property or assignable expression.
+  - `WRITE` — Sends formatted output to the current device.
+- **System variables and macros**
+  - `$HOROLOG` — Reports local date and time as day and seconds fields.
+  - `$SYSTEM` — Provides shorthand access to the IRIS %SYSTEM package.
+  - `$THIS` — Refers to the current object in an instance method.
+  - `$USERNAME` — Identifies the authenticated user.
+  - `$ZPI` — Supplies the constant pi.
+  - `$$$ERROR` — Builds an error status from its code and arguments.
+  - `$$$GeneralError` — Identifies the general-error code used with message text.
+  - `$$$ISERR` — Tests whether a status indicates an error.
+  - `$$$ISOK` — Tests whether a status indicates success.
+  - `$$$OK` — Supplies a success status.
+- **SQL statements and clauses**
+  - `&sql` — Embeds a SQL statement in ObjectScript.
+  - `DECLARE CURSOR` — Gives a result set a name for Embedded SQL row-by-row fetch.
+  - **OPEN (cursor)** — Starts a declared cursor.
+  - `FETCH` — Reads the next cursor row into host variables.
+  - **CLOSE (cursor)** — Closes the cursor and releases its resources.
+  - `SELECT` — Reads rows and expressions from one or more sources.
+  - `FROM` — Names the source tables or queries.
+  - `WHERE` — Keeps rows whose predicate is true.
+  - `GROUP BY` — Forms groups of rows for aggregate operations.
+  - `SQLCODE` — Reports the result of an Embedded SQL operation.
 
-### Commands, methods and syntax
+### System methods and functions
 
-- **ObjectScript commands** — `DO`, `ELSE`, `ELSEIF`, `FOR`, `IF`, `KILL`, `MERGE`, `QUIT`, `RETURN`, `SET`, `WRITE`.
-- **ObjectScript functions and special variables** — `$CHAR`, `$CLASSNAME`, `$DATA`, `$FN`, `$FNUMBER`, `$GET`, `$HOROLOG`, `$ISOBJECT`, `$LB`, `$LIST`, `$LISTBUILD`, `$LISTLENGTH`, `$ORDER`, `$PIECE`, `$SYSTEM`, `$THIS`, `$USERNAME`, `$ZCONVERT`, `$ZDATE`, `$ZPI`, `$ZSTRIP`.
-- **Macros and extrinsics** — `$$$ERROR`, `$$$GeneralError`, `$$$ISERR`, `$$$ISOK`, `$$$OK`.
-- **Qualified calls and terminal utilities** — `$SYSTEM.Status.DisplayError()`, `$SYSTEM.Status.GetErrorText()`.
-- **Method names and generated entry points** — `%ClassName()`, `%IsA()`, `%New()`, `%OnAfterSave()`, `%OnBeforeSave()`, `%OnNew()`, `%OnOpen()`, `%OnValidateObject()`, `%OpenId()`, `%Save()`, `DoSend()`, `GetAt()`, `Log()`, `LogActivity()`, `MethodName()`.
-- **Class declaration and call syntax** — `Class`, `Extends`, `ClassMethod`, `Method`, `Property`, `Parameter`, `As`, `ByRef`, `Output`, `..Property`, `..#ParameterName`, `.variable`, `##class`, `##super`, `Final`, `Abstract`, `ProcedureBlock`, `%This`, `%Status`.
-- **SQL cursor and query** — `&sql`, `DECLARE CURSOR`, `OPEN`, `FETCH`, `CLOSE`, `SELECT`, `FROM`, `WHERE`, `GROUP BY`, `COUNT()`, `INTO`, `SQLCODE`.
-- **Methods defined in chapter examples** — `Add()`, `AddOne()`, `AddResult()`, `AddSuffix()`, `AppendSuffix()`, `ApplyDiscount()`, `Area()`, `BuildReport()`, `Calculate()`, `CurrentTaxRate()`, `Describe()`, `Description()`, `DisplayColors()`, `DisplayInfo()`, `Divide()`, `Draw()`, `FetchData()`, `FindByName()`, `FormatDate()`, `FromDiameter()`, `GetAge()`, `GetCount()`, `GetInfo()`, `GetProvider()`, `GetStateCounts()`, `GetStats()`, `HandleItem()`, `Increment()`, `Init()`, `InitialCount()`, `OnEvent()`, `PrintShapeInfo()`, `Process()`, `ProcessAll()`, `ProcessData()`, `ProcessOrder()`, `ProcessPatient()`, `ProcessTree()`, `ResetOrder()`, `Round()`, `Send()`, `Show()`, `Swap()`, `Tax()`, `ToList()`, `Total()`, `Transform()`, `UpdateName()`, `UpdateRecord()`, `Validate()`, `ValidateAge()`, `ValidatePerson()`, `ValidateRecord()`.
-- **Incorrect forms in the exercises** — `%TypeOf()`.
+- `##class(App.Record).%New()` — Creates a new in-memory instance of the class.
+- `##class(App.Record).%OpenId(id, concurrency, .status)` — Opens a record by ID. The concurrency and status arguments are optional.
+- `##super(arg)` — Calls the inherited implementation of the current method.
+- `$CHAR(code1, code2)` — Builds a string from character codes.
+- `$CLASSNAME(obj)` — Returns the object's fully qualified class name.
+- `$DATA(node)` — Reports whether a node has data, descendants, both or neither.
+- `$FNUMBER(number, format, decimals)` — Formats a numeric value to the specified precision.
+- `$GET(node, default)` — Returns the node value or a default.
+- `$ISOBJECT(obj)` — Indicates whether the value is an object reference.
+- `$LIST(list, position)` — Reads the element at the specified position.
+- `$LISTBUILD(value1, value2)` — Encodes values as an ObjectScript list.
+- `$LISTLENGTH(list)` — Counts list positions.
+- `$ORDER(node, direction)` — Returns the next or previous sibling subscript.
+- `$PIECE(text, delimiter, from, to)` — Returns one or more delimited fields.
+- `$SYSTEM.Status.DisplayError(status)` — Writes error details to the current device.
+- `$SYSTEM.Status.GetErrorText(status)` — Returns status message text.
+- `$ZCONVERT(text, mode)` — Converts case or applies an encoding mode.
+- `$ZDATE(days, format)` — Formats an internal day count.
+- `$ZSTRIP(text, action)` — Removes characters according to class and position rules.
+- `COUNT(*)` — Counts rows, regardless of whether individual fields are NULL.
+- `list.Count()` — Returns the number of elements in the list collection.
+- `list.GetAt(position)` — Returns the collection element at the specified position.
+- `obj.%ClassName(1)` — Returns the fully qualified class name. Omit 1 for the short name.
+- `obj.%IsA(className)` — Tests membership in the object's primary class hierarchy.
+- `obj.%Save()` — Persists the object and returns a status.
 
 Official reference: [ObjectScript object interface](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=ROBJ).
 

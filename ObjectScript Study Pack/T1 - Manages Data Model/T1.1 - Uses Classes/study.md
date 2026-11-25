@@ -934,26 +934,99 @@ Class documentation can be viewed through:
 
 ### Key terms
 
-- **Class lifecycle** — %Persistent instances have database IDs and SQL projection. %RegisteredObject supplies in-process object state. %SerialObject embeds a value in a parent’s storage.
-- **OREF, OID and ID** — An OREF identifies an in-memory object. %Id returns the persistent ID. %Oid carries object identity. A unique application key can locate the same object through its index.
-- **Create, validate and save** — %New invokes %OnNew. %ValidateObject can invoke %OnValidateObject. Check the %Status from %Save before using the assigned ID. An outer transaction can still roll back.
-- **Open and delete** — %OpenId reopens by ID. %DeleteId removes one record. %DeleteExtent operates on a class extent. %KillExtent has different callback and integrity implications.
-- **Lifecycle callbacks** — %OnBeforeSave and %OnAfterSave bracket the save. %OnOpen and %OnDelete run at the relevant object operation. SQL triggers follow their own execution rules.
-- **Storage mapping** — DataLocation, IdLocation and IndexLocation identify globals. Per-index Location can override the default. USEEXTENTSET enables extent membership tracking. Namespace mappings determine the physical database.
-- **Inheritance and documentation** — Extends lists superclasses. Inheritance settings influence method resolution. Description and /// document class members.
+- **Class lifecycle**
+  - `%Persistent` — Gives stored objects database IDs and, by default, a SQL projection.
+  - `%RegisteredObject` — Provides in-process object behavior and object references.
+  - `%SerialObject` — Embeds a value in the storage of its containing object.
+- **OREF, OID and ID**
+  - `OREF` — Identifies an object instance in memory.
+  - `%Id` — Returns the object's persistent ID.
+  - `%Oid` — Returns object identity, including class and ID.
+  - **IdKey** — Lets a unique application key serve as the persistent ID.
+- **Create, validate and save**
+  - `%New` — Constructs an instance in memory.
+  - `%OnNew` — Runs initialization during %New.
+  - `%ValidateObject` — Runs object validation and returns a status.
+  - `%OnValidateObject` — Implements additional validation rules.
+  - `%Save` — Persists changes and returns a %Status. An outer transaction can still roll back.
+- **Open and delete**
+  - `%OpenId` — Opens a stored object by persistent ID.
+  - `%DeleteId` — Deletes the object with the given ID.
+  - `%DeleteExtent` — Deletes the class extent through the object API.
+  - `%KillExtent` — Clears extent storage directly and bypasses per-object delete callbacks.
+- **Lifecycle callbacks**
+  - `%OnBeforeSave` — Runs before writing object changes.
+  - `%OnAfterSave` — Runs after the storage operation, within the save transaction.
+  - `%OnOpen` — Runs when an object is opened from storage.
+  - `%OnDelete` — Runs during object deletion.
+  - `%OnAfterDelete` — Runs after the object has been removed from storage.
+  - **SQL trigger** — Runs on its configured SQL event according to trigger settings.
+- **Storage mapping**
+  - **DataLocation** — Names the default data global.
+  - **IdLocation** — Names the default ID-counter global.
+  - **IndexLocation** — Names the default index global.
+  - **Location** — Overrides storage for a specific index.
+  - `USEEXTENTSET` — Enables extent membership tracking.
+  - **Namespace mapping** — Resolves a logical global reference to its physical database.
+- **Inheritance and documentation**
+  - **Extends** — Declares the class's superclasses.
+  - **Inheritance** — Controls superclass resolution order.
+  - **Description** — Stores documentation in class metadata.
+  - `///` — Introduces class-member documentation.
+- **ObjectScript commands**
+  - `DO` — Invokes a routine, label or method.
+  - `FOR` — Repeats a block or command according to a loop specification.
+  - `IF` — Runs the following command or block when its condition is true.
+  - `OPEN` — Opens the specified I/O device.
+  - `QUIT` — Leaves the current loop, block or invocation as determined by context.
+  - `RETURN` — Returns control, optionally with a value, to the caller.
+  - `SET` — Assigns a value to a variable, property or assignable expression.
+  - `WRITE` — Sends formatted output to the current device.
+  - `ZWRITE` — Displays variable values and subscripts for inspection.
+- **System variables and macros**
+  - `$HOROLOG` — Reports local date and time as day and seconds fields.
+  - `$NAMESPACE` — Names the current namespace.
+  - `$SYSTEM` — Provides shorthand access to the IRIS %SYSTEM package.
+  - `$$$ERROR` — Builds an error status from its code and arguments.
+  - `$$$GeneralError` — Identifies the general-error code used with message text.
+  - `$$$ISERR` — Tests whether a status indicates an error.
+  - `$$$oidPrimary` — Selects the primary OID representation.
+  - `$$$OK` — Supplies a success status.
+- **SQL statements and clauses**
+  - `SELECT` — Reads rows and expressions from one or more sources.
+  - `FROM` — Names the source tables or queries.
+  - `WHERE` — Keeps rows whose predicate is true.
+  - `UPDATE` — Changes values in existing rows.
+  - `INSERT INTO` — Creates rows in the named table.
+  - **DELETE (SQL)** — Removes rows that match the filter.
 
-### Commands, methods and syntax
+### System methods and functions
 
-- **ObjectScript commands** — `DO`, `FOR`, `IF`, `OPEN`, `QUIT`, `RETURN`, `SET`, `WRITE`, `ZWRITE`.
-- **ObjectScript functions and special variables** — `$H`, `$HOROLOG`, `$INCREMENT`, `$ISOBJECT`, `$LB`, `$LISTBUILD`, `$NAMESPACE`, `$PIECE`, `$SYSTEM`, `$ZDATE`, `$ZDATEH`, `$ZDT`.
-- **Macros and extrinsics** — `$$$ERROR`, `$$$GeneralError`, `$$$ISERR`, `$$$oidPrimary`, `$$$OK`.
-- **IRIS classes and packages** — `%Dictionary.StorageDefinition`, `%Library.Persistent`, `%Storage.Persistent`, `%SYS.Namespace`.
-- **Qualified calls and terminal utilities** — `$SYSTEM.OBJ.DeleteExtent()`, `$SYSTEM.Status.DisplayError()`, `$SYSTEM.Status.GetErrorText()`, `$SYSTEM.Status.IsError()`.
-- **Method names and generated entry points** — `%Delete()`, `%DeleteExtent()`, `%DeleteId()`, `%Exists()`, `%ExistsId()`, `%Id()`, `%KillExtent()`, `%New()`, `%Oid()`, `%OnAfterDelete()`, `%OnAfterSave()`, `%OnBeforeSave()`, `%OnDelete()`, `%OnNew()`, `%OnOpen()`, `%OnValidateObject()`, `%Open()`, `%OpenId()`, `%Save()`, `%ValidateObject()`, `A()`, `AccountIdxOpen()`, `Delete()`, `DeleteData()`, `GetGlobalDest()`, `Log()`, `MIIdxDelete()`, `MIIdxExists()`, `MIIdxOpen()`, `Person()`, `Truck()`.
-- **Class and storage** — `Class`, `Extends`, `Property`, `Method`, `ClassMethod`, `Index`, `Parameter`, `Trigger`, `Storage`, `Description`, `Inheritance`, `DataLocation`, `IdLocation`, `IndexLocation`, `Location`, `IdKey`, `USEEXTENTSET`, `DefaultData`, `BME`, `///`.
-- **Core object classes and methods** — `%Persistent`, `%RegisteredObject`, `%SerialObject`, `%Status`, `%Dictionary`, `%Populate()`.
-- **SQL** — `SELECT`, `FROM`, `WHERE`, `UPDATE`, `INSERT`, `DELETE`, `%ID`.
-- **Methods defined in chapter examples** — `BadgeLabel()`, `Describe()`, `Double()`, `FormatDate()`, `GetAge()`, `Greet()`, `Increment()`, `Square()`, `Total()`.
+- `##class(%SYS.Namespace).GetGlobalDest(namespace, globalName)` — Resolves the database mapped to the global.
+- `##class(App.Record).%Delete(oid)` — Deletes a persistent object by object identity.
+- `##class(App.Record).%DeleteExtent()` — Deletes stored records through the object API.
+- `##class(App.Record).%DeleteId(id)` — Deletes the record with the supplied persistent ID.
+- `##class(App.Record).%Exists(oid)` — Tests whether an object with the given OID exists.
+- `##class(App.Record).%ExistsId(id)` — Tests whether an object with the given ID exists.
+- `##class(App.Record).%KillExtent()` — Clears extent storage directly, including related extents as applicable.
+- `##class(App.Record).%New()` — Creates a new in-memory instance of the class.
+- `##class(App.Record).%Open(oid)` — Opens a persistent object by its OID.
+- `##class(App.Record).%OpenId(id, concurrency, .status)` — Opens a record by ID. The concurrency and status arguments are optional.
+- `##class(App.Record).%Populate(count)` — Generates sample objects for a class that supports test data population.
+- `$INCREMENT(node, amount)` — Atomically adds an amount and returns the new value.
+- `$ISOBJECT(obj)` — Indicates whether the value is an object reference.
+- `$LISTBUILD(value1, value2)` — Encodes values as an ObjectScript list.
+- `$PIECE(text, delimiter, from, to)` — Returns one or more delimited fields.
+- `$SYSTEM.Status.DisplayError(status)` — Writes error details to the current device.
+- `$SYSTEM.Status.GetErrorText(status)` — Returns status message text.
+- `$SYSTEM.Status.IsError(status)` — Tests whether the status represents an error.
+- `$ZDATE(days, format)` — Formats an internal day count.
+- `$ZDATEH(dateText, format)` — Converts a formatted date to an internal day count.
+- `$ZDATETIME(daySecondPair, dateFormat, timeFormat)` — Formats a day-and-seconds pair as date and time text.
+- `obj.%Id()` — Returns the persistent ID of the open object.
+- `obj.%Oid()` — Returns the OID of the persistent object.
+- `obj.%Save()` — Persists the object and returns a status.
+- `obj.%ValidateObject()` — Validates the object and returns a status.
 
 Official reference: [Persistent object API](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_persobj).
 

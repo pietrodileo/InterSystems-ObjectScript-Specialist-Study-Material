@@ -531,20 +531,47 @@ Because $HOROLOG represents dates as integer day counts and times as integer sec
 
 ### Key terms
 
-- **Arithmetic evaluation** — Binary arithmetic evaluates left to right without conventional operator precedence. Parenthesize explicitly. Integer division, modulo and exponentiation use distinct operators.
-- **Logical evaluation** — Group Boolean terms and comparisons explicitly. Apostrophe negates. ObjectScript includes numeric comparisons and string operators such as contains and follows.
-- **Clocks and duration** — $HOROLOG gives local days and seconds. $ZTIMESTAMP gives UTC days and fractional seconds. $ZHOROLOG measures elapsed seconds since IRIS startup.
-- **Formatting and arithmetic** — $ZDATE and $ZDATEH convert dates. $ZTIME and $ZTIMEH convert times. Add days to the internal day count and account for midnight when computing durations.
+- **Arithmetic evaluation**
+  - **Evaluation order** — Evaluates binary arithmetic left to right unless parentheses group it.
+  - **\ and #** — Perform integer division and remainder respectively.
+  - `**` — Raises a number to a power.
+- **Logical evaluation**
+  - **Grouping** — Makes the order of comparisons and Boolean operations explicit.
+  - **Apostrophe** — Negates a logical expression or comparison operator.
+  - **Contains and follows** — Test substring membership and string ordering respectively.
+- **Clocks and duration**
+  - `$HOROLOG` — Reports the local day and seconds.
+  - `$ZTIMESTAMP` — Reports UTC day and fractional seconds.
+  - `$ZHOROLOG` — Measures seconds elapsed since IRIS startup.
+- **Formatting and arithmetic**
+  - `$ZDATE` — Formats an internal day count.
+  - `$ZDATEH` — Parses a date to its internal day count.
+  - `$ZTIME` — Formats a seconds-of-day value.
+  - `$ZTIMEH` — Parses a time to seconds of day.
+  - **Duration across midnight** — Includes both the change in day count and seconds.
+- **ObjectScript commands**
+  - `FOR` — Repeats a block or command according to a loop specification.
+  - `IF` — Runs the following command or block when its condition is true.
+  - `SET` — Assigns a value to a variable, property or assignable expression.
+  - `WRITE` — Sends formatted output to the current device.
+- **System variables and macros**
+  - `$SYSTEM` — Provides shorthand access to the IRIS %SYSTEM package.
 
-### Commands, methods and syntax
+### System methods and functions
 
-- **ObjectScript commands** — `FOR`, `IF`, `SET`, `WRITE`.
-- **ObjectScript functions and special variables** — `$H`, `$INCREMENT`, `$JUSTIFY`, `$NOW`, `$P`, `$PIECE`, `$SYSTEM`, `$ZD`, `$ZDATE`, `$ZDATEH`, `$ZDH`, `$ZT`, `$ZTH`, `$ZTIME`, `$ZTIMEH`, `$ZTS`.
-- **Qualified calls and terminal utilities** — `$SYSTEM.SQL.DATEADD()`, `$SYSTEM.SQL.DATEDIFF()`, `$SYSTEM.SQL.Functions.DATEADD()`.
-- **Arithmetic** — `+`, `-`, `*`, `\`, `/`, `#`, `**`, `unary +`, `unary -`.
-- **Logical and comparison** — `&`, `!`, `'`, `'=`, `=`, `<`, `>`, `<=`, `>=`, `[`, `]`, `&&`, `||`.
-- **Date and time API** — `DATEADD()`, `DATEDIFF()`, `$ZDATE()`, `$ZDATEH()`, `$ZTIME()`, `$ZTIMEH()`, `$HOROLOG`, `$ZTIMESTAMP`, `$ZHOROLOG`, `$NOW()`.
-- **Incorrect forms in the exercises** — `$DATE`, `$DATEADD`.
+- `$INCREMENT(node, amount)` — Atomically adds an amount and returns the new value.
+- `$JUSTIFY(value, width, decimals)` — Right-aligns or formats a numeric value.
+- `$NOW()` — Returns the current date and time with fractional seconds.
+- `$PIECE(text, delimiter, from, to)` — Returns one or more delimited fields.
+- `$SYSTEM.SQL.DATEADD("day", amount, dateValue)` — Adds a date interval through the deprecated SQL system wrapper.
+- `$SYSTEM.SQL.DATEDIFF("day", startDate, endDate)` — Measures a date interval through the deprecated SQL system wrapper.
+- `$SYSTEM.SQL.Functions.DATEADD("day", amount, dateValue)` — Adds a date interval using the ObjectScript SQL functions API.
+- `$ZDATE(days, format)` — Formats an internal day count.
+- `$ZDATEH(dateText, format)` — Converts a formatted date to an internal day count.
+- `$ZTIME(seconds, format)` — Formats an internal seconds-of-day value.
+- `$ZTIMEH(timeText, format)` — Parses a time as an internal seconds-of-day value.
+- `DATEADD('day', amount, dateValue)` — Adds a specified number of date parts to a SQL date or timestamp.
+- `DATEDIFF('day', startDate, endDate)` — Counts the specified date-part intervals between values.
 
 Official reference: [ObjectScript operators](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_operators).
 

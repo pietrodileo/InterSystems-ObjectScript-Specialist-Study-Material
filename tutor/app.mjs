@@ -1,10 +1,10 @@
 import { routeHref, readRoute } from './navigation.mjs';
-import { assessmentAnswered, assessmentComplete, chapterStep, correctSelection, finalQuestionRefs, loadCourse, packPath, passedAnswer, practiceQueue, quizBlocks, recordPractice, reviewItems, topics } from './content.mjs?v=chapter-glossary-1';
+import { assessmentAnswered, assessmentComplete, chapterStep, correctSelection, finalQuestionRefs, loadCourse, packPath, passedAnswer, practiceQueue, quizBlocks, recordPractice, reviewItems, topics } from './content.mjs?v=chapter-glossary-2';
 import { caseFocus, examAreaDescriptions, guides, variations } from './lesson-guides.mjs?v=practice-feedback-1';
 import { diagramExamples, studyExamples } from './code-examples.mjs';
 import './sidebar-controls.mjs?v=chapter-layout-2';
 import { createZip, galleryDownloadItems } from './gallery-download.mjs';
-import { galleryItems, searchCourse } from './content.mjs?v=chapter-glossary-1';
+import { galleryItems, searchCourse } from './content.mjs?v=chapter-glossary-2';
 
 const lesson = document.querySelector('#lesson');
 const nav = document.querySelector('#chapters');
@@ -614,6 +614,21 @@ function renderStudyNotes(markdown, diagrams) {
   const tableSeparator = line => /^\|.*\|$/.test(line.trim()) &&
     cells(line).every(cell => /^:?-{3,}:?$/.test(cell));
   const isBlockStart = index => /^(\x60{3}|#{1,6}\s|[-*]\s|\d+\.\s|\|.*\|$|!\[)/.test(lines[index].trim());
+  const bullet = index => lines[index]?.match(/^(\s*)[-*]\s+(.+)$/);
+  const unorderedList = (start, indent) => {
+    const items = [];
+    let index = start;
+    while (bullet(index)?.[1].length === indent) {
+      const [, , label] = bullet(index++);
+      const childIndent = bullet(index)?.[1].length;
+      let children = '';
+      if (childIndent > indent) {
+        [children, index] = unorderedList(index, childIndent);
+      }
+      items.push('<li>' + inline(label) + children + '</li>');
+    }
+    return ['<ul>' + items.join('') + '</ul>', index];
+  };
   for (let i = 0; i < lines.length;) {
     const line = lines[i].trim();
     if (!line) { i++; continue; }
@@ -651,12 +666,10 @@ function renderStudyNotes(markdown, diagrams) {
         '</tbody></table></div>');
       continue;
     }
-    if (/^[-*]\s+/.test(line)) {
-      const items = [];
-      while (i < lines.length && /^\s*[-*]\s+/.test(lines[i])) {
-        items.push('<li>' + inline(lines[i++].trim().replace(/^[-*]\s+/, '')) + '</li>');
-      }
-      html.push('<ul>' + items.join('') + '</ul>');
+    if (bullet(i)) {
+      const [list, end] = unorderedList(i, bullet(i)[1].length);
+      html.push(list);
+      i = end;
       continue;
     }
     if (/^\d+\.\s+/.test(line)) {

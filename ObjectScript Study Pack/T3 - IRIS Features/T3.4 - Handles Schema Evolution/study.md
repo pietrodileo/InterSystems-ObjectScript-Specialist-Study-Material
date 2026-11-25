@@ -404,22 +404,65 @@ You can check frozen status by querying `INFORMATION_SCHEMA.STATEMENTS` for the 
 
 ### Key terms
 
-- **Schema evolution** — Compiling changes class metadata. Existing data and index entries can need backfill, rebuilding and validation.
-- **Index build and purge** — Compile the revised index definition and use %BuildIndices for existing rows. %PurgeIndices removes entries. Check statuses and representative queries.
-- **Rename and datatype change** — Review physical storage and projected names separately. SqlFieldName can retain a SQL name. Convert incompatible data in a planned migration.
-- **Cached and frozen plans** — Cached SQL can depend on old metadata. Purge affected cache entries when necessary. Decide explicitly how to handle frozen plans.
+- **Schema evolution**
+  - **Class compilation** — Updates class metadata and generated code.
+  - **Backfill** — Populates or converts existing data.
+  - **Validation** — Checks revised metadata, stored rows and query results together.
+- **Index build and purge**
+  - `%BuildIndices` — Rebuilds or populates indexes for stored rows.
+  - `%PurgeIndices` — Removes index entries without deleting stored objects.
+  - **Index migration** — Checks returned statuses and representative query results.
+- **Rename and datatype change**
+  - **SqlFieldName** — Controls the name of the projected column.
+  - **Storage mapping** — Determines where existing values are stored.
+  - **Datatype conversion** — Migrates old values that cannot be read under the new definition.
+- **Cached and frozen plans**
+  - **Cached statement** — Can depend on the old schema or statistics.
+  - **Purge** — Invalidates affected cached queries for fresh preparation.
+  - **Frozen plan** — Retains a chosen strategy until it is deliberately changed or unfrozen.
+- **ObjectScript commands**
+  - `DO` — Invokes a routine, label or method.
+  - `FOR` — Repeats a block or command according to a loop specification.
+  - `IF` — Runs the following command or block when its condition is true.
+  - `QUIT` — Leaves the current loop, block or invocation as determined by context.
+  - `SET` — Assigns a value to a variable, property or assignable expression.
+  - `WRITE` — Sends formatted output to the current device.
+- **System variables and macros**
+  - `$SYSTEM` — Provides shorthand access to the IRIS %SYSTEM package.
+  - `$$$ISERR` — Tests whether a status indicates an error.
+- **SQL statements and clauses**
+  - `BUILD INDEX` — Populates an index for rows already stored in the table.
+  - `PURGE CACHED QUERIES` — Removes SQL cache entries within the chosen namespace, table, age or name scope.
+  - `CREATE INDEX` — Defines an index for a table.
+  - `DROP INDEX` — Removes the index definition and its index data.
+  - `ALTER TABLE` — Changes an existing table definition.
+  - `SELECT` — Reads rows and expressions from one or more sources.
+  - `FROM` — Names the source tables or queries.
+  - `WHERE` — Keeps rows whose predicate is true.
+  - `&sql` — Embeds a SQL statement in ObjectScript.
+  - `SQLCODE` — Reports the result of an Embedded SQL operation.
+  - `%NOFPLAN` — Directs the optimizer to ignore a frozen plan for a statement.
 
-### Commands, methods and syntax
+### System methods and functions
 
-- **ObjectScript commands** — `DO`, `FOR`, `IF`, `QUIT`, `SET`, `WRITE`.
-- **ObjectScript functions and special variables** — `$LB`, `$LIST`, `$LISTBUILD`, `$ORDER`, `$SYSTEM`.
-- **Macros and extrinsics** — `$$$ISERR`.
-- **IRIS classes and packages** — `%SQL.Statement`, `%SYS.PTools`.
-- **Qualified calls and terminal utilities** — `$SYSTEM.OBJ.Compile()`, `$SYSTEM.SQL.Purge()`, `$SYSTEM.SQL.PurgeForTable()`, `$SYSTEM.SQL.Schema.ImportDDL()`, `$SYSTEM.SQL.Statement.FreezeRelation()`, `$SYSTEM.SQL.Statement.FreezeStatement()`, `$SYSTEM.SQL.Statement.UnfreezeRelation()`, `$SYSTEM.SQL.Statement.UnfreezeStatement()`, `$SYSTEM.SQL.TuneTable()`, `$SYSTEM.Status.GetErrorText()`.
-- **Method names and generated entry points** — `%BuildIndices()`, `%New()`, `%OpenId()`, `%PurgeIndices()`.
-- **Schema and query SQL** — `CREATE INDEX`, `DROP INDEX`, `ALTER TABLE`, `SELECT`, `FROM`, `WHERE`, `COUNT()`, `ON`, `&sql`, `SQLCODE`, `%NOFPLAN`.
-- **Property and mapping syntax** — `Class`, `Property`, `Index`, `SqlFieldName`, `DataLocation`, `Unique`, `Bitmap`, `InitialExpression`, `%Dictionary`, `%Date`, `%Integer`, `%String`.
-- **Incorrect forms in the exercises** — `$SYSTEM.SQL.BuildIndex()`, `BuildIndex()`.
+- `##class(App.Record).%BuildIndices($LISTBUILD("IndexName"))` — Builds the named index for stored records.
+- `##class(App.Record).%New()` — Creates a new in-memory instance of the class.
+- `##class(App.Record).%OpenId(id, concurrency, .status)` — Opens a record by ID. The concurrency and status arguments are optional.
+- `##class(App.Record).%PurgeIndices($LISTBUILD("IndexName"))` — Clears entries from the named index for a subsequent rebuild.
+- `$LIST(list, position)` — Reads the element at the specified position.
+- `$LISTBUILD(value1, value2)` — Encodes values as an ObjectScript list.
+- `$ORDER(node, direction)` — Returns the next or previous sibling subscript.
+- `$SYSTEM.OBJ.Compile(className, flags)` — Compiles the specified class with the given flags.
+- `$SYSTEM.SQL.PurgeQueries()` — Purges cached queries in the current namespace.
+- `$SYSTEM.SQL.PurgeQueries({"table":[tableName]})` — Purges cached queries that reference the named table.
+- `$SYSTEM.SQL.Schema.ImportDDL(fileName)` — Imports SQL DDL from a file.
+- `$SYSTEM.SQL.Statement.FreezeRelation(tableName)` — Freezes statement plans referencing the relation.
+- `$SYSTEM.SQL.Statement.FreezeStatement(statementId)` — Freezes the plan of an identified statement.
+- `$SYSTEM.SQL.Statement.UnfreezeRelation(tableName)` — Unfreezes statement plans referencing the relation.
+- `$SYSTEM.SQL.Statement.UnfreezeStatement(statementId)` — Unfreezes the plan of an identified statement.
+- `$SYSTEM.SQL.TuneTable(tableName)` — Updates optimizer statistics for the target table.
+- `$SYSTEM.Status.GetErrorText(status)` — Returns status message text.
+- `COUNT(*)` — Counts rows, regardless of whether individual fields are NULL.
 
 Official reference: [Persistent class indexes](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GOBJ_defpersobj).
 

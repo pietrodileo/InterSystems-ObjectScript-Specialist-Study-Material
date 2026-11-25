@@ -445,16 +445,36 @@ $DATA tells you IF something exists; $GET retrieves the value with a default. Th
 
 ### Key terms
 
-- **Sparse multidimensional array** — Subscripts form a tree. A node can have a value, children, both or neither.
-- **Collation** — Canonical numeric subscripts sort numerically before text under standard collation. A text subscript such as 02 is distinct from canonical 2.
-- **Traversal** — $ORDER walks sibling keys and takes -1 for reverse order. Nested loops visit individual levels. $QUERY walks complete references.
-- **Node state** — $DATA returns 0, 1, 10 or 11 for absent, value only, descendants only or both. $GET reads with a default. KILL removes a subtree.
+- **Sparse multidimensional array**
+  - **Subscript** — Identifies a branch or leaf in the tree.
+  - **Node value** — Can exist independently of child nodes.
+- **Collation**
+  - **Canonical numeric subscript** — Sorts numerically under standard collation.
+  - **Text subscript** — Sorts as text, so 02 is distinct from canonical 2.
+- **Traversal**
+  - `$ORDER` — Returns the next sibling subscript, or the previous one with direction -1.
+  - `$QUERY` — Returns a full reference to the next or previous node.
+  - **Nested loops** — Visit each level of a multidimensional structure.
+- **Node state**
+  - `$DATA` — Returns 0, 1, 10 or 11 for neither, value only, descendants only or both.
+  - `$GET` — Reads a value without raising an undefined-variable error.
+  - `KILL` — Removes a variable or a node and its descendants.
+- **ObjectScript commands**
+  - `ELSE` — Runs the alternative branch when the condition is false.
+  - `FOR` — Repeats a block or command according to a loop specification.
+  - `IF` — Runs the following command or block when its condition is true.
+  - `QUIT` — Leaves the current loop, block or invocation as determined by context.
+  - `SET` — Assigns a value to a variable, property or assignable expression.
+  - `WHILE` — Repeats the block while its condition holds.
+  - `WRITE` — Sends formatted output to the current device.
 
-### Commands, methods and syntax
+### System methods and functions
 
-- **ObjectScript commands** — `ELSE`, `FOR`, `IF`, `KILL`, `QUIT`, `SET`, `WHILE`, `WRITE`.
-- **ObjectScript functions and special variables** — `$D`, `$DATA`, `$GET`, `$ORDER`, `$QUERY`.
-- **Subscript and control syntax** — `^global`, `$ORDER(node,1)`, `$ORDER(node,-1)`, `$DATA(node)`, `$GET(node,default)`, `MultiDimensional`.
+- `$DATA(node)` — Reports whether a node has data, descendants, both or neither.
+- `$GET(node, default)` — Returns the node value or a default.
+- `$ORDER(node, -1)` — Finds the previous sibling subscript.
+- `$ORDER(node, direction)` — Returns the next or previous sibling subscript.
+- `$QUERY(node, direction)` — Returns the next or previous full node reference.
 
 Official reference: [ObjectScript $ORDER](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_forder).
 

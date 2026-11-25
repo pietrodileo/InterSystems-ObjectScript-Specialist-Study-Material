@@ -376,24 +376,62 @@ Common compilation error patterns and their causes:
 
 ### Key terms
 
-- **Performance baseline** — Compare repeated equivalent workloads. Review elapsed time, global references, lines executed and SQL activity together.
-- **Line and SQL tools** — DO ^%SYS.MONLBL opens line-by-line monitoring. %Monitor.System.LineByLine is its programming interface. PTools collects SQL statistics; StatsSQL replaces the older SQLStats class.
-- **Class compilation** — Compile the intended source in the intended namespace. Read the full status. Fix missing includes, dependencies and malformed source before interpreting later errors.
-- **Flags and generated routines** — Inspect compiler flags, generated code and reported lines when diagnosing a failure. Verify spellings of classes, methods and includes.
+- **Performance baseline**
+  - **Comparable runs** — Repeat equivalent workloads under similar conditions.
+  - **Elapsed time and counters** — Track time together with global, code and SQL activity.
+- **Line and SQL tools**
+  - **DO ^%SYS.MONLBL** — Opens interactive line-by-line monitoring.
+  - `%Monitor.System.LineByLine` — Provides the monitoring class API.
+  - `%SYS.PTools.StatsSQL` — Exposes SQL performance statistics and supersedes the older SQLStats class.
+- **Class compilation**
+  - **Namespace** — Determines the target classes and routines available to the compiler.
+  - **Compile status** — Reports source, include and dependency failures.
+  - **First failure** — Often explains later generated-code diagnostics.
+- **Flags and generated routines**
+  - **Compiler flags** — Control aspects of generated code and diagnostic output.
+  - **Generated routine** — Maps runtime failures back to generated and source lines.
+- **ObjectScript commands**
+  - `DO` — Invokes a routine, label or method.
+  - `FOR` — Repeats a block or command according to a loop specification.
+  - `HANG` — Pauses the current process for a specified duration.
+  - `IF` — Runs the following command or block when its condition is true.
+  - `QUIT` — Leaves the current loop, block or invocation as determined by context.
+  - `RETURN` — Returns control, optionally with a value, to the caller.
+  - `SET` — Assigns a value to a variable, property or assignable expression.
+  - `WRITE` — Sends formatted output to the current device.
+  - `ZNAMESPACE` — Switches the current process to another namespace.
+  - `SQLCODE` — Reports the result of an Embedded SQL operation.
+- **System variables and macros**
+  - `$HOROLOG` — Reports local date and time as day and seconds fields.
+  - `$SYSTEM` — Provides shorthand access to the IRIS %SYSTEM package.
+  - `$ZHOROLOG` — Reports elapsed time in seconds since IRIS startup.
+  - `$ZTIMESTAMP` — Reports UTC date and time with fractional seconds.
+  - `$$$ISERR` — Tests whether a status indicates an error.
 
-### Commands, methods and syntax
+### System methods and functions
 
-- **ObjectScript commands** — `DO`, `FOR`, `HANG`, `IF`, `QUIT`, `RETURN`, `SET`, `WRITE`.
-- **ObjectScript functions and special variables** — `$HOROLOG`, `$JUSTIFY`, `$P`, `$PIECE`, `$RANDOM`, `$SYSTEM`, `$TRANSLATE`, `$ZH`, `$ZHOROLOG`, `$ZTIMESTAMP`.
-- **Macros and extrinsics** — `$$$AppVersion`, `$$$DbName`, `$$$FindAreaCode`, `$$$ISERR`, `$$$LogError`, `$$$LogInfo`, `$$$LogMsg`, `$$$MacroName`.
-- **IRIS classes and packages** — `%occStatus.inc`, `%SYS.MONLBL`, `%SYSTEM.OBJ`.
-- **Qualified calls and terminal utilities** — `$SYSTEM.OBJ.Compile()`, `$SYSTEM.OBJ.CompileAll()`, `$SYSTEM.OBJ.CompileList()`, `$SYSTEM.OBJ.CompilePackage()`, `$SYSTEM.Status.DisplayError()`, `$SYSTEM.Status.GetErrorText()`, `$SYSTEM.Status.IsError()`.
-- **Method names and generated entry points** — `%ExecDirect()`, `%New()`, `%Prepare()`, `%Save()`, `%ShowPlan()`, `DisplayStats()`, `LogMsg()`, `MONLBL()`, `MyMethod()`, `Process()`, `ProcessBatch()`, `SetSQLStatsJob()`, `ShowFlags()`.
-- **Terminal and compiler syntax** — `ZN`, `ZNAMESPACE`, `DO ^PERFMON`, `DO ^%SYS.MONLBL`, `MONLBL`, `Include`, `#include`, `#define`, `#if`, `%occStatus`, `r`, `d`, `b`, `y`.
-- **Diagnostics and SQL** — `%SQL.Statement`, `%SYS.PTools`, `%SYS.PTools.SQLStats`, `%SYS.PTools.StatsSQL`, `%Monitor.System.LineByLine`, `SQLCODE`, `%msg`.
-- **Routine labels cited in the lesson** — `Start^%MONLBL`, `Stop^%MONLBL`, `Report^%MONLBL`.
-- **Methods defined in chapter examples** — `Calculate()`, `CompareApproaches()`, `Info()`, `ProcessAddress()`, `Run()`, `Save()`, `TimedOperation()`.
-- **Incorrect forms in the exercises** — `/sort=dependency`, `%Strig`, `%SYS.PTools.Start`, `%SYS.PTools.Start()`, `$SYSTEM.Performance.Start()`.
+- `##class(%Monitor.System.LineByLine).Start($LISTBUILD(routine))` — Starts line-by-line monitoring for the named routine.
+- `##class(%Monitor.System.LineByLine).Stop()` — Stops line-by-line monitoring.
+- `##class(%SQL.Statement).%ExecDirect(, sql, value)` — Prepares and executes SQL with a bound value.
+- `##class(%SQL.Statement).%New()` — Creates a dynamic SQL statement object.
+- `##class(%SYS.PTools.SQLStats).SetSQLStatsJob(mode)` — Controls SQL statistics collection for the current job through the legacy interface.
+- `##class(App.Record).%New()` — Creates a new in-memory instance of the class.
+- `$JUSTIFY(value, width, decimals)` — Right-aligns or formats a numeric value.
+- `$PIECE(text, delimiter, from, to)` — Returns one or more delimited fields.
+- `$RANDOM(limit)` — Returns a random integer from zero through limit minus one.
+- `$SYSTEM.OBJ.Compile(className, flags)` — Compiles the specified class with the given flags.
+- `$SYSTEM.OBJ.CompileAll(flags)` — Compiles the classes in the current namespace.
+- `$SYSTEM.OBJ.CompileList(classList, flags)` — Compiles the supplied list of classes.
+- `$SYSTEM.OBJ.CompilePackage(packageName, flags)` — Compiles classes in a package.
+- `$SYSTEM.OBJ.ShowFlags()` — Displays the object compiler flags.
+- `$SYSTEM.SQL.Explain(sql)` — Generates and displays an execution plan for the SQL query.
+- `$SYSTEM.SQL.SetSQLStatsFlagJob(mode)` — Controls SQL statistics collection for the current job.
+- `$SYSTEM.Status.DisplayError(status)` — Writes error details to the current device.
+- `$SYSTEM.Status.GetErrorText(status)` — Returns status message text.
+- `$SYSTEM.Status.IsError(status)` — Tests whether the status represents an error.
+- `$TRANSLATE(text, from, to)` — Maps or removes individual characters.
+- `obj.%Save()` — Persists the object and returns a status.
+- `stmt.%Prepare(sql)` — Prepares a dynamic statement and returns a status.
 
 Official reference: [Performance Monitor](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCM_perfmon).
 

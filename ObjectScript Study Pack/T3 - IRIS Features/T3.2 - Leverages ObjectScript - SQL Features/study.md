@@ -667,25 +667,94 @@ WRITE "Rows affected: ", rs.%ROWCOUNT, !
 
 ### Key terms
 
-- **Weak typing and coercion** — ObjectScript converts runtime values in numeric, string and Boolean contexts. Class and SQL datatypes can enforce checks at their boundaries.
-- **Macros and includes** — $$$name expands at compile time. #define declares it. #include or Include supplies its definition. %occStatus provides standard status helpers.
-- **Object-to-SQL projection** — Persistent classes project tables and properties project columns. SqlName changes the projection name in its context. SqlProc exposes a method or query as a SQL procedure.
-- **Embedded and dynamic SQL** — &sql embeds SQL with :hostVariable binding. %SQL.Statement uses %Prepare and %Execute with ? parameters and %Next to traverse the result.
-- **Select modes** — Logical gives internal values, ODBC gives interoperability formats and Display gives human-oriented values. %EXTERNAL, %INTERNAL and %ODBCOUT make conversions explicit where applicable.
-- **Result metadata** — SQLCODE is zero for success, 100 for no row or end of fetch, and negative for an error. %ROWCOUNT reports row count in context. %ROWID identifies a row where supplied.
+- **Weak typing and coercion**
+  - **Runtime coercion** — Interprets a value according to its numeric, string or Boolean context.
+  - **Datatype boundary** — Applies class or SQL datatype checks and conversions.
+- **Macros and includes**
+  - `$$$name` — References a compile-time macro.
+  - `#define` — Declares a macro.
+  - `#include and Include` — Make shared definitions available to the compiler.
+  - `%occStatus` — Provides standard status macros.
+- **Object-to-SQL projection**
+  - **Persistent class** — Projects a SQL table by default.
+  - **Property** — Projects a column when the property is SQL-visible.
+  - **SqlName** — Changes the SQL name in its declaration context.
+  - **SqlProc** — Exposes a method or query as a SQL procedure.
+- **Embedded and dynamic SQL**
+  - `&sql` — Embeds SQL and binds named host variables.
+  - `%SQL.Statement` — Represents a prepared or executable SQL statement.
+  - `%Prepare` — Prepares the statement and reports a status.
+  - `%Execute` — Runs it with positional parameters.
+  - `%Next` — Advances through returned rows.
+- **Select modes**
+  - **Logical** — Uses internal data representations.
+  - `ODBC` — Uses interoperability formats.
+  - **Display** — Uses display-oriented formats.
+  - `%EXTERNAL, %INTERNAL and %ODBCOUT` — Request explicit representation conversion.
+- **Result metadata**
+  - `SQLCODE` — Distinguishes success, end of results and error.
+  - `%ROWCOUNT` — Reports row count for the operation in context.
+  - `%ROWID` — Reports a row ID where supplied.
+- **ObjectScript commands**
+  - `ELSE` — Runs the alternative branch when the condition is false.
+  - `ELSEIF` — Tests an additional condition after a false branch.
+  - `FOR` — Repeats a block or command according to a loop specification.
+  - `IF` — Runs the following command or block when its condition is true.
+  - `QUIT` — Leaves the current loop, block or invocation as determined by context.
+  - `RETURN` — Returns control, optionally with a value, to the caller.
+  - `THROW` — Raises an exception object.
+  - `WHILE` — Repeats the block while its condition holds.
+  - `WRITE` — Sends formatted output to the current device.
+  - `%ID` — Exposes the row's persistent identifier in SQL.
+- **System variables and macros**
+  - `$HOROLOG` — Reports local date and time as day and seconds fields.
+  - `$SYSTEM` — Provides shorthand access to the IRIS %SYSTEM package.
+  - `$$$ERROR` — Builds an error status from its code and arguments.
+  - `$$$GeneralError` — Identifies the general-error code used with message text.
+  - `$$$ISERR` — Tests whether a status indicates an error.
+  - `$$$ISOK` — Tests whether a status indicates success.
+  - `$$$NULLOREF` — Supplies the null object reference.
+  - `$$$OK` — Supplies a success status.
+  - `$$$ThrowOnError` — Throws if the supplied status indicates an error.
+  - `$$$ThrowStatus` — Raises an exception from the supplied error status.
+- **SQL statements and clauses**
+  - `DECLARE CURSOR` — Gives a result set a name for Embedded SQL row-by-row fetch.
+  - **OPEN (cursor)** — Starts a declared cursor.
+  - `FETCH` — Reads the next cursor row into host variables.
+  - **CLOSE (cursor)** — Closes the cursor and releases its resources.
+  - `SELECT` — Reads rows and expressions from one or more sources.
+  - `FROM` — Names the source tables or queries.
+  - `WHERE` — Keeps rows whose predicate is true.
+  - `INSERT INTO` — Creates rows in the named table.
+  - `VALUES` — Supplies row values for an insert.
+  - `UPDATE` — Changes values in existing rows.
+  - **SET (SQL)** — Defines the columns and expressions updated by an UPDATE.
+  - `%ID` — Exposes the row's persistent identifier in SQL.
+  - `%msg` — Contains diagnostic text for a SQL error where supplied.
 
-### Commands, methods and syntax
+### System methods and functions
 
-- **ObjectScript commands** — `ELSE`, `ELSEIF`, `FOR`, `IF`, `QUIT`, `RETURN`, `THROW`, `WHILE`, `WRITE`.
-- **ObjectScript functions and special variables** — `$C`, `$CHAR`, `$HOROLOG`, `$P`, `$SYSTEM`, `$ZDATE`.
-- **Macros and extrinsics** — `$$$ERROR`, `$$$FindAreaCode`, `$$$GeneralError`, `$$$ISERR`, `$$$ISOK`, `$$$macroName`, `$$$NULLOREF`, `$$$OK`, `$$$TaxRate`, `$$$ThrowOnError`, `$$$ThrowStatus`.
-- **IRIS classes and packages** — `%Exception.StatusException`, `%occErrors.inc`, `%occStatus.inc`, `%SQL.Statement`, `%SQL.StatementResult`, `%SYS.System`.
-- **Qualified calls and terminal utilities** — `$SYSTEM.SQL.Util.SetOption()`, `$SYSTEM.Status.AppendStatus()`, `$SYSTEM.Status.GetErrorText()`.
-- **Method names and generated entry points** — `%Execute()`, `%Get()`, `%ID()`, `%New()`, `%Next()`, `%OpenId()`, `%Prepare()`, `%Save()`, `CreateFromStatus()`, `Log()`, `ThrowIfError()`, `WriteToConsoleLog()`.
-- **Preprocessor and members** — `#define`, `#include`, `#ifdef`, `#else`, `#endif`, `Include`, `%occStatus`, `%occErrors`, `Class`, `Property`, `ClassMethod`, `Query`, `SqlProc`, `SqlName`, `SqlFieldName`, `SqlTableName`, `%Date`, `%Persistent`, `%Status`.
-- **SQL statements and result fields** — `&sql`, `DECLARE CURSOR`, `OPEN`, `FETCH`, `CLOSE`, `SELECT`, `FROM`, `WHERE`, `COUNT()`, `IS NULL`, `INSERT INTO`, `VALUES`, `UPDATE`, `SET`, `INTO`, `SQLCODE`, `%ROWCOUNT`, `%ROWID`, `%ID`, `%msg`, `%Message`.
-- **Mode conversion** — `%SelectMode`, `%EXTERNAL()`, `%INTERNAL()`, `%ODBCOUT()`, `Logical`, `ODBC`, `Display`.
-- **Methods defined in chapter examples** — `Calculate()`, `GetTax()`, `GetTopEarners()`, `ProcessAddress()`.
+- `##class(%Exception.StatusException).CreateFromStatus(status)` — Creates an exception object from a status.
+- `##class(%SQL.Statement).%New()` — Creates a dynamic SQL statement object.
+- `##class(%SYS.System).WriteToConsoleLog(message)` — Writes a message to the IRIS console log.
+- `##class(App.Record).%New()` — Creates a new in-memory instance of the class.
+- `##class(App.Record).%OpenId(id, concurrency, .status)` — Opens a record by ID. The concurrency and status arguments are optional.
+- `%EXTERNAL(column)` — Converts the value to its display representation.
+- `%INTERNAL(column)` — Requests the internal representation of the value.
+- `%ODBCOUT(column)` — Converts a value to its ODBC representation.
+- `$CHAR(code1, code2)` — Builds a string from character codes.
+- `$PIECE(text, delimiter, from, to)` — Returns one or more delimited fields.
+- `$SYSTEM.SQL.Util.SetOption(option, value)` — Sets a named SQL option.
+- `$SYSTEM.Status.AppendStatus(first, second)` — Combines two status values.
+- `$SYSTEM.Status.GetErrorText(status)` — Returns status message text.
+- `$ZDATE(days, format)` — Formats an internal day count.
+- `COUNT(*)` — Counts rows, regardless of whether individual fields are NULL.
+- `obj.%Id()` — Returns the persistent ID of the open object.
+- `obj.%Save()` — Persists the object and returns a status.
+- `result.%Get("ColumnName")` — Reads a result column by name.
+- `result.%Next()` — Advances to the next SQL row and reports whether it exists.
+- `stmt.%Execute(value)` — Runs the prepared statement with the given bound value.
+- `stmt.%Prepare(sql)` — Prepares a dynamic statement and returns a status.
 
 Official reference: [Using Embedded SQL](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GSQL_esql).
 

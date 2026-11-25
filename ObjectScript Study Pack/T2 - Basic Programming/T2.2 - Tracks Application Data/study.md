@@ -472,25 +472,95 @@ ClassMethod CollectMetrics() As %Status
 
 ### Key terms
 
-- **Global and namespace mapping** — A global is a sparse tree. A namespace maps the name to a database. Inspect deployed storage before assuming the global behind a class.
-- **Safe inspection** — $DATA distinguishes value and descendants. $GET supplies a default. $ORDER walks siblings. $QUERY walks full references. ZWRITE inspects the tree.
-- **Application logging** — Record timestamp, event and correlation context while excluding sensitive values. $INCREMENT can allocate a sequence atomically. Keep application and platform diagnostics distinct.
-- **Time sources** — $HOROLOG gives local day/second fields. $ZTIMESTAMP gives UTC day/second fields. Use differences in $ZHOROLOG to measure elapsed seconds since IRIS startup.
-- **Performance metrics** — Take before and after readings at the same scope. Compare elapsed seconds, global references, executed lines and disk activity under similar workloads.
-- **Global browsing with SQL** — Global_Find finds global names and Global_Get inspects nodes. Verify the target namespace and privileges before reading data.
+- **Global and namespace mapping**
+  - **Global** — Stores data in a sparse subscript tree.
+  - **Namespace mapping** — Resolves a global name to a database.
+  - **Deployed storage** — Identifies the actual globals used by a class.
+- **Safe inspection**
+  - `$DATA` — Checks whether a node has a value, descendants or both.
+  - `$GET` — Reads a node with a default for an undefined value.
+  - `$ORDER` — Returns the next or previous sibling subscript.
+  - `$QUERY` — Returns the next or previous full node reference.
+  - `ZWRITE` — Displays values and subscripts for inspection.
+- **Application logging**
+  - **Correlation context** — Associates events from the same operation.
+  - `$INCREMENT` — Atomically allocates the next numeric sequence value.
+  - **Data minimization** — Keeps secrets and sensitive fields out of log records.
+- **Time sources**
+  - `$HOROLOG` — Gives local day and second fields.
+  - `$ZTIMESTAMP` — Gives UTC day and fractional-second fields.
+  - `$ZHOROLOG` — Reports elapsed seconds since IRIS startup.
+- **Performance metrics**
+  - **Baseline and delta** — Compare before and after readings from the same scope.
+  - **Operation counters** — Measure globals, executed lines or disk activity alongside duration.
+- **Global browsing with SQL**
+  - **Global_Find** — Finds global names matching a search pattern.
+  - **Global_Get** — Reads nodes from a specified global.
+  - **Namespace and privileges** — Determine which globals a caller can inspect.
+- **ObjectScript commands**
+  - `DO` — Invokes a routine, label or method.
+  - `FOR` — Repeats a block or command according to a loop specification.
+  - `IF` — Runs the following command or block when its condition is true.
+  - `QUIT` — Leaves the current loop, block or invocation as determined by context.
+  - `RETURN` — Returns control, optionally with a value, to the caller.
+  - `SET` — Assigns a value to a variable, property or assignable expression.
+  - `WHILE` — Repeats the block while its condition holds.
+  - `WRITE` — Sends formatted output to the current device.
+  - `CLOSE` — Closes the device identified by its argument.
+  - `OPEN` — Opens the specified I/O device.
+  - `ZNAMESPACE` — Switches the current process to another namespace.
+- **System variables and macros**
+  - `$JOB` — Identifies the current process.
+  - `$NAMESPACE` — Names the current namespace.
+  - `$SYSTEM` — Provides shorthand access to the IRIS %SYSTEM package.
+  - `$USERNAME` — Identifies the authenticated user.
+  - `$ZTIMEZONE` — Reports the current time zone offset in minutes west of UTC.
+  - `$$$ISCLOG` — Emits diagnostics through the framework logging configuration.
+  - `$$$OK` — Supplies a success status.
+  - `$$$SysLog` — Writes framework diagnostics to the system logging facility.
+- **SQL statements and clauses**
+  - `SELECT` — Reads rows and expressions from one or more sources.
+  - `FROM` — Names the source tables or queries.
+  - `CALL` — Executes a stored procedure.
 
-### Commands, methods and syntax
+### System methods and functions
 
-- **ObjectScript commands** — `DO`, `FOR`, `IF`, `QUIT`, `RETURN`, `SET`, `WHILE`, `WRITE`.
-- **ObjectScript functions and special variables** — `$DATA`, `$GET`, `$H`, `$HOROLOG`, `$INCREMENT`, `$JOB`, `$LB`, `$LIST`, `$LISTBUILD`, `$LISTGET`, `$NAMESPACE`, `$NOW`, `$ORDER`, `$PIECE`, `$QUERY`, `$RANDOM`, `$SYSTEM`, `$USERNAME`, `$ZDATE`, `$ZDATETIME`, `$ZH`, `$ZHOROLOG`, `$ZTIME`, `$ZTIMESTAMP`, `$ZTIMEZONE`, `$ZTS`.
-- **Macros and extrinsics** — `$$$ISCLOG`, `$$$OK`, `$$$SysLog`.
-- **IRIS classes and packages** — `%Library.File`, `%Library.Global`, `%Library.SysLog`, `%occDiagnostics.inc`, `%SYS.MONLBL`, `%SYS.Namespace`, `%SYS.ProcessQuery`, `%SYSTEM.Process`, `%SYSTEM.SYS`.
-- **Qualified calls and terminal utilities** — `$SYSTEM.Monitor.LineLevelMonStart()`, `$SYSTEM.Monitor.LineLevelMonStop()`, `$SYSTEM.OBJ.ShowGlobal()`, `$SYSTEM.Process.DiskReadCount()`, `$SYSTEM.Process.GetMetrics()`, `$SYSTEM.Process.GlobalReferences()`, `$SYSTEM.Process.JournalEntryCount()`, `$SYSTEM.Process.LinesExecuted()`, `$SYSTEM.SQL.Stats.DisplayStats()`, `$SYSTEM.SYS.Horolog()`, `$SYSTEM.SYS.TimeStamp()`.
-- **Method names and generated entry points** — `%Execute()`, `%Get()`, `%New()`, `%Next()`, `%Prepare()`, `%PrepareClassQuery()`, `%ShowPlan()`, `Close()`, `FindAll()`, `FixedDate()`, `GetGlobalDest()`, `GetMetric()`, `GetNSInfo()`, `Global_Find()`, `Global_Get()`, `Log()`, `MONLBL()`, `Open()`, `PerfLog()`, `ProcessBatch()`, `WriteLine()`.
-- **Inspection and timing** — `ZWRITE`, `ZN`, `ZNAMESPACE`, `MONLBL`, `^global`, `^||global`, `%SYS`, `DataLocation`, `IdLocation`, `IndexLocation`, `USEEXTENTSET`.
-- **SQL** — `SELECT`, `FROM`, `CALL`, `%SQL.Statement`, `%Library.Global_Find`, `%Library.Global_Get`.
-- **Methods defined in chapter examples** — `CalculateReport()`, `CollectMetrics()`, `LogError()`.
-- **Incorrect forms in the exercises** — `%Global.MyGlobal`, `$SYSTEM.Process.GlobalRefs()`, `GlobalRefs()`.
+- `##class(%File).%New(path)` — Creates a file object for the path.
+- `##class(%Monitor.System.LineByLine).Start($LISTBUILD(routine))` — Starts line-by-line monitoring for the named routine.
+- `##class(%Monitor.System.LineByLine).Stop()` — Stops line-by-line monitoring.
+- `##class(%SQL.Statement).%New()` — Creates a dynamic SQL statement object.
+- `##class(%SYS.Namespace).GetGlobalDest(namespace, globalName)` — Resolves the database mapped to the global.
+- `##class(%SYS.Namespace).GetNSInfo(namespace, .info)` — Returns namespace properties, including its default mappings.
+- `$DATA(node)` — Reports whether a node has data, descendants, both or neither.
+- `$GET(node, default)` — Returns the node value or a default.
+- `$INCREMENT(node, amount)` — Atomically adds an amount and returns the new value.
+- `$LIST(list, position)` — Reads the element at the specified position.
+- `$LISTBUILD(value1, value2)` — Encodes values as an ObjectScript list.
+- `$LISTGET(list, position, default)` — Reads an element or supplies a default.
+- `$NOW()` — Returns the current date and time with fractional seconds.
+- `$ORDER(node, direction)` — Returns the next or previous sibling subscript.
+- `$PIECE(text, delimiter, from, to)` — Returns one or more delimited fields.
+- `$QUERY(node, direction)` — Returns the next or previous full node reference.
+- `$RANDOM(limit)` — Returns a random integer from zero through limit minus one.
+- `$SYSTEM.Process.FixedDate(days)` — Sets a test date for the process's Horolog value. Pass zero to restore it.
+- `$SYSTEM.Process.GlobalReferences()` — Returns the process's global reference count.
+- `$SYSTEM.Process.LinesExecuted()` — Returns the process's executed-line count.
+- `$SYSTEM.SQL.Explain(sql)` — Generates and displays an execution plan for the SQL query.
+- `$SYSTEM.SYS.Horolog()` — Returns the current Horolog value.
+- `$SYSTEM.SYS.TimeStamp()` — Returns the current timestamp.
+- `$ZDATE(days, format)` — Formats an internal day count.
+- `$ZDATETIME(daySecondPair, dateFormat, timeFormat)` — Formats a day-and-seconds pair as date and time text.
+- `$ZTIME(seconds, format)` — Formats an internal seconds-of-day value.
+- `CALL %Library.Global_Find(namespace, startNode, pattern)` — Finds global nodes containing the search value.
+- `CALL %Library.Global_Get(namespace, searchMask, lastNode)` — Returns nodes selected by the global search mask.
+- `file.Close()` — Closes an open file object.
+- `file.Open("WSA")` — Opens a file for stream writes in append mode.
+- `result.%Get("ColumnName")` — Reads a result column by name.
+- `result.%Next()` — Advances to the next SQL row and reports whether it exists.
+- `stmt.%Execute(value)` — Runs the prepared statement with the given bound value.
+- `stmt.%Prepare(sql)` — Prepares a dynamic statement and returns a status.
+- `stmt.%PrepareClassQuery(className, queryName)` — Prepares a named class query for execution.
+- `stream.WriteLine(text)` — Writes text followed by a line terminator.
 
 Official reference: [Elapsed seconds with $ZHOROLOG](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_vzhorolog).
 

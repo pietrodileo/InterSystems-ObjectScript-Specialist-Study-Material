@@ -80,3 +80,26 @@ test('grouped diagrams explain only the sections in their caption', () => {
   assert.ok(diagrams[1].description[0].startsWith('5.'));
   assert.ok(diagrams[1].description.at(-1).startsWith('8.'));
 });
+
+test('chapter glossaries render sublists and individual system calls', async () => {
+  const source = await readFile(new URL('./app.mjs', import.meta.url), 'utf8');
+  const context = vm.createContext({ renderDiagrams: () => '' });
+  vm.runInContext(source.slice(source.indexOf('const escape ='), source.indexOf('const leadParagraphs =')) +
+    source.slice(source.indexOf('function renderStudyNotes('), source.indexOf('function renderCodeExamples(')), context);
+
+  for (const chapter of chapters) {
+    context.chapter = chapter;
+    const html = vm.runInContext('renderStudyNotes(chapter.glossary, chapter.diagrams)', context);
+    const [, terms, calls] = html.match(/<h3>Key terms<\/h3>(.*?)<h3>System methods and functions<\/h3>(.*?)<p>/s);
+    const groups = chapter.glossary.split('### System methods and functions')[0].match(/^- \*\*/gm).length;
+    assert.equal((terms.match(/<\/strong><ul><li>/g) ?? []).length, groups, chapter.topic);
+    for (const [, call] of calls.matchAll(/<li>(.*?)<\/li>/g)) {
+      assert.match(call, /^<code translate="no">[^\n]*\([^\n]*\)[^\n]*<\/code> — .+\.$/, chapter.topic);
+    }
+    assert.ok(calls.includes('<li><code'), chapter.topic);
+    if (chapter.topic === 'T1.1') {
+      assert.match(terms, /Create, validate and save<\/strong><ul><li><code translate="no">%New<\/code>/);
+      assert.ok(!/BadgeLabel|GetAge|AccountIdxOpen/.test(calls));
+    }
+  }
+});

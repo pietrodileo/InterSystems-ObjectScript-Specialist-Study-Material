@@ -1183,24 +1183,91 @@ ClassMethod IndirectionError()
 
 ### Key terms
 
-- **&lt;SUBSCRIPT&gt; and &lt;UNDEFINED&gt;** — Check subscript validity and initialization. Use $DATA for presence and $GET when a missing value has a meaningful default.
-- **&lt;PROTECT&gt; and &lt;FRAMESTACK&gt;** — Check namespace mapping and privilege for the failing operation. For stack exhaustion check base cases, recursion depth and cycles.
-- **&lt;INVALID OREF&gt;** — Check construction and open results. Use $ISOBJECT before accessing object members if the reference may be invalid.
-- **Missing class, method or property** — Check names, namespace, compilation and dispatch kind. Inspect metadata and verify qualified system calls, such as $SYSTEM.SQL.Stats.Table.GatherTableStats().
-- **&lt;SYNTAX&gt;** — Fix the earliest error. Check brackets, braces, arguments, postconditionals and indirection. Recompile after correcting the source.
+- **&lt;SUBSCRIPT&gt; and &lt;UNDEFINED&gt;**
+  - `<SUBSCRIPT>` — Signals an invalid subscript operation.
+  - `<UNDEFINED>` — Signals a read from an undefined variable or node.
+  - `$DATA` — Checks for a value or descendants.
+  - `$GET` — Supplies a default when an undefined value is expected.
+- **&lt;PROTECT&gt; and &lt;FRAMESTACK&gt;**
+  - `<PROTECT>` — Signals a protected operation or insufficient access.
+  - `<FRAMESTACK>` — Signals exhausted call frames, often from uncontrolled recursion.
+  - **Base case** — Terminates a recursive algorithm.
+- **&lt;INVALID OREF&gt;**
+  - **Invalid object reference** — Prevents safe access to an instance's methods or properties.
+  - `$ISOBJECT` — Tests whether a value is an object reference.
+  - **Construction and open status** — Help identify why a reference was unavailable.
+- **Missing class, method or property**
+  - **Namespace and compilation** — Determine whether the definition is available.
+  - **Dispatch kind** — Determines whether the call needs a class or instance receiver.
+  - **Metadata inspection** — Checks that the target member exists and that its name matches.
+- **&lt;SYNTAX&gt;**
+  - **Syntax error** — Reports code the parser cannot accept.
+  - **First reported error** — Can identify the malformed bracket, argument, postconditional or indirection that triggered later errors.
+- **ObjectScript commands**
+  - `CATCH` — Receives the exception raised in the corresponding TRY block.
+  - `DO` — Invokes a routine, label or method.
+  - `ELSE` — Runs the alternative branch when the condition is false.
+  - `ELSEIF` — Tests an additional condition after a false branch.
+  - `FOR` — Repeats a block or command according to a loop specification.
+  - `IF` — Runs the following command or block when its condition is true.
+  - `KILL` — Removes a variable or a node and all its descendants.
+  - `NEW` — Saves an existing local binding and creates a fresh one for the current scope.
+  - `QUIT` — Leaves the current loop, block or invocation as determined by context.
+  - `RETURN` — Returns control, optionally with a value, to the caller.
+  - `SET` — Assigns a value to a variable, property or assignable expression.
+  - `THROW` — Raises an exception object.
+  - `TRY` — Begins a block watched for exceptions.
+  - `WHILE` — Repeats the block while its condition holds.
+  - `WRITE` — Sends formatted output to the current device.
+  - `XECUTE` — Executes a string as ObjectScript commands.
+  - `ZNAMESPACE` — Switches the current process to another namespace.
+- **System variables and macros**
+  - `$JOB` — Identifies the current process.
+  - `$ROLES` — Lists the roles active for the current process.
+  - `$SYSTEM` — Provides shorthand access to the IRIS %SYSTEM package.
+  - `$USERNAME` — Identifies the authenticated user.
+  - `$$$ERROR` — Builds an error status from its code and arguments.
+  - `$$$GeneralError` — Identifies the general-error code used with message text.
+  - `$$$ISERR` — Tests whether a status indicates an error.
+  - `$$$OK` — Supplies a success status.
+  - `$$$ThrowOnError` — Throws if the supplied status indicates an error.
 
-### Commands, methods and syntax
+### System methods and functions
 
-- **ObjectScript commands** — `CATCH`, `DO`, `ELSE`, `ELSEIF`, `FOR`, `IF`, `KILL`, `NEW`, `QUIT`, `RETURN`, `SET`, `THROW`, `TRY`, `WHILE`, `WRITE`.
-- **ObjectScript functions and special variables** — `$EXTRACT`, `$FIND`, `$JOB`, `$LB`, `$LENGTH`, `$LIST`, `$LISTBUILD`, `$LISTGET`, `$LISTLENGTH`, `$ORDER`, `$PIECE`, `$ROLES`, `$SELECT`, `$SYSTEM`, `$USERNAME`, `$XECUTE`, `$ZCONVERT`.
-- **Macros and extrinsics** — `$$$ERROR`, `$$$GeneralError`, `$$$ISERR`, `$$$OK`, `$$$ThrowOnError`.
-- **IRIS classes and packages** — `%Dictionary.ClassDefinition`, `%Dictionary.MethodDefinition`, `%Dictionary.PropertyDefinition`, `%Exception.General`, `%SQL.Statement`, `%Stream.FileCharacter`, `%SYS.Namespace`.
-- **Qualified calls and terminal utilities** — `$SYSTEM.SQL.Stats.Table.GatherTableStats()`.
-- **Method names and generated entry points** — `%ClassName()`, `%ExistsId()`, `%IsA()`, `%New()`, `%OpenId()`, `%Prepare()`, `%Save()`, `AsStatus()`, `GetGlobalDest()`, `LinkToFile()`, `MyMethod()`, `ReadLine()`, `SendConfirmation()`, `SetAt()`, `Walk()`.
-- **Error and lookup syntax** — `<SUBSCRIPT>`, `<PROTECT>`, `<FRAMESTACK>`, `<UNDEFINED>`, `<INVALID OREF>`, `<CLASS DOES NOT EXIST>`, `<METHOD DOES NOT EXIST>`, `<PROPERTY DOES NOT EXIST>`, `<SYNTAX>`.
-- **Dispatch and inspection** — `##class`, `$METHOD`, `$CLASSMETHOD`, `$PROPERTY`, `@`, `XECUTE`, `ZN`, `ZNAMESPACE`, `$DATA`, `$GET`, `$ISOBJECT`.
-- **Methods defined in chapter examples** — `BadFactorial()`, `BraceError()`, `BuildTree()`, `CallerBug()`, `CanWrite()`, `CheckDatabaseAccess()`, `CompileError()`, `ComputeAverage()`, `ConditionalBug()`, `ConditionalFixed()`, `CreatePerson()`, `DataCheckExamples()`, `DeepRecursiveProcess()`, `DisplayPerson()`, `DisplayPersonSafe()`, `DynamicCall()`, `DynamicCodeError()`, `Factorial()`, `GetPropertyValue()`, `GetPropertyValueSafe()`, `IndirectionError()`, `LoadOrders()`, `OpenRecord()`, `OrefScopeIssue()`, `ProcessA()`, `ProcessB()`, `ProcessExample()`, `ProcessFile()`, `ProcessItem()`, `ProcessItems()`, `ProcessItemsSafe()`, `ProcessList()`, `ProcessOrder()`, `ProcessRecord()`, `QueryExample()`, `SafeAccessExamples()`, `SafeCreateObject()`, `SafeRecursion()`, `SaveData()`, `SavePerson()`, `StoreValue()`, `TraverseList()`, `TraverseTree()`, `TraverseTreeIterative()`, `TypoExample()`, `UndefinedExample()`, `UpdatePatients()`.
-- **Incorrect forms in the exercises** — `$SYSTEM.Process.SetStackSize()`, `$SYSTEM.SQL.Stats.GatherTableStats()`, `Preapre()`, `Save()`.
+- `##class(%ArrayOfDataTypes).%New()` — Creates an empty array collection.
+- `##class(%Exception.General).%New(name, code, location, data)` — Creates a general exception carrying diagnostic context.
+- `##class(%SQL.Statement).%New()` — Creates a dynamic SQL statement object.
+- `##class(%Stream.FileCharacter).%New()` — Creates a character stream backed by a file.
+- `##class(%SYS.Namespace).GetGlobalDest(namespace, globalName)` — Resolves the database mapped to the global.
+- `##class(App.Record).%ExistsId(id)` — Tests whether an object with the given ID exists.
+- `##class(App.Record).%OpenId(id, concurrency, .status)` — Opens a record by ID. The concurrency and status arguments are optional.
+- `$CLASSMETHOD(className, methodName, arg)` — Invokes a class method selected at runtime.
+- `$DATA(node)` — Reports whether a node has data, descendants, both or neither.
+- `$EXTRACT(text, from, to)` — Returns a substring by character position.
+- `$FIND(text, needle, start)` — Returns the position after the match, or zero.
+- `$GET(node, default)` — Returns the node value or a default.
+- `$ISOBJECT(obj)` — Indicates whether the value is an object reference.
+- `$LENGTH(text, delimiter)` — Counts delimited fields. Omit the delimiter to count characters.
+- `$LIST(list, position)` — Reads the element at the specified position.
+- `$LISTBUILD(value1, value2)` — Encodes values as an ObjectScript list.
+- `$LISTGET(list, position, default)` — Reads an element or supplies a default.
+- `$LISTLENGTH(list)` — Counts list positions.
+- `$METHOD(obj, methodName, arg)` — Invokes an instance method selected at runtime.
+- `$ORDER(node, direction)` — Returns the next or previous sibling subscript.
+- `$PIECE(text, delimiter, from, to)` — Returns one or more delimited fields.
+- `$PROPERTY(obj, propertyName)` — Reads a property selected at runtime.
+- `$SELECT(condition:value, 1:default)` — Returns the value for the first true condition.
+- `$SYSTEM.SQL.Stats.Table.GatherTableStats(tableName)` — Gathers optimizer statistics for the named table.
+- `$XECUTE(code)` — Executes an ObjectScript command string that returns a value.
+- `$ZCONVERT(text, mode)` — Converts case or applies an encoding mode.
+- `array.SetAt(value, key)` — Sets a value at the named key in an array collection.
+- `ex.AsStatus()` — Converts an exception object to a status.
+- `obj.%ClassName(1)` — Returns the fully qualified class name. Omit 1 for the short name.
+- `obj.%IsA(className)` — Tests membership in the object's primary class hierarchy.
+- `obj.%Save()` — Persists the object and returns a status.
+- `stmt.%Prepare(sql)` — Prepares a dynamic statement and returns a status.
+- `stream.LinkToFile(fileName)` — Associates a file stream with a path.
+- `stream.ReadLine()` — Reads a line at the current stream position.
 
 Official reference: [ObjectScript errors](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=RCOS_errors).
 

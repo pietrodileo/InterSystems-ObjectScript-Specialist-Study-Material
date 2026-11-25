@@ -140,20 +140,49 @@ SET ^Patient(12345, "DOB") = "1985-03-15"
 
 ### Key terms
 
-- **Local variable** — Lives in the process. Procedure scope and NEW govern visibility. Use scalar or subscripted locals for per-operation data.
-- **Process-private global** — ^||name is private to the owning process, can be shared by its routines and is cleaned up when that process ends.
-- **Temporary global** — A shared global mapped to a temporary database supports work across processes. Verify mapping, cleanup and restart behavior.
-- **Persistent global** — A global mapped to a regular database can outlive both process and restart. Durability and journaling depend on the database configuration.
-- **Storage choice** — Compare visibility, lifetime and ownership. Use $JOB for process identity, $DATA for node state and $GET for a defaulted read.
+- **Local variable**
+  - **Lifetime** — Normally tied to the process and the relevant scope.
+  - `NEW` — Saves prior bindings and creates a fresh local scope.
+  - **Subscripted local** — Stores sparse per-operation data in memory.
+- **Process-private global**
+  - `^||name` — Refers to a global visible only to its owning process.
+  - **Lifetime** — Spans routines in the same process and ends at process exit.
+- **Temporary global**
+  - **Temporary database mapping** — Places shared scratch data in temporary storage.
+  - **Cleanup** — Depends on application ownership and restart behavior.
+- **Persistent global**
+  - **Regular database mapping** — Lets global data outlive the creating process.
+  - **Durability** — Depends on database and journaling configuration.
+- **Storage choice**
+  - **Visibility and ownership** — Determine which sessions can access and clean up data.
+  - `$JOB` — Identifies the current process.
+  - `$DATA` — Reports the state of a node.
+  - `$GET` — Reads a node with a default.
+- **ObjectScript commands**
+  - `DO` — Invokes a routine, label or method.
+  - `FOR` — Repeats a block or command according to a loop specification.
+  - `HANG` — Pauses the current process for a specified duration.
+  - `KILL` — Removes a variable or a node and all its descendants.
+  - `QUIT` — Leaves the current loop, block or invocation as determined by context.
+  - `SET` — Assigns a value to a variable, property or assignable expression.
+  - `WHILE` — Repeats the block while its condition holds.
+  - `WRITE` — Sends formatted output to the current device.
+- **System variables and macros**
+  - `$ZERROR` — Reports the last ObjectScript error text.
+  - `$ZTIMESTAMP` — Reports UTC date and time with fractional seconds.
+  - `$$$OK` — Supplies a success status.
 
-### Commands, methods and syntax
+### System methods and functions
 
-- **ObjectScript commands** — `DO`, `FOR`, `HANG`, `KILL`, `NEW`, `QUIT`, `SET`, `WHILE`, `WRITE`.
-- **ObjectScript functions and special variables** — `$DATA`, `$GET`, `$INCREMENT`, `$ORDER`, `$PIECE`, `$ZERROR`, `$ZSTRIP`, `$ZTS`.
-- **Macros and extrinsics** — `$$$OK`.
-- **Method names and generated entry points** — `%New()`, `LinkToFile()`, `MyApp()`, `ReadLine()`, `WorkQueue()`.
-- **Storage syntax** — `^global`, `^||global`, `^IRIS.Temp.*`, `^CacheTemp*`, `$JOB`, `%Stream.FileCharacter`.
-- **Methods defined in chapter examples** — `Consumer()`, `GetProgress()`, `GetTotalExecutions()`, `ProcessFile()`, `Producer()`, `RecordExecution()`, `UpdateProgress()`.
+- `##class(%Stream.FileCharacter).%New()` — Creates a character stream backed by a file.
+- `$DATA(node)` — Reports whether a node has data, descendants, both or neither.
+- `$GET(node, default)` — Returns the node value or a default.
+- `$INCREMENT(node, amount)` — Atomically adds an amount and returns the new value.
+- `$ORDER(node, direction)` — Returns the next or previous sibling subscript.
+- `$PIECE(text, delimiter, from, to)` — Returns one or more delimited fields.
+- `$ZSTRIP(text, action)` — Removes characters according to class and position rules.
+- `stream.LinkToFile(fileName)` — Associates a file stream with a path.
+- `stream.ReadLine()` — Reads a line at the current stream position.
 
 Official reference: [Globals and storage](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS_globals).
 

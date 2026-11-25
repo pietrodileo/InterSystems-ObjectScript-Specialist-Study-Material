@@ -76,7 +76,7 @@ test('the real study pack supplies every lesson, question, and worked case', asy
   for (const chapter of chapters) {
     const recaps = chapter.diagrams.filter(diagram => diagram.glossary);
     assert.match(chapter.glossary, /^### Key terms$/m, chapter.topic);
-    assert.match(chapter.glossary, /^### Commands, methods and syntax$/m, chapter.topic);
+    assert.match(chapter.glossary, /^### System methods and functions$/m, chapter.topic);
     assert.ok(recaps.length >= 1 && recaps.length <= 2, chapter.topic);
     for (const recap of recaps) {
       assert.ok(recap.alt.startsWith(`${chapter.topic} Glossary & Cheat Sheet`));
