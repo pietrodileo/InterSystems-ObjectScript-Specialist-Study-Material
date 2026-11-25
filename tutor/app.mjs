@@ -1,10 +1,10 @@
-import { routeHref, readRoute } from './navigation.mjs';
-import { assessmentAnswered, assessmentComplete, chapterStep, correctSelection, finalQuestionRefs, loadCourse, packPath, passedAnswer, practiceQueue, quizBlocks, recordPractice, reviewItems, topics } from './content.mjs?v=chapter-glossary-2';
+import { routeHref, readRoute } from './navigation.mjs?v=glossary-tab-1';
+import { assessmentAnswered, assessmentComplete, chapterStep, correctSelection, finalQuestionRefs, loadCourse, packPath, passedAnswer, practiceQueue, quizBlocks, recordPractice, reviewItems, topics } from './content.mjs?v=glossary-tab-1';
 import { caseFocus, examAreaDescriptions, guides, variations } from './lesson-guides.mjs?v=practice-feedback-1';
 import { diagramExamples, studyExamples } from './code-examples.mjs';
 import './sidebar-controls.mjs?v=chapter-layout-2';
 import { createZip, galleryDownloadItems } from './gallery-download.mjs';
-import { galleryItems, searchCourse } from './content.mjs?v=chapter-glossary-2';
+import { galleryItems, searchCourse } from './content.mjs?v=glossary-tab-1';
 
 const lesson = document.querySelector('#lesson');
 const nav = document.querySelector('#chapters');
@@ -20,7 +20,7 @@ const progressFile = document.querySelector('#progress-file');
 const transferStatus = document.querySelector('#progress-transfer-status');
 const storageKey = 'objectscript-tutor-v1';
 const profileStorageKey = 'objectscript-tutor-profile-v1';
-const phases = { theory: 'Study', quiz: 'Practice', cases: 'Apply' };
+const phases = { theory: 'Study', quiz: 'Practice', cases: 'Apply', glossary: 'Glossary &amp; Cheat Sheet' };
 const escape = value => String(value).replace(/[&<>"']/g, char => ({
   '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
 })[char]);
@@ -255,6 +255,7 @@ function render() {
   if (phase === 'theory') renderTheory(panel);
   if (phase === 'quiz') renderQuiz(panel);
   if (phase === 'cases') renderCases(panel);
+  if (phase === 'glossary') renderGlossary(panel);
   focusLesson();
 }
 
@@ -726,10 +727,6 @@ function renderTheory(panel) {
         </div>
       </details>`;
     }).join('')}</div>
-    <details class="reading">
-      <summary>Glossary &amp; Cheat Sheet</summary>
-      <div class="disclosure-body">${renderStudyNotes(chapter.glossary, chapter.diagrams)}</div>
-    </details>
     <section class="controls-panel" aria-labelledby="chapter-controls-title">
       <h3 id="chapter-controls-title">Chapter controls</h3>
       <div class="controls-row">
@@ -737,6 +734,12 @@ function renderTheory(panel) {
         <a class="button-link" href="${escape(packPath(`${chapter.folder}/study.md`))}" download="${escape(chapter.topic)}-study-notes.md">Download chapter notes (.md)</a>
       </div>
     </section>`;
+}
+
+function renderGlossary(panel) {
+  panel.innerHTML = `
+    <h2 tabindex="-1">Glossary &amp; Cheat Sheet</h2>
+    ${renderStudyNotes(chapter.glossary, chapter.diagrams.filter(diagram => diagram.glossary))}`;
 }
 
 function answerOptions(question, selected) {
@@ -1310,7 +1313,7 @@ function validateProgressBackup(backup) {
   };
   if (!saved.assessments.every(validFinal) || (saved.final !== undefined && !validFinal(saved.final))) return null;
   if (saved.topic !== undefined && !byTopic.has(saved.topic)) return null;
-  if (saved.phase !== undefined && !['theory', 'quiz', 'cases', 'roadmap', 'review', 'final', 'past', 'profile', 'area', 'gallery', 'index'].includes(saved.phase)) return null;
+  if (saved.phase !== undefined && !['theory', 'quiz', 'cases', 'glossary', 'roadmap', 'review', 'final', 'past', 'profile', 'area', 'gallery', 'index'].includes(saved.phase)) return null;
   if (saved.assessmentIndex !== undefined && (!Number.isInteger(saved.assessmentIndex) || saved.assessmentIndex < 0 || saved.assessmentIndex >= saved.assessments.length)) return null;
   if (saved.sidebarOpen !== undefined && typeof saved.sidebarOpen !== 'boolean') return null;
 

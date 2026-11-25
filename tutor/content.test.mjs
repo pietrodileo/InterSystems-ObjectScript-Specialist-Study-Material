@@ -33,10 +33,10 @@ test('gallery covers every course diagram with captions and valid course locatio
     assert.ok(image.caption.trim());
     assert.ok(image.locations.length);
     if (image.glossary) {
-      assert.equal(image.phase, 'theory');
-      assert.deepEqual(image.locations, ['Study · Glossary & Cheat Sheet']);
+      assert.equal(image.phase, 'glossary');
+      assert.deepEqual(image.locations, ['Glossary & Cheat Sheet · Visual recap']);
     }
-    assert.ok((image.phase === 'theory' ? chapter.diagrams : chapter.exerciseDiagrams)
+    assert.ok((image.phase === 'cases' ? chapter.exerciseDiagrams : chapter.diagrams)
       .some(diagram => diagram.file === image.file));
     for (const question of chapter.quiz.filter(question => question.feedback.diagram?.file === image.file)) {
       assert.ok(image.locations.includes(`Practice · Question ${question.id}`));

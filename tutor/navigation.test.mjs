@@ -3,7 +3,7 @@ import test from 'node:test';
 import { readFile } from 'node:fs/promises';
 import vm from 'node:vm';
 import { readRoute, routeHref } from './navigation.mjs';
-import { loadCourse, packPath, topics } from './content.mjs';
+import { galleryItems, loadCourse, packPath, topics } from './content.mjs';
 
 const chapters = await loadCourse(path => readFile(new URL(packPath(path), import.meta.url), 'utf8'));
 
@@ -13,7 +13,7 @@ test('destinations round-trip for pages, areas, chapters, concepts, and diagrams
   }
   assert.deepEqual(readRoute('#area=T3', chapters, topics), { area: 'T3' });
   for (const chapter of chapters) {
-    for (const phase of ['theory', 'quiz', 'cases']) {
+    for (const phase of ['theory', 'quiz', 'cases', 'glossary']) {
       const route = { topic: chapter.topic, phase, mode: 'learn' };
       assert.deepEqual(readRoute(routeHref(route), chapters, topics), route);
     }
@@ -23,6 +23,18 @@ test('destinations round-trip for pages, areas, chapters, concepts, and diagrams
     assert.deepEqual(readRoute(routeHref(route), chapters, topics), route);
   }
   assert.deepEqual(readRoute(routeHref({ page: 'past', assessment: 0 }), chapters, topics), { page: 'past', assessment: 0 });
+});
+
+test('recap links open the glossary tab, including older Study links', () => {
+  const recaps = galleryItems(chapters).filter(image => image.glossary);
+  assert.equal(recaps.length, 80);
+  for (const image of recaps) {
+    for (const phase of [image.phase, 'theory']) {
+      const route = readRoute(routeHref({ topic: image.topic, phase, image: image.file }), chapters, topics);
+      assert.equal(route.phase, 'glossary');
+      assert.equal(route.image, image.file);
+    }
+  }
 });
 
 test('invalid direct links cannot select unknown material or unsafe indexes', () => {
@@ -100,6 +112,26 @@ test('chapter glossaries render sublists and individual system calls', async () 
     if (chapter.topic === 'T1.1') {
       assert.match(terms, /Create, validate and save<\/strong><ul><li><code translate="no">%New<\/code>/);
       assert.ok(!/BadgeLabel|GetAge|AccountIdxOpen/.test(calls));
+    }
+  }
+});
+
+test('the glossary tab renders every recap and the reference text for each chapter', async () => {
+  const source = await readFile(new URL('./app.mjs', import.meta.url), 'utf8');
+  const context = vm.createContext({ renderDiagrams: diagrams => diagrams.map(diagram => `<img src="${diagram.file}">`).join('') });
+  vm.runInContext(source.slice(source.indexOf('const escape ='), source.indexOf('const leadParagraphs =')) +
+    source.slice(source.indexOf('function renderStudyNotes('), source.indexOf('function renderCodeExamples(')) +
+    source.slice(source.indexOf('function renderGlossary('), source.indexOf('function answerOptions(')), context);
+  for (const chapter of chapters) {
+    context.chapter = chapter;
+    context.panel = {};
+    vm.runInContext('renderGlossary(panel)', context);
+    const html = context.panel.innerHTML;
+    assert.match(html, /<h2[^>]*>Glossary &amp; Cheat Sheet<\/h2>/);
+    assert.match(html, /<h3>Key terms<\/h3>/);
+    assert.match(html, /<h3>System methods and functions<\/h3>/);
+    for (const diagram of chapter.diagrams) {
+      assert.equal(html.includes(`src="${diagram.file}"`), Boolean(diagram.glossary), diagram.file);
     }
   }
 });

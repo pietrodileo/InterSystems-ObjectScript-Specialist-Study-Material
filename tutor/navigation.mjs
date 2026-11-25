@@ -1,5 +1,5 @@
 const pages = new Set(['roadmap', 'index', 'gallery', 'review', 'final', 'profile', 'past']);
-const phases = new Set(['theory', 'quiz', 'cases']);
+const phases = new Set(['theory', 'quiz', 'cases', 'glossary']);
 
 export function routeHref(route) {
   const params = new URLSearchParams();
@@ -35,6 +35,7 @@ export function readRoute(hash, chapters, topics) {
     if (image) {
       if (![...chapter.diagrams, ...chapter.exerciseDiagrams].some(diagram => diagram.file === image)) return null;
       route.image = image;
+      if (chapter.diagrams.some(diagram => diagram.file === image && diagram.glossary)) route.phase = 'glossary';
     }
     return route;
   }

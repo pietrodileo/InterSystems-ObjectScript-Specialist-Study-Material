@@ -420,7 +420,7 @@ h4 { font-size: 1rem; margin: 1rem 0 .35rem; }
 .lead { color: var(--muted); margin: 0; max-width: 69ch; line-height: 1.65; }
 .lead + .lead { margin-top: .8rem; }
 .chapter-location + .lead { margin-top: .65rem; }
-.phases { display: flex; gap: .4rem; margin: 0 0 .8rem; border-bottom: 1px solid var(--line); }
+.phases { display: flex; flex-wrap: wrap; gap: .4rem; margin: 0 0 .8rem; border-bottom: 1px solid var(--line); }
 .phases :is(button, a):not(.chapter-button) { background: transparent; border-color: transparent; border-radius: .4rem .4rem 0 0; }
 .phases :is(button, a):not(.chapter-button):hover { background: var(--quiet); }
 .phases :is(button, a)[aria-current]:not(.chapter-button) { background: var(--selected); border-bottom-color: var(--accent); font-weight: 700; }

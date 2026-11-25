@@ -22,8 +22,8 @@ export function searchCourse(chapters, query) {
 
 export function galleryItems(chapters) {
   return chapters.flatMap((chapter, index) => [
-    ...chapter.diagrams.map(diagram => ({ ...diagram, phase: 'theory',
-      locations: [diagram.glossary ? 'Study · Glossary & Cheat Sheet' : 'Study · Chapter diagrams', ...chapter.sections.filter(section => section.detail?.includes(diagram.file.split('/').at(-1)))
+    ...chapter.diagrams.map(diagram => ({ ...diagram, phase: diagram.glossary ? 'glossary' : 'theory',
+      locations: [diagram.glossary ? 'Glossary & Cheat Sheet · Visual recap' : 'Study · Chapter diagrams', ...chapter.sections.filter(section => section.detail?.includes(diagram.file.split('/').at(-1)))
         .map(section => `Study · ${section.title}`)],
     })),
     ...chapter.exerciseDiagrams.map(diagram => ({ ...diagram, phase: 'cases',
