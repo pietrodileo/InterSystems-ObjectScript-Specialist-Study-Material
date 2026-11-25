@@ -490,7 +490,7 @@ function renderGallery() {
     <section class="panel gallery-filters" aria-label="Filter images">
       <label>Search images<input id="gallery-search" type="search" placeholder="Caption, chapter or section"></label>
       <label>Chapter<select id="gallery-chapter"><option value="">All chapters</option>${chapters.map(item => `<option value="${escape(item.topic)}">${escape(item.title)}</option>`).join('')}</select></label>
-      <label>Course step<select id="gallery-phase"><option value="">All steps</option><option value="theory">Study</option><option value="quiz">Practice</option><option value="cases">Apply</option></select></label>
+      <label>Course step<select id="gallery-phase"><option value="">All steps</option><option value="theory">Study</option><option value="quiz">Practice</option><option value="cases">Apply</option><option value="glossary">Glossary</option></select></label>
     </section>
     <div class="actions">
       <button type="button" id="gallery-download">Download all images as ZIP</button>
@@ -567,7 +567,7 @@ function renderGalleryGrid() {
   const selectedPhase = lesson.querySelector('#gallery-phase').value;
   const items = galleryItems(chapters);
   const visible = items.filter(item => (!topic || item.topic === topic) &&
-    (!selectedPhase || (selectedPhase === 'quiz' ? item.locations.some(location => location.startsWith('Practice')) : item.phase === selectedPhase)) &&
+    (!selectedPhase || (selectedPhase === 'glossary' ? item.glossary : selectedPhase === 'quiz' ? item.locations.some(location => location.startsWith('Practice')) : item.phase === selectedPhase)) &&
     `${item.title} ${item.caption} ${item.locations.join(' ')}`.toLowerCase().includes(query));
   lesson.querySelector('#gallery-count').textContent = `${visible.length} of ${items.length} images`;
   lesson.querySelector('#gallery-grid').innerHTML = visible.length ? visible.map(item => {
