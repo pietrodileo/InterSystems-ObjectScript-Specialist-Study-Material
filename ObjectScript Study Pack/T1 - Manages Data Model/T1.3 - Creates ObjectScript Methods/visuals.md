@@ -30,8 +30,11 @@ Covers:
 
 ## Glossary & Cheat Sheet
 
-![T1.3 Glossary & Cheat Sheet — Key terms and core syntax](visual-guide-glossary-01.png)
+![T1.3 Glossary & Cheat Sheet — Key terms and core syntax, 1/5: Instance and class methods; Signature and types; Object reference; Multidimensional arguments; Override and parent call; Status and return](visual-guide-glossary-01.png)
+![T1.3 Glossary & Cheat Sheet — Key terms and core syntax, 2/5: Inherited callbacks; ObjectScript commands; System variables and macros](visual-guide-glossary-02.png)
+![T1.3 Glossary & Cheat Sheet — Key terms and core syntax, 3/5: System variables and macros; SQL statements and clauses](visual-guide-glossary-03.png)
+![T1.3 Glossary & Cheat Sheet — System methods and functions, 4/5: System methods and functions](visual-guide-glossary-04.png)
+![T1.3 Glossary & Cheat Sheet — System methods and functions, 5/5: System methods and functions](visual-guide-glossary-05.png)
 
-![T1.3 Glossary & Cheat Sheet — Commands and APIs](visual-guide-glossary-02.png)
 
 [Open the text recap](study.md#glossary--cheat-sheet).

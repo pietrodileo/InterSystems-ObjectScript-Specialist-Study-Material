@@ -28,8 +28,10 @@ Covers:
 
 ## Glossary & Cheat Sheet
 
-![T5.2 Glossary & Cheat Sheet — Key terms and core syntax](visual-guide-glossary-01.png)
+![T5.2 Glossary & Cheat Sheet — Key terms and core syntax, 1/4: TRY, CATCH and THROW; %Status and exception; Diagnostics; Application logging; ObjectScript commands](visual-guide-glossary-01.png)
+![T5.2 Glossary & Cheat Sheet — Key terms and core syntax, 2/4: ObjectScript commands; System variables and macros](visual-guide-glossary-02.png)
+![T5.2 Glossary & Cheat Sheet — System methods and functions, 3/4: System methods and functions](visual-guide-glossary-03.png)
+![T5.2 Glossary & Cheat Sheet — System methods and functions, 4/4: System methods and functions](visual-guide-glossary-04.png)
 
-![T5.2 Glossary & Cheat Sheet — Commands and APIs](visual-guide-glossary-02.png)
 
 [Open the text recap](study.md#glossary--cheat-sheet).

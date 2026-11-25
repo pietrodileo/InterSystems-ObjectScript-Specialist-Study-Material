@@ -17,8 +17,9 @@ Covers:
 
 ## Glossary & Cheat Sheet
 
-![T5.1 Glossary & Cheat Sheet — Key terms and core syntax](visual-guide-glossary-01.png)
+![T5.1 Glossary & Cheat Sheet — Key terms and core syntax, 1/3: Performance baseline; Line and SQL tools; Class compilation; Flags and generated routines; ObjectScript commands; System variables and macros](visual-guide-glossary-01.png)
+![T5.1 Glossary & Cheat Sheet — System methods and functions, 2/3: System methods and functions](visual-guide-glossary-02.png)
+![T5.1 Glossary & Cheat Sheet — System methods and functions, 3/3: System methods and functions](visual-guide-glossary-03.png)
 
-![T5.1 Glossary & Cheat Sheet — Commands and APIs](visual-guide-glossary-02.png)
 
 [Open the text recap](study.md#glossary--cheat-sheet).

@@ -861,6 +861,7 @@ Official reference: [Defining persistent classes and indexes](https://docs.inter
 
 ### Visual recap
 
-![T1.2 Glossary & Cheat Sheet — Key terms and core syntax](visual-guide-glossary-01.png)
-
-![T1.2 Glossary & Cheat Sheet — Commands and APIs](visual-guide-glossary-02.png)
+![T1.2 Glossary & Cheat Sheet — Key terms and core syntax, 1/4: String validation; Stream types; Computed values; Class member parameters; Index selection; Unique keys and references](visual-guide-glossary-01.png)
+![T1.2 Glossary & Cheat Sheet — Key terms and core syntax, 2/4: Unique keys and references; ObjectScript commands; System variables and macros; SQL statements and clauses](visual-guide-glossary-02.png)
+![T1.2 Glossary & Cheat Sheet — System methods and functions, 3/4: System methods and functions](visual-guide-glossary-03.png)
+![T1.2 Glossary & Cheat Sheet — System methods and functions, 4/4: System methods and functions](visual-guide-glossary-04.png)

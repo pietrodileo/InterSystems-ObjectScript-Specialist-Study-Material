@@ -16,6 +16,7 @@ Covers:
 
 ## Glossary & Cheat Sheet
 
-![T3.1 Glossary & Cheat Sheet — Key terms and syntax](visual-guide-glossary-01.png)
+![T3.1 Glossary & Cheat Sheet — Key terms and core syntax, 1/2: Local variable; Process-private global; Temporary global; Persistent global; Storage choice; ObjectScript commands; System variables and macros](visual-guide-glossary-01.png)
+![T3.1 Glossary & Cheat Sheet — System methods and functions, 2/2: System methods and functions](visual-guide-glossary-02.png)
 
 [Open the text recap](study.md#glossary--cheat-sheet).

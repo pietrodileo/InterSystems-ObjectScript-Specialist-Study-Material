@@ -473,4 +473,5 @@ Official reference: [ObjectScript $LIST](https://docs.intersystems.com/irislates
 
 ### Visual recap
 
-![T4.2 Glossary & Cheat Sheet — Key terms and syntax](visual-guide-glossary-01.png)
+![T4.2 Glossary & Cheat Sheet — Key terms and core syntax, 1/2: Encoded list; Access and update; Sequential operations; Delimited text; ObjectScript commands](visual-guide-glossary-01.png)
+![T4.2 Glossary & Cheat Sheet — System methods and functions, 2/2: System methods and functions](visual-guide-glossary-02.png)

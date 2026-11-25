@@ -555,6 +555,7 @@ Official reference: [TUNE TABLE](https://docs.intersystems.com/irislatest/csp/do
 
 ### Visual recap
 
-![T3.5 Glossary & Cheat Sheet — Key terms and core syntax](visual-guide-glossary-01.png)
-
-![T3.5 Glossary & Cheat Sheet — Commands and APIs](visual-guide-glossary-02.png)
+![T3.5 Glossary & Cheat Sheet — Key terms and core syntax, 1/4: Statistics and selectivity; Plan interpretation; Correctness tests; Benchmarking; ObjectScript commands](visual-guide-glossary-01.png)
+![T3.5 Glossary & Cheat Sheet — Key terms and core syntax, 2/4: ObjectScript commands; System variables and macros; SQL statements and clauses](visual-guide-glossary-02.png)
+![T3.5 Glossary & Cheat Sheet — System methods and functions, 3/4: System methods and functions](visual-guide-glossary-03.png)
+![T3.5 Glossary & Cheat Sheet — System methods and functions, 4/4: System methods and functions](visual-guide-glossary-04.png)

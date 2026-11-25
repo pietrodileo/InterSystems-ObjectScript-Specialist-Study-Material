@@ -1032,6 +1032,8 @@ Official reference: [Persistent object API](https://docs.intersystems.com/irisla
 
 ### Visual recap
 
-![T1.1 Glossary & Cheat Sheet — Key terms and core syntax](visual-guide-glossary-01.png)
-
-![T1.1 Glossary & Cheat Sheet — Commands and APIs](visual-guide-glossary-02.png)
+![T1.1 Glossary & Cheat Sheet — Key terms and core syntax, 1/5: Class lifecycle; OREF, OID and ID; Create, validate and save; Open and delete; Lifecycle callbacks](visual-guide-glossary-01.png)
+![T1.1 Glossary & Cheat Sheet — Key terms and core syntax, 2/5: Lifecycle callbacks; Storage mapping; Inheritance and documentation; ObjectScript commands](visual-guide-glossary-02.png)
+![T1.1 Glossary & Cheat Sheet — Key terms and core syntax, 3/5: ObjectScript commands; System variables and macros; SQL statements and clauses](visual-guide-glossary-03.png)
+![T1.1 Glossary & Cheat Sheet — System methods and functions, 4/5: System methods and functions](visual-guide-glossary-04.png)
+![T1.1 Glossary & Cheat Sheet — System methods and functions, 5/5: System methods and functions](visual-guide-glossary-05.png)

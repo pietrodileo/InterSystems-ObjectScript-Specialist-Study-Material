@@ -856,4 +856,5 @@ Official reference: [Strings in ObjectScript](https://docs.intersystems.com/iris
 
 ### Visual recap
 
-![T4.3 Glossary & Cheat Sheet — Key terms and syntax](visual-guide-glossary-01.png)
+![T4.3 Glossary & Cheat Sheet — Key terms and core syntax, 1/2: Fields and character positions; Replacement and stripping; Concatenation and matching; Encoding and escapes; ObjectScript commands](visual-guide-glossary-01.png)
+![T4.3 Glossary & Cheat Sheet — System methods and functions, 2/2: System methods and functions](visual-guide-glossary-02.png)

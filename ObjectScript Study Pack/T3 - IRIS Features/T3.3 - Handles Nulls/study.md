@@ -274,4 +274,6 @@ Official reference: [Null values in Embedded SQL](https://docs.intersystems.com/
 
 ### Visual recap
 
-![T3.3 Glossary & Cheat Sheet — Key terms and syntax](visual-guide-glossary-01.png)
+![T3.3 Glossary & Cheat Sheet — Key terms and core syntax, 1/3: Undefined and empty values; SQL NULL; Host variable and result; Fallback and aggregates](visual-guide-glossary-01.png)
+![T3.3 Glossary & Cheat Sheet — Key terms and core syntax, 2/3: ObjectScript commands; SQL statements and clauses](visual-guide-glossary-02.png)
+![T3.3 Glossary & Cheat Sheet — System methods and functions, 3/3: System methods and functions](visual-guide-glossary-03.png)

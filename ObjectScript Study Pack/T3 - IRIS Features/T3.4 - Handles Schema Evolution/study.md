@@ -468,6 +468,7 @@ Official reference: [Persistent class indexes](https://docs.intersystems.com/iri
 
 ### Visual recap
 
-![T3.4 Glossary & Cheat Sheet — Key terms and core syntax](visual-guide-glossary-01.png)
-
-![T3.4 Glossary & Cheat Sheet — Commands and APIs](visual-guide-glossary-02.png)
+![T3.4 Glossary & Cheat Sheet — Key terms and core syntax, 1/4: Schema evolution; Index build and purge; Rename and datatype change; Cached and frozen plans; ObjectScript commands](visual-guide-glossary-01.png)
+![T3.4 Glossary & Cheat Sheet — Key terms and core syntax, 2/4: ObjectScript commands; System variables and macros; SQL statements and clauses](visual-guide-glossary-02.png)
+![T3.4 Glossary & Cheat Sheet — System methods and functions, 3/4: System methods and functions](visual-guide-glossary-03.png)
+![T3.4 Glossary & Cheat Sheet — System methods and functions, 4/4: System methods and functions](visual-guide-glossary-04.png)

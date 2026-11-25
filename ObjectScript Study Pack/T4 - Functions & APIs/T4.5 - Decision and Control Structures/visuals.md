@@ -18,6 +18,7 @@ Covers:
 
 ## Glossary & Cheat Sheet
 
-![T4.5 Glossary & Cheat Sheet — Key terms and syntax](visual-guide-glossary-01.png)
+![T4.5 Glossary & Cheat Sheet — Key terms and core syntax, 1/2: Postconditionals; Loop exit and method return; Boolean evaluation; Loop and selection flow; ObjectScript commands; System variables and macros](visual-guide-glossary-01.png)
+![T4.5 Glossary & Cheat Sheet — System methods and functions, 2/2: System methods and functions](visual-guide-glossary-02.png)
 
 [Open the text recap](study.md#glossary--cheat-sheet).

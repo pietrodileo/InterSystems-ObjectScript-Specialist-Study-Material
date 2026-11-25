@@ -480,4 +480,5 @@ Official reference: [ObjectScript $ORDER](https://docs.intersystems.com/irislate
 
 ### Visual recap
 
-![T4.1 Glossary & Cheat Sheet — Key terms and syntax](visual-guide-glossary-01.png)
+![T4.1 Glossary & Cheat Sheet — Key terms and core syntax, 1/2: Sparse multidimensional array; Collation; Traversal; Node state; ObjectScript commands](visual-guide-glossary-01.png)
+![T4.1 Glossary & Cheat Sheet — System methods and functions, 2/2: System methods and functions](visual-guide-glossary-02.png)

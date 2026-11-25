@@ -599,6 +599,7 @@ Official reference: [Using Embedded SQL](https://docs.intersystems.com/irislates
 
 ### Visual recap
 
-![T2.3 Glossary & Cheat Sheet — Key terms and core syntax](visual-guide-glossary-01.png)
-
-![T2.3 Glossary & Cheat Sheet — Commands and APIs](visual-guide-glossary-02.png)
+![T2.3 Glossary & Cheat Sheet — Key terms and core syntax, 1/4: Variable and global scope; Role, resource and privilege; Visibility and authorization; Bound SQL values; SQL and embedded privileges](visual-guide-glossary-01.png)
+![T2.3 Glossary & Cheat Sheet — Key terms and core syntax, 2/4: ObjectScript commands; System variables and macros](visual-guide-glossary-02.png)
+![T2.3 Glossary & Cheat Sheet — Key terms and core syntax, 3/4: System variables and macros; SQL statements and clauses](visual-guide-glossary-03.png)
+![T2.3 Glossary & Cheat Sheet — System methods and functions, 4/4: System methods and functions](visual-guide-glossary-04.png)

@@ -518,6 +518,8 @@ Official reference: [HTTP requests from IRIS](https://docs.intersystems.com/iris
 
 ### Visual recap
 
-![T4.7 Glossary & Cheat Sheet — Key terms and core syntax](visual-guide-glossary-01.png)
-
-![T4.7 Glossary & Cheat Sheet — Commands and APIs](visual-guide-glossary-02.png)
+![T4.7 Glossary & Cheat Sheet — Key terms and core syntax, 1/5: Stream types; File stream navigation; HTTP transport and response; FTP and SMTP](visual-guide-glossary-01.png)
+![T4.7 Glossary & Cheat Sheet — Key terms and core syntax, 2/5: FTP and SMTP; ObjectScript commands; System variables and macros](visual-guide-glossary-02.png)
+![T4.7 Glossary & Cheat Sheet — System methods and functions, 3/5: System methods and functions](visual-guide-glossary-03.png)
+![T4.7 Glossary & Cheat Sheet — System methods and functions, 4/5: System methods and functions](visual-guide-glossary-04.png)
+![T4.7 Glossary & Cheat Sheet — System methods and functions, 5/5: System methods and functions](visual-guide-glossary-05.png)

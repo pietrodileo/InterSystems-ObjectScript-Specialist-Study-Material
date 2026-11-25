@@ -28,8 +28,11 @@ Covers:
 
 ## Glossary & Cheat Sheet
 
-![T3.2 Glossary & Cheat Sheet — Key terms and core syntax](visual-guide-glossary-01.png)
+![T3.2 Glossary & Cheat Sheet — Key terms and core syntax, 1/5: Weak typing and coercion; Macros and includes; Object-to-SQL projection; Embedded and dynamic SQL; Select modes](visual-guide-glossary-01.png)
+![T3.2 Glossary & Cheat Sheet — Key terms and core syntax, 2/5: Result metadata; ObjectScript commands; System variables and macros](visual-guide-glossary-02.png)
+![T3.2 Glossary & Cheat Sheet — Key terms and core syntax, 3/5: System variables and macros; SQL statements and clauses](visual-guide-glossary-03.png)
+![T3.2 Glossary & Cheat Sheet — System methods and functions, 4/5: System methods and functions](visual-guide-glossary-04.png)
+![T3.2 Glossary & Cheat Sheet — System methods and functions, 5/5: System methods and functions](visual-guide-glossary-05.png)
 
-![T3.2 Glossary & Cheat Sheet — Commands and APIs](visual-guide-glossary-02.png)
 
 [Open the text recap](study.md#glossary--cheat-sheet).

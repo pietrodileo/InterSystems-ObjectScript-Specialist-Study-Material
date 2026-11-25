@@ -869,6 +869,7 @@ Official reference: [ObjectScript LOCK](https://docs.intersystems.com/irislatest
 
 ### Visual recap
 
-![T2.1 Glossary & Cheat Sheet — Key terms and core syntax](visual-guide-glossary-01.png)
-
-![T2.1 Glossary & Cheat Sheet — Commands and APIs](visual-guide-glossary-02.png)
+![T2.1 Glossary & Cheat Sheet — Key terms and core syntax, 1/4: Transaction and nesting; Rollback scope; Cooperative lock; Modes and escalation; Optimistic and pessimistic control; SQL transaction controls](visual-guide-glossary-01.png)
+![T2.1 Glossary & Cheat Sheet — Key terms and core syntax, 2/4: SQL transaction controls; Deadlock and lifetime; ObjectScript commands; System variables and macros](visual-guide-glossary-02.png)
+![T2.1 Glossary & Cheat Sheet — Key terms and core syntax, 3/4: System variables and macros; SQL statements and clauses](visual-guide-glossary-03.png)
+![T2.1 Glossary & Cheat Sheet — System methods and functions, 4/4: System methods and functions](visual-guide-glossary-04.png)
